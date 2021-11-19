@@ -86,7 +86,6 @@ namespace PaintBall
 						{
 							RoundStateFinish();
 
-							NextSecondTime = 0f;
 							return;
 						}
 					}
@@ -159,6 +158,9 @@ namespace PaintBall
 			}
 
 			StateEndTime = RoundStateDuration[(int)CurrentRoundState] + Time.Now;
+
+			// Call OnSecond() as soon as RoundState starts
+			NextSecondTime = 0f;
 		}
 
 		private void RoundStateFinish()
