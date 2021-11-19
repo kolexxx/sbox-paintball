@@ -1,0 +1,30 @@
+@import "Variables.scss";
+
+crosshair
+{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    width: 30px;
+    height: 30px;
+    border: 1.5px solid $defaultColor;
+    border-radius: 50%;
+    justify-content: center;
+
+    label
+    {
+        position: absolute;
+        top: -250%;
+        color: $defaultColor;
+        font-size: 20px;
+        font-family: Roboto;
+        mix-blend-mode: lighten;
+        font-weight: bold;
+    }
+
+    &.hidden
+    {
+        display: none;
+    }
+}

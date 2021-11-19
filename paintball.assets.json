@@ -1,0 +1,11 @@
+[
+    "particles/blue_glow.vpcf",
+    "particles/red_glow.vpcf",
+    "sounds/pb1.vsnd",
+    "sounds/pb2.vsnd",
+    "sounds/pb3.vsnd",
+    "sounds/pb4.vsnd",
+    "sounds/pbg.vsnd",
+    "models/red_ball/ball.vmdl",
+    "models/blue_ball/ball.vmdl"
+]
