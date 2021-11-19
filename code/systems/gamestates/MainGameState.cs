@@ -11,6 +11,7 @@ namespace PaintBall
 		[Net, Change] public int BlueScore { get; private set; } = 0;
 		[Net, Change] public int RedScore { get; private set; } = 0;
 		[Net] public RoundState CurrentRoundState { get; set; }
+		public override bool UpdateTimer => true;
 		private int RoundLimit => 13;
 		private int Round = 0;
 		private readonly float[] RoundStateDuration = { 5f, 60f, 5f };
@@ -207,18 +208,6 @@ namespace PaintBall
 			}
 
 			RoundStateStart();
-		}
-
-		public override string StateTime()
-		{
-			if ( RoundStateEnds < 0 )
-				return "00:00";
-
-			var timeSpan = TimeSpan.FromSeconds( RoundStateEnds );
-			var minutes = timeSpan.Minutes;
-			var seconds = timeSpan.Seconds;
-
-			return $"{minutes:D2}:{seconds:D2}";
 		}
 
 		private void AdjustTeam( Team team, int num )

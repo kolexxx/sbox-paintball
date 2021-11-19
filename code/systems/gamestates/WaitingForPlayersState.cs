@@ -28,7 +28,7 @@ namespace PaintBall
 			if ( Host.IsServer )
 			{
 				if ( Players.Count > 1 )
-					Hud.UpdateCrosshairMessage( $"Starting in {StateTime()}" );
+					Hud.UpdateCrosshairMessage( $"Starting in {TimeLeftSeconds}" );
 				else
 					Hud.UpdateCrosshairMessage( "Waiting for players..." );
 			}
@@ -63,15 +63,5 @@ namespace PaintBall
 				player.Respawn();
 			}
 		}
-
-		public override string StateTime()
-		{
-			var timeEnd = TimeSpan.FromSeconds( TimeLeft );
-			var minutes = timeEnd.Minutes;
-			var seconds = timeEnd.Seconds;
-
-			return $"{minutes:D2}:{seconds:D2}";
-		}
-
 	}
 }

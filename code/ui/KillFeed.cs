@@ -29,26 +29,26 @@ namespace PaintBall
 
 			return e;
 		}
-	}
 
-	public class KillFeedEntry : Panel
-	{
-		public Label Left { get; internal set; }
-		public Label Right { get; internal set; }
-		public Label Method { get; internal set; }
-
-		public KillFeedEntry()
+		public class KillFeedEntry : Panel
 		{
-			Left = Add.Label( "", "left" );
-			Method = Add.Label( "", "method" );
-			Right = Add.Label( "", "right" );
-			_ = DeleteAsync();
-		}
+			public Label Left { get; internal set; }
+			public Label Right { get; internal set; }
+			public Label Method { get; internal set; }
 
-		private async Task DeleteAsync()
-		{
-			await Task.Delay( 4000 );
-			Delete();
+			public KillFeedEntry()
+			{
+				Left = Add.Label( "", "left" );
+				Method = Add.Label( "", "method" );
+				Right = Add.Label( "", "right" );
+				_ = DeleteAsync();
+			}
+
+			private async Task DeleteAsync()
+			{
+				await Task.Delay( 5000 );
+				Delete();
+			}
 		}
 	}
 }

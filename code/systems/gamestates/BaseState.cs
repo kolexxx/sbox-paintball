@@ -11,6 +11,7 @@ namespace PaintBall
 		public virtual int StateDuration => 0;
 		public virtual string Name => GetType().Name;
 		public float StateEndTime { get; set; }
+		public virtual bool UpdateTimer => false;
 		private RealTimeUntil NextSecondTime { get; set; }
 
 		protected static List<Player> Players = new();
@@ -77,15 +78,5 @@ namespace PaintBall
 			Hud.UpdateTeamScore( Team.Blue );
 			Hud.UpdateTeamScore( Team.Red );
 		}
-
-		public virtual string StateTime()
-		{
-			var timeSpan = TimeSpan.FromSeconds( TimeLeft );
-			var minutes = timeSpan.Minutes;
-			var seconds = timeSpan.Seconds;
-
-			return $"{minutes:D2}:{seconds:D2}";
-		}
 	}
-
 }

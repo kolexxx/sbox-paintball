@@ -14,13 +14,13 @@ namespace PaintBall
 		public GameInfo()
 		{
 			StyleSheet.Load( "/ui/GameInfo.scss" );
-			////////
+
 			left = AddChild<Panel>( "left" );
 			left.Add.Label( "0" );
-			////////
+
 			mid = AddChild<Middle>( "mid" );
 			Timer = mid.GetChild( 0 ).Add.Label( "00:00" );
-			////////
+
 			right = AddChild<Panel>( "right" );
 			right.Add.Label( "0" );
 		}
@@ -38,7 +38,7 @@ namespace PaintBall
 				return;
 
 			var state = game.CurrentGameState;
-			if ( state == null )
+			if ( state == null || !state.UpdateTimer )
 				return;
 
 			Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
