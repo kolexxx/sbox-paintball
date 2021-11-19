@@ -12,7 +12,7 @@ namespace PaintBall
 		public virtual string Name => GetType().Name;
 		public float StateEndTime { get; set; }
 		public virtual bool UpdateTimer => false;
-		private RealTimeUntil NextSecondTime { get; set; }
+		protected RealTimeUntil NextSecondTime { get; set; }
 
 		protected static List<Player> Players = new();
 
@@ -50,7 +50,7 @@ namespace PaintBall
 		public virtual void OnSecond()
 		{
 			if ( Host.IsServer )
-				TimeLeftSeconds = TimeLeft.FloorToInt();
+				TimeLeftSeconds = TimeLeft.CeilToInt();
 		}
 
 		public virtual void Tick()

@@ -38,10 +38,13 @@ namespace PaintBall
 				return;
 
 			var state = game.CurrentGameState;
-			if ( state == null || !state.UpdateTimer )
+			if ( state == null )
 				return;
 
-			Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
+			if ( state.UpdateTimer )
+				Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
+			else
+				Timer.Text = "00:00";
 		}
 
 		public class Middle : Panel

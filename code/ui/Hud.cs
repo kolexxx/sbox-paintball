@@ -12,7 +12,7 @@ namespace PaintBall
 		public static void AddKillFeed( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
 		{
 			(Local.Hud
-				.GetChild( 5 ) as KillFeed)
+				.GetChild( 5 ) as KillFeed)?
 				.AddEntry( left, right, method, teamLeft, teamRight, lsteamid, rsteamid );
 		}
 
@@ -20,8 +20,8 @@ namespace PaintBall
 		public static void UpdateCrosshairMessage( string text = "" )
 		{
 			(Local.Hud
-				.GetChild( 2 )
-				.GetChild( 0 ) as Label)
+				.GetChild( 2 )?
+				.GetChild( 0 ) as Label)?
 				.SetText( text );
 		}
 
@@ -29,11 +29,11 @@ namespace PaintBall
 		public static void UpdateTeamScore( Team team, string text = "0" )
 		{
 			(Local.Hud.
-				GetChild( 3 ).
-				GetChild( 1 ).
-				GetChild( (int)team ).
-				GetChild( 0 ) as Label).
-				SetText( text );
+				GetChild( 3 )?
+				.GetChild( 1 )?
+				.GetChild( (int)team )?
+				.GetChild( 0 ) as Label)?
+				.SetText( text );
 		}
 
 		public Hud()

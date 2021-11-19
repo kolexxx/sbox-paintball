@@ -86,6 +86,7 @@ namespace PaintBall
 						{
 							RoundStateFinish();
 
+							NextSecondTime = 0f;
 							return;
 						}
 					}
