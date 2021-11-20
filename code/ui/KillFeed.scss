@@ -27,26 +27,11 @@ killfeedentry
     position: relative;
     align-items: center;
 
-    /*
-    &:intro
-    {
-        transform: scale( 2 );
-        padding-top: 0;
-        padding-bottom: 0;
-        margin-bottom: 0;
-        height: 0;
-        opacity: 0;
-    }
-
     &:outro
     {
-        top: -20px;
         opacity: 0;
-        transform: scale( 1.1 );
-        transition: all 0.2s ease-in;
     }
-    */
-
+    
     .icon
     {
         width: 100px;
