@@ -144,7 +144,7 @@ namespace PaintBall
 			{
 				if ( attacker.Client != null )
 				{
-					Hud.AddKillFeed( attacker.Client.Name, client.Name, pawn.LastAttackerWeapon?.ClassInfo?.Name, attacker.Team, victim.Team, attacker.Client.PlayerId, client.PlayerId );
+					Hud.AddKillFeed( attacker.Client.Name, client.Name, (pawn.LastAttackerWeapon as Weapon).Icon, attacker.Team, victim.Team, attacker.Client.PlayerId, client.PlayerId );
 				}
 				else
 				{

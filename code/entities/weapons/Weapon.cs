@@ -2,7 +2,7 @@
 
 namespace PaintBall
 {
-	public abstract partial class Weapon : Sandbox.BaseWeapon
+	public abstract partial class Weapon : BaseWeapon
 	{
 		[Net, Predicted] public int AmmoClip { get; set; }
 		[Net, Predicted] public bool IsReloading { get; set; }
@@ -13,6 +13,7 @@ namespace PaintBall
 		public virtual string FollowEffect => $"particles/{(Owner as Player).Team.GetString()}_glow.vpcf";
 		public virtual float Gravity => 0f;
 		public virtual string HitSound => "impact";
+		public virtual string Icon => "ui/weapons/pistol.png";
 		public virtual string ProjectileModel => $"models/{(Owner as Player).Team.GetString()}_ball/ball.vmdl";
 		public virtual float ProjectileRadius => 3f;
 		public virtual float ReloadTime => 5.0f;

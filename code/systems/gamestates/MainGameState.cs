@@ -15,7 +15,6 @@ namespace PaintBall
 		private int RoundLimit => 13;
 		private int Round = 0;
 		private readonly float[] RoundStateDuration = { 5f, 60f, 5f };
-		private RealTimeUntil RoundStateEnds;
 
 		// Maybe turn these into classes?
 		public enum RoundState

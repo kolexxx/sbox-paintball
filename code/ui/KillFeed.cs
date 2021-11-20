@@ -25,7 +25,7 @@ namespace PaintBall
 			e.Right.Text = right;
 			e.Right.SetClass( teamRight.GetString(), true );
 
-			e.Method.Text = method;
+			e.Method.SetTexture( method );
 
 			return e;
 		}
@@ -34,12 +34,12 @@ namespace PaintBall
 		{
 			public Label Left { get; internal set; }
 			public Label Right { get; internal set; }
-			public Label Method { get; internal set; }
+			public Image Method { get; internal set; }
 
 			public KillFeedEntry()
 			{
 				Left = Add.Label( "", "left" );
-				Method = Add.Label( "", "method" );
+				Method = Add.Image( "", "method" );
 				Right = Add.Label( "", "right" );
 				_ = DeleteAsync();
 			}

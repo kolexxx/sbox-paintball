@@ -31,14 +31,6 @@ killfeedentry
     {
         opacity: 0;
     }
-    
-    .icon
-    {
-        width: 100px;
-        height: 100px;
-        background-size: 100%;
-        background-image-tint: red;
-    }
 
     .left, .right
     {
@@ -63,10 +55,10 @@ killfeedentry
 
     .method
     {
-        &.me
-        {
-            color: black;
-        }
+        width: 100px;
+        height: 100px;
+        background-size: 100%;
+        background-image-tint: white;
     }
 
 
@@ -74,6 +66,11 @@ killfeedentry
     {
         background-color: rgba(255 255 2255 0.6);
         color: black;
+
+        .method
+        {
+            background-image-tint: black;
+        }
     }
 
     .message

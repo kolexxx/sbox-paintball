@@ -6,6 +6,7 @@ namespace PaintBall
 	public partial class SMG : Weapon
 	{
 		public override int ClipSize => 20;
+		public override string Icon => "ui/weapons/smg.png";
 		public override float PrimaryRate => 6f;
 		public override float ProjectileRadius => 3f;
 		public override float ReloadTime => 5f;
