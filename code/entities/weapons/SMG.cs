@@ -9,16 +9,16 @@ namespace PaintBall
 		public override string Icon => "ui/weapons/smg.png";
 		public override float PrimaryRate => 6f;
 		public override float ProjectileRadius => 3f;
-		public override float ReloadTime => 5f;
+		public override float ReloadTime => 3f;
 		public override float Speed => 2000f;
-		public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
+		public override string ViewModelPath => "models/paintballmarker/v_paintballmarker.vmdl";
 
 		public override void Spawn()
 		{
 			base.Spawn();
 
 			AmmoClip = ClipSize;
-			SetModel( "weapons/rust_smg/rust_smg.vmdl" );
+			SetModel( "models/paintballmarker/paintballmarker.vmdl" );
 		}
 
 		public override void SimulateAnimator( PawnAnimator anim )
