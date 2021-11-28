@@ -74,6 +74,10 @@ namespace PaintBall
 		public virtual void Finish()
 		{
 			StateEndTime = 0f;
+
+			if ( Host.IsServer )
+				return;
+
 			Hud.UpdateCrosshairMessage();
 			Hud.UpdateTeamScore( Team.Blue );
 			Hud.UpdateTeamScore( Team.Red );

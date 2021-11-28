@@ -8,6 +8,8 @@ namespace PaintBall
 	[Library]
 	public partial class Hud : HudEntity<RootPanel>
 	{
+		// Ugly ass code. Use static instances?
+
 		[ClientRpc]
 		public static void AddKillFeed( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
 		{

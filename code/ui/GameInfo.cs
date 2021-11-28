@@ -44,7 +44,7 @@ namespace PaintBall
 			if ( state.UpdateTimer )
 				Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
 			else
-				Timer.Text = "00:00";
+				Timer.Text = "";
 		}
 
 		public class Middle : Panel

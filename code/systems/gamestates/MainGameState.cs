@@ -11,7 +11,7 @@ namespace PaintBall
 		[Net, Change] public int BlueScore { get; private set; } = 0;
 		[Net, Change] public int RedScore { get; private set; } = 0;
 		[Net] public RoundState CurrentRoundState { get; set; }
-		public override bool UpdateTimer => true;
+		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
 		private int RoundLimit => 13;
 		private int Round = 0;
 		private readonly float[] RoundStateDuration = { 5f, 60f, 5f };
@@ -34,7 +34,10 @@ namespace PaintBall
 				player.SetTeam( Team.Blue );
 
 			if ( CurrentRoundState == RoundState.Freeze )
+			{
 				player.Respawn();
+				(player.Controller as CustomWalkController).CanMove = false;
+			}
 		}
 
 		public override void OnPlayerLeave( Player player )
@@ -233,12 +236,20 @@ namespace PaintBall
 
 		private void OnAliveBlueChanged()
 		{
-			(Local.Hud.GetChild( 3 ).GetChild( 0 ).GetChild( 0 ) as Sandbox.UI.Label).SetText( AliveBlue.ToString() );
+			(Local.Hud
+				.GetChild( 3 )
+				.GetChild( 0 )
+				.GetChild( 0 ) as Sandbox.UI.Label)
+				.SetText( AliveBlue.ToString() );
 		}
 
 		private void OnAliveRedChanged()
 		{
-			(Local.Hud.GetChild( 3 ).GetChild( 2 ).GetChild( 0 ) as Sandbox.UI.Label).SetText( AliveRed.ToString() );
+			(Local.Hud
+				.GetChild( 3 )
+				.GetChild( 2 )
+				.GetChild( 0 ) as Sandbox.UI.Label)
+				.SetText( AliveRed.ToString() );
 		}
 
 		private void OnBlueScoreChanged()

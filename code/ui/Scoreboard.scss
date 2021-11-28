@@ -1,0 +1,43 @@
+﻿scoreboard
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: rgba(black 0.8);
+    width: 750px;
+    height: 500px;
+    opacity: 0;
+    align-items: center;
+    flex-direction: column;
+    padding: 1px;
+    backdrop-filter: blur(5px);
+
+    &.open
+    {
+        opacity: 1;
+    }
+
+    &.hidden
+    {
+        display: none;
+    }
+}
+
+scoreboardentry
+{
+    color: green;
+    width: 100%;
+    margin-bottom: 1px;
+    background-color: rgba(white 0.4);
+    align-items: center;
+    justify-content: center;
+    flex-grow: 0;
+    flex-shrink: 0;
+    height: 30px;
+    flex-wrap: wrap;
+    label{
+        text-align: center;
+        width: 20%;
+    }
+}

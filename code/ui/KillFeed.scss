@@ -8,7 +8,7 @@ killfeed
     z-index: 100;
     flex-direction: column-reverse;
     width: 500px;
-    font-family: Poppins;
+    font-family: Roboto;
     font-size: 15px;
     font-weight: 500;
     align-items: flex-end;
@@ -16,7 +16,7 @@ killfeed
 
 killfeedentry
 {
-    background-color: rgba(0 0 0 0.8);
+    background-color: rgba(black 0.8);
     margin-bottom: 5px;
     color: white;
     transition: all 0.2s ease-out;
@@ -26,6 +26,7 @@ killfeedentry
     height: 30px;
     position: relative;
     align-items: center;
+    backdrop-filter: blur(10px);
 
     &:outro
     {
@@ -64,7 +65,7 @@ killfeedentry
 
     &.me
     {
-        background-color: rgba(255 255 2255 0.6);
+        background-color: rgba(255 255 255 0.6);
         color: black;
 
         .method

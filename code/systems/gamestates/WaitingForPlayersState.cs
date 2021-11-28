@@ -12,6 +12,7 @@ namespace PaintBall
 			player.SetTeam( (Team)Rand.Int( 1, 2 ) );
 			player.Respawn();
 			StateEndTime = 10f + Time.Now;
+			NextSecondTime = 0f;
 		}
 
 		public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
