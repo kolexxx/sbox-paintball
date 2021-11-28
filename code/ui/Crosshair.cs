@@ -13,5 +13,15 @@ namespace PaintBall
 			StyleSheet.Load( "/ui/Crosshair.scss" );
 			Message = Add.Label( "" );
 		}
+
+		public override void Tick()
+		{
+			base.Tick();
+
+			if ( Local.Pawn is not Player player )
+				return;
+
+			SetClass( "hidden", Local.Hud.GetChild( 6 ).IsVisible );
+		}
 	}
 }
