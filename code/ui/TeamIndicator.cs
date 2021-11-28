@@ -12,5 +12,15 @@ namespace PaintBall
 		{
 			TeamName = Add.Label( "None" );
 		}
+
+		public override void Tick()
+		{
+			base.Tick();
+
+			if ( Local.Pawn is not Player player )
+				return;
+
+			SetClass( "hidden", player.LifeState != LifeState.Alive );
+		}
 	}
 }

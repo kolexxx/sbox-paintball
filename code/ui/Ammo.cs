@@ -6,7 +6,6 @@ namespace PaintBall
 {
 	public class Ammo : Panel
 	{
-
 		public Label AmmoCount;
 
 		public Ammo()
@@ -21,6 +20,8 @@ namespace PaintBall
 			if ( player == null )
 				return;
 
+			SetClass( "hidden", player.LifeState != LifeState.Alive );
+
 			var weapon = player.ActiveChild as Weapon;
 
 			if ( weapon == null )
@@ -28,7 +29,7 @@ namespace PaintBall
 
 			AmmoCount.Text = $"{weapon.AmmoClip}";
 		}
-		
+
 	}
 
 }
