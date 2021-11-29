@@ -151,7 +151,7 @@ namespace PaintBall
 					Alive.Text = "";
 
 				Deaths.Text = Client.GetInt( "deaths" ).ToString();
-				Ping.Text = Client.Ping.ToString();
+				Ping.Text =  Client.IsBot ? "BOT" : Client.Ping.ToString();
 			}
 		}
 	}
