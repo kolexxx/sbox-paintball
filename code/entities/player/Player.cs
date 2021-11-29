@@ -15,6 +15,7 @@ namespace PaintBall
 			Inventory = new BaseInventory( this );
 			Projectiles = new( this );
 			EnableTouch = true;
+			LifeState = LifeState.Dead;
 		}
 
 		public override void Respawn()

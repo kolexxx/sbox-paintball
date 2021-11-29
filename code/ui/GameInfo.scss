@@ -2,6 +2,7 @@
 
 gameinfo
 {
+    position: absolute;
     margin-top: 1px;
     width: 200px;
     height: 50px;
@@ -37,6 +38,11 @@ gameinfo
         margin: 0px 0px 0px 2px;
         background-color: $redColor;
         width: 25%;
+    }
+
+    &.hidden
+    {
+        display: none;
     }
 }
 

@@ -29,6 +29,11 @@ namespace PaintBall
 		{
 			base.Tick();
 
+			SetClass( "hidden", Local.Hud.GetChild( 6 ).IsVisible );
+
+			if ( !IsVisible )
+				return;
+
 			var player = Local.Pawn;
 			if ( player == null )
 				return;

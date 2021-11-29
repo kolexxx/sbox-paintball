@@ -62,6 +62,8 @@ namespace PaintBall
 
 			foreach ( var player in Players )
 			{
+				player.Reset();
+
 				player.SetTeam( (Team)Rand.Int( 1, 2 ) );
 
 				player.Respawn();
