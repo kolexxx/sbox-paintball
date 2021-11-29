@@ -49,7 +49,6 @@ namespace PaintBall
 
 		public override void Simulate( Client cl )
 		{
-			
 			Projectiles.Simulate();
 
 			var controller = GetActiveController();
