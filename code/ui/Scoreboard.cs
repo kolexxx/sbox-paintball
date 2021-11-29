@@ -13,6 +13,7 @@ namespace PaintBall
 
 		Dictionary<Client, ScoreBoardEntry> Entries = new();
 
+		Panel Header;
 		Panel[] Sections = new Panel[3];
 
 		public Scoreboard()
@@ -24,6 +25,12 @@ namespace PaintBall
 			Sections[0] = Add.Panel( "none" );
 			Sections[1] = Add.Panel( "blue" );
 			Sections[2] = Add.Panel( "red" );
+			Header = Add.Panel( "header" );
+			Header.Add.Label( "Name" );
+			Header.Add.Label( "" );
+			Header.Add.Label( "Kills" );
+			Header.Add.Label( "Deaths" );
+			Header.Add.Label( "Ping" );
 		}
 
 		public override void Tick()
@@ -69,7 +76,7 @@ namespace PaintBall
 			}
 		}
 
-		public ScoreBoardEntry AddEntry( Client client, Team team )
+	public ScoreBoardEntry AddEntry( Client client, Team team )
 		{
 			var e = Sections[(int)team].AddChild<ScoreBoardEntry>();
 			e.Client = client;
@@ -109,9 +116,9 @@ namespace PaintBall
 
 			public ScoreBoardEntry()
 			{
-				Name = Add.Label( "Name", "name" );
-				Kills = Add.Label( "0", "kills" );
+				Name = Add.Label( "Name", "name" );				
 				Alive = Add.Label( "", "alive" );
+				Kills = Add.Label( "0", "kills" );
 				Deaths = Add.Label( "0", "deaths" );
 				Ping = Add.Label( "0", "ping" );
 			}
