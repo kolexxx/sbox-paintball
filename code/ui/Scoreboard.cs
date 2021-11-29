@@ -56,7 +56,7 @@ namespace PaintBall
 			}
 
 			// Up to 160 comparisons each tick. Maybe add delay for each sort?
-			for ( int i = 0; i < 3; i++ )
+			for ( int i = 1; i <= 2; i++ )
 			{
 				Sections[i].SortChildren( e =>
 				{
@@ -137,7 +137,12 @@ namespace PaintBall
 			{
 				Name.Text = Client.Name;
 				Kills.Text = Client.GetInt( "kills" ).ToString();
-				Alive.Text = Client.Pawn?.LifeState == LifeState.Alive ? "" : "Dead";
+
+				if ( !Client.Pawn.IsValid() || Client.Pawn.LifeState != LifeState.Alive )
+					Alive.Text = "Dead";
+				else
+					Alive.Text = "";
+
 				Deaths.Text = Client.GetInt( "deaths" ).ToString();
 				Ping.Text = Client.Ping.ToString();
 			}

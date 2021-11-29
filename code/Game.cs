@@ -137,7 +137,7 @@ namespace PaintBall
 
 			Log.Info( $"{client.Name} was killed" );
 
-			var attacker = pawn.LastAttacker.Client.Pawn as Player;
+			var attacker = pawn.LastAttacker?.Client?.Pawn as Player;
 			var victim = pawn as Player;
 
 			if ( attacker != null )
