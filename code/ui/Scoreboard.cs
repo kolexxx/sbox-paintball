@@ -8,11 +8,22 @@ namespace PaintBall
 {
 	public class Scoreboard : Panel
 	{
+
+		public static Scoreboard Instance;
+
 		Dictionary<Client, ScoreBoardEntry> Entries = new();
+
+		Panel[] Sections = new Panel[3];
 
 		public Scoreboard()
 		{
+			Instance = this;
+
 			StyleSheet.Load( "/ui/Scoreboard.scss" );
+
+			Sections[0] = Add.Panel( "none" );
+			Sections[1] = Add.Panel( "blue" );
+			Sections[2] = Add.Panel( "red" );
 		}
 
 		public override void Tick()
@@ -26,7 +37,12 @@ namespace PaintBall
 
 			foreach ( var client in Client.All.Except( Entries.Keys ) )
 			{
-				var e = AddEntry( client );
+				Team team = Team.None;
+
+				if ( client.Pawn != null )
+					team = (client.Pawn as Player).Team;
+
+				var e = AddEntry( client, team );
 				Entries[client] = e;
 			}
 
@@ -40,22 +56,45 @@ namespace PaintBall
 			}
 
 			// Up to 160 comparisons each tick. Maybe add delay for each sort?
-			SortChildren( e =>
+			for ( int i = 0; i < 3; i++ )
 			{
-				var client = (e as ScoreBoardEntry)?.Client;
+				Sections[i].SortChildren( e =>
+				{
+					var client = (e as ScoreBoardEntry)?.Client;
 
-				int rank = client.GetInt( "kills" ) - client.GetInt( "deaths" );
+					int rank = client.GetInt( "kills" ) - client.GetInt( "deaths" );
 
-				return -rank;
-			} );
+					return -rank;
+				} );
+			}
 		}
 
-		public ScoreBoardEntry AddEntry( Client client )
+		public ScoreBoardEntry AddEntry( Client client, Team team )
 		{
-			var e = AddChild<ScoreBoardEntry>();
+			var e = Sections[(int)team].AddChild<ScoreBoardEntry>();
 			e.Client = client;
 
 			return e;
+		}
+
+		public void UpdateEntry( Client client, Team team )
+		{
+			if ( !client.IsValid() )
+				return;
+
+			if ( Entries.ContainsKey( client ) )
+			{
+				var e = Entries[client];
+				e?.Delete();
+
+				e = AddEntry( client, team );
+				Entries[client] = e;
+			}
+			else
+			{
+				var e = AddEntry( client, team );
+				Entries[client] = e;
+			}
 		}
 
 		public class ScoreBoardEntry : Panel

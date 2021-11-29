@@ -1,4 +1,6 @@
-﻿scoreboard
+﻿@import "Variables.scss";
+
+scoreboard
 {
     position: absolute;
     top: 50%;
@@ -9,8 +11,7 @@
     height: 500px;
     opacity: 0;
     align-items: center;
-    flex-direction: column;
-    padding: 1px;
+    flex-direction: column-reverse;
     backdrop-filter: blur(5px);
 
     &.open
@@ -18,25 +19,44 @@
         opacity: 1;
     }
 
+    panel{
+        width: 100%;
+        height: 34%;
+        flex-direction: column;
+        align-items: center;
+    }
+
     &.hidden
     {
         display: none;
+    }
+
+    .blue
+    {
+        background-color: rgba($blueColor 0.2);
+    }
+
+    .red
+    {
+        background-color: rgba($redColor 0.2);
     }
 }
 
 scoreboardentry
 {
-    color: green;
+    color: white;
     width: 100%;
     margin-bottom: 1px;
-    background-color: rgba(white 0.4);
+    //background-color: rgba(white 0.4);
     align-items: center;
     justify-content: center;
     flex-grow: 0;
     flex-shrink: 0;
     height: 30px;
     flex-wrap: wrap;
-    label{
+
+    label
+    {
         text-align: center;
         width: 20%;
     }
