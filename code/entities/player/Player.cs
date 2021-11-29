@@ -91,6 +91,8 @@ namespace PaintBall
 			Team = team;
 			Tags.Add( $"{Team.GetString()}player" );
 			Client.SetInt( "team", (int)team );
+
+			Hud.OnTeamChanged( To.Everyone, Client, team );
 		}
 
 		public void OnTeamChanged( Team oldTeam, Team newTeam )

@@ -3,8 +3,6 @@ using Sandbox.UI;
 
 namespace PaintBall
 {
-
-
 	[Library]
 	public partial class Hud : HudEntity<RootPanel>
 	{
@@ -36,6 +34,12 @@ namespace PaintBall
 				.GetChild( (int)team )?
 				.GetChild( 0 ) as Label)?
 				.SetText( text );
+		}
+
+		[ClientRpc]
+		public static void OnTeamChanged(Client client, Team newTeam )
+		{
+			Scoreboard.Instance.UpdateEntry( client, newTeam );
 		}
 
 		public Hud()
