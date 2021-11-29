@@ -48,7 +48,7 @@ middle
     panel
     {
         background-color: rgba(black, 0.8);
-        height: 50%;
+        height: 49%;
         font-size: 20px;
         backdrop-filter: blur(5px);
     }
@@ -61,7 +61,6 @@ middle
 
     .bluescore
     {
-        height: 48%;
         color: $blueColor;
         width: 39.5px;
         margin-top: 1px;
@@ -70,7 +69,6 @@ middle
 
     .redscore
     {
-        height: 48%;
         color: $redColor;
         width: 39.5px;
         margin-top: 1px;

@@ -4,8 +4,6 @@ using System.Linq;
 
 namespace PaintBall
 {
-
-
 	public enum Team
 	{
 		None,
