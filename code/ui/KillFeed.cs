@@ -7,8 +7,12 @@ namespace PaintBall
 {
 	public class KillFeed : Panel
 	{
+		public static KillFeed Instance;
+
 		public KillFeed()
 		{
+			Instance = this;
+
 			StyleSheet.Load( "/ui/KillFeed.scss" );
 		}
 
