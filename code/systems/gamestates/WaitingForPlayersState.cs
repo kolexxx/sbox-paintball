@@ -5,13 +5,16 @@ namespace PaintBall
 {
 	public partial class WaitingForPlayersState : BaseState
 	{
+		public override int StateDuration => 10;
+
 		public override void OnPlayerJoin( Player player )
 		{
 			base.OnPlayerJoin( player );
 
 			player.SetTeam( (Team)Rand.Int( 1, 2 ) );
 			player.Respawn();
-			StateEndTime = 10f + Time.Now;
+
+			StateEndTime = StateDuration + Time.Now;
 			NextSecondTime = 0f;
 		}
 
@@ -58,7 +61,7 @@ namespace PaintBall
 			base.Start();
 
 			if ( Players.Count > 1 )
-				StateEndTime = 10f + Time.Now;
+				StateEndTime = StateDuration + Time.Now;
 
 			foreach ( var player in Players )
 			{
