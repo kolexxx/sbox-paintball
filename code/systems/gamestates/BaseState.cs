@@ -7,6 +7,7 @@ namespace PaintBall
 {
 	public partial class BaseState : BaseNetworkable
 	{
+		[Net, Predicted] public TimeSince FreezeTime { get; protected set; } = 5f;
 		public virtual bool CanPlayerSuicide => false;
 		public virtual int StateDuration => 0;
 		public virtual string Name => GetType().Name;
@@ -73,14 +74,13 @@ namespace PaintBall
 
 		public virtual void Finish()
 		{
-			StateEndTime = 0f;
-
 			if ( Host.IsServer )
 				return;
 
 			Hud.UpdateCrosshairMessage();
 			Hud.UpdateTeamScore( Team.Blue );
 			Hud.UpdateTeamScore( Team.Red );
+			KillFeed.Instance.DeleteChildren();
 		}
 	}
 }
