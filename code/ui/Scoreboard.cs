@@ -8,7 +8,7 @@ namespace PaintBall
 {
 	public class Scoreboard : Panel
 	{
-
+		public bool Show { get; set; } = false;
 		public static Scoreboard Instance;
 
 		Dictionary<Client, ScoreBoardEntry> Entries = new();
@@ -37,7 +37,7 @@ namespace PaintBall
 		{
 			base.Tick();
 
-			SetClass( "open", Input.Down( InputButton.Score ) );
+			SetClass( "open", Show || Input.Down( InputButton.Score ));
 
 			if ( !IsVisible )
 				return;
