@@ -77,10 +77,7 @@ namespace PaintBall
 			if ( Host.IsServer )
 				return;
 
-			Hud.UpdateCrosshairMessage();
-			Hud.UpdateTeamScore( Team.Blue );
-			Hud.UpdateTeamScore( Team.Red );
-			KillFeed.Instance.DeleteChildren();
+			Hud.Reset();
 		}
 	}
 }
