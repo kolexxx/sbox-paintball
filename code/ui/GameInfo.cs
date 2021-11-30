@@ -7,22 +7,26 @@ namespace PaintBall
 {
 	public class GameInfo : Panel
 	{
+		public static GameInfo Instance;
+
 		public Label Timer;
-		public Panel left;
-		public Middle mid;
-		public Panel right;
+		public Panel Left;
+		public Middle Mid;
+		public Panel Right;
 		public GameInfo()
 		{
+			Instance = this;
+
 			StyleSheet.Load( "/ui/GameInfo.scss" );
 
-			left = AddChild<Panel>( "left" );
-			left.Add.Label( "0" );
+			Left = AddChild<Panel>( "left" );
+			Left.Add.Label( "0" );
 
-			mid = AddChild<Middle>( "mid" );
-			Timer = mid.GetChild( 0 ).Add.Label( "00:00" );
+			Mid = AddChild<Middle>( "mid" );
+			Timer = Mid.GetChild( 0 ).Add.Label( "00:00" );
 
-			right = AddChild<Panel>( "right" );
-			right.Add.Label( "0" );
+			Right = AddChild<Panel>( "right" );
+			Right.Add.Label( "0" );
 		}
 
 		public override void Tick()
