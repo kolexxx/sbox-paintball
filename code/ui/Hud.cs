@@ -6,12 +6,23 @@ namespace PaintBall
 	[Library]
 	public partial class Hud : HudEntity<RootPanel>
 	{
-		// Ugly ass code. Use static instances?
-
 		[ClientRpc]
 		public static void AddKillFeed( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
 		{
 			KillFeed.Instance.AddEntry( left, right, method, teamLeft, teamRight, lsteamid, rsteamid );
+		}
+
+		[ClientRpc]
+		public static void OnTeamChanged( Client client, Team newTeam )
+		{
+			Scoreboard.Instance.UpdateEntry( client, newTeam );
+		}
+
+		[ClientRpc]
+		public static void Reset()
+		{
+			UpdateCrosshairMessage();
+			KillFeed.Instance.DeleteChildren();
 		}
 
 		[ClientRpc]
@@ -29,11 +40,7 @@ namespace PaintBall
 			(GameInfo.Instance.Mid.GetChild( (int)team ).GetChild( 0 ) as Label).Text = text;
 		}
 
-		[ClientRpc]
-		public static void OnTeamChanged( Client client, Team newTeam )
-		{
-			Scoreboard.Instance.UpdateEntry( client, newTeam );
-		}
+		
 
 		public Hud()
 		{

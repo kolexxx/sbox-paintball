@@ -18,9 +18,8 @@ namespace PaintBall
 
 		public virtual Panel AddEntry( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
 		{
-			Log.Info( $"{left} has killed {right} using {method}" );
-
 			var e = AddChild<KillFeedEntry>();
+
 			e.SetClass( "me", Local.Client.PlayerId == lsteamid || Local.Client.PlayerId == rsteamid );
 
 			e.Left.Text = left;
