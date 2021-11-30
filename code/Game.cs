@@ -64,11 +64,16 @@ namespace PaintBall
 
 		public override void MoveToSpawnpoint( Entity pawn )
 		{
-			if ( pawn is Player player && player.Team != Team.None )
+			if ( pawn is Player player )
 			{
+				Team team = player.Team;
+
+				if ( player.Team == Team.None )
+					team = (Team)Rand.Int( 1, 2 );
+
 				var spawnpoints = Entity.All
 									.OfType<PlayerSpawnPoint>()
-									.Where( e => e.Team == player.Team )
+									.Where( e => e.Team == team )
 									.ToList();
 
 				if ( spawnpoints.Count > 0 )
@@ -90,6 +95,7 @@ namespace PaintBall
 		{
 			CurrentGameState = null;
 			LastGameState = null;
+
 			base.Shutdown();
 		}
 
@@ -134,8 +140,6 @@ namespace PaintBall
 		public override void OnKilled( Client client, Entity pawn )
 		{
 			Host.AssertServer();
-
-			Log.Info( $"{client.Name} was killed" );
 
 			var attacker = pawn.LastAttacker?.Client?.Pawn as Player;
 			var victim = pawn as Player;

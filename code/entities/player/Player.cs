@@ -6,6 +6,7 @@ namespace PaintBall
 	public partial class Player : Sandbox.Player
 	{
 		[Net, Change] public Team Team { get; set; }
+		public bool IsSpectator => Controller is SpectatorController;
 		public ProjectileSimulator Projectiles { get; set; }
 		public TimeSince TimeSinceSpawned { get; private set; }
 		private DamageInfo LastDamageInfo { get; set; }
@@ -15,7 +16,15 @@ namespace PaintBall
 			Inventory = new BaseInventory( this );
 			Projectiles = new( this );
 			EnableTouch = true;
+		}
+
+		public void MakeSpectator()
+		{
+			Inventory.DeleteContents();
+			EnableAllCollisions = false;
+			EnableDrawing = false;
 			LifeState = LifeState.Dead;
+			Controller = new SpectatorController();
 		}
 
 		public override void Respawn()
@@ -55,22 +64,19 @@ namespace PaintBall
 
 			if ( controller is SpectatorController )
 			{
-				controller?.Simulate( cl, this, GetActiveAnimator() );
+				controller.Simulate( cl, this, GetActiveAnimator() );
+
 				return;
 			}
 
 			SimulateActiveChild( cl, ActiveChild );
 
-			if ( Input.ActiveChild != null )
-			{
+			if ( Input.ActiveChild != null )			
 				ActiveChild = Input.ActiveChild;
-			}
-
-			if ( LifeState != LifeState.Alive )
-			{
+			
+			if ( LifeState != LifeState.Alive )	
 				return;
-			}
-
+			
 			controller?.Simulate( cl, this, GetActiveAnimator() );
 		}
 
@@ -118,24 +124,17 @@ namespace PaintBall
 
 			Inventory.DeleteContents();
 
-			EnableDrawing = false;
-			EnableAllCollisions = false;
-
 			BecomeRagdollOnClient( LastDamageInfo.Force, GetHitboxBone( LastDamageInfo.HitboxIndex ) );
 
 			RemoveAllDecals();
-
-			Controller = new SpectatorController();
-
 
 			var attacker = LastAttacker;
 
 			if ( attacker.IsValid() )
 			{
 				if ( attacker is Player killer )
-				{
 					killer?.OnPlayerKill();
-				}
+
 				Game.Instance.CurrentGameState?.OnPlayerKilled( this, attacker, LastDamageInfo );
 			}
 			else
@@ -152,7 +151,7 @@ namespace PaintBall
 		public override void TakeDamage( DamageInfo info )
 		{
 			// Spawnprotection
-			if ( TimeSinceSpawned < 0f )
+			if ( TimeSinceSpawned < 1f )
 				return;
 
 			LastDamageInfo = info;

@@ -10,7 +10,7 @@ namespace PaintBall
 		[Net, Change] public int AliveRed { get; private set; } = 0;
 		[Net, Change] public int BlueScore { get; private set; } = 0;
 		[Net, Change] public int RedScore { get; private set; } = 0;
-		[Net] public RoundState CurrentRoundState { get; set; }
+		[Net, Change] public RoundState CurrentRoundState { get; private set; }
 		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
 		private int RoundLimit => 13;
 		private int Round = 0;
@@ -28,14 +28,21 @@ namespace PaintBall
 		{
 			base.OnPlayerJoin( player );
 
-			if ( Team.Blue.GetCount() >= Team.Red.GetCount() )
-				player.SetTeam( Team.Red );
-			else
-				player.SetTeam( Team.Blue );
+			if ( CurrentRoundState == RoundState.Freeze )
+			{
+				if ( Team.Blue.GetCount() >= Team.Red.GetCount() )
+					player.SetTeam( Team.Red );
+				else
+					player.SetTeam( Team.Blue );
 
-			if ( CurrentRoundState == RoundState.Freeze )			
 				player.Respawn();
-			
+			}
+			else
+			{
+				player.MakeSpectator();
+
+				Game.Instance.MoveToSpawnpoint( player );
+			}
 		}
 
 		public override void OnPlayerLeave( Player player )
@@ -53,6 +60,8 @@ namespace PaintBall
 		public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
 		{
 			AdjustTeam( player.Team, -1 );
+
+			player.MakeSpectator();
 		}
 
 		public override void OnSecond()
@@ -80,14 +89,11 @@ namespace PaintBall
 
 				case RoundState.Play:
 
-					if ( Host.IsServer )
+					if ( Host.IsServer && (AliveBlue == 0 || AliveRed == 0) )
 					{
-						if ( AliveBlue == 0 || AliveRed == 0 )
-						{
-							RoundStateFinish();
+						RoundStateFinish();
 
-							return;
-						}
+						return;
 					}
 
 					break;
@@ -117,6 +123,8 @@ namespace PaintBall
 
 			if ( Host.IsClient )
 			{
+				Hud.UpdateTeamScore( Team.Blue );
+				Hud.UpdateTeamScore( Team.Red );
 				(GameInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
 				(GameInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
 			}
@@ -167,8 +175,6 @@ namespace PaintBall
 
 		private void RoundStateFinish()
 		{
-			StateEndTime = 0f;
-
 			switch ( CurrentRoundState )
 			{
 				case RoundState.Freeze:
@@ -207,8 +213,6 @@ namespace PaintBall
 					AliveBlue = 0;
 					AliveRed = 0;
 
-					Hud.UpdateCrosshairMessage( To.Everyone );
-
 					break;
 			}
 
@@ -236,7 +240,7 @@ namespace PaintBall
 
 		private void OnAliveBlueChanged()
 		{
-			(GameInfo.Instance.Left.GetChild(0) as Sandbox.UI.Label).Text = AliveBlue.ToString();
+			(GameInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = AliveBlue.ToString();
 		}
 
 		private void OnAliveRedChanged()
@@ -252,6 +256,12 @@ namespace PaintBall
 		private void OnRedScoreChanged()
 		{
 			Hud.UpdateTeamScore( Team.Red, RedScore.ToString() );
+		}
+
+		private void OnCurrentRoundStateChanged( RoundState oldState, RoundState newState )
+		{
+			if ( oldState == RoundState.End )
+				Hud.Reset();
 		}
 	}
 }
