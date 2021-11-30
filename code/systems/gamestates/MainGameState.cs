@@ -33,11 +33,9 @@ namespace PaintBall
 			else
 				player.SetTeam( Team.Blue );
 
-			if ( CurrentRoundState == RoundState.Freeze )
-			{
+			if ( CurrentRoundState == RoundState.Freeze )			
 				player.Respawn();
-				(player.Controller as CustomWalkController).CanMove = false;
-			}
+			
 		}
 
 		public override void OnPlayerLeave( Player player )
@@ -108,7 +106,6 @@ namespace PaintBall
 				player.Reset();
 
 			CurrentRoundState = RoundState.Freeze; // No need for this.
-			StateEndTime = RoundStateDuration[(int)CurrentRoundState] + Time.Now;
 
 			if ( Host.IsServer )
 				RoundStateStart();
@@ -117,6 +114,12 @@ namespace PaintBall
 		public override void Finish()
 		{
 			base.Finish();
+
+			if ( Host.IsClient )
+			{
+				(GameInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
+				(GameInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
+			}
 		}
 
 		private void RoundStateStart()
@@ -124,6 +127,8 @@ namespace PaintBall
 			switch ( CurrentRoundState )
 			{
 				case RoundState.Freeze:
+
+					FreezeTime = 0;
 
 					Game.Instance.CleanUp();
 
@@ -139,8 +144,6 @@ namespace PaintBall
 						index ^= 1;
 
 						player.Respawn();
-
-						(player.Controller as CustomWalkController).CanMove = false;
 					}
 
 					break;
@@ -148,9 +151,6 @@ namespace PaintBall
 				case RoundState.Play:
 
 					Audio.PlayAll( "prepare" );
-
-					foreach ( var player in Players )
-						(player.Controller as CustomWalkController).CanMove = true;
 
 					break;
 
@@ -197,7 +197,7 @@ namespace PaintBall
 
 					if ( Round == RoundLimit )
 					{
-						Game.Instance.ChangeState( new WaitingForPlayersState() );
+						Game.Instance.ChangeState( new GameFinishedState() );
 
 						return;
 					}
@@ -236,20 +236,12 @@ namespace PaintBall
 
 		private void OnAliveBlueChanged()
 		{
-			(Local.Hud
-				.GetChild( 3 )
-				.GetChild( 0 )
-				.GetChild( 0 ) as Sandbox.UI.Label)
-				.SetText( AliveBlue.ToString() );
+			(GameInfo.Instance.Left.GetChild(0) as Sandbox.UI.Label).Text = AliveBlue.ToString();
 		}
 
 		private void OnAliveRedChanged()
 		{
-			(Local.Hud
-				.GetChild( 3 )
-				.GetChild( 2 )
-				.GetChild( 0 ) as Sandbox.UI.Label)
-				.SetText( AliveRed.ToString() );
+			(GameInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = AliveRed.ToString();
 		}
 
 		private void OnBlueScoreChanged()
