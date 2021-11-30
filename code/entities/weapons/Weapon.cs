@@ -83,8 +83,7 @@ namespace PaintBall
 
 		public override bool CanPrimaryAttack()
 		{
-			// Ugly prediction error because it takes time for the client to update the RoundState. This is a much bigger problem :(
-			if ( (Owner as Player).GetActiveController() is CustomWalkController controller && !controller.CanMove )
+			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f )
 				return false;
 
 			return base.CanPrimaryAttack();

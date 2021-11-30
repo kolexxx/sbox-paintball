@@ -29,12 +29,9 @@ namespace PaintBall
 		[Net] public float AirControl { get; set; } = 30.0f;
 		public bool Swimming { get; set; } = false;
 		[Net] public bool AutoJump { get; set; } = true;
-		[Net] public bool CanMove { get; set; } = true;
-
 
 		public Duck Duck;
 		public Unstuck Unstuck;
-
 
 		public CustomWalkController()
 		{
@@ -142,7 +139,7 @@ namespace PaintBall
 				BaseVelocity = BaseVelocity.WithZ( 0 );
 			}
 
-			if ( !CanMove )
+			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f )	
 				return;
 			/*
 			 if (player->m_flWaterJumpTime)
