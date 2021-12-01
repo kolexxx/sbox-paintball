@@ -101,7 +101,7 @@ namespace PaintBall
 			if ( string.IsNullOrEmpty( ViewModelPath ) )
 				return;
 
-			ViewModelEntity = new BaseViewModel
+			ViewModelEntity = new ViewModel
 			{
 				Position = Position,
 				Owner = Owner,
