@@ -21,10 +21,15 @@ namespace PaintBall
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 		public PickupTrigger PickupTrigger { get; protected set; }
 
+		public Weapon()
+		{
+			EnableShadowInFirstPerson = false;
+		}
+
 		public override void Spawn()
 		{
 			base.Spawn();
-
+			
 			PickupTrigger = new PickupTrigger
 			{
 				Parent = this,
@@ -166,7 +171,7 @@ namespace PaintBall
 			if ( Owner is not Player owner )
 				return;
 
-			var projectile = new BaseProjectile()
+			var projectile = new Projectile()
 			{
 				Team = owner.Team,
 				FollowEffect = FollowEffect,
@@ -187,7 +192,7 @@ namespace PaintBall
 			projectile.Initialize( position, velocity, OnProjectileHit );
 		}
 
-		protected virtual void OnProjectileHit( BaseProjectile projectile, Entity entity, int hitbox )
+		protected virtual void OnProjectileHit( Projectile projectile, Entity entity, int hitbox )
 		{
 			if ( IsServer && entity.IsValid() )
 				DealDamage( entity, projectile.Position, projectile.Velocity * 0.1f, hitbox );

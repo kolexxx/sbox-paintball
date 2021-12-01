@@ -69,7 +69,7 @@ namespace PaintBall
 				{
 					var client = (e as ScoreBoardEntry)?.Client;
 
-					int rank = client.GetInt( "kills" ) - client.GetInt( "deaths" );
+					int rank = client.GetInt( "kills" );
 
 					return -rank;
 				} );

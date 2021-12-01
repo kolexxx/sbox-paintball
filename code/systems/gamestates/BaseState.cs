@@ -10,11 +10,10 @@ namespace PaintBall
 		[Net, Predicted] public TimeSince FreezeTime { get; protected set; } = 5f;
 		public virtual bool CanPlayerSuicide => false;
 		public virtual int StateDuration => 0;
-		public virtual string Name => GetType().Name;
 		public float StateEndTime { get; set; }
+		public virtual string Name => GetType().Name;
 		public virtual bool UpdateTimer => false;
 		protected RealTimeUntil NextSecondTime { get; set; }
-
 		protected static List<Player> Players = new();
 
 		public float TimeLeft
@@ -47,6 +46,16 @@ namespace PaintBall
 		public virtual void OnPlayerSpawned( Player player ) { }
 
 		public virtual void OnPlayerKilled( Player player, Entity attacker, DamageInfo info ) { }
+
+		public virtual void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
+		{
+			if ( newTeam == Team.None )
+			{
+				player.MakeSpectator();
+
+				return;
+			}
+		}
 
 		public virtual void OnSecond()
 		{

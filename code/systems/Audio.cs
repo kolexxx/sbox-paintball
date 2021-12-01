@@ -4,7 +4,6 @@ namespace PaintBall
 {
 	public static partial class Audio
 	{
-
 		public static void PlayAll( string sound )
 		{
 			Play( To.Everyone, sound );

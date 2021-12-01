@@ -5,7 +5,7 @@ namespace PaintBall
 {
 	public partial class ProjectileSimulator
 	{
-		public List<BaseProjectile> List { get; private set; }
+		public List<Projectile> List { get; private set; }
 		public Player Owner { get; private set; }
 
 		public ProjectileSimulator( Player owner )
@@ -14,12 +14,12 @@ namespace PaintBall
 			Owner = owner;
 		}
 
-		public void Add( BaseProjectile projectile )
+		public void Add( Projectile projectile )
 		{
 			List.Add( projectile );
 		}
 
-		public void Remove( BaseProjectile projectile )
+		public void Remove( Projectile projectile )
 		{
 			List.Remove( projectile );
 		}

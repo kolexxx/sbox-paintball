@@ -165,7 +165,7 @@ namespace PaintBall
 		{
 			Sandbox.Internal.Decals.RemoveFromWorld();
 
-			foreach ( var projectile in All.OfType<BaseProjectile>() )
+			foreach ( var projectile in All.OfType<Projectile>() )
 			{
 				if ( projectile.IsValid() )
 					projectile.Delete();

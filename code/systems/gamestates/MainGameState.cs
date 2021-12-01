@@ -64,6 +64,25 @@ namespace PaintBall
 			player.MakeSpectator();
 		}
 
+		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
+		{
+			if ( newTeam == Team.None )
+			{
+				player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
+
+				return;
+			}
+
+			if ( CurrentRoundState == RoundState.Freeze )
+			{
+				Game.Instance.MoveToSpawnpoint( player );
+
+				return;
+			}
+
+			player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
+		}
+
 		public override void OnSecond()
 		{
 			if ( Host.IsServer )
@@ -144,7 +163,7 @@ namespace PaintBall
 
 					foreach ( var player in Players )
 					{
-						if ( !player.IsValid() )
+						if ( !player.IsValid() || player.Team == Team.None )
 							continue;
 
 						player.SetTeam( (Team)(1 + index) );
@@ -221,6 +240,9 @@ namespace PaintBall
 
 		private void AdjustTeam( Team team, int num )
 		{
+			if ( team == Team.None )
+				return;
+
 			if ( team == Team.Blue )
 				AliveBlue += num;
 			else

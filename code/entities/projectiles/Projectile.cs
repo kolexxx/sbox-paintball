@@ -4,15 +4,14 @@ using System;
 namespace PaintBall
 {
 	[Library]
-	public partial class BaseProjectile : ModelEntity
+	public partial class Projectile : ModelEntity
 	{
 		[Net, Predicted] public string FollowEffect { get; set; } = "";
 		[Net, Predicted] public string HitSound { get; set; } = "";
 		[Net, Predicted] public string Model { get; set; } = "";
 		[Net, Predicted] public string TrailEffect { get; set; } = "";
-
 		public string Attachment { get; set; } = null;
-		public Action<BaseProjectile, Entity, int> Callback { get; private set; }
+		public Action<Projectile, Entity, int> Callback { get; private set; }
 		public RealTimeUntil CanHitTime { get; set; } = 0.1f;
 		public float Gravity { get; set; } = 10f;
 		public string IgnoreTag { get; set; }
@@ -27,17 +26,16 @@ namespace PaintBall
 		protected SceneObject ModelEntity { get; set; }
 		protected Particles Trail { get; set; }
 
-		public void Initialize( Vector3 start, Vector3 velocity, float radius, Action<BaseProjectile, Entity, int> callback = null )
+		public void Initialize( Vector3 start, Vector3 velocity, float radius, Action<Projectile, Entity, int> callback = null )
 		{
 			Initialize( start, velocity, callback );
 			Radius = radius;
 		}
 
-		public void Initialize( Vector3 start, Vector3 velocity, Action<BaseProjectile, Entity, int> callback = null )
+		public void Initialize( Vector3 start, Vector3 velocity, Action<Projectile, Entity, int> callback = null )
 		{
 			if ( LifeTime.HasValue )
-				DestroyTime = LifeTime.Value;
-			
+				DestroyTime = LifeTime.Value;	
 
 			if ( Simulator != null && Simulator.IsValid() )
 			{
@@ -72,9 +70,7 @@ namespace PaintBall
 		{
 			// We only want to create effects if we don't have a client proxy.
 			if ( !HasClientProxy() )
-			{
-				CreateEffects();
-			}
+				CreateEffects();			
 
 			base.ClientSpawn();
 		}
@@ -127,10 +123,11 @@ namespace PaintBall
 
 			if ( HasHitTarget( trace ) )
 			{
-				if ( !string.IsNullOrEmpty( HitSound ) )
+				if ( Host.IsServer && !string.IsNullOrEmpty( HitSound ) )
+				{
+					CreateDecal( $"decals/{Team.GetString()}.decal", trace );
 					Audio.Play( HitSound, Position );
-
-				CreateDecal( $"decals/{Team.GetString()}.decal", trace );
+				}
 
 				Callback?.Invoke( this, trace.Entity, trace.Bone );
 				Delete();
@@ -149,16 +146,11 @@ namespace PaintBall
 
 		protected void CreateDecal( string decalname, TraceResult tr )
 		{
-			if ( Host.IsClient )
-				return;
-
 			var decalPath = decalname;
 			if ( decalPath != null )
 			{
 				if ( DecalDefinition.ByPath.TryGetValue( decalPath, out var decal ) )
-				{
 					decal.PlaceUsingTrace( tr );
-				}
 			}
 		}
 
@@ -166,18 +158,14 @@ namespace PaintBall
 		protected virtual void ClientTick()
 		{
 			if ( ModelEntity.IsValid() )
-			{
 				ModelEntity.Transform = Transform;
-			}
 		}
 
 		[Event.Tick.Server]
 		protected virtual void ServerTick()
 		{
-			if ( !Simulator.IsValid() )
-			{
-				Simulate();
-			}
+			if ( !Simulator.IsValid() )		
+				Simulate();			
 		}
 
 		protected override void OnDestroy()
