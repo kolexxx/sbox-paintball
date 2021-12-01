@@ -163,7 +163,7 @@ namespace PaintBall
 
 					foreach ( var player in Players )
 					{
-						if ( !player.IsValid() || player.Team == Team.None )
+						if ( !player.IsValid() )
 							continue;
 
 						player.SetTeam( (Team)(1 + index) );
