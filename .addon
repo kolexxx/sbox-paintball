@@ -1,4 +1,6 @@
 {
     "sharedassets": "*.*",
-    "type": "game"
+    "type": "game",
+    "name": "PaintBall",
+    "ident": "kole.paintball"
 }
