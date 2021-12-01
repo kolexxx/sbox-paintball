@@ -16,7 +16,7 @@ namespace PaintBall
 			}
 		}
 		private Player SpectadedPlayer;
-		private int SpectatedPlayerIndex = 0;
+		private int Index = 0;
 
 		public void ChangeSpectateCamera()
 		{
@@ -47,8 +47,6 @@ namespace PaintBall
 
 		public void UpdateSpectatingPlayer()
 		{
-			Debug.CheckRealms();
-
 			var oldPlayer = CurrentPlayer;
 
 			CurrentPlayer = null;
@@ -57,10 +55,10 @@ namespace PaintBall
 
 			if ( ValidPlayers.Count > 0 )
 			{
-				if ( ++SpectatedPlayerIndex >= ValidPlayers.Count )
-					SpectatedPlayerIndex = 0;
+				if ( ++Index >= ValidPlayers.Count )
+					Index = 0;
 
-				CurrentPlayer = ValidPlayers[SpectatedPlayerIndex];
+				CurrentPlayer = ValidPlayers[Index];
 			}
 
 			if ( Camera is SpectateCamera camera )
