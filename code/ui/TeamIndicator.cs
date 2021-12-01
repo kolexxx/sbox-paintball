@@ -22,7 +22,7 @@ namespace PaintBall
 
 			SetClass( "hidden", player.LifeState == LifeState.Dead && (player.IsSpectator && !player.IsSpectatingPlayer) );
 
-			TeamName.Text = player.CurrentPlayer.Team.ToString();
+			TeamName.Text = player.CurrentPlayer == player ? player.Team.ToString() : player.CurrentPlayer.Client.Name;
 		}
 	}
 }
