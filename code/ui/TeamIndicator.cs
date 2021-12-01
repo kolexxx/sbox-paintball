@@ -20,7 +20,9 @@ namespace PaintBall
 			if ( Local.Pawn is not Player player )
 				return;
 
-			SetClass( "hidden", player.LifeState != LifeState.Alive );
+			SetClass( "hidden", player.LifeState == LifeState.Dead && (player.IsSpectator && !player.IsSpectatingPlayer) );
+
+			TeamName.Text = player.CurrentPlayer.Team.ToString();
 		}
 	}
 }

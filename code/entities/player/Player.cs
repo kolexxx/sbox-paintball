@@ -5,8 +5,7 @@ namespace PaintBall
 {
 	public partial class Player : Sandbox.Player
 	{
-		[Net, Change] public Team Team { get; set; }
-		public bool IsSpectator => Controller is SpectatorController;
+		[Net, Change] public Team Team { get; set; }		
 		public ProjectileSimulator Projectiles { get; set; }
 		public TimeSince TimeSinceSpawned { get; private set; }
 		private DamageInfo LastDamageInfo { get; set; }
@@ -16,15 +15,6 @@ namespace PaintBall
 			Inventory = new BaseInventory( this );
 			Projectiles = new( this );
 			EnableTouch = true;
-		}
-
-		public void MakeSpectator()
-		{
-			Inventory.DeleteContents();
-			EnableAllCollisions = false;
-			EnableDrawing = false;
-			LifeState = LifeState.Dead;
-			Controller = new SpectatorController();
 		}
 
 		public override void Respawn()
@@ -45,7 +35,7 @@ namespace PaintBall
 			EnableAllCollisions = true;
 			EnableDrawing = true;
 			EnableHideInFirstPerson = true;
-			EnableShadowInFirstPerson = true;
+			EnableShadowInFirstPerson = false;
 
 			Inventory.Add( new SMG(), true );
 			Inventory.Add( new Pistol(), false );
@@ -62,20 +52,17 @@ namespace PaintBall
 
 			var controller = GetActiveController();
 
-			if ( controller is SpectatorController )
-			{
-				controller.Simulate( cl, this, GetActiveAnimator() );
-
-				return;
-			}
-
 			SimulateActiveChild( cl, ActiveChild );
 
 			if ( Input.ActiveChild != null )			
 				ActiveChild = Input.ActiveChild;
-			
-			if ( LifeState != LifeState.Alive )	
+
+			if ( LifeState != LifeState.Alive )
+			{
+				ChangeSpectateCamera();
+
 				return;
+			}
 			
 			controller?.Simulate( cl, this, GetActiveAnimator() );
 		}
@@ -91,14 +78,17 @@ namespace PaintBall
 			LastDamageInfo = default;
 		}
 
-		public void SetTeam( Team team )
+		public void SetTeam( Team newTeam )
 		{
-			Tags.Remove( $"{Team.GetString()}player" );
-			Team = team;
-			Tags.Add( $"{Team.GetString()}player" );
-			Client.SetInt( "team", (int)team );
+			Team oldTeam = Team;
+			Tags.Remove( $"{oldTeam.GetString()}player" );
+			Team = newTeam;
+			Tags.Add( $"{newTeam.GetString()}player" );
+			Client.SetInt( "team", (int)newTeam);
 
-			Hud.OnTeamChanged( To.Everyone, Client, team );
+			Hud.OnTeamChanged( To.Everyone, Client, newTeam );
+
+			Game.Instance.CurrentGameState.OnPlayerChangedTeam( this, oldTeam, newTeam );
 		}
 
 		public void OnTeamChanged( Team oldTeam, Team newTeam )
@@ -107,7 +97,6 @@ namespace PaintBall
 			{
 				Local.Hud.RemoveClass( oldTeam.GetString() );
 				Local.Hud.AddClass( newTeam.GetString() );
-				(Local.Hud.GetChild( 7 ).GetChild( 0 ) as Label).SetText( $"{newTeam}" );
 			}
 		}
 
