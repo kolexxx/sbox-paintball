@@ -2,22 +2,24 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PaintBall
 {
 	public class InventoryBar : Panel
 	{
-		private readonly List<InventoryIcon> slots = new();
+		private List<InventoryIcon> Slots = new();
+		private List<Weapon> Weapons = new();
 
 		public InventoryBar()
 		{
-			for ( int i = 0; i < 6; i++ )
+			StyleSheet.Load( "/ui/InventoryBar.scss" );
+
+			for ( int i = 0; i < 5; i++ )
 			{
 				var icon = new InventoryIcon( i + 1, this );
-				slots.Add( icon );
+				Slots.Add( icon );
 			}
-
-			SetClass( "none", true );
 		}
 
 		public override void Tick()
@@ -26,25 +28,23 @@ namespace PaintBall
 
 			var player = Local.Pawn;
 			if ( player == null ) return;
-			if ( player.Inventory == null ) return;
 
-			for ( int i = 0; i < slots.Count; i++ )
-			{
-				UpdateIcon( player.Inventory.GetSlot( i ), slots[i], i );
-			}
-		}
+			SetClass( "hidden", player.LifeState != LifeState.Alive );
 
-		private static void UpdateIcon( Entity ent, InventoryIcon inventoryIcon, int i )
-		{
-			if ( ent == null )
-			{
-				inventoryIcon.Clear();
+			if ( !IsVisible )
 				return;
-			}
 
-			inventoryIcon.TargetEnt = ent;
-			inventoryIcon.Label.Text = ent.ClassInfo.Title;
-			inventoryIcon.SetClass( "active", ent.IsActiveChild() );
+			Weapons = player.Children.OfType<Weapon>().ToList();
+			Weapons.Sort( ( a, b ) => a.Bucket.CompareTo( b.Bucket ) );
+
+			int i = 0;
+
+			for ( int index = i; index < Weapons.Count; index++, i++ )
+				Slots[Weapons[index].Bucket].UpdateWeapon( Weapons[index] );
+
+			for ( int index = i; index < Slots.Count; index++ )
+				Slots[index].Clear();
+
 		}
 
 		[Event.BuildInput]
@@ -57,48 +57,60 @@ namespace PaintBall
 			var inventory = player.Inventory;
 			if ( inventory == null )
 				return;
-			
-			if ( input.Pressed( InputButton.Slot1 ) ) SetActiveSlot( input, inventory, 0 );
-			if ( input.Pressed( InputButton.Slot2 ) ) SetActiveSlot( input, inventory, 1 );
-			if ( input.Pressed( InputButton.Slot3 ) ) SetActiveSlot( input, inventory, 2 );
-			if ( input.Pressed( InputButton.Slot4 ) ) SetActiveSlot( input, inventory, 3 );
-			if ( input.Pressed( InputButton.Slot5 ) ) SetActiveSlot( input, inventory, 4 );
+
+			if ( input.Pressed( InputButton.Slot1 ) ) SetActiveSlot( input, 0 );
+			if ( input.Pressed( InputButton.Slot2 ) ) SetActiveSlot( input, 1 );
+			if ( input.Pressed( InputButton.Slot3 ) ) SetActiveSlot( input, 2 );
+			if ( input.Pressed( InputButton.Slot4 ) ) SetActiveSlot( input, 3 );
+			if ( input.Pressed( InputButton.Slot5 ) ) SetActiveSlot( input, 4 );
 		}
 
-		private static void SetActiveSlot( InputBuilder input, IBaseInventory inventory, int i )
+		private void SetActiveSlot( InputBuilder input, int i )
 		{
+			if ( i >= Weapons.Count )
+				return;
+
 			var player = Local.Pawn;
 			if ( player == null )
 				return;
 
-			var ent = inventory.GetSlot( i );
-			if ( player.ActiveChild == ent )
+			var weapon = Weapons[i];
+
+			if ( player.ActiveChild == weapon )
 				return;
 
-			if ( ent == null )
+			if ( weapon == null )
 				return;
 
-			input.ActiveChild = ent;
-		}
-	}
-
-	public class InventoryIcon : Panel
-	{
-		public Entity TargetEnt;
-		public Label Label;
-		public Label Number;
-
-		public InventoryIcon( int i, Panel parent )
-		{
-			Parent = parent;
-			Label = Add.Label( "empty", "item-name" );
-			Number = Add.Label( $"{i}", "slot-number" );
+			input.ActiveChild = weapon;
 		}
 
-		public void Clear()
+		public class InventoryIcon : Panel
 		{
-			Label.Text = "";
-			SetClass( "active", false );
+			public Weapon TargetWeapon;
+			public Label Label;
+			public Label Number;
+
+			public InventoryIcon( int i, Panel parent )
+			{
+				Parent = parent;
+				Label = Add.Label( "empty", "item-name" );
+				Number = Add.Label( $"{i}", "slot-number" );
+			}
+
+			public void Clear()
+			{
+				TargetWeapon = null;
+				Label.Text = "";
+				SetClass( "hidden", true );
+			}
+
+			public void UpdateWeapon( Weapon weapon )
+			{
+				TargetWeapon = weapon;
+				Label.Text = weapon.Name;
+				SetClass( "hidden", false );
+			}
 		}
 	}
 }
