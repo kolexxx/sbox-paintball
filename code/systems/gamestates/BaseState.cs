@@ -30,6 +30,8 @@ namespace PaintBall
 
 		public virtual void AddPlayer( Player player )
 		{
+			Host.AssertServer();
+
 			Players.Add( player );
 		}
 

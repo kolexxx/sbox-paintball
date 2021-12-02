@@ -2,7 +2,7 @@
 
 namespace PaintBall
 {
-	public class ViewModel : BaseViewModel
+	partial class ViewModel : BaseViewModel
 	{
 		protected float SwingInfluence => 0.05f;
 		protected float ReturnSpeed => 5.0f;

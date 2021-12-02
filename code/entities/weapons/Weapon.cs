@@ -8,12 +8,14 @@ namespace PaintBall
 		[Net, Predicted] public bool IsReloading { get; set; }
 		[Net, Predicted] public TimeSince TimeSinceDeployed { get; set; }
 		[Net, Predicted] public TimeSince TimeSinceReload { get; set; }
+		public virtual int Bucket => 0;
 		public virtual int ClipSize => 20;
 		public virtual string FireSound => "pbg";
 		public virtual string FollowEffect => $"particles/{(Owner as Player).Team.GetString()}_glow.vpcf";
 		public virtual float Gravity => 0f;
 		public virtual string HitSound => "impact";
 		public virtual string Icon => "ui/weapons/pistol.png";
+		public virtual string Name => "Weapon";
 		public virtual string ProjectileModel => $"models/{(Owner as Player).Team.GetString()}_ball/ball.vmdl";
 		public virtual float ProjectileRadius => 3f;
 		public virtual float ReloadTime => 5.0f;

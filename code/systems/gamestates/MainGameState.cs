@@ -56,9 +56,8 @@ namespace PaintBall
 		{
 			AdjustTeam( player.Team, 1 );
 
-
 			player.Inventory.Add( new SMG(), true );
-			player.Inventory.Add( new Pistol(), false );
+			player.Inventory.Add( new Pistol() );
 		}
 
 		public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
@@ -170,9 +169,9 @@ namespace PaintBall
 						if ( !player.IsValid() )
 							continue;
 
-						player.SetTeam( (Team)(1 + index) );
-
 						player.Inventory.DeleteContents();
+
+						player.SetTeam( (Team)(1 + index) );				
 
 						index ^= 1;
 
