@@ -12,7 +12,7 @@ namespace PaintBall
 
 		public Player()
 		{
-			Inventory = new BaseInventory( this );
+			Inventory = new Inventory( this );
 			Projectiles = new( this );
 			EnableTouch = true;
 		}
@@ -27,7 +27,7 @@ namespace PaintBall
 
 			Animator = new StandardPlayerAnimator();
 
-			Camera = new FirstPersonCamera();
+			Camera = new FirstPersonCamera();	
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
