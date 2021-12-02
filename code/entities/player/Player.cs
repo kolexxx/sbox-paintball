@@ -19,10 +19,7 @@ namespace PaintBall
 
 		public override void Respawn()
 		{
-			Game.Instance.CurrentGameState.OnPlayerSpawned( this );
-
-			Inventory.DeleteContents();
-			Corpse?.Delete();
+			RemoveCorpse();
 
 			SetModel( "models/citizen/citizen.vmdl" );
 
@@ -37,13 +34,12 @@ namespace PaintBall
 			EnableHideInFirstPerson = true;
 			EnableShadowInFirstPerson = false;
 
-			Inventory.Add( new SMG(), true );
-			Inventory.Add( new Pistol(), false );
-
 			TimeSinceSpawned = 0f;
 			RenderColor = Team.GetColor();
 
 			base.Respawn();
+
+			Game.Instance.CurrentGameState.OnPlayerSpawned( this );
 		}
 
 		public override void Simulate( Client cl )

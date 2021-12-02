@@ -33,7 +33,7 @@ namespace PaintBall
 			if ( Local.Pawn is not Player player )
 				return;
 
-			if ( !player.IsSpectatingPlayer || Input.Pressed( InputButton.Attack1 ) )
+			if ( !player.IsSpectatingPlayer || player.CurrentPlayer.LifeState == LifeState.Dead || Input.Pressed( InputButton.Attack1 ) )
 			{
 				player.UpdateSpectatingPlayer();
 

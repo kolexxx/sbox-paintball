@@ -50,6 +50,26 @@ namespace PaintBall
 
 			ent.DeleteAsync( 10.0f );
 		}
-	
+
+		[ClientRpc]
+		public void RemoveCorpseOnClient()
+		{
+			RemoveCorpse();
+		}
+
+		public void RemoveCorpse()
+		{
+			if ( IsServer )
+			{
+				RemoveCorpseOnClient();
+			}
+
+			if ( Corpse != null && Corpse.IsValid() )
+			{
+				Corpse.Delete();
+				Corpse = null;
+			}
+		}
+
 	}
 }

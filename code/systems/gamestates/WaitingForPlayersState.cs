@@ -25,6 +25,12 @@ namespace PaintBall
 			player.Respawn();
 		}
 
+		public override void OnPlayerSpawned( Player player )
+		{
+			player.Inventory.Add( new SMG(), true );
+			player.Inventory.Add( new Pistol() );
+		}
+
 		public override void OnSecond()
 		{
 			base.OnSecond();
