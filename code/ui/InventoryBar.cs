@@ -8,11 +8,15 @@ namespace PaintBall
 {
 	public class InventoryBar : Panel
 	{
+		public static InventoryBar Instance;
+
 		private List<InventoryIcon> Slots = new();
 		private Weapon[] Weapons = new Weapon[5];
 
 		public InventoryBar()
 		{
+			Instance = this;
+
 			StyleSheet.Load( "/ui/InventoryBar.scss" );
 
 			for ( int i = 0; i < 5; i++ )
@@ -54,6 +58,13 @@ namespace PaintBall
 			if ( player == null )
 				return;
 
+			if ( player.FixSpawn <= 0.1f )
+			{
+				Fix( input );
+				
+				return;
+			}
+
 			var inventory = player.Inventory;
 			if ( inventory == null )
 				return;
@@ -81,6 +92,14 @@ namespace PaintBall
 				return;
 
 			input.ActiveChild = weapon;
+		}
+
+		public void Fix( InputBuilder input )
+		{
+			for ( int i = 0; i < 5; i++ )
+			{
+				SetActiveSlot( input, i );
+			}
 		}
 
 		public class InventoryIcon : Panel

@@ -40,8 +40,6 @@ namespace PaintBall
 			(GameInfo.Instance.Mid.GetChild( (int)team ).GetChild( 0 ) as Label).Text = text;
 		}
 
-		
-
 		public Hud()
 		{
 			if ( !IsClient )

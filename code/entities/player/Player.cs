@@ -9,6 +9,7 @@ namespace PaintBall
 		public ProjectileSimulator Projectiles { get; set; }
 		public TimeSince TimeSinceSpawned { get; private set; }
 		private DamageInfo LastDamageInfo { get; set; }
+		[Net, Predicted] public TimeSince FixSpawn { get; set; }
 
 		public Player()
 		{
@@ -19,6 +20,7 @@ namespace PaintBall
 
 		public override void Respawn()
 		{
+			FixSpawn = 0f;
 			RemoveCorpse();
 
 			SetModel( "models/citizen/citizen.vmdl" );
