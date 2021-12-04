@@ -24,6 +24,13 @@ namespace PaintBall
 			SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );
 		}
 
+		public override void ActiveStart( Entity entity )
+		{
+			base.ActiveStart( entity );
+
+			AttackedDuringReload = false;
+		}
+
 		public override void AttackPrimary()
 		{
 			if ( AmmoClip == 0 )
@@ -46,10 +53,48 @@ namespace PaintBall
 			{
 				Rand.SetSeed( Time.Tick );
 				for ( int i = 0; i < BulletsPerFire; i++ )
-				{ 
+				{
 					FireProjectile();
 				}
 			}
+		}
+
+		private bool AttackedDuringReload = false;
+		public override void Simulate( Client owner )
+		{
+			if ( TimeSinceDeployed < 0.6f )
+				return;
+
+			if ( !IsReloading )
+			{
+				if ( CanReload() )
+					Reload();
+
+				if ( !Owner.IsValid() )
+					return;
+
+				if ( CanPrimaryAttack() )
+				{
+					TimeSincePrimaryAttack = 0;
+					AttackPrimary();
+				}
+
+				if ( !Owner.IsValid() )
+					return;
+
+				if ( CanSecondaryAttack() )
+				{
+					TimeSinceSecondaryAttack = 0;
+					AttackSecondary();
+				}
+			}
+			else if ( Input.Pressed( InputButton.Attack1 ) )
+			{
+				AttackedDuringReload = true;
+			}
+
+			if ( IsReloading && TimeSinceReload > ReloadTime )
+				OnReloadFinish();
 		}
 
 		public override void OnReloadFinish()
@@ -59,25 +104,25 @@ namespace PaintBall
 			TimeSincePrimaryAttack = 0;
 
 			AmmoClip++;
-			if(AmmoClip < ClipSize )
-			{
-				Reload();
-			} else
-			{
-				FinishReload();
-			}
-		}
 
-		[ClientRpc]
-		public void FinishReload()
-		{
-			ViewModelEntity?.SetAnimBool( "reload_finished", true );
+			if ( !AttackedDuringReload && AmmoClip < ClipSize )
+				Reload();		
+			else
+				FinishReload();
+			
+			AttackedDuringReload = false;
 		}
 
 		public override void SimulateAnimator( PawnAnimator anim )
 		{
 			anim.SetParam( "holdtype", 3 );
 			anim.SetParam( "aimat_weight", 1.0f );
+		}
+
+		[ClientRpc]
+		public void FinishReload()
+		{
+			ViewModelEntity?.SetAnimBool( "reload_finished", true );
 		}
 	}
 }
