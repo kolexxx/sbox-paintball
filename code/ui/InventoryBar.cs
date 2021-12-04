@@ -58,7 +58,7 @@ namespace PaintBall
 			if ( player == null )
 				return;
 
-			if ( player.FixSpawn <= 0.1f )
+			if ( player.TimeSinceSpawned <= 0.1f )
 			{
 				Fix( input );
 				
@@ -96,7 +96,7 @@ namespace PaintBall
 
 		public void Fix( InputBuilder input )
 		{
-			for ( int i = 0; i < 5; i++ )
+			for ( int i = 4; i >= 0; i-- )
 			{
 				SetActiveSlot( input, i );
 			}
