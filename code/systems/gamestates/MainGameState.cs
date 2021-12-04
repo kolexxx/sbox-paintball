@@ -58,6 +58,8 @@ namespace PaintBall
 
 			player.Inventory.Add( (Rand.Int(1, 2) == 1 ? new SMG() : new Shotgun()), true );
 			player.Inventory.Add( new Pistol() );
+			player.Inventory.SwitchActiveSlot( 1, false );
+			player.Inventory.SwitchActiveSlot( 0, false );
 		}
 
 		public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
@@ -90,11 +92,9 @@ namespace PaintBall
 		{
 			if ( Host.IsServer )
 			{
-				if ( Time.Now >= StateEndTime )
-				{
+				if ( Time.Now >= StateEndTime )		
 					RoundStateFinish();
-				}
-
+				
 				TimeLeftSeconds = TimeLeft.CeilToInt();
 			}
 		}
