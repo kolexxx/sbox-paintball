@@ -12,7 +12,7 @@ namespace PaintBall
 		public override float PrimaryRate => 1f;
 		public override float ProjectileRadius => 3f;
 		public override float ReloadTime => 0.5f;
-		public override float Speed => 3000f;
+		public override float Speed => 2500f;
 		public override float Spread => 0.05f;
 		public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
 
@@ -29,6 +29,18 @@ namespace PaintBall
 			base.ActiveStart( entity );
 
 			AttackedDuringReload = false;
+			TimeSinceReload = 0f;
+		}
+
+		public override bool CanReload()
+		{
+			if ( !Owner.IsValid() || !Input.Down( InputButton.Reload ) ) return false;
+
+			var rate = PrimaryRate;
+			if ( rate <= 0 )
+				return true;
+
+			return TimeSincePrimaryAttack > (1 / rate);
 		}
 
 		public override void AttackPrimary()
@@ -106,10 +118,10 @@ namespace PaintBall
 			AmmoClip++;
 
 			if ( !AttackedDuringReload && AmmoClip < ClipSize )
-				Reload();		
+				Reload();
 			else
 				FinishReload();
-			
+
 			AttackedDuringReload = false;
 		}
 
