@@ -8,6 +8,7 @@ namespace PaintBall
 		[Net, Predicted] public bool IsReloading { get; set; }
 		[Net, Predicted] public TimeSince TimeSinceDeployed { get; set; }
 		[Net, Predicted] public TimeSince TimeSinceReload { get; set; }
+		public virtual bool Automatic => false;
 		public virtual int Bucket => 0;
 		public virtual int ClipSize => 20;
 		public virtual string FireSound => "pbg";
@@ -15,11 +16,11 @@ namespace PaintBall
 		public virtual float Gravity => 0f;
 		public virtual string HitSound => "impact";
 		public virtual string Icon => "ui/weapons/pistol.png";
-		public virtual string Name => "Weapon";
 		public virtual string ProjectileModel => $"models/{(Owner as Player).Team.GetString()}_ball/ball.vmdl";
 		public virtual float ProjectileRadius => 3f;
 		public virtual float ReloadTime => 5.0f;
 		public virtual float Speed => 2000f;
+		public virtual float Spread => 0f;
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 		public PickupTrigger PickupTrigger { get; protected set; }
 
@@ -63,8 +64,7 @@ namespace PaintBall
 
 			if ( IsReloading && TimeSinceReload > ReloadTime )
 			{
-				IsReloading = false;
-				AmmoClip = ClipSize;
+				OnReloadFinish();
 			}
 		}
 
@@ -85,15 +85,26 @@ namespace PaintBall
 			PlaySound( FireSound );
 
 			if ( Prediction.FirstTime )
+			{
+				Rand.SetSeed( Time.Tick );
 				FireProjectile();
+			}
 		}
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f )
+			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f)
 				return false;
 
-			return base.CanPrimaryAttack();
+			if ( Automatic == false && !Input.Pressed( InputButton.Attack1 ) )
+				return false;		
+			else if ( Automatic == true && !Input.Down( InputButton.Attack1 ) )
+				return false;
+
+			var rate = PrimaryRate;
+			if ( rate <= 0 ) return true;
+
+			return TimeSincePrimaryAttack > (1 / rate);
 		}
 
 		public override void CreateViewModel()
@@ -132,6 +143,12 @@ namespace PaintBall
 			(Owner as AnimEntity).SetAnimBool( "b_reload", true );
 
 			ReloadEffects();
+		}
+
+		public virtual void OnReloadFinish()
+		{
+			IsReloading = false;
+			AmmoClip = ClipSize;
 		}
 
 		public void Remove()
@@ -187,6 +204,8 @@ namespace PaintBall
 			};
 
 			var forward = owner.EyeRot.Forward;
+			forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * Spread * 0.25f;
+			forward = forward.Normal;
 			var position = owner.EyePos;
 
 			var velocity = forward * Speed;
