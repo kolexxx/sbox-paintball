@@ -54,6 +54,8 @@ namespace PaintBall
 
 		public override void OnPlayerSpawned( Player player )
 		{
+			Host.AssertServer();
+
 			AdjustTeam( player.Team, 1 );
 
 			player.Inventory.Add( (Rand.Int(1, 2) == 1 ? new SMG() : new Shotgun()), true );
