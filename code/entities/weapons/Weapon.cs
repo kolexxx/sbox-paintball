@@ -32,7 +32,7 @@ namespace PaintBall
 		public override void Spawn()
 		{
 			base.Spawn();
-			
+
 			PickupTrigger = new PickupTrigger
 			{
 				Parent = this,
@@ -58,14 +58,11 @@ namespace PaintBall
 				return;
 
 			if ( !IsReloading )
-			{
 				base.Simulate( owner );
-			}
 
 			if ( IsReloading && TimeSinceReload > ReloadTime )
-			{
 				OnReloadFinish();
-			}
+
 		}
 
 		public override void AttackPrimary()
@@ -93,16 +90,17 @@ namespace PaintBall
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f)
+			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f )
 				return false;
 
 			if ( Automatic == false && !Input.Pressed( InputButton.Attack1 ) )
-				return false;		
+				return false;
 			else if ( Automatic == true && !Input.Down( InputButton.Attack1 ) )
 				return false;
 
 			var rate = PrimaryRate;
-			if ( rate <= 0 ) return true;
+			if ( rate <= 0 )
+				return true;
 
 			return TimeSincePrimaryAttack > (1 / rate);
 		}
