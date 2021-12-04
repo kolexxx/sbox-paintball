@@ -13,12 +13,13 @@ namespace PaintBall
 
 		public override bool Add( Entity entity, bool makeActive = false )
 		{
-			return base.Add( entity, makeActive );
-		}
+			if ( entity is not Weapon weapon)
+				return false;
 
-		public bool IsCarryingType( Type t )
-		{
-			return List.Any( x => x.GetType() == t );
+			if ( List.Any( x => (x as Weapon).Bucket == weapon.Bucket ) )		
+				return false;
+			
+			return base.Add( entity, makeActive );
 		}
 	}
 }

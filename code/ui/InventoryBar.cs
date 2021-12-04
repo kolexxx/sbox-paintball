@@ -9,7 +9,7 @@ namespace PaintBall
 	public class InventoryBar : Panel
 	{
 		private List<InventoryIcon> Slots = new();
-		private List<Weapon> Weapons = new();
+		private Weapon[] Weapons = new Weapon[5];
 
 		public InventoryBar()
 		{
@@ -26,25 +26,25 @@ namespace PaintBall
 		{
 			base.Tick();
 
-			var player = Local.Pawn;
-			if ( player == null ) return;
-
-			SetClass( "hidden", player.LifeState != LifeState.Alive );
-
-			if ( !IsVisible )
+			if ( Local.Pawn is not Player player )
 				return;
 
-			Weapons = player.Children.OfType<Weapon>().ToList();
-			Weapons.Sort( ( a, b ) => a.Bucket.CompareTo( b.Bucket ) );
+			for ( int i = 0; i < 5; i++ )
+				Weapons[i] = null;
 
-			int i = 0;
+			foreach ( var weapon in player.CurrentPlayer.Children.OfType<Weapon>().ToList() )
+				Weapons[weapon.Bucket] = weapon;
 
-			for ( int index = i; index < Weapons.Count; index++, i++ )
-				Slots[Weapons[index].Bucket].UpdateWeapon( Weapons[index] );
+			for ( int i = 0; i < 5; i++ )
+			{
+				if ( Weapons[i] == null )
+				{
+					Slots[i].Clear();
+					continue;
+				}
 
-			for ( int index = i; index < Slots.Count; index++ )
-				Slots[index].Clear();
-
+				Slots[i].UpdateWeapon( Weapons[i] );
+			}
 		}
 
 		[Event.BuildInput]
@@ -67,10 +67,8 @@ namespace PaintBall
 
 		private void SetActiveSlot( InputBuilder input, int i )
 		{
-			if ( i >= Weapons.Count )
-				return;
-
 			var player = Local.Pawn;
+
 			if ( player == null )
 				return;
 
@@ -88,27 +86,26 @@ namespace PaintBall
 		public class InventoryIcon : Panel
 		{
 			public Weapon TargetWeapon;
-			public Label Label;
+			public Image Icon;
 			public Label Number;
 
 			public InventoryIcon( int i, Panel parent )
 			{
 				Parent = parent;
-				Label = Add.Label( "empty", "item-name" );
+				Icon = Add.Image( "", "slot-icon" );
 				Number = Add.Label( $"{i}", "slot-number" );
 			}
 
 			public void Clear()
 			{
 				TargetWeapon = null;
-				Label.Text = "";
 				SetClass( "hidden", true );
 			}
 
 			public void UpdateWeapon( Weapon weapon )
 			{
 				TargetWeapon = weapon;
-				Label.Text = weapon.Name;
+				Icon.SetTexture( weapon?.Icon );
 				SetClass( "hidden", false );
 			}
 		}

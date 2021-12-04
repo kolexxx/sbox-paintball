@@ -10,7 +10,6 @@
 
     label
     {
-        text-shadow: 0px 0px 20px #f70a;
         color: #f00;
         text-align: center;
     }
@@ -34,10 +33,19 @@ inventoryicon
         color: #00ff21;
     }
 
+    image
+    {
+        width: 100px;
+        height: 100px;
+        background-size: 100%;
+        background-image-tint: white;
+        transform: scaleX(-1);
+    }
+
     .slot-number
     {
         position: absolute;
-        color: red;
+        color: white;
         right: 0;
         top: 0;
     }
