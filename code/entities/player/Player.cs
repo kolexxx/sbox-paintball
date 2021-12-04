@@ -5,11 +5,10 @@ namespace PaintBall
 {
 	public partial class Player : Sandbox.Player
 	{
-		[Net, Change] public Team Team { get; set; }		
+		[Net, Change] public Team Team { get; set; }
+		[Net] public TimeSince TimeSinceSpawned { get; private set; }
 		public ProjectileSimulator Projectiles { get; set; }
-		public TimeSince TimeSinceSpawned { get; private set; }
 		private DamageInfo LastDamageInfo { get; set; }
-		[Net, Predicted] public TimeSince FixSpawn { get; set; }
 
 		public Player()
 		{
@@ -20,7 +19,8 @@ namespace PaintBall
 
 		public override void Respawn()
 		{
-			FixSpawn = 0f;
+			TimeSinceSpawned = 0f;
+
 			RemoveCorpse();
 
 			SetModel( "models/citizen/citizen.vmdl" );
@@ -29,7 +29,7 @@ namespace PaintBall
 
 			Animator = new StandardPlayerAnimator();
 
-			Camera = new FirstPersonCamera();	
+			Camera = new FirstPersonCamera();
 
 			EnableAllCollisions = true;
 			EnableDrawing = true;
@@ -52,7 +52,7 @@ namespace PaintBall
 
 			SimulateActiveChild( cl, ActiveChild );
 
-			if ( Input.ActiveChild != null )			
+			if ( Input.ActiveChild != null )
 				ActiveChild = Input.ActiveChild;
 
 			if ( LifeState != LifeState.Alive )
@@ -61,7 +61,7 @@ namespace PaintBall
 
 				return;
 			}
-			
+
 			controller?.Simulate( cl, this, GetActiveAnimator() );
 		}
 
@@ -82,7 +82,7 @@ namespace PaintBall
 			Tags.Remove( $"{oldTeam.GetString()}player" );
 			Team = newTeam;
 			Tags.Add( $"{newTeam.GetString()}player" );
-			Client.SetInt( "team", (int)newTeam);
+			Client.SetInt( "team", (int)newTeam );
 
 			Hud.OnTeamChanged( To.Everyone, Client, newTeam );
 
