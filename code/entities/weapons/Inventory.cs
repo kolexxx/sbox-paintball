@@ -21,5 +21,11 @@ namespace PaintBall
 			
 			return base.Add( entity, makeActive );
 		}
+
+		public override void OnChildAdded( Entity child )
+		{
+			base.OnChildAdded( child );
+			(Owner as Player).ActiveChild = child;
+		}
 	}
 }
