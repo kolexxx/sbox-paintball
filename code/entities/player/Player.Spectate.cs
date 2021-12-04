@@ -6,16 +6,16 @@ namespace PaintBall
 	public partial class Player
 	{
 		public bool IsSpectator => Camera is SpectateCamera;
-		public bool IsSpectatingPlayer => SpectadedPlayer != null;
+		public bool IsSpectatingPlayer => SpectatedPlayer != null;
 		public Player CurrentPlayer
 		{
-			get => SpectadedPlayer ?? this;
+			get => SpectatedPlayer ?? this;
 			set
 			{
-				SpectadedPlayer = value == this ? null : value;
+				SpectatedPlayer = value == this ? null : value;
 			}
 		}
-		private Player SpectadedPlayer;
+		private Player SpectatedPlayer;
 		private int Index = 0;
 
 		public void ChangeSpectateCamera()
