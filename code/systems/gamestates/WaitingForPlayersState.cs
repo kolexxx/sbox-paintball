@@ -27,7 +27,7 @@ namespace PaintBall
 
 		public override void OnPlayerSpawned( Player player )
 		{
-			player.Inventory.Add( new SMG(), true );
+			player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
 			player.Inventory.Add( new Pistol() );
 		}
 

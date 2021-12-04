@@ -10,7 +10,7 @@ namespace PaintBall
 		[Net, Change] public int AliveRed { get; private set; } = 0;
 		[Net, Change] public int BlueScore { get; private set; } = 0;
 		[Net, Change] public int RedScore { get; private set; } = 0;
-		[Net, Change] public RoundState CurrentRoundState { get; private set; }
+		[Net, Change] public RoundState CurrentRoundState { get; private set; }	
 		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
 		private int RoundLimit => 13;
 		private int Round = 0;
@@ -56,7 +56,7 @@ namespace PaintBall
 		{
 			AdjustTeam( player.Team, 1 );
 
-			player.Inventory.Add( new SMG(), true );
+			player.Inventory.Add( (Rand.Int(1, 2) == 1 ? new SMG() : new Shotgun()), true );
 			player.Inventory.Add( new Pistol() );
 		}
 

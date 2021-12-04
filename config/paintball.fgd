@@ -44,6 +44,16 @@ metadata
 ]
 
 //
+// PaintBall.Shotgun
+//
+@PointClass base(BaseProperties_paintball) = pb_shotgun : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
 // PaintBall.SMG
 //
 @PointClass base(BaseProperties_paintball) = pb_smg : ""
