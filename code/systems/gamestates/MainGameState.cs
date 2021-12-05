@@ -12,7 +12,8 @@ namespace PaintBall
 		[Net, Change] public int RedScore { get; private set; } = 0;
 		[Net, Change] public RoundState CurrentRoundState { get; private set; }	
 		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
-		private int RoundLimit => 13;
+		private int RoundLimit => 12;
+		private int ToWinScore => 7; 
 		private int Round = 0;
 		private readonly float[] RoundStateDuration = { 5f, 60f, 5f };
 
@@ -225,7 +226,7 @@ namespace PaintBall
 
 					Round++;
 
-					if ( Round == RoundLimit )
+					if ( BlueScore == ToWinScore || RedScore == ToWinScore || Round == RoundLimit )
 					{
 						Game.Instance.ChangeState( new GameFinishedState() );
 
