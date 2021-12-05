@@ -3,6 +3,7 @@
 namespace PaintBall
 {
 	[Library( "pb_smg", Title = "SMG", Spawnable = true )]
+	[Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
 	public partial class SMG : Weapon
 	{
 		public override bool Automatic => true;
@@ -22,7 +23,6 @@ namespace PaintBall
 			AmmoClip = ClipSize;
 			SetModel( "weapons/rust_smg/rust_smg.vmdl" );
 		}
-
 
 		public override void SimulateAnimator( PawnAnimator anim )
 		{

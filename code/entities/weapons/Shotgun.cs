@@ -3,6 +3,7 @@
 namespace PaintBall
 {
 	[Library( "pb_shotgun", Title = "Shotgun", Spawnable = true )]
+	[Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
 	public partial class Shotgun : Weapon
 	{
 		public virtual int BulletsPerFire => 4;
@@ -51,8 +52,6 @@ namespace PaintBall
 				return;
 			}
 
-			Rand.SetSeed( Time.Tick );
-
 			TimeSincePrimaryAttack = 0;
 			AmmoClip--;
 
@@ -64,6 +63,7 @@ namespace PaintBall
 			if ( Prediction.FirstTime )
 			{
 				Rand.SetSeed( Time.Tick );
+
 				for ( int i = 0; i < BulletsPerFire; i++ )
 				{
 					FireProjectile();
