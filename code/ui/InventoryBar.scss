@@ -8,6 +8,8 @@ inventorybar
     width: 200px;
     right: 0;
     bottom: 100px;
+    transition: all 0.3s ease-out;
+    opacity: 1;
 
     label
     {
@@ -16,9 +18,9 @@ inventorybar
         text-align: center;
     }
 
-    &.none
+    &.hidden
     {
-        display: none;
+        opacity: 0;
     }
 }
 
@@ -28,6 +30,10 @@ inventoryicon
     height: 100px;
     align-items: center;
     justify-content: center;
+    transition: all 0.5s ease-out;
+    transform: scale( 1 );
+    transform-origin: 50% 50%;
+    opacity: 1;
 
     label
     {
@@ -38,6 +44,16 @@ inventoryicon
     &.active
     {
         background-image: linear-gradient(to left, rgba(0 0 0 0.7 ), rgba(0 0 0 0.4) 80%, rgba(0 0 0 0 ));
+
+        image
+        {
+            background-image-tint: white;
+        }
+
+        .slot-number
+        {
+            color: white;
+        }
     }
 
     image
@@ -48,40 +64,23 @@ inventoryicon
         height: 200px;
         background-size: 100%;
         transform: scaleX(-1);
+        background-image-tint: slategray;
     }
 
     .slot-number
     {
+        color: slategray;
         position: absolute;
-        color: white;
         right: 0;
         top: 0;
     }
 
     &.hidden
     {
-        display: none;
-    }
-}
-
-.red
-{
-    inventoryicon
-    {
-        image
-        {
-            background-image-tint: $redColor;
-        }
-    }
-}
-
-.blue
-{
-    inventoryicon
-    {
-        image
-        {
-            background-image-tint: $blueColor;
-        }
+        transform-origin: 50% 50%;
+        transform: scale(0);
+        width: 0;
+        height: 0;
+        opacity: 0;
     }
 }

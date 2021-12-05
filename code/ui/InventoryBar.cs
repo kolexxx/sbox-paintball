@@ -12,6 +12,7 @@ namespace PaintBall
 
 		private List<InventoryIcon> Slots = new();
 		private Weapon[] Weapons = new Weapon[5];
+		public RealTimeUntil Close { get; set; }
 
 		public InventoryBar()
 		{
@@ -31,7 +32,7 @@ namespace PaintBall
 			base.Tick();
 
 			if ( Local.Pawn is not Player player )
-				return;
+				return;	
 
 			for ( int i = 0; i < 5; i++ )
 				Weapons[i] = null;
@@ -43,12 +44,20 @@ namespace PaintBall
 			{
 				if ( Weapons[i] == null )
 				{
+					if ( Slots[i].TargetWeapon != null )
+						Close = 3f;
+
 					Slots[i].Clear();
 					continue;
 				}
 
+				if ( Slots[i].TargetWeapon == null )
+					Close = 3f;
+
 				Slots[i].UpdateWeapon( Weapons[i] );
 			}
+
+			SetClass( "hidden", Close <= 0 );
 		}
 
 		[Event.BuildInput]
@@ -78,6 +87,8 @@ namespace PaintBall
 
 		private void SetActiveSlot( InputBuilder input, int i )
 		{
+			Close = 3f;
+
 			var player = Local.Pawn as Player;
 
 			if ( player == null || player.CurrentPlayer != player )
