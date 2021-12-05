@@ -3,7 +3,7 @@
 rootpanel
 {
     margin: 0;
-    background-color: rgba(0 255 255 0);
+    background-color: rgba(0 0 0 0);
     transition: background-color 0.2s ease-in;
     transform-origin: 50% 50%;
     font-family: Roboto;
@@ -31,8 +31,7 @@ ammo
     min-width: 200px;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(to left, rgba(0 0 0 1), rgba(0 0 0 0.8 ));
-    backdrop-filter: blur(5px);
+    background-image: linear-gradient(to left, rgba(0 0 0 0.7 ), rgba(0 0 0 0.4) 80%, rgba(0 0 0 0 ));
 
     label
     {
@@ -58,12 +57,11 @@ teamindicator
     left: 0;
     font-size: 50px;
     color: $defaultColor;
-    background-image: linear-gradient(to right, rgba(0 0 0 1), rgba(0 0 0 0.8 ));
+    background-image: linear-gradient(to right, rgba(0 0 0 0.7 ), rgba(0 0 0 0.4) 80%, rgba(0 0 0 0 ));
     height: 50px;
     min-width: 200px;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(5px);
 
     &.hidden
     {
@@ -99,12 +97,15 @@ spectatorcontrols
     backdrop-filter: blur(5px);
     position: absolute;
     padding: 5px;
-    top: 5%;
-    left: 5%;
+    top: 50px;
+    left: 100px;
+    border-radius: 5%;
 
-    label{
+    label
+    {
         margin: 5px;
     }
+
     &.hidden
     {
         display: none;

@@ -1,15 +1,17 @@
-﻿inventorybar
+﻿@import "Variables.scss";
+
+inventorybar
 {
     position: absolute;
     display: flex;
     flex-direction: column;
-    background-color: rgba(128 128 128 0.2);
-    width: 100px;
+    width: 200px;
     right: 0;
-    bottom: 50px;
+    bottom: 100px;
 
     label
     {
+        font-size: 20px;
         color: #f00;
         text-align: center;
     }
@@ -33,12 +35,18 @@ inventoryicon
         color: #00ff21;
     }
 
+    &.active
+    {
+        background-image: linear-gradient(to left, rgba(0 0 0 0.7 ), rgba(0 0 0 0.4) 80%, rgba(0 0 0 0 ));
+    }
+
     image
     {
-        width: 100px;
-        height: 100px;
+        position: absolute;
+        right: 0;
+        width: 200px;
+        height: 200px;
         background-size: 100%;
-        background-image-tint: white;
         transform: scaleX(-1);
     }
 
@@ -50,11 +58,30 @@ inventoryicon
         top: 0;
     }
 
-    background-color: rgba(black 0.8);
-    backdrop-filter: blur(5px);
-
     &.hidden
     {
         display: none;
+    }
+}
+
+.red
+{
+    inventoryicon
+    {
+        image
+        {
+            background-image-tint: $redColor;
+        }
+    }
+}
+
+.blue
+{
+    inventoryicon
+    {
+        image
+        {
+            background-image-tint: $blueColor;
+        }
     }
 }

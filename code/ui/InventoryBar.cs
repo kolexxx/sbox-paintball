@@ -57,13 +57,13 @@ namespace PaintBall
 			var player = Local.Pawn as Player;
 			if ( player == null )
 				return;
-
+			/*
 			if ( player.TimeSinceSpawned <= 0.1f )
 			{
 				Fix( input );
-				
+
 				return;
-			}
+			}*/
 
 			var inventory = player.Inventory;
 			if ( inventory == null )
@@ -78,9 +78,9 @@ namespace PaintBall
 
 		private void SetActiveSlot( InputBuilder input, int i )
 		{
-			var player = Local.Pawn;
+			var player = Local.Pawn as Player;
 
-			if ( player == null )
+			if ( player == null || player.CurrentPlayer != player )
 				return;
 
 			var weapon = Weapons[i];
@@ -125,6 +125,7 @@ namespace PaintBall
 			{
 				TargetWeapon = weapon;
 				Icon.SetTexture( weapon?.Icon );
+				SetClass( "active", weapon.IsActiveChild() );
 				SetClass( "hidden", false );
 			}
 		}
