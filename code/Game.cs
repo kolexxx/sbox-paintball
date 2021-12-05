@@ -171,6 +171,12 @@ namespace PaintBall
 					projectile.Delete();
 			}
 
+			foreach(var weapon in All.OfType<Weapon>() )
+			{
+				if ( weapon.IsValid() && weapon.Owner == null )
+					weapon.Delete();
+			}
+
 			ClientCleanUp();
 		}
 
