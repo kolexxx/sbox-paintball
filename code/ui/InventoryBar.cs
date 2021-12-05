@@ -44,14 +44,14 @@ namespace PaintBall
 			{
 				if ( Weapons[i] == null )
 				{
-					if ( Slots[i].TargetWeapon != null )
+					if ( Slots[i].TargetWeapon != null)
 						Close = 3f;
 
 					Slots[i].Clear();
 					continue;
 				}
 
-				if ( Slots[i].TargetWeapon == null )
+				if ( Slots[i].TargetWeapon == null || Slots[i].TargetWeapon != Weapons[i] )
 					Close = 3f;
 
 				Slots[i].UpdateWeapon( Weapons[i] );
