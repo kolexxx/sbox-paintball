@@ -145,10 +145,10 @@ namespace PaintBall
 		{
 			base.OnCarryStart( carrier );
 
-			if ( PickupTrigger.IsValid() )	
+			if ( PickupTrigger.IsValid() )
 				PickupTrigger.EnableTouch = false;
 
-			foreach(var entity in Owner.Children )
+			foreach ( var entity in Owner.Children )
 			{
 				if ( entity is not Weapon weapon || this == weapon )
 					continue;
@@ -164,7 +164,7 @@ namespace PaintBall
 		{
 			base.OnCarryDrop( dropper );
 
-			if ( PickupTrigger.IsValid() )	
+			if ( PickupTrigger.IsValid() )
 				PickupTrigger.EnableTouch = true;
 		}
 
@@ -209,6 +209,7 @@ namespace PaintBall
 
 			var projectile = new Projectile()
 			{
+				Owner = this,
 				Team = owner.Team,
 				FollowEffect = FollowEffect,
 				HitSound = HitSound,
@@ -233,13 +234,13 @@ namespace PaintBall
 		protected virtual void OnProjectileHit( Projectile projectile, Entity entity, int hitbox )
 		{
 			if ( IsServer && entity.IsValid() )
-				DealDamage( entity, projectile.Position, projectile.Velocity * 0.1f, hitbox );
+				DealDamage( entity, projectile.Owner, projectile.Position, projectile.Velocity * 0.1f, hitbox );
 		}
 
-		protected void DealDamage( Entity entity, Vector3 position, Vector3 force, int hitbox )
+		protected void DealDamage( Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox )
 		{
 			var info = new DamageInfo()
-				.WithAttacker( Owner )
+				.WithAttacker( attacker )
 				.WithWeapon( this )
 				.WithPosition( position )
 				.WithForce( force )
