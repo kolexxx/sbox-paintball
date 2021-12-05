@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Linq;
 
 namespace PaintBall
 {
@@ -43,6 +44,7 @@ namespace PaintBall
 			Game.Instance.CurrentGameState.OnPlayerSpawned( this );
 		}
 
+		TimeSince timeSinceDropped;
 		public override void Simulate( Client cl )
 		{
 			Projectiles.Simulate();
@@ -61,7 +63,29 @@ namespace PaintBall
 				return;
 			}
 
+			if ( Input.Pressed( InputButton.Drop ) )
+			{
+				var dropped = Inventory.DropActive();
+				if ( dropped != null )
+				{
+					if ( dropped.PhysicsGroup != null )
+					{	
+						dropped.PhysicsGroup.Velocity = Velocity + (EyeRot.Forward + EyeRot.Up) * 300;
+
+						SwitchToBestWeapon();
+						timeSinceDropped = 0;
+					}
+				}
+			}
+
 			controller?.Simulate( cl, this, GetActiveAnimator() );
+		}
+
+		public override void StartTouch( Entity other )
+		{
+			if ( timeSinceDropped < 1 ) return;
+
+			base.StartTouch( other );
 		}
 
 		public void Reset()
@@ -108,6 +132,7 @@ namespace PaintBall
 		{
 			base.OnKilled();
 
+			Inventory.DropActive();
 			Inventory.DeleteContents();
 
 			BecomeRagdollOnClient( LastDamageInfo.Force, GetHitboxBone( LastDamageInfo.HitboxIndex ) );
@@ -143,6 +168,18 @@ namespace PaintBall
 			LastDamageInfo = info;
 
 			base.TakeDamage( info );
+		}
+
+		private void SwitchToBestWeapon()
+		{
+			var best = Children.Select( x => x as Weapon )
+			.Where( x => x.IsValid() )
+			.OrderByDescending( x => x.Bucket)
+			.FirstOrDefault();
+
+			if ( best == null ) return;
+
+			ActiveChild = best;
 		}
 	}
 }

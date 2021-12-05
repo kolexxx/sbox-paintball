@@ -36,9 +36,7 @@ namespace PaintBall
 			PickupTrigger = new PickupTrigger
 			{
 				Parent = this,
-				Position = Position,
-				EnableTouch = true,
-				EnableSelfCollisions = false
+				Position = Position
 			};
 
 			PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
@@ -62,7 +60,6 @@ namespace PaintBall
 
 			if ( IsReloading && TimeSinceReload > ReloadTime )
 				OnReloadFinish();
-
 		}
 
 		public override void AttackPrimary()
@@ -122,11 +119,6 @@ namespace PaintBall
 			ViewModelEntity.SetModel( ViewModelPath );
 		}
 
-		public override bool CanReload()
-		{
-			return base.CanReload();
-		}
-
 		public override void Reload()
 		{
 			if ( IsReloading )
@@ -147,6 +139,33 @@ namespace PaintBall
 		{
 			IsReloading = false;
 			AmmoClip = ClipSize;
+		}
+
+		public override void OnCarryStart( Entity carrier )
+		{
+			base.OnCarryStart( carrier );
+
+			if ( PickupTrigger.IsValid() )	
+				PickupTrigger.EnableTouch = false;
+
+			foreach(var entity in Owner.Children )
+			{
+				if ( entity is not Weapon weapon || this == weapon )
+					continue;
+
+				if ( Bucket > weapon.Bucket )
+					return;
+			}
+
+			Owner.ActiveChild = this;
+		}
+
+		public override void OnCarryDrop( Entity dropper )
+		{
+			base.OnCarryDrop( dropper );
+
+			if ( PickupTrigger.IsValid() )	
+				PickupTrigger.EnableTouch = true;
 		}
 
 		public void Remove()
