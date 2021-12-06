@@ -29,6 +29,11 @@ killfeedentry
     backdrop-filter: blur(10px);
     border-radius: 5%;
 
+
+    &:intro
+    {
+    }
+
     &:outro
     {
         opacity: 0;

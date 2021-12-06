@@ -30,9 +30,8 @@ inventoryicon
     height: 100px;
     align-items: center;
     justify-content: center;
-    transition: all 0.5s ease-out;
-    transform: scale( 1 );
-    transform-origin: 50% 50%;
+    transition: opacity 0.2s ease-out;
+    transition: height 0.5s ease-out;
     opacity: 1;
 
     label
@@ -77,9 +76,6 @@ inventoryicon
 
     &.hidden
     {
-        transform-origin: 50% 50%;
-        transform: scale(0);
-        width: 0;
         height: 0;
         opacity: 0;
     }

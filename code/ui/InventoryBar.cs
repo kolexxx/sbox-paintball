@@ -64,6 +64,7 @@ namespace PaintBall
 		private void ProcessClientInput( InputBuilder input )
 		{
 			var player = Local.Pawn as Player;
+
 			if ( player == null )
 				return;
 			/*
