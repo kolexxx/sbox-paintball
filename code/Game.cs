@@ -185,7 +185,7 @@ namespace PaintBall
 		{
 			foreach ( var ent in All.OfType<ModelEntity>() )
 			{
-				if ( ent.IsValid() && ent.IsClientOnly )
+				if ( ent.IsValid() && ent.IsClientOnly && ent is not BaseViewModel )
 					ent.Delete();
 			}
 		}
