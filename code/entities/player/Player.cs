@@ -44,7 +44,6 @@ namespace PaintBall
 			Game.Instance.CurrentGameState.OnPlayerSpawned( this );
 		}
 
-		TimeSince timeSinceDropped;
 		public override void Simulate( Client cl )
 		{
 			Projectiles.Simulate();
@@ -66,14 +65,14 @@ namespace PaintBall
 			if ( Input.Pressed( InputButton.Drop ) )
 			{
 				var dropped = Inventory.DropActive();
+
 				if ( dropped != null )
 				{
 					if ( dropped.PhysicsGroup != null )
-					{	
+					{
 						dropped.PhysicsGroup.Velocity = Velocity + (EyeRot.Forward + EyeRot.Up) * 300;
 
 						SwitchToBestWeapon();
-						timeSinceDropped = 0;
 					}
 				}
 			}
@@ -83,9 +82,19 @@ namespace PaintBall
 
 		public override void StartTouch( Entity other )
 		{
-			if ( timeSinceDropped < 1 ) return;
+			if ( IsClient )
+				return;
 
-			base.StartTouch( other );
+			if ( other is Weapon weapon && weapon.PreviousOwner == this && weapon.TimeSinceDropped < 2f )
+				return;
+
+			if ( other is PickupTrigger )
+			{
+				StartTouch( other.Parent );
+				return;
+			}
+
+			Inventory?.Add( other, Inventory.Active == null );
 		}
 
 		public void Reset()
@@ -156,7 +165,6 @@ namespace PaintBall
 
 		protected void OnPlayerKill()
 		{
-
 		}
 
 		public override void TakeDamage( DamageInfo info )
@@ -174,7 +182,7 @@ namespace PaintBall
 		{
 			var best = Children.Select( x => x as Weapon )
 			.Where( x => x.IsValid() )
-			.OrderByDescending( x => x.Bucket)
+			.OrderByDescending( x => x.Bucket )
 			.FirstOrDefault();
 
 			if ( best == null ) return;
