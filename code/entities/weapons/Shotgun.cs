@@ -12,7 +12,7 @@ namespace PaintBall
 		public override string Icon => "ui/weapons/shotgun.png";
 		public override float PrimaryRate => 1f;
 		public override float ProjectileRadius => 3f;
-		public override float ReloadTime => 0.5f;
+		public override float ReloadTime => 0.7f;
 		public override float Speed => 2500f;
 		public override float Spread => 0.05f;
 		public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
