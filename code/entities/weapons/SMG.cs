@@ -13,7 +13,7 @@ namespace PaintBall
 		public override float PrimaryRate => 6f;
 		public override float ProjectileRadius => 3f;
 		public override float ReloadTime => 3f;
-		public override float Speed => 2000f;
+		public override float Speed => 2500f;
 		public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
 
 		public override void Spawn()
