@@ -9,7 +9,7 @@ namespace PaintBall
 		public SpectatorControls()
 		{
 			Add.Label( "Spacebar - switch camera" );
-			Add.Label( "Attack1 - switch player" );
+			Add.Label( "Attack (1 or 2) - switch player" );
 		}
 
 		public override void Tick()

@@ -45,18 +45,27 @@ namespace PaintBall
 			Camera = new FreeSpectateCamera();
 		}
 
-		public void UpdateSpectatingPlayer()
+		public void UpdateSpectatingPlayer( int i )
 		{
 			var oldPlayer = CurrentPlayer;
 
 			CurrentPlayer = null;
 
-			var ValidPlayers = All.OfType<Player>().Where( e => e.LifeState == LifeState.Alive ).ToList();
+			var ValidPlayers =
+				All.OfType<Player>()
+				.Where( x => x.IsValid() && x.LifeState == LifeState.Alive )
+				.OrderByDescending( x => x.Name )
+				.ToList();
 
 			if ( ValidPlayers.Count > 0 )
 			{
-				if ( ++Index >= ValidPlayers.Count )
+				Index += i;
+
+				if ( Index >= ValidPlayers.Count )
 					Index = 0;
+
+				if ( Index < 0 )
+					Index = ValidPlayers.Count - 1;
 
 				CurrentPlayer = ValidPlayers[Index];
 			}
