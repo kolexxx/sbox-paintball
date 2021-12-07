@@ -27,7 +27,7 @@ namespace PaintBall
 			if ( weapon == null )
 				return;
 
-			AmmoCount.Text = $"{weapon.AmmoClip}";
+			AmmoCount.Text = $"{weapon.AmmoClip}/{weapon.ReserveAmmo}";
 		}
 
 	}

@@ -20,6 +20,7 @@ namespace PaintBall
 			base.Spawn();
 
 			AmmoClip = ClipSize;
+			ReserveAmmo = -1;
 			SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 		}
 

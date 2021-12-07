@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 
 namespace PaintBall
 {
@@ -6,6 +7,7 @@ namespace PaintBall
 	{
 		[Net, Predicted] public int AmmoClip { get; protected set; }
 		[Net, Predicted] public bool IsReloading { get; protected set; }
+		[Net, Predicted] public int ReserveAmmo { get; protected set; }
 		[Net, Predicted] public TimeSince TimeSinceDeployed { get; protected set; }
 		[Net, Predicted] public TimeSince TimeSinceReload { get; protected set; }
 		public virtual bool Automatic => false;
@@ -68,6 +70,11 @@ namespace PaintBall
 		{
 			if ( AmmoClip == 0 )
 			{
+				if(ReserveAmmo == 0 )
+				{
+
+					return;
+				}
 				Reload();
 				return;
 			}
@@ -104,6 +111,14 @@ namespace PaintBall
 			return TimeSincePrimaryAttack > (1 / rate);
 		}
 
+		public override bool CanReload()
+		{
+			if ( AmmoClip >= ClipSize || ReserveAmmo == 0 )
+				return false;
+
+			return base.CanReload();
+		}
+
 		public override void CreateViewModel()
 		{
 			Host.AssertClient();
@@ -126,9 +141,6 @@ namespace PaintBall
 			if ( IsReloading )
 				return;
 
-			if ( AmmoClip >= ClipSize )
-				return;
-
 			TimeSinceReload = 0;
 			IsReloading = true;
 
@@ -140,7 +152,7 @@ namespace PaintBall
 		public virtual void OnReloadFinish()
 		{
 			IsReloading = false;
-			AmmoClip = ClipSize;
+			AmmoClip += TakeAmmo( ClipSize - AmmoClip );
 		}
 
 		public override void OnCarryStart( Entity carrier )
@@ -244,6 +256,17 @@ namespace PaintBall
 			info.Damage = float.MaxValue;
 
 			entity.TakeDamage( info );
+		}
+
+		protected virtual int TakeAmmo( int ammo )
+		{
+			if ( ReserveAmmo == -1 )
+				return ammo;
+
+			int available = Math.Min( ReserveAmmo, ammo );
+			ReserveAmmo -= available;
+
+			return available;
 		}
 	}
 

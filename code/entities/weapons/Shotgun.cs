@@ -22,6 +22,7 @@ namespace PaintBall
 			base.Spawn();
 
 			AmmoClip = ClipSize;
+			ReserveAmmo = 10;
 			SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );
 		}
 
@@ -35,7 +36,11 @@ namespace PaintBall
 
 		public override bool CanReload()
 		{
-			if ( !Owner.IsValid() || !Input.Down( InputButton.Reload ) ) return false;
+			if ( AmmoClip >= ClipSize || ReserveAmmo == 0 )
+				return false;
+
+			if ( !Owner.IsValid() || !Input.Down( InputButton.Reload ) )
+				return false;
 
 			var rate = PrimaryRate;
 			if ( rate <= 0 )
@@ -48,7 +53,14 @@ namespace PaintBall
 		{
 			if ( AmmoClip == 0 )
 			{
+				if ( ReserveAmmo == 0 )
+				{
+
+					return;
+				}
+
 				Reload();
+
 				return;
 			}
 
@@ -115,9 +127,9 @@ namespace PaintBall
 
 			TimeSincePrimaryAttack = 0;
 
-			AmmoClip++;
+			AmmoClip += TakeAmmo( 1 );
 
-			if ( !AttackedDuringReload && AmmoClip < ClipSize )
+			if ( !AttackedDuringReload && AmmoClip < ClipSize && ReserveAmmo != 0 )
 				Reload();
 			else
 				FinishReload();

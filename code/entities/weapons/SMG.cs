@@ -21,6 +21,7 @@ namespace PaintBall
 			base.Spawn();
 
 			AmmoClip = ClipSize;
+			ReserveAmmo = 40;
 			SetModel( "weapons/rust_smg/rust_smg.vmdl" );
 		}
 
