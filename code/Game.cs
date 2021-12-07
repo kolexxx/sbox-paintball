@@ -17,6 +17,9 @@ namespace PaintBall
 		[Net, Change( nameof( OnStateChanged ) )]
 		public BaseState CurrentGameState { get; private set; }
 
+		[ServerVar( "pb_min_players", Help = "The minimum players required to start." )]
+		public static int MinPlayers { get; set; } = 2;
+
 		private BaseState LastGameState { get; set; }
 
 		public Game()
@@ -124,17 +127,14 @@ namespace PaintBall
 		}
 
 		[ServerCmd( "changeteam", Help = "Changes the callers team" )]
-		public static void ChangeTeamCommand()
+		public static void ChangeTeamCommand( uint team )
 		{
 			Client client = ConsoleSystem.Caller;
 
-			if ( client.PlayerId != 76561198087434609 )
+			if ( client == null || client.Pawn is not Player player || team > 2 )
 				return;
 
-			if ( client == null || client.Pawn is not PaintBall.Player player )
-				return;
-
-			player.SetTeam( player.Team == Team.Red ? Team.Blue : Team.Red );
+			player.SetTeam( (Team)team );
 		}
 
 		public override void OnKilled( Client client, Entity pawn )
@@ -171,7 +171,7 @@ namespace PaintBall
 					projectile.Delete();
 			}
 
-			foreach(var weapon in All.OfType<Weapon>() )
+			foreach ( var weapon in All.OfType<Weapon>() )
 			{
 				if ( weapon.IsValid() && weapon.Owner == null )
 					weapon.Delete();

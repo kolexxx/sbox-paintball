@@ -31,13 +31,21 @@ namespace PaintBall
 			player.Inventory.Add( new Pistol() );
 		}
 
+		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
+		{
+			base.OnPlayerChangedTeam( player, oldTeam, newTeam );
+
+			if ( newTeam != Team.None )
+				player.Respawn();
+		}
+
 		public override void OnSecond()
 		{
 			base.OnSecond();
 
 			if ( Host.IsServer )
 			{
-				if ( Players.Count > 1 )
+				if ( Players.Count >= Game.MinPlayers )
 					Hud.UpdateCrosshairMessage( $"Starting in {TimeLeftSeconds}" );
 				else
 					Hud.UpdateCrosshairMessage( "Waiting for players..." );
