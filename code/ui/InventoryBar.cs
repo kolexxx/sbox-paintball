@@ -10,9 +10,9 @@ namespace PaintBall
 	{
 		public static InventoryBar Instance;
 
-		private List<InventoryIcon> Slots = new();
+		private InventoryIcon[] Slots = new InventoryIcon[5];
 		private Weapon[] Weapons = new Weapon[5];
-		public RealTimeUntil Close { get; set; }
+		RealTimeUntil Close;
 
 		public InventoryBar()
 		{
@@ -21,10 +21,8 @@ namespace PaintBall
 			StyleSheet.Load( "/ui/InventoryBar.scss" );
 
 			for ( int i = 0; i < 5; i++ )
-			{
-				var icon = new InventoryIcon( i + 1, this );
-				Slots.Add( icon );
-			}
+				Slots[i] = new InventoryIcon( i + 1, this );
+
 		}
 
 		public override void Tick()
@@ -32,19 +30,19 @@ namespace PaintBall
 			base.Tick();
 
 			if ( Local.Pawn is not Player player )
-				return;	
+				return;
 
 			for ( int i = 0; i < 5; i++ )
 				Weapons[i] = null;
 
-			foreach ( var weapon in player.CurrentPlayer.Children.OfType<Weapon>().ToList() )
+			foreach ( var weapon in player.CurrentPlayer.Children.OfType<Weapon>() )
 				Weapons[weapon.Bucket] = weapon;
 
 			for ( int i = 0; i < 5; i++ )
 			{
 				if ( Weapons[i] == null )
 				{
-					if ( Slots[i].TargetWeapon != null)
+					if ( Slots[i].TargetWeapon != null )
 						Close = 3f;
 
 					Slots[i].Clear();
@@ -61,11 +59,9 @@ namespace PaintBall
 		}
 
 		[Event.BuildInput]
-		private void ProcessClientInput( InputBuilder input )
+		private void BuildInput( InputBuilder input )
 		{
-			var player = Local.Pawn as Player;
-
-			if ( player == null )
+			if ( Local.Pawn is not Player player )
 				return;
 			/*
 			if ( player.TimeSinceSpawned <= 0.1f )
@@ -137,6 +133,10 @@ namespace PaintBall
 			{
 				TargetWeapon = weapon;
 				Icon.SetTexture( weapon?.Icon );
+
+				if ( weapon.IsActiveChild() && !HasClass( "active" ) )
+					Instance.Close = 3f;
+
 				SetClass( "active", weapon.IsActiveChild() );
 				SetClass( "hidden", false );
 			}
