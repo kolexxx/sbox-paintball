@@ -35,7 +35,7 @@ namespace PaintBall
 
 			bool wantToUpdate = Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 );
 
-			if ( !player.IsSpectatingPlayer || player.CurrentPlayer.LifeState == LifeState.Dead || wantToUpdate )
+			if ( !player.IsSpectatingPlayer || wantToUpdate )
 			{
 				player.UpdateSpectatingPlayer( Input.Pressed( InputButton.Attack2 ) ? -1 : 1 );
 
@@ -47,8 +47,11 @@ namespace PaintBall
 				return;
 			}
 
-			Position = Vector3.Lerp( Position, player.CurrentPlayer.EyePos, SMOOTH_SPEED * Time.Delta );
-			Rotation = Rotation.Slerp( Rotation, player.CurrentPlayer.EyeRot, SMOOTH_SPEED * Time.Delta );
+			if ( player.CurrentPlayer.IsValid() )
+			{
+				Position = Vector3.Lerp( Position, player.CurrentPlayer.EyePos, SMOOTH_SPEED * Time.Delta );
+				Rotation = Rotation.Slerp( Rotation, player.CurrentPlayer.EyeRot, SMOOTH_SPEED * Time.Delta );
+			}
 		}
 	}
 }
