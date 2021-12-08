@@ -105,15 +105,5 @@ namespace PaintBall
 
 			return offset;
 		}
-
-		public override void FrameSimulate( Client cl )
-		{
-			if ( (Local.Pawn as Player).CurrentPlayer != Owner || Local.Pawn.Camera is not FirstPersonSpectateCamera )
-				EnableDrawing = false;
-			else
-				EnableDrawing = true;
-
-			base.FrameSimulate( cl );
-		}
 	}
 }

@@ -15,7 +15,10 @@ namespace PaintBall
 			{
 				Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetString() );
 				Local.Hud.AddClass( player.Team.GetString() );
-			}
+
+				if ( player.CurrentPlayer.ActiveChild is Weapon weapon && weapon.ViewModelEntity != null )
+					weapon.ViewModelEntity.EnableDrawing = false;
+			}		
 
 			player.CurrentPlayer = null;
 
@@ -24,8 +27,14 @@ namespace PaintBall
 
 		public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
 		{
+			if ( oldPlayer.ActiveChild is Weapon oldWeapon && oldWeapon.ViewModelEntity != null )
+				oldWeapon.ViewModelEntity.EnableDrawing = false;
+
 			Local.Hud.RemoveClass( oldPlayer.Team.GetString() );
 			Local.Hud.AddClass( newPlayer.Team.GetString() );
+
+			if ( newPlayer.ActiveChild is Weapon newWeapon && newWeapon.ViewModelEntity != null )
+				newWeapon.ViewModelEntity.EnableDrawing = true;
 		}
 
 		public override void Update()
@@ -37,7 +46,13 @@ namespace PaintBall
 
 			if ( !player.IsSpectatingPlayer || wantToUpdate )
 			{
+				if ( player.CurrentPlayer.ActiveChild is Weapon oldWeapon && oldWeapon.ViewModelEntity != null )
+					oldWeapon.ViewModelEntity.EnableDrawing = false;
+
 				player.UpdateSpectatingPlayer( Input.Pressed( InputButton.Attack2 ) ? -1 : 1 );
+
+				if ( player.CurrentPlayer.ActiveChild is Weapon newWeapon && newWeapon.ViewModelEntity != null )
+					newWeapon.ViewModelEntity.EnableDrawing = true;
 
 				Position = player.CurrentPlayer.EyePos;
 				Rotation = player.CurrentPlayer.EyeRot;

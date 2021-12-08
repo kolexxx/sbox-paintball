@@ -51,7 +51,11 @@ namespace PaintBall
 			base.ClientSpawn();
 
 			if ( !IsLocalPawn && IsActiveChild() )
+			{
 				CreateViewModel();
+
+				ViewModelEntity.EnableDrawing = false;
+			}
 		}
 
 		public override void ActiveStart( Entity entity )
@@ -91,7 +95,7 @@ namespace PaintBall
 			{
 				if ( ReserveAmmo == 0 )
 				{
-
+					// Play dryfire sound
 					return;
 				}
 				Reload();
@@ -214,6 +218,10 @@ namespace PaintBall
 			if ( !IsLocalPawn && ViewModelEntity == null )
 			{
 				CreateViewModel();
+
+				if ( (Local.Pawn as Player).CurrentPlayer != Owner )
+					ViewModelEntity.EnableDrawing = false;
+
 				ViewModelEntity?.SetAnimBool( "deploy", true );
 			}
 		}

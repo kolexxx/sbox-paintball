@@ -80,20 +80,6 @@ namespace PaintBall
 			controller?.Simulate( cl, this, GetActiveAnimator() );
 		}
 
-		public override void FrameSimulate( Client cl )
-		{
-			var viewmodels = All.OfType<ViewModel>().ToList();
-			for ( int i = 0; i < viewmodels.Count; i++ )
-			{
-				if ( viewmodels[i].IsValid() && viewmodels[i].Owner != Local.Pawn )
-				{
-					viewmodels[i].FrameSimulate( cl );
-				}
-			}
-
-			base.FrameSimulate( cl );
-		}
-
 		public override void StartTouch( Entity other )
 		{
 			if ( IsClient )
