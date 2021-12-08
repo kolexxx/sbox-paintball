@@ -14,12 +14,12 @@ namespace PaintBall
 		public virtual int Bucket => 0;
 		public virtual int ClipSize => 20;
 		public virtual string FireSound => "pbg";
-		public virtual string FollowEffect => $"particles/{(Owner as Player).Team.GetString()}_glow.vpcf";
+		public virtual string FollowEffect => $"particles/{(Owner as Player)?.Team.GetString()}_glow.vpcf";
 		public virtual float Gravity => 0f;
 		public virtual string HitSound => "impact";
 		public virtual string Icon => "ui/weapons/pistol.png";
 		public Entity PreviousOwner { get; private set; }
-		public virtual string ProjectileModel => $"models/{(Owner as Player).Team.GetString()}_ball/ball.vmdl";
+		public virtual string ProjectileModel => $"models/{(Owner as Player)?.Team.GetString()}_ball/ball.vmdl";
 		public virtual float ProjectileRadius => 3f;
 		public virtual float ReloadTime => 5.0f;
 		public virtual float Speed => 2000f;
@@ -46,12 +46,31 @@ namespace PaintBall
 			PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
 		}
 
+		public override void ClientSpawn()
+		{
+			base.ClientSpawn();
+
+			if ( !IsLocalPawn && IsActiveChild() )
+				CreateViewModel();
+		}
+
 		public override void ActiveStart( Entity entity )
 		{
 			base.ActiveStart( entity );
 
 			TimeSinceDeployed = 0;
 			IsReloading = false;
+
+			if ( IsServer )
+				OnActiveStartClient( To.Everyone );
+		}
+
+		public override void ActiveEnd( Entity ent, bool dropped )
+		{
+			base.ActiveEnd( ent, dropped );
+
+			if ( IsServer )
+				OnActiveEndClient( To.Everyone );
 		}
 
 		public override void Simulate( Client owner )
@@ -70,7 +89,7 @@ namespace PaintBall
 		{
 			if ( AmmoClip == 0 )
 			{
-				if(ReserveAmmo == 0 )
+				if ( ReserveAmmo == 0 )
 				{
 
 					return;
@@ -173,6 +192,8 @@ namespace PaintBall
 				PickupTrigger.EnableTouch = true;
 
 			TimeSinceDropped = 0f;
+
+			OnActiveEndClient( To.Everyone );
 		}
 
 		public void Remove()
@@ -185,6 +206,24 @@ namespace PaintBall
 		protected virtual void ReloadEffects()
 		{
 			ViewModelEntity?.SetAnimBool( "reload", true );
+		}
+
+		[ClientRpc]
+		protected void OnActiveStartClient()
+		{
+			if ( !IsLocalPawn && ViewModelEntity == null )
+			{
+				CreateViewModel();
+				ViewModelEntity?.SetAnimBool( "deploy", true );
+			}
+		}
+
+
+		[ClientRpc]
+		protected void OnActiveEndClient()
+		{
+			if ( !IsLocalPawn )
+				DestroyViewModel();
 		}
 
 		[ClientRpc]

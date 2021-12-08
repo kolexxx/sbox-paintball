@@ -21,7 +21,12 @@ namespace PaintBall
 		{
 			base.PostCameraSetup( ref camSetup );
 
-			if ( !Local.Pawn.IsValid() )
+			if ( Local.Pawn is not Player player )
+				return;
+
+			player = player.CurrentPlayer;
+
+			if ( !player.IsValid() )
 				return;
 
 			if ( !activated )
@@ -39,14 +44,13 @@ namespace PaintBall
 
 			var playerVelocity = Local.Pawn.Velocity;
 
-			if ( Local.Pawn is Player player )
+
+			var controller = player.GetActiveController();
+			if ( controller != null && controller.HasTag( "noclip" ) )
 			{
-				var controller = player.GetActiveController();
-				if ( controller != null && controller.HasTag( "noclip" ) )
-				{
-					playerVelocity = Vector3.Zero;
-				}
+				playerVelocity = Vector3.Zero;
 			}
+
 
 			var newPitch = Rotation.Pitch();
 			var newYaw = Rotation.Yaw();
@@ -100,6 +104,16 @@ namespace PaintBall
 			offset = offset.WithZ( -System.MathF.Abs( offset.z ) );
 
 			return offset;
+		}
+
+		public override void FrameSimulate( Client cl )
+		{
+			if ( (Local.Pawn as Player).CurrentPlayer != Owner || Local.Pawn.Camera is not FirstPersonSpectateCamera )
+				EnableDrawing = false;
+			else
+				EnableDrawing = true;
+
+			base.FrameSimulate( cl );
 		}
 	}
 }
