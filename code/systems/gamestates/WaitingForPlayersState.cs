@@ -34,9 +34,6 @@ namespace PaintBall
 		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
 		{
 			base.OnPlayerChangedTeam( player, oldTeam, newTeam );
-
-			if ( newTeam != Team.None )
-				player.Respawn();
 		}
 
 		public override void OnSecond()
