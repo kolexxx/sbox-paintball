@@ -25,7 +25,11 @@ namespace PaintBall
 			var weapon = player.CurrentPlayer.ActiveChild as Weapon;
 
 			if ( weapon == null )
+			{
+				AmmoCount.Text = "";
+
 				return;
+			}
 
 			AmmoCount.Text = $"{weapon.AmmoClip}/{weapon.ReserveAmmo}";
 		}
