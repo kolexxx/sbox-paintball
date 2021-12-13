@@ -1,5 +1,4 @@
 using Sandbox;
-using System;
 
 namespace PaintBall
 {
@@ -11,8 +10,17 @@ namespace PaintBall
 		{
 			base.OnPlayerJoin( player );
 
-			player.SetTeam( (Team)Rand.Int( 1, 2 ) );
-			player.Respawn();
+			if ( player.Client.IsBot )
+			{
+				if ( Team.Blue.GetCount() >= Team.Red.GetCount() )
+					player.SetTeam( Team.Red );
+				else
+					player.SetTeam( Team.Blue );
+			}
+			else
+			{
+				player.MakeSpectator();
+			}
 
 			StateEndTime = StateDuration + Time.Now;
 			NextSecondTime = 0f;
@@ -34,6 +42,8 @@ namespace PaintBall
 		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
 		{
 			base.OnPlayerChangedTeam( player, oldTeam, newTeam );
+
+			player.Respawn();
 		}
 
 		public override void OnSecond()
@@ -76,9 +86,10 @@ namespace PaintBall
 
 			foreach ( var player in Players )
 			{
-				player.Reset();
+				if ( player.Team == Team.None )
+					continue;
 
-				player.SetTeam( (Team)Rand.Int( 1, 2 ) );
+				player.Reset();
 
 				player.Respawn();
 			}
