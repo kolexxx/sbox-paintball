@@ -10,12 +10,12 @@ namespace PaintBall
 		protected float BobCycleTime => 5f;
 		protected Vector3 BobDirection => new Vector3( 0.0f, 1.0f, 0.5f );
 
-		private Vector3 swingOffset;
-		private float lastPitch;
-		private float lastYaw;
-		private float bobAnim;
+		private Vector3 _swingOffset;
+		private float _lastPitch;
+		private float _lastYaw;
+		private float _bobAnim;
 
-		private bool activated = false;
+		private bool _activated = false;
 
 		public override void PostCameraSetup( ref CameraSetup camSetup )
 		{
@@ -29,12 +29,12 @@ namespace PaintBall
 			if ( !player.IsValid() )
 				return;
 
-			if ( !activated )
+			if ( !_activated )
 			{
-				lastPitch = camSetup.Rotation.Pitch();
-				lastYaw = camSetup.Rotation.Yaw();
+				_lastPitch = camSetup.Rotation.Pitch();
+				_lastYaw = camSetup.Rotation.Yaw();
 
-				activated = true;
+				_activated = true;
 			}
 
 			Position = camSetup.Position;
@@ -42,7 +42,7 @@ namespace PaintBall
 
 			camSetup.ViewModel.FieldOfView = FieldOfView;
 
-			var playerVelocity = Local.Pawn.Velocity;
+			var playerVelocity = player.Velocity;
 
 
 			var controller = player.GetActiveController();
@@ -55,8 +55,8 @@ namespace PaintBall
 			var newPitch = Rotation.Pitch();
 			var newYaw = Rotation.Yaw();
 
-			var pitchDelta = Angles.NormalizeAngle( newPitch - lastPitch );
-			var yawDelta = Angles.NormalizeAngle( lastYaw - newYaw );
+			var pitchDelta = Angles.NormalizeAngle( newPitch - _lastPitch );
+			var yawDelta = Angles.NormalizeAngle( _lastYaw - newYaw );
 
 			var verticalDelta = playerVelocity.z * Time.Delta;
 			var viewDown = Rotation.FromPitch( newPitch ).Up * -1.0f;
@@ -68,39 +68,39 @@ namespace PaintBall
 
 			Position += Rotation * offset;
 
-			lastPitch = newPitch;
-			lastYaw = newYaw;
+			_lastPitch = newPitch;
+			_lastYaw = newYaw;
 		}
 
 		protected Vector3 CalcSwingOffset( float pitchDelta, float yawDelta )
 		{
 			Vector3 swingVelocity = new Vector3( 0, yawDelta, pitchDelta );
 
-			swingOffset -= swingOffset * ReturnSpeed * Time.Delta;
-			swingOffset += (swingVelocity * SwingInfluence);
+			_swingOffset -= _swingOffset * ReturnSpeed * Time.Delta;
+			_swingOffset += (swingVelocity * SwingInfluence);
 
-			if ( swingOffset.Length > MaxOffsetLength )
+			if ( _swingOffset.Length > MaxOffsetLength )
 			{
-				swingOffset = swingOffset.Normal * MaxOffsetLength;
+				_swingOffset = _swingOffset.Normal * MaxOffsetLength;
 			}
 
-			return swingOffset;
+			return _swingOffset;
 		}
 
 		protected Vector3 CalcBobbingOffset( Vector3 velocity )
 		{
-			bobAnim += Time.Delta * BobCycleTime;
+			_bobAnim += Time.Delta * BobCycleTime;
 
 			var twoPI = System.MathF.PI * 2.0f;
 
-			if ( bobAnim > twoPI )
+			if ( _bobAnim > twoPI )
 			{
-				bobAnim -= twoPI;
+				_bobAnim -= twoPI;
 			}
 
 			var speed = new Vector2( velocity.x, velocity.y ).Length;
 			speed = speed > 10.0 ? speed : 0.0f;
-			var offset = BobDirection * (speed * 0.005f) * System.MathF.Cos( bobAnim );
+			var offset = BobDirection * (speed * 0.005f) * System.MathF.Cos( _bobAnim );
 			offset = offset.WithZ( -System.MathF.Abs( offset.z ) );
 
 			return offset;

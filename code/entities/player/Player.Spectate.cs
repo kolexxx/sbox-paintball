@@ -5,18 +5,18 @@ namespace PaintBall
 {
 	public partial class Player
 	{
-		public bool IsSpectator => Camera is SpectateCamera;
-		public bool IsSpectatingPlayer => SpectatedPlayer != null;
+		public bool IsSpectator => Camera is ISpectateCamera;
+		public bool IsSpectatingPlayer => _spectatedPlayer != null;
 		public Player CurrentPlayer
 		{
-			get => SpectatedPlayer ?? this;
+			get => _spectatedPlayer ?? this;
 			set
 			{
-				SpectatedPlayer = value == this ? null : value;
+				_spectatedPlayer = value == this ? null : value;
 			}
 		}
-		private Player SpectatedPlayer;
-		private int Index = 0;
+		private Player _spectatedPlayer;
+		private int _index = 0;
 
 		public void ChangeSpectateCamera()
 		{
@@ -36,6 +36,8 @@ namespace PaintBall
 
 		public void MakeSpectator()
 		{
+			Host.AssertServer();
+
 			Inventory.DeleteContents();
 			Controller = null;
 			EnableAllCollisions = false;
@@ -59,18 +61,18 @@ namespace PaintBall
 
 			if ( ValidPlayers.Count > 0 )
 			{
-				Index += i;
+				_index += i;
 
-				if ( Index >= ValidPlayers.Count )
-					Index = 0;
+				if ( _index >= ValidPlayers.Count )
+					_index = 0;
 
-				if ( Index < 0 )
-					Index = ValidPlayers.Count - 1;
+				if ( _index < 0 )
+					_index = ValidPlayers.Count - 1;
 
-				CurrentPlayer = ValidPlayers[Index];
+				CurrentPlayer = ValidPlayers[_index];
 			}
 
-			if ( Camera is SpectateCamera camera )
+			if ( Camera is ISpectateCamera camera )
 				camera.OnSpectatedPlayerChanged( oldPlayer, CurrentPlayer );
 		}
 	}

@@ -10,12 +10,12 @@ namespace PaintBall
 		[Net, Change] public int AliveRed { get; private set; } = 0;
 		[Net, Change] public int BlueScore { get; private set; } = 0;
 		[Net, Change] public int RedScore { get; private set; } = 0;
-		[Net, Change] public RoundState CurrentRoundState { get; private set; }	
+		[Net, Change] public RoundState CurrentRoundState { get; private set; }
 		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
-		private int RoundLimit => 12;
-		private int ToWinScore => 7; 
-		private int Round = 0;
-		private readonly float[] RoundStateDuration = { 5f, 60f, 5f };
+		private int _roundLimit => 12;
+		private int _toWinScore => 7;
+		private int _round = 0;
+		private readonly float[] _roundStateDuration = { 5f, 60f, 5f };
 
 		// Maybe turn these into classes?
 		public enum RoundState
@@ -29,28 +29,28 @@ namespace PaintBall
 		{
 			base.OnPlayerJoin( player );
 
-			if ( CurrentRoundState == RoundState.Freeze )
+			if ( player.Client.IsBot )
 			{
 				if ( Team.Blue.GetCount() >= Team.Red.GetCount() )
 					player.SetTeam( Team.Red );
 				else
 					player.SetTeam( Team.Blue );
-
-				player.Respawn();
 			}
 			else
 			{
 				player.MakeSpectator();
-
-				Game.Instance.MoveToSpawnpoint( player );
 			}
+
+			Game.Instance.MoveToSpawnpoint( player );
+
 		}
 
 		public override void OnPlayerLeave( Player player )
 		{
 			base.OnPlayerLeave( player );
 
-			AdjustTeam( player.Team, -1 );
+			if ( player.LifeState != LifeState.Dead )
+				AdjustTeam( player.Team, -1 );
 		}
 
 		public override void OnPlayerSpawned( Player player )
@@ -72,18 +72,19 @@ namespace PaintBall
 
 		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
 		{
-			if ( newTeam == Team.None )
+			if ( newTeam != Team.None && CurrentRoundState == RoundState.Freeze )
 			{
-				player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
+				AdjustTeam( oldTeam, -1 );
+
+				player.Respawn();
 
 				return;
 			}
 
-			if ( CurrentRoundState == RoundState.Freeze )
+			if ( player.LifeState != LifeState.Dead )
 			{
-				Game.Instance.MoveToSpawnpoint( player );
-
-				return;
+				AdjustTeam( oldTeam, -1 );
+				AdjustTeam( newTeam, 1 );
 			}
 
 			player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
@@ -93,9 +94,9 @@ namespace PaintBall
 		{
 			if ( Host.IsServer )
 			{
-				if ( Time.Now >= StateEndTime )		
+				if ( Time.Now >= StateEndTime )
 					RoundStateFinish();
-				
+
 				TimeLeftSeconds = TimeLeft.CeilToInt();
 			}
 		}
@@ -163,21 +164,20 @@ namespace PaintBall
 
 					Game.Instance.CleanUp();
 
-					int index = 0;
-
 					foreach ( var player in Players )
 					{
-						if ( !player.IsValid() )
+						if ( !player.IsValid() || player.Team == Team.None )
 							continue;
 
 						player.Inventory.DeleteContents();
 
-						player.SetTeam( (Team)(1 + index) );				
-
-						index ^= 1;
-
 						player.Respawn();
 					}
+
+					if ( AliveBlue - AliveRed > 1 )
+						TeamBalance( Team.Blue, Team.Red, AliveBlue - AliveRed - 1 );
+					else if ( AliveRed - AliveBlue > 1 )
+						TeamBalance( Team.Red, Team.Blue, AliveRed - AliveBlue - 1 );
 
 					break;
 
@@ -192,7 +192,7 @@ namespace PaintBall
 					break;
 			}
 
-			StateEndTime = RoundStateDuration[(int)CurrentRoundState] + Time.Now;
+			StateEndTime = _roundStateDuration[(int)CurrentRoundState] + Time.Now;
 
 			// Call OnSecond() as soon as RoundState starts
 			NextSecondTime = 0f;
@@ -224,9 +224,9 @@ namespace PaintBall
 
 				case RoundState.End:
 
-					Round++;
+					_round++;
 
-					if ( BlueScore == ToWinScore || RedScore == ToWinScore || Round == RoundLimit )
+					if ( BlueScore == _toWinScore || RedScore == _toWinScore || _round == _roundLimit )
 					{
 						Game.Instance.ChangeState( new GameFinishedState() );
 
@@ -290,6 +290,16 @@ namespace PaintBall
 		{
 			if ( oldState == RoundState.End )
 				Hud.Reset();
+		}
+
+		private void TeamBalance(Team more, Team less, int diff )
+		{
+			var players = more.GetAll().ToList();
+
+			for(int i = 0; i < diff; i++ )
+			{
+				players[i].SetTeam( less );
+			}
 		}
 	}
 }

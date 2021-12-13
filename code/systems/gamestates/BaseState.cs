@@ -1,7 +1,6 @@
 ﻿using Sandbox;
-using Sandbox.UI;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PaintBall
 {
@@ -57,6 +56,8 @@ namespace PaintBall
 
 				return;
 			}
+
+			player.TakeDamage( DamageInfo.Generic(float.MaxValue) );
 		}
 
 		public virtual void OnSecond()

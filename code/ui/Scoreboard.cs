@@ -10,11 +10,9 @@ namespace PaintBall
 	{
 		public bool Show { get; set; } = false;
 		public static Scoreboard Instance;
-
-		Dictionary<Client, ScoreBoardEntry> Entries = new();
-
-		Panel Header;
-		Panel[] Sections = new Panel[3];
+		private Dictionary<Client, ScoreBoardEntry> _entries = new();
+		private Panel _header;
+		private Panel[] _sections = new Panel[3];
 
 		public Scoreboard()
 		{
@@ -22,15 +20,17 @@ namespace PaintBall
 
 			StyleSheet.Load( "/ui/Scoreboard.scss" );
 
-			Sections[0] = Add.Panel( "none" );
-			Sections[1] = Add.Panel( "blue" );
-			Sections[2] = Add.Panel( "red" );
-			Header = Add.Panel( "header" );
-			Header.Add.Label( "Name" );
-			Header.Add.Label( "" );
-			Header.Add.Label( "Kills" );
-			Header.Add.Label( "Deaths" );
-			Header.Add.Label( "Ping" );
+			_sections[0] = Add.Panel( "none" );
+			_sections[1] = Add.Panel( "blue" );
+			_sections[2] = Add.Panel( "red" );
+			_header = Add.Panel( "header" );
+			_header.Add.Label( "Name" );
+			_header.Add.Label( "" );
+			_header.Add.Label( "Kills" );
+			_header.Add.Label( "Deaths" );
+			_header.Add.Label( "Ping" );
+
+			BindClass( "hidden", () => Local.Hud.GetChild( 9 ).IsVisible );
 		}
 
 		public override void Tick()
@@ -42,7 +42,7 @@ namespace PaintBall
 			if ( !IsVisible )
 				return;
 
-			foreach ( var client in Client.All.Except( Entries.Keys ) )
+			foreach ( var client in Client.All.Except( _entries.Keys ) )
 			{
 				Team team = Team.None;
 
@@ -50,22 +50,22 @@ namespace PaintBall
 					team = (client.Pawn as Player).Team;
 
 				var e = AddEntry( client, team );
-				Entries[client] = e;
+				_entries[client] = e;
 			}
 
-			foreach ( var client in Entries.Keys.Except( Client.All ) )
+			foreach ( var client in _entries.Keys.Except( Client.All ) )
 			{
-				if ( Entries.TryGetValue( client, out var e ) )
+				if ( _entries.TryGetValue( client, out var e ) )
 				{
 					e?.Delete();
-					Entries.Remove( client );
+					_entries.Remove( client );
 				}
 			}
 
 			// Up to 160 comparisons each tick. Maybe add delay for each sort?
 			for ( int i = 1; i <= 2; i++ )
 			{
-				Sections[i].SortChildren( e =>
+				_sections[i].SortChildren( e =>
 				{
 					var client = (e as ScoreBoardEntry)?.Client;
 
@@ -78,7 +78,7 @@ namespace PaintBall
 
 	public ScoreBoardEntry AddEntry( Client client, Team team )
 		{
-			var e = Sections[(int)team].AddChild<ScoreBoardEntry>();
+			var e = _sections[(int)team].AddChild<ScoreBoardEntry>();
 			e.Client = client;
 
 			return e;
@@ -89,18 +89,18 @@ namespace PaintBall
 			if ( !client.IsValid() )
 				return;
 
-			if ( Entries.ContainsKey( client ) )
+			if ( _entries.ContainsKey( client ) )
 			{
-				var e = Entries[client];
+				var e = _entries[client];
 				e?.Delete();
 
 				e = AddEntry( client, team );
-				Entries[client] = e;
+				_entries[client] = e;
 			}
 			else
 			{
 				var e = AddEntry( client, team );
-				Entries[client] = e;
+				_entries[client] = e;
 			}
 		}
 

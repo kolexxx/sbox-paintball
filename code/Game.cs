@@ -1,7 +1,5 @@
 ﻿using Sandbox;
-using Sandbox.UI;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Linq;
 
 namespace PaintBall
@@ -20,7 +18,7 @@ namespace PaintBall
 		[ServerVar( "pb_min_players", Help = "The minimum players required to start." )]
 		public static int MinPlayers { get; set; } = 2;
 
-		private BaseState LastGameState { get; set; }
+		private BaseState _lastGameState { get; set; }
 
 		public Game()
 		{
@@ -97,7 +95,7 @@ namespace PaintBall
 		public override void Shutdown()
 		{
 			CurrentGameState = null;
-			LastGameState = null;
+			_lastGameState = null;
 
 			base.Shutdown();
 		}
@@ -127,14 +125,42 @@ namespace PaintBall
 		}
 
 		[ServerCmd( "changeteam", Help = "Changes the callers team" )]
-		public static void ChangeTeamCommand( uint team )
+		public static void ChangeTeamCommand( uint i )
 		{
 			Client client = ConsoleSystem.Caller;
 
-			if ( client == null || client.Pawn is not Player player || team > 2 )
+			if ( client == null || client.Pawn is not Player player || i > 2 )
 				return;
 
-			player.SetTeam( (Team)team );
+			Team team = (Team)i;
+
+			if ( team != player.Team )
+			{
+				if ( team == Team.None )
+				{
+					player.SetTeam( team );
+
+					return;
+				}
+
+				int redCount = Team.Red.GetCount();
+				int blueCount = Team.Blue.GetCount();
+
+				if ( player.Team == Team.None )
+				{
+					if ( team == Team.Blue && (blueCount <= redCount) )
+						player.SetTeam( team );
+					else if ( team == Team.Red && (redCount <= blueCount) )
+						player.SetTeam( team );
+
+					return;
+				}
+
+				if ( team == Team.Blue && (blueCount < redCount) )
+					player.SetTeam( team );
+				else if ( team == Team.Red && (redCount < blueCount) )
+					player.SetTeam( team );
+			}
 		}
 
 		public override void OnKilled( Client client, Entity pawn )
@@ -148,11 +174,24 @@ namespace PaintBall
 			{
 				if ( attacker.Client != null )
 				{
-					Hud.AddKillFeed( attacker.Client.Name, client.Name, (pawn.LastAttackerWeapon as Weapon).Icon, attacker.Team, victim.Team, attacker.Client.PlayerId, client.PlayerId );
+					Hud.AddKillFeed(
+						attacker.Client.Name,
+						client.Name,
+						(pawn.LastAttackerWeapon as Weapon).Icon,
+						attacker.Team, victim.Team,
+						attacker.Client.PlayerId,
+						client.PlayerId );
 				}
 				else
 				{
-					Hud.AddKillFeed( attacker.Name, client.Name, "killed", attacker.Team, victim.Team, attacker.NetworkIdent, client.PlayerId );
+					Hud.AddKillFeed(
+						attacker.Name,
+						client.Name,
+						"killed",
+						attacker.Team,
+						victim.Team,
+						attacker.NetworkIdent,
+						client.PlayerId );
 				}
 			}
 			else
@@ -201,11 +240,11 @@ namespace PaintBall
 
 		private void OnStateChanged()
 		{
-			if ( LastGameState != CurrentGameState )
+			if ( _lastGameState != CurrentGameState )
 			{
-				LastGameState?.Finish();
-				LastGameState = CurrentGameState;
-				LastGameState.Start();
+				_lastGameState?.Finish();
+				_lastGameState = CurrentGameState;
+				_lastGameState.Start();
 			}
 		}
 

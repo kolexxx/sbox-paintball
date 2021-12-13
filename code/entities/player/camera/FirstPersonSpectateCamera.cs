@@ -2,7 +2,7 @@
 
 namespace PaintBall
 {
-	public class FirstPersonSpectateCamera : Camera, SpectateCamera
+	public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 	{
 		private const float SMOOTH_SPEED = 25f;
 

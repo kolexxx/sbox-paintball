@@ -9,10 +9,9 @@ namespace PaintBall
 	public class InventoryBar : Panel
 	{
 		public static InventoryBar Instance;
-
-		private InventoryIcon[] Slots = new InventoryIcon[5];
-		private Weapon[] Weapons = new Weapon[5];
-		RealTimeUntil Close;
+		private InventoryIcon[] _slots = new InventoryIcon[5];
+		private Weapon[] _weapons = new Weapon[5];
+		private RealTimeUntil _close;
 
 		public InventoryBar()
 		{
@@ -21,8 +20,9 @@ namespace PaintBall
 			StyleSheet.Load( "/ui/InventoryBar.scss" );
 
 			for ( int i = 0; i < 5; i++ )
-				Slots[i] = new InventoryIcon( i + 1, this );
+				_slots[i] = new InventoryIcon( i + 1, this );
 
+			BindClass( "hidden", () => Local.Hud.GetChild( 9 ).IsVisible );
 		}
 
 		public override void Tick()
@@ -33,29 +33,29 @@ namespace PaintBall
 				return;
 
 			for ( int i = 0; i < 5; i++ )
-				Weapons[i] = null;
+				_weapons[i] = null;
 
 			foreach ( var weapon in player.CurrentPlayer.Children.OfType<Weapon>() )
-				Weapons[weapon.Bucket] = weapon;
+				_weapons[weapon.Bucket] = weapon;
 
 			for ( int i = 0; i < 5; i++ )
 			{
-				if ( Weapons[i] == null )
+				if ( _weapons[i] == null )
 				{
-					if ( Slots[i].TargetWeapon != null )
-						Close = 3f;
+					if ( _slots[i].TargetWeapon != null )
+						_close = 3f;
 
-					Slots[i].Clear();
+					_slots[i].Clear();
 					continue;
 				}
 
-				if ( Slots[i].TargetWeapon == null || Slots[i].TargetWeapon != Weapons[i] )
-					Close = 3f;
+				if ( _slots[i].TargetWeapon == null || _slots[i].TargetWeapon != _weapons[i] )
+					_close = 3f;
 
-				Slots[i].UpdateWeapon( Weapons[i] );
+				_slots[i].UpdateWeapon( _weapons[i] );
 			}
 
-			SetClass( "hidden", Close <= 0 );
+			SetClass( "hidden", _close <= 0 );
 		}
 
 		[Event.BuildInput]
@@ -84,14 +84,14 @@ namespace PaintBall
 
 		private void SetActiveSlot( InputBuilder input, int i )
 		{
-			Close = 3f;
+			_close = 3f;
 
 			var player = Local.Pawn as Player;
 
 			if ( player == null || player.CurrentPlayer != player )
 				return;
 
-			var weapon = Weapons[i];
+			var weapon = _weapons[i];
 
 			if ( player.ActiveChild == weapon )
 				return;
@@ -135,7 +135,7 @@ namespace PaintBall
 				Icon.SetTexture( weapon?.Icon );
 
 				if ( weapon.IsActiveChild() && !HasClass( "active" ) )
-					Instance.Close = 3f;
+					Instance._close = 3f;
 
 				SetClass( "active", weapon.IsActiveChild() );
 				SetClass( "hidden", false );

@@ -2,11 +2,11 @@
 
 namespace PaintBall
 {
-	public class FreeSpectateCamera : Camera, SpectateCamera
+	public class FreeSpectateCamera : Camera, ISpectateCamera
 	{
-		private Angles MoveAngles;
-		private Vector3 MoveInput;
-		private float MoveSpeed;
+		private Angles _moveAngles;
+		private Vector3 _moveInput;
+		private float _moveSpeed;
 
 		public override void Activated()
 		{
@@ -15,23 +15,23 @@ namespace PaintBall
 			Position = CurrentView.Position;
 			Rotation = CurrentView.Rotation;
 
-			MoveAngles = Rotation.Angles();
+			_moveAngles = Rotation.Angles();
 		}
 
 		public override void BuildInput( InputBuilder input )
 		{
-			MoveInput = input.AnalogMove;
+			_moveInput = input.AnalogMove;
 
-			MoveSpeed = 1f;
+			_moveSpeed = 1f;
 
 			if ( input.Down( InputButton.Run ) )
-				MoveSpeed = 5f;
+				_moveSpeed = 5f;
 
 			if ( input.Down( InputButton.Duck ) )
-				MoveSpeed = 0.5f;
+				_moveSpeed = 0.5f;
 
-			MoveAngles += input.AnalogLook;
-			MoveAngles.roll = 0;
+			_moveAngles += input.AnalogLook;
+			_moveAngles.roll = 0;
 
 			base.BuildInput( input );
 		}
@@ -43,10 +43,10 @@ namespace PaintBall
 			if ( Local.Client == null )
 				return;
 
-			var Move = MoveInput.Normal * 300 * RealTime.Delta * Rotation * MoveSpeed;
+			var Move = _moveInput.Normal * 300 * RealTime.Delta * Rotation * _moveSpeed;
 
 			Position += Move;
-			Rotation = Rotation.From( MoveAngles );
+			Rotation = Rotation.From( _moveAngles );
 		}
 	}
 }
