@@ -6,7 +6,7 @@ killfeed
     top: 50px;
     right: 100px;
     z-index: 100;
-    flex-direction: column-reverse;
+    flex-direction: column;
     width: 500px;
     font-family: Roboto;
     font-size: 15px;
@@ -28,7 +28,6 @@ killfeedentry
     align-items: center;
     backdrop-filter: blur(10px);
     border-radius: 5%;
-
 
     &:intro
     {
