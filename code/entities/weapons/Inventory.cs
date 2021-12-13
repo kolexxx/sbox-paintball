@@ -5,10 +5,7 @@ namespace PaintBall
 {
 	public class Inventory : BaseInventory
 	{
-		public Inventory( Player player ) : base( player )
-		{
-
-		}
+		public Inventory( Player player ) : base( player ) { }
 
 		public override bool Add( Entity entity, bool makeActive = false )
 		{
