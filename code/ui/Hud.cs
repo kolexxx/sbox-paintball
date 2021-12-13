@@ -56,6 +56,7 @@ namespace PaintBall
 			RootPanel.AddChild<Scoreboard>();        // 6
 			RootPanel.AddChild<SpectatorControls>(); // 7
 			RootPanel.AddChild<TeamIndicator>();     // 8
+			RootPanel.AddChild<TeamSelect>();        // 9
 		}
 	}
 }
