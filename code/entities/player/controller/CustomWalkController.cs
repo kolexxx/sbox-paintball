@@ -6,7 +6,7 @@ namespace PaintBall
 	{
 		[Net] public new float SprintSpeed { get; set; } = 150.0f;
 		[Net] public new float WalkSpeed { get; set; } = 150.0f;
-		[Net] public new float DefaultSpeed { get; set; } = 225.0f;
+		[Net] public new float DefaultSpeed { get; set; } = 250.0f;
 		public override float GetWishSpeed()
 		{
 			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f )

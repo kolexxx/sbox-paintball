@@ -7,14 +7,16 @@ namespace PaintBall
 	{
 		[Net, Change] public Team Team { get; set; }
 		[Net] public TimeSince TimeSinceSpawned { get; private set; }
+		public DamageInfo LastDamageInfo { get; set; }
 		public ProjectileSimulator Projectiles { get; set; }
-		private DamageInfo LastDamageInfo { get; set; }
-
+		
 		public Player()
 		{
 			Inventory = new Inventory( this );
 			Projectiles = new( this );
 			EnableTouch = true;
+
+			LifeState = LifeState.Dead;
 		}
 
 		public override void Respawn()
