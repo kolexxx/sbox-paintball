@@ -16,6 +16,7 @@ namespace PaintBall
 		public override float Speed => 2500f;
 		public override float Spread => 0.05f;
 		public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
+		private bool _attackedDuringReload = false;
 
 		public override void Spawn()
 		{
@@ -23,6 +24,7 @@ namespace PaintBall
 
 			AmmoClip = ClipSize;
 			ReserveAmmo = 10;
+
 			SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );
 		}
 
@@ -30,13 +32,13 @@ namespace PaintBall
 		{
 			base.ActiveStart( entity );
 
-			AttackedDuringReload = false;
+			_attackedDuringReload = false;
 			TimeSinceReload = 0f;
 		}
 
 		public override bool CanReload()
 		{
-			if ( AmmoClip >= ClipSize || ReserveAmmo == 0 )
+			if ( AmmoClip >= ClipSize || (!UnlimitedAmmo && ReserveAmmo == 0) )
 				return false;
 
 			if ( !Owner.IsValid() || !Input.Down( InputButton.Reload ) )
@@ -53,9 +55,9 @@ namespace PaintBall
 		{
 			if ( AmmoClip == 0 )
 			{
-				if ( ReserveAmmo == 0 )
+				if ( !UnlimitedAmmo && ReserveAmmo == 0 )
 				{
-
+					// Play dryfire sound
 					return;
 				}
 
@@ -83,7 +85,6 @@ namespace PaintBall
 			}
 		}
 
-		private bool AttackedDuringReload = false;
 		public override void Simulate( Client owner )
 		{
 			if ( TimeSinceDeployed < 0.6f )
@@ -114,7 +115,7 @@ namespace PaintBall
 			}
 			else if ( Input.Pressed( InputButton.Attack1 ) )
 			{
-				AttackedDuringReload = true;
+				_attackedDuringReload = true;
 			}
 
 			if ( IsReloading && TimeSinceReload > ReloadTime )
@@ -129,12 +130,12 @@ namespace PaintBall
 
 			AmmoClip += TakeAmmo( 1 );
 
-			if ( !AttackedDuringReload && AmmoClip < ClipSize && ReserveAmmo != 0 )
+			if ( !_attackedDuringReload && AmmoClip < ClipSize && ( UnlimitedAmmo || ReserveAmmo != 0 ) )
 				Reload();
 			else
 				FinishReload();
 
-			AttackedDuringReload = false;
+			_attackedDuringReload = false;
 		}
 
 		public override void SimulateAnimator( PawnAnimator anim )

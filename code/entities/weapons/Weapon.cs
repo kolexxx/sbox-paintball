@@ -27,6 +27,7 @@ namespace PaintBall
 		public TimeSince TimeSinceDropped { get; private set; }
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 		public PickupTrigger PickupTrigger { get; protected set; }
+		public virtual bool UnlimitedAmmo => false;
 
 		public Weapon()
 		{
@@ -54,7 +55,8 @@ namespace PaintBall
 			{
 				CreateViewModel();
 
-				ViewModelEntity.EnableDrawing = false;
+				if ( Local.Pawn is Player player && player.CurrentPlayer != Owner )
+					ViewModelEntity.EnableDrawing = false;
 			}
 		}
 
@@ -93,7 +95,7 @@ namespace PaintBall
 		{
 			if ( AmmoClip == 0 )
 			{
-				if ( ReserveAmmo == 0 )
+				if ( !UnlimitedAmmo && ReserveAmmo == 0 )
 				{
 					// Play dryfire sound
 					return;
@@ -136,7 +138,7 @@ namespace PaintBall
 
 		public override bool CanReload()
 		{
-			if ( AmmoClip >= ClipSize || ReserveAmmo == 0 )
+			if ( AmmoClip >= ClipSize || (!UnlimitedAmmo && ReserveAmmo == 0) )
 				return false;
 
 			return base.CanReload();
@@ -307,7 +309,7 @@ namespace PaintBall
 
 		protected virtual int TakeAmmo( int ammo )
 		{
-			if ( ReserveAmmo == -1 )
+			if ( UnlimitedAmmo )
 				return ammo;
 
 			int available = Math.Min( ReserveAmmo, ammo );

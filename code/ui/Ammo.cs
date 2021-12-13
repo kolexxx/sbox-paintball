@@ -7,10 +7,13 @@ namespace PaintBall
 	public class Ammo : Panel
 	{
 		public Label AmmoCount;
+		public Image AmmoIcon;
 
 		public Ammo()
 		{
 			AmmoCount = Add.Label( "100" );
+			AmmoIcon = Add.Image( "", "icon" );
+			AmmoIcon.SetTexture( "ui/ammo.png" );
 		}
 
 		public override void Tick()
@@ -20,7 +23,7 @@ namespace PaintBall
 			if ( player == null )
 				return;
 
-			SetClass( "hidden", player.LifeState == LifeState.Dead && (player.IsSpectator && !player.IsSpectatingPlayer) );
+			SetClass( "hidden", Local.Hud.GetChild( 9 ).IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
 
 			var weapon = player.CurrentPlayer.ActiveChild as Weapon;
 
@@ -31,7 +34,8 @@ namespace PaintBall
 				return;
 			}
 
-			AmmoCount.Text = $"{weapon.AmmoClip}/{weapon.ReserveAmmo}";
+			string reserve = weapon.UnlimitedAmmo ? "∞" : $"{weapon.ReserveAmmo}";
+			AmmoCount.Text = $"{weapon.AmmoClip}/{reserve}";
 		}
 
 	}
