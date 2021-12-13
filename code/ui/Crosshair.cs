@@ -11,7 +11,9 @@ namespace PaintBall
 		public Crosshair()
 		{
 			StyleSheet.Load( "/ui/Crosshair.scss" );
-			Message = Add.Label( "" );
+			Message = Add.Label();
+
+			BindClass( "hidden", () => Local.Hud.GetChild( 6 ).IsVisible || Local.Hud.GetChild( 9 ).IsVisible );
 		}
 
 		public override void Tick()
@@ -20,8 +22,7 @@ namespace PaintBall
 
 			if ( Local.Pawn is not Player player )
 				return;
-
-			SetClass( "hidden", Local.Hud.GetChild( 6 ).IsVisible );
+		
 		}
 	}
 }

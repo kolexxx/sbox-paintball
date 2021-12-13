@@ -8,11 +8,11 @@ namespace PaintBall
 	public class GameInfo : Panel
 	{
 		public static GameInfo Instance;
-
 		public Label Timer;
 		public Panel Left;
 		public Middle Mid;
 		public Panel Right;
+
 		public GameInfo()
 		{
 			Instance = this;
@@ -27,13 +27,13 @@ namespace PaintBall
 
 			Right = AddChild<Panel>( "right" );
 			Right.Add.Label( "0" );
+
+			BindClass( "hidden", () => Local.Hud.GetChild( 6 ).IsVisible || Local.Hud.GetChild( 9 ).IsVisible );
 		}
 
 		public override void Tick()
 		{
 			base.Tick();
-
-			SetClass( "hidden", Local.Hud.GetChild( 6 ).IsVisible );
 
 			if ( !IsVisible )
 				return;
