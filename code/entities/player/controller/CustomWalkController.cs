@@ -4,6 +4,7 @@ namespace PaintBall
 {
 	public partial class CustomWalkController : WalkController
 	{
+		[Net] public new float AirControl { get; set; } = 30.0f;
 		[Net] public new float SprintSpeed { get; set; } = 150.0f;
 		[Net] public new float WalkSpeed { get; set; } = 150.0f;
 		[Net] public new float DefaultSpeed { get; set; } = 250.0f;
