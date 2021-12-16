@@ -56,8 +56,6 @@ namespace PaintBall
 
 				return;
 			}
-
-			player.TakeDamage( DamageInfo.Generic(float.MaxValue) );
 		}
 
 		public virtual void OnSecond()

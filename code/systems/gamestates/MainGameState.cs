@@ -17,7 +17,7 @@ namespace PaintBall
 		private int _round = 0;
 		private readonly float[] _roundStateDuration = { 5f, 60f, 5f };
 
-		// Maybe turn these into classes?
+
 		public enum RoundState
 		{
 			Freeze,
@@ -72,22 +72,11 @@ namespace PaintBall
 
 		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
 		{
-			if ( newTeam != Team.None && CurrentRoundState == RoundState.Freeze )
-			{
-				AdjustTeam( oldTeam, -1 );
-
-				player.Respawn();
-
-				return;
-			}
-
 			if ( player.LifeState != LifeState.Dead )
 			{
 				AdjustTeam( oldTeam, -1 );
 				AdjustTeam( newTeam, 1 );
 			}
-
-			player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
 		}
 
 		public override void OnSecond()
@@ -174,10 +163,10 @@ namespace PaintBall
 						player.Respawn();
 					}
 
-					if ( AliveBlue - AliveRed > 1 )
-						TeamBalance( Team.Blue, Team.Red, AliveBlue - AliveRed - 1 );
-					else if ( AliveRed - AliveBlue > 1 )
-						TeamBalance( Team.Red, Team.Blue, AliveRed - AliveBlue - 1 );
+					int diff = Math.Abs( AliveBlue - AliveRed );
+
+					if ( Math.Abs( AliveBlue - AliveRed ) > 1 )
+						TeamBalance( diff );
 
 					break;
 
@@ -292,13 +281,18 @@ namespace PaintBall
 				Hud.Reset();
 		}
 
-		private void TeamBalance(Team more, Team less, int diff )
+		private void TeamBalance( int diff )
 		{
-			var players = more.GetAll().ToList();
+			Team team = AliveBlue > AliveRed ? Team.Red : Team.Blue;
 
-			for(int i = 0; i < diff; i++ )
+			var players = team.GetAll();
+
+			foreach ( var player in players )
 			{
-				players[i].SetTeam( less );
+				player.SetTeam( team );
+
+				if ( --diff == 0 )
+					break;
 			}
 		}
 	}
