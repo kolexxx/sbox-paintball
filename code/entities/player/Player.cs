@@ -134,7 +134,7 @@ namespace PaintBall
 
 		public override void Spawn()
 		{
-			LagCompensation = true;
+			EnableLagCompensation = true;
 
 			base.Spawn();
 		}

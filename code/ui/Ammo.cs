@@ -37,7 +37,5 @@ namespace PaintBall
 			string reserve = weapon.UnlimitedAmmo ? "∞" : $"{weapon.ReserveAmmo}";
 			AmmoCount.Text = $"{weapon.AmmoClip}/{reserve}";
 		}
-
 	}
-
 }

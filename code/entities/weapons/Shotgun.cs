@@ -78,10 +78,8 @@ namespace PaintBall
 			{
 				Rand.SetSeed( Time.Tick );
 
-				for ( int i = 0; i < BulletsPerFire; i++ )
-				{
+				for ( int i = 0; i < BulletsPerFire; i++ )	
 					FireProjectile();
-				}
 			}
 		}
 

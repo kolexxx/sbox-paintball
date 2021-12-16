@@ -38,14 +38,11 @@ namespace PaintBall
 				var body = ent.GetBonePhysicsBody( forceBone );
 
 				if ( body != null )
-				{
 					body.ApplyForce( force * 1000 );
-				}
 				else
-				{
 					ent.PhysicsGroup.AddVelocity( force );
-				}
 			}
+
 			Corpse = ent;
 
 			ent.DeleteAsync( 10.0f );
@@ -59,17 +56,14 @@ namespace PaintBall
 
 		public void RemoveCorpse()
 		{
-			if ( IsServer )
-			{
+			if ( IsServer )	
 				RemoveCorpseOnClient();
-			}
-
+			
 			if ( Corpse != null && Corpse.IsValid() )
 			{
 				Corpse.Delete();
 				Corpse = null;
 			}
 		}
-
 	}
 }
