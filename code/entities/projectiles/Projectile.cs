@@ -105,7 +105,6 @@ namespace PaintBall
 			newPosition -= new Vector3( 0f, 0f, GravityModifier * Time.Delta );
 
 			var trace = Trace.Ray( Position, newPosition )
-				.UseLagCompensation()
 				.UseHitboxes()
 				.Size( Radius )
 				.WithoutTags( "baseprojectile" )
