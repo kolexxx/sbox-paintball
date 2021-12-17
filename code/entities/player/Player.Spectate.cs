@@ -23,15 +23,13 @@ namespace PaintBall
 			if ( !IsServer || !Input.Pressed( InputButton.Jump ) )
 				return;
 
-			using ( Prediction.Off() )
+
+			Camera = Camera switch
 			{
-				Camera = Camera switch
-				{
-					FreeSpectateCamera => new FirstPersonSpectateCamera(),
-					FirstPersonSpectateCamera => new FreeSpectateCamera(),
-					_ => Camera
-				};
-			}
+				FreeSpectateCamera => new FirstPersonSpectateCamera(),
+				FirstPersonSpectateCamera => new FreeSpectateCamera(),
+				_ => Camera
+			};
 		}
 
 		public void MakeSpectator()
