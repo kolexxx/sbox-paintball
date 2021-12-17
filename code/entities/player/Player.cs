@@ -113,6 +113,8 @@ namespace PaintBall
 
 		public void SetTeam( Team newTeam )
 		{
+			TakeDamage( DamageInfo.Generic( float.MaxValue ) );
+
 			Team oldTeam = Team;
 			Tags.Remove( $"{oldTeam.GetString()}player" );
 			Team = newTeam;

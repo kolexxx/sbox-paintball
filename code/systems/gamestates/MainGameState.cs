@@ -163,9 +163,9 @@ namespace PaintBall
 						player.Respawn();
 					}
 
-					int diff = Math.Abs( AliveBlue - AliveRed );
+					int diff = Math.Abs( AliveBlue - AliveRed ) - 1;
 
-					if ( Math.Abs( AliveBlue - AliveRed ) > 1 )
+					if ( diff > 0 )
 						TeamBalance( diff );
 
 					break;
@@ -283,13 +283,15 @@ namespace PaintBall
 
 		private void TeamBalance( int diff )
 		{
-			Team team = AliveBlue > AliveRed ? Team.Red : Team.Blue;
+			Team teamLess = AliveBlue > AliveRed ? Team.Red : Team.Blue;
+			Team teamMore = teamLess == Team.Blue ? Team.Red : Team.Blue;
 
-			var players = team.GetAll();
+			var players = teamMore.GetAll();
 
 			foreach ( var player in players )
 			{
-				player.SetTeam( team );
+				player.SetTeam( teamLess );
+
 
 				if ( --diff == 0 )
 					break;

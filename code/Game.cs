@@ -159,8 +159,6 @@ namespace PaintBall
 				if ( blueCount == redCount )
 					return;
 
-				player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
-
 				if ( team == Team.Blue && (blueCount < redCount) )
 					player.SetTeam( team );
 				else if ( team == Team.Red && (redCount < blueCount) )
