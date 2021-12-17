@@ -62,6 +62,7 @@ namespace PaintBall
 		public override void Spawn()
 		{
 			Predictable = true;
+			EnableLagCompensation = true;
 
 			base.Spawn();
 		}

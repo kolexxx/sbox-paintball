@@ -45,6 +45,7 @@ namespace PaintBall
 			};
 
 			PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
+			EnableLagCompensation = true;
 		}
 
 		public override void ClientSpawn()

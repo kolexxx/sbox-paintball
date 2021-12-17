@@ -9,7 +9,7 @@ namespace PaintBall
 		[Net] public TimeSince TimeSinceSpawned { get; private set; }
 		public DamageInfo LastDamageInfo { get; set; }
 		public ProjectileSimulator Projectiles { get; set; }
-		
+
 		public Player()
 		{
 			Inventory = new Inventory( this );
@@ -48,7 +48,8 @@ namespace PaintBall
 
 		public override void Simulate( Client cl )
 		{
-			Projectiles.Simulate();
+			using ( LagCompensation() )
+				Projectiles.Simulate();
 
 			var controller = GetActiveController();
 
