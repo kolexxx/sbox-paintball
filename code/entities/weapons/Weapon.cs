@@ -52,11 +52,14 @@ namespace PaintBall
 		{
 			base.ClientSpawn();
 
+			if ( Local.Pawn is not Player player )
+				return;
+
 			if ( !IsLocalPawn && IsActiveChild() )
 			{
 				CreateViewModel();
 
-				if ( Local.Pawn is Player player && player.CurrentPlayer != Owner )
+				if ( player.LifeState == LifeState.Alive || player.CurrentPlayer != Owner )
 					ViewModelEntity.EnableDrawing = false;
 			}
 		}

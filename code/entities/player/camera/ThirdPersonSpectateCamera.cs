@@ -64,9 +64,6 @@ namespace PaintBall
 				Local.Hud.AddClass( player.Team.GetString() );
 			}
 
-			if ( player.CurrentPlayer.ActiveChild is Weapon weapon && weapon.ViewModelEntity != null )
-				weapon.ViewModelEntity.EnableDrawing = false;
-
 			player.CurrentPlayer = null;
 		}
 
