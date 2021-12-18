@@ -140,7 +140,7 @@ namespace PaintBall
 
 		public override bool CanReload()
 		{
-			if ( AmmoClip >= ClipSize || ( !UnlimitedAmmo && ReserveAmmo == 0 ) )
+			if ( AmmoClip >= ClipSize || (!UnlimitedAmmo && ReserveAmmo == 0) )
 				return false;
 
 			return base.CanReload();
