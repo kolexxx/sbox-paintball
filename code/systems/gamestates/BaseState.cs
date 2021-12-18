@@ -1,6 +1,5 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PaintBall
 {
@@ -56,6 +55,8 @@ namespace PaintBall
 
 				return;
 			}
+
+			player.Respawn();
 		}
 
 		public virtual void OnSecond()

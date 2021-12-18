@@ -39,13 +39,6 @@ namespace PaintBall
 			player.Inventory.Add( new Pistol() );
 		}
 
-		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
-		{
-			base.OnPlayerChangedTeam( player, oldTeam, newTeam );
-
-			player.Respawn();
-		}
-
 		public override void OnSecond()
 		{
 			base.OnSecond();
