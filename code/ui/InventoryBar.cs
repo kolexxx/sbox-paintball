@@ -63,13 +63,6 @@ namespace PaintBall
 		{
 			if ( Local.Pawn is not Player player )
 				return;
-			/*
-			if ( player.TimeSinceSpawned <= 0.1f )
-			{
-				Fix( input );
-
-				return;
-			}*/
 
 			var inventory = player.Inventory;
 			if ( inventory == null )
