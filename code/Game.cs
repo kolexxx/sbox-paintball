@@ -124,48 +124,6 @@ namespace PaintBall
 			base.DoPlayerSuicide( cl );
 		}
 
-		[ServerCmd( "changeteam", Help = "Changes the callers team" )]
-		public static void ChangeTeamCommand( uint i )
-		{
-			Client client = ConsoleSystem.Caller;
-
-			if ( client == null || client.Pawn is not Player player || i > 2 )
-				return;
-
-			Team team = (Team)i;
-
-			if ( team != player.Team )
-			{
-				if ( team == Team.None )
-				{
-					player.SetTeam( team );
-
-					return;
-				}		
-
-				int redCount = Team.Red.GetCount();
-				int blueCount = Team.Blue.GetCount();
-
-				if ( player.Team == Team.None )
-				{
-					if ( team == Team.Blue && (blueCount <= redCount) )
-						player.SetTeam( team );
-					else if ( team == Team.Red && (redCount <= blueCount) )
-						player.SetTeam( team );
-
-					return;
-				}
-
-				if ( blueCount == redCount )
-					return;
-
-				if ( team == Team.Blue && (blueCount < redCount) )
-					player.SetTeam( team );
-				else if ( team == Team.Red && (redCount < blueCount) )
-					player.SetTeam( team );
-			}
-		}
-
 		public override void OnKilled( Client client, Entity pawn )
 		{
 			Host.AssertServer();

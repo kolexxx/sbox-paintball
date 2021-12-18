@@ -111,21 +111,6 @@ namespace PaintBall
 			LastDamageInfo = default;
 		}
 
-		public void SetTeam( Team newTeam )
-		{
-			TakeDamage( DamageInfo.Generic( float.MaxValue ) );
-
-			Team oldTeam = Team;
-			Tags.Remove( $"{oldTeam.GetString()}player" );
-			Team = newTeam;
-			Tags.Add( $"{newTeam.GetString()}player" );
-			Client.SetInt( "team", (int)newTeam );
-
-			Hud.OnTeamChanged( To.Everyone, Client, newTeam );
-
-			Game.Instance.CurrentGameState.OnPlayerChangedTeam( this, oldTeam, newTeam );
-		}
-
 		public void OnTeamChanged( Team oldTeam, Team newTeam )
 		{
 			if ( IsLocalPawn )
