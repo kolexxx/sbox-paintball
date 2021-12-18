@@ -6,7 +6,7 @@ namespace PaintBall
 	public partial class Player
 	{
 		public bool IsSpectator => Camera is ISpectateCamera;
-		public bool IsSpectatingPlayer => _spectatedPlayer != null;
+		public bool IsSpectatingPlayer => _spectatedPlayer.IsValid();
 		public Player CurrentPlayer
 		{
 			get => _spectatedPlayer ?? this;

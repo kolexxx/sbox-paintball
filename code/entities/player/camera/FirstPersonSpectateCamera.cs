@@ -12,11 +12,11 @@ namespace PaintBall
 				return;
 
 			if ( player.CurrentPlayer.ActiveChild is Weapon weapon && weapon.ViewModelEntity != null )
-					weapon.ViewModelEntity.EnableDrawing = false;
+				weapon.ViewModelEntity.EnableDrawing = false;
 
 			if ( player.Camera is ThirdPersonSpectateCamera )
 				return;
-			
+
 			if ( Host.IsClient && player.CurrentPlayer.IsValid() )
 			{
 				Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetString() );
@@ -56,8 +56,7 @@ namespace PaintBall
 
 				return;
 			}
-
-			if ( player.CurrentPlayer.IsValid() )
+			else if ( player.CurrentPlayer.IsValid() )
 			{
 				Position = Vector3.Lerp( Position, player.CurrentPlayer.EyePos, SMOOTH_SPEED * Time.Delta );
 				Rotation = Rotation.Slerp( Rotation, player.CurrentPlayer.EyeRot, SMOOTH_SPEED * Time.Delta );
