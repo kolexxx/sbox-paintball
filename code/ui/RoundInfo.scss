@@ -1,6 +1,6 @@
 ﻿@import "Variables.scss";
 
-gameinfo
+roundinfo
 {
     position: absolute;
     margin-top: 2px;
@@ -23,11 +23,6 @@ gameinfo
         height: 100%;
     }
 
-    .mid
-    {
-        width: 80px;
-    }
-
     .left
     {
         margin: 0px 2px 0px 0px;
@@ -48,40 +43,42 @@ gameinfo
         opacity: 0;
         transform: scale(1);
     }
-}
 
-middle
-{
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    panel
+    .middle
     {
-        background-color: rgba(black, 0.8);
-        height: 24.5;
-        font-size: 20px;
-        backdrop-filter: blur(5px);
-    }
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: 80px;
 
-    .timer
-    {
-        width: 100%;
-        font-size: 20px;
-    }
+        panel
+        {
+            background-color: rgba(black, 0.8);
+            height: 24.5px;
+            font-size: 20px;
+            backdrop-filter: blur(5px);
+        }
 
-    .bluescore
-    {
-        color: $blueColor;
-        width: 39.5px;
-        margin-top: 1px;
-        margin-right: 0.5px;
-    }
+        .timer
+        {
+            width: 100%;
+            font-size: 20px;
+        }
 
-    .redscore
-    {
-        color: $redColor;
-        width: 39.5px;
-        margin-top: 1px;
-        margin-left: 0.5px;
+        .bluescore
+        {
+            color: $blueColor;
+            width: 39.5px;
+            margin-top: 1px;
+            margin-right: 0.5px;
+        }
+
+        .redscore
+        {
+            color: $redColor;
+            width: 39.5px;
+            margin-top: 2px;
+            margin-left: 0.5px;
+
+        }
     }
 }

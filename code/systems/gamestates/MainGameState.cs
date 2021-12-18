@@ -138,8 +138,8 @@ namespace PaintBall
 			{
 				Hud.UpdateTeamScore( Team.Blue );
 				Hud.UpdateTeamScore( Team.Red );
-				(GameInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
-				(GameInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
+				(RoundInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
+				(RoundInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
 			}
 		}
 
@@ -257,12 +257,12 @@ namespace PaintBall
 
 		private void OnAliveBlueChanged()
 		{
-			(GameInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = AliveBlue.ToString();
+			(RoundInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = AliveBlue.ToString();
 		}
 
 		private void OnAliveRedChanged()
 		{
-			(GameInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = AliveRed.ToString();
+			(RoundInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = AliveRed.ToString();
 		}
 
 		private void OnBlueScoreChanged()

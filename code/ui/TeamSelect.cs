@@ -14,8 +14,8 @@ namespace PaintBall
 		{
 			StyleSheet.Load( "/ui/TeamSelect.scss" );
 
-			Blue = Add.Button( "Join Blue", "blue", () => { ConsoleSystem.Run( "changeteam 1" ); } );
-			Red = Add.Button( "Join Red", "red", () => { ConsoleSystem.Run( "changeteam 2" ); } );
+			Blue = Add.Button( "Join Blue", "blue", () => { Player.ChangeTeamCommand( Team.Blue ); } );
+			Red = Add.Button( "Join Red", "red", () => { Player.ChangeTeamCommand( Team.Red ); } );
 			Add.Label( "Press Q to open/close", "info" );
 		}
 

@@ -37,7 +37,7 @@ namespace PaintBall
 		[ClientRpc]
 		public static void UpdateTeamScore( Team team, string text = "0" )
 		{
-			(GameInfo.Instance.Mid.GetChild( (int)team ).GetChild( 0 ) as Label).Text = text;
+			(RoundInfo.Instance.Middle.GetChild( (int)team ).GetChild( 0 ) as Label).Text = text;
 		}
 
 		public Hud()
@@ -50,9 +50,9 @@ namespace PaintBall
 			RootPanel.AddChild<Ammo>();              // 0
 			RootPanel.AddChild<ChatBox>();           // 1
 			RootPanel.AddChild<Crosshair>();         // 2
-			RootPanel.AddChild<GameInfo>();          // 3
-			RootPanel.AddChild<InventoryBar>();      // 4
-			RootPanel.AddChild<KillFeed>();          // 5
+			RootPanel.AddChild<InventoryBar>();      // 3
+			RootPanel.AddChild<KillFeed>();          // 4
+			RootPanel.AddChild<RoundInfo>();         // 5
 			RootPanel.AddChild<Scoreboard>();        // 6
 			RootPanel.AddChild<SpectatorControls>(); // 7
 			RootPanel.AddChild<TeamIndicator>();     // 8
