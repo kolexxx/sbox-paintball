@@ -11,18 +11,19 @@ namespace PaintBall
 			if ( Local.Pawn is not Player player )
 				return;
 
+			if ( player.CurrentPlayer.ActiveChild is Weapon weapon && weapon.ViewModelEntity != null )
+					weapon.ViewModelEntity.EnableDrawing = false;
+
+			if ( player.Camera is ThirdPersonSpectateCamera )
+				return;
+			
 			if ( Host.IsClient && player.CurrentPlayer.IsValid() )
 			{
 				Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetString() );
 				Local.Hud.AddClass( player.Team.GetString() );
-
-				if ( player.CurrentPlayer.ActiveChild is Weapon weapon && weapon.ViewModelEntity != null )
-					weapon.ViewModelEntity.EnableDrawing = false;
-			}		
+			}
 
 			player.CurrentPlayer = null;
-
-			base.Deactivated();
 		}
 
 		public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
@@ -46,13 +47,7 @@ namespace PaintBall
 
 			if ( !player.IsSpectatingPlayer || wantToUpdate )
 			{
-				if ( player.CurrentPlayer.ActiveChild is Weapon oldWeapon && oldWeapon.ViewModelEntity != null )
-					oldWeapon.ViewModelEntity.EnableDrawing = false;
-
 				player.UpdateSpectatingPlayer( Input.Pressed( InputButton.Attack2 ) ? -1 : 1 );
-
-				if ( player.CurrentPlayer.ActiveChild is Weapon newWeapon && newWeapon.ViewModelEntity != null )
-					newWeapon.ViewModelEntity.EnableDrawing = true;
 
 				Position = player.CurrentPlayer.EyePos;
 				Rotation = player.CurrentPlayer.EyeRot;
