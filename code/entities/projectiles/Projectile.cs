@@ -15,7 +15,7 @@ namespace PaintBall
 		public RealTimeUntil CanHitTime { get; set; } = 0.1f;
 		public float Gravity { get; set; } = 10f;
 		public string IgnoreTag { get; set; }
-		public float? LifeTime { get; set; } = 10f;
+		public virtual float LifeTime => 10f;
 		public float Radius { get; set; } = 8f;
 		public ProjectileSimulator Simulator { get; set; }
 		public Vector3 StartPosition { get; private set; }
@@ -34,8 +34,7 @@ namespace PaintBall
 
 		public void Initialize( Vector3 start, Vector3 velocity, Action<Projectile, Entity, int> callback = null )
 		{
-			if ( LifeTime.HasValue )
-				DestroyTime = LifeTime.Value;	
+			DestroyTime = LifeTime;	
 
 			if ( Simulator != null && Simulator.IsValid() )
 			{
@@ -114,7 +113,7 @@ namespace PaintBall
 
 			Position = trace.EndPos;
 
-			if ( LifeTime.HasValue && DestroyTime )
+			if ( DestroyTime )
 			{
 				Delete();
 
