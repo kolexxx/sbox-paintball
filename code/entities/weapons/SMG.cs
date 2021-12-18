@@ -4,9 +4,10 @@ namespace PaintBall
 {
 	[Library( "pb_smg", Title = "SMG", Spawnable = true )]
 	[Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
-	public partial class SMG : Weapon
+	public partial class SMG : ProjectileWeapon<Projectile>
 	{
 		public override bool Automatic => true;
+		public override int Bucket => 0;
 		public override int ClipSize => 20;
 		public override float Gravity => 7f;
 		public override string Icon => "ui/weapons/smg.png";

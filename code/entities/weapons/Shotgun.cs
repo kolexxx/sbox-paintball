@@ -4,8 +4,9 @@ namespace PaintBall
 {
 	[Library( "pb_shotgun", Title = "Shotgun", Spawnable = true )]
 	[Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
-	public partial class Shotgun : Weapon
+	public partial class Shotgun : ProjectileWeapon<Projectile>
 	{
+		public override int Bucket => 0;
 		public virtual int BulletsPerFire => 4;
 		public override int ClipSize => 5;
 		public override float Gravity => 7f;
@@ -78,7 +79,7 @@ namespace PaintBall
 			{
 				Rand.SetSeed( Time.Tick );
 
-				for ( int i = 0; i < BulletsPerFire; i++ )	
+				for ( int i = 0; i < BulletsPerFire; i++ )
 					FireProjectile();
 			}
 		}
@@ -128,7 +129,7 @@ namespace PaintBall
 
 			AmmoClip += TakeAmmo( 1 );
 
-			if ( !_attackedDuringReload && AmmoClip < ClipSize && ( UnlimitedAmmo || ReserveAmmo != 0 ) )
+			if ( !_attackedDuringReload && AmmoClip < ClipSize && (UnlimitedAmmo || ReserveAmmo != 0) )
 				Reload();
 			else
 				FinishReload();
