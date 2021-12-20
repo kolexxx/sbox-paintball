@@ -37,6 +37,7 @@ namespace PaintBall
 		{
 			player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
 			player.Inventory.Add( new Pistol() );
+			player.Inventory.Add( new Knife() );
 		}
 
 		public override void OnSecond()
