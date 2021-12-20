@@ -13,6 +13,7 @@ namespace PaintBall
 		public virtual bool Automatic => false;
 		public virtual int Bucket => 0;
 		public virtual int ClipSize => 20;
+		public virtual bool Droppable => true;
 		public virtual string FireSound => "pbg";
 		public virtual string Icon => "ui/weapons/pistol.png";
 		public PickupTrigger PickupTrigger { get; protected set; }
@@ -103,6 +104,21 @@ namespace PaintBall
 				return true;
 
 			return TimeSincePrimaryAttack > (1 / rate);
+		}
+
+		public override bool CanSecondaryAttack()
+		{
+			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f )
+				return false;
+
+			if ( !Input.Pressed( InputButton.Attack2 ) )
+				return false;
+
+			var rate = SecondaryRate;
+			if ( rate <= 0 )
+				return true;
+
+			return TimeSinceSecondaryAttack > (1 / rate);
 		}
 
 		public override void Reload()

@@ -17,5 +17,15 @@ namespace PaintBall
 
 			return base.Add( entity, makeActive );
 		}
+
+		public override Entity DropActive()
+		{
+			var ac = Owner.ActiveChild as Weapon;
+
+			if ( !ac.Droppable )
+				return null;
+
+			return base.DropActive();
+		}
 	}
 }
