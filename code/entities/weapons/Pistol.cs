@@ -14,13 +14,13 @@ namespace PaintBall
 		public override float ReloadTime => 2.0f;
 		public override float Speed => 1500f;
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
-		public override bool UnlimitedAmmo => true;
 
 		public override void Spawn()
 		{
 			base.Spawn();
 
 			AmmoClip = ClipSize;
+			ReserveAmmo = 20;
 
 			SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 		}
