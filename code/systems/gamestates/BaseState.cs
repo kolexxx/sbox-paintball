@@ -43,7 +43,10 @@ namespace PaintBall
 			Players.Remove( player );
 		}
 
-		public virtual void OnPlayerSpawned( Player player ) { }
+		public virtual void OnPlayerSpawned( Player player )
+		{
+			Game.Current?.MoveToSpawnpoint( player );
+		}
 
 		public virtual void OnPlayerKilled( Player player, Entity attacker, DamageInfo info ) { }
 

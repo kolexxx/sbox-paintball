@@ -1,6 +1,5 @@
 ﻿using Sandbox;
 using System;
-using System.Linq;
 
 namespace PaintBall
 {
@@ -62,6 +61,8 @@ namespace PaintBall
 			player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
 			player.Inventory.Add( new Pistol() );
 			player.Inventory.Add( new Knife() );
+
+			base.OnPlayerSpawned( player );
 		}
 
 		public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
