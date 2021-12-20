@@ -41,7 +41,14 @@ namespace PaintBall
 			TimeSinceSpawned = 0f;
 			RenderColor = Team.GetColor();
 
-			base.Respawn();
+			LifeState = LifeState.Alive;
+			Health = 100;
+			Velocity = Vector3.Zero;
+			WaterLevel.Clear();
+
+			CreateHull();
+
+			ResetInterpolation();
 
 			Game.Instance.CurrentGameState.OnPlayerSpawned( this );
 		}
@@ -154,20 +161,14 @@ namespace PaintBall
 			}
 		}
 
-		protected void OnPlayerKill()
-		{
-		}
-
 		public override void TakeDamage( DamageInfo info )
 		{
-			// Spawnprotection
-			if ( TimeSinceSpawned < 1f )
-				return;
-
 			LastDamageInfo = info;
 
 			base.TakeDamage( info );
 		}
+
+		protected void OnPlayerKill() { }
 
 		private void SwitchToBestWeapon()
 		{
