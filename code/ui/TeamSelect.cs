@@ -1,22 +1,17 @@
 ﻿using Sandbox;
 using Sandbox.UI;
-using Sandbox.UI.Construct;
 
 namespace PaintBall
 {
+	[UseTemplate]
 	public class TeamSelect : Panel
 	{
-		public Button Blue;
-		public Button Red;
+		public Button Blue { get; set; }
+		public Button Red { get; set; }
 		private bool _open = true;
 
 		public TeamSelect()
 		{
-			StyleSheet.Load( "/ui/TeamSelect.scss" );
-
-			Blue = Add.Button( "Join Blue", "blue", () => { Player.ChangeTeamCommand( Team.Blue ); } );
-			Red = Add.Button( "Join Red", "red", () => { Player.ChangeTeamCommand( Team.Red ); } );
-			Add.Label( "Press Q to open/close", "info" );
 		}
 
 		public override void Tick()
@@ -30,6 +25,16 @@ namespace PaintBall
 
 			if ( !IsVisible )
 				return;
+		}
+
+		public void JoinBlue()
+		{
+			Player.ChangeTeamCommand( Team.Blue );
+		}
+
+		public void JoinRed()
+		{
+			Player.ChangeTeamCommand( Team.Red );
 		}
 	}
 }
