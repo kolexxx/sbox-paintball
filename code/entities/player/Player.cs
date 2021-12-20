@@ -172,7 +172,7 @@ namespace PaintBall
 		{
 			var best = Children.Select( x => x as Weapon )
 			.Where( x => x.IsValid() )
-			.OrderByDescending( x => x.Bucket )
+			.OrderBy( x => x.Bucket )
 			.FirstOrDefault();
 
 			if ( best == null ) return;
