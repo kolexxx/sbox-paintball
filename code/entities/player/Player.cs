@@ -131,6 +131,7 @@ namespace PaintBall
 		{
 			base.OnKilled();
 
+			SwitchToBestWeapon();
 			Inventory.DropActive();
 			Inventory.DeleteContents();
 
