@@ -140,7 +140,6 @@ namespace PaintBall
 		public override void SimulateAnimator( PawnAnimator anim )
 		{
 			anim.SetParam( "holdtype", 3 );
-			anim.SetParam( "aimat_weight", 1.0f );
 		}
 
 		[ClientRpc]
