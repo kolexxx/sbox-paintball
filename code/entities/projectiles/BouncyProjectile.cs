@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 
 namespace PaintBall
 {
@@ -13,7 +14,9 @@ namespace PaintBall
 			{
 				if ( trace.Entity is not WorldEntity )
 					return true;
-
+				else if ( trace.Normal.z <= 1f && trace.Normal.z >= Math.PI / 4 )
+					return true;
+				
 				var reflect = Vector3.Reflect( Velocity.Normal, trace.Normal );
 
 				GravityModifier = 0f;
