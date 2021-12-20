@@ -64,6 +64,9 @@ namespace PaintBall
 			if ( Local.Pawn is not Player player )
 				return;
 
+			if ( player.CurrentPlayer != player )
+				return;
+
 			var inventory = player.Inventory;
 			if ( inventory == null )
 				return;
