@@ -9,6 +9,7 @@ namespace PaintBall
 		[Net] public TimeSince TimeSinceSpawned { get; private set; }
 		public DamageInfo LastDamageInfo { get; set; }
 		public ProjectileSimulator Projectiles { get; set; }
+		public TimeSince TimeSinceTeamChanged { get; private set; }
 
 		public Player()
 		{
@@ -116,16 +117,7 @@ namespace PaintBall
 
 			LastAttacker = null;
 			LastDamageInfo = default;
-		}
-
-		public void OnTeamChanged( Team oldTeam, Team newTeam )
-		{
-			if ( IsLocalPawn )
-			{
-				Local.Hud.RemoveClass( oldTeam.GetString() );
-				Local.Hud.AddClass( newTeam.GetString() );
-			}
-		}
+		}		
 
 		public override void Spawn()
 		{

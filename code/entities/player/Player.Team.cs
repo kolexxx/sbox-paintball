@@ -6,6 +6,7 @@ namespace PaintBall
 	{
 		public void SetTeam( Team newTeam )
 		{
+			TimeSinceTeamChanged = 0f;
 			TakeDamage( DamageInfo.Generic( float.MaxValue ) );
 
 			Team oldTeam = Team;
@@ -19,6 +20,15 @@ namespace PaintBall
 			Game.Instance.CurrentGameState.OnPlayerChangedTeam( this, oldTeam, newTeam );
 		}
 
+		public void OnTeamChanged( Team oldTeam, Team newTeam )
+		{
+			if ( IsLocalPawn && LifeState == LifeState.Alive )
+			{
+				Local.Hud.RemoveClass( oldTeam.GetString() );
+				Local.Hud.AddClass( newTeam.GetString() );
+			}
+		}
+
 		[ServerCmd( "changeteam", Help = "Changes the caller's team" )]
 		public static void ChangeTeamCommand( Team team )
 		{
@@ -27,36 +37,42 @@ namespace PaintBall
 			if ( client == null || client.Pawn is not Player player )
 				return;
 
-			if ( team != player.Team )
+			if ( player.Team == team || player.TimeSinceTeamChanged < 5f )
 			{
 				if ( team == Team.None )
-				{
+					Hud.CloseTeamSelect();
+
+				return;
+			}
+
+			if ( team == Team.None )
+			{
+				player.SetTeam( team );
+				Hud.CloseTeamSelect();
+
+				return;
+			}
+
+			int redCount = Team.Red.GetCount();
+			int blueCount = Team.Blue.GetCount();
+
+			if ( player.Team == Team.None )
+			{
+				if ( team == Team.Blue && (blueCount <= redCount) )
 					player.SetTeam( team );
-
-					return;
-				}
-
-				int redCount = Team.Red.GetCount();
-				int blueCount = Team.Blue.GetCount();
-
-				if ( player.Team == Team.None )
-				{
-					if ( team == Team.Blue && (blueCount <= redCount) )
-						player.SetTeam( team );
-					else if ( team == Team.Red && (redCount <= blueCount) )
-						player.SetTeam( team );
-
-					return;
-				}
-
-				if ( blueCount == redCount )
-					return;
-
+				else if ( team == Team.Red && (redCount <= blueCount) )
+					player.SetTeam( team );
+			}
+			else
+			{
 				if ( team == Team.Blue && (blueCount < redCount) )
 					player.SetTeam( team );
 				else if ( team == Team.Red && (redCount < blueCount) )
 					player.SetTeam( team );
 			}
+
+			if ( player.Team == team )
+				Hud.CloseTeamSelect();
 		}
 	}
 }
