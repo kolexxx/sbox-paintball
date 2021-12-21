@@ -13,6 +13,12 @@ namespace PaintBall
 		}
 
 		[ClientRpc]
+		public static void CloseTeamSelect()
+		{
+			TeamSelect.Instance.Close();
+		}
+
+		[ClientRpc]
 		public static void OnTeamChanged( Client client, Team newTeam )
 		{
 			Scoreboard.Instance.UpdateEntry( client, newTeam );

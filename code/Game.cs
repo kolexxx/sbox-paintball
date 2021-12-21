@@ -51,16 +51,22 @@ namespace PaintBall
 
 			client.Pawn = player;
 
+			Event.Run( PBEvent.Client.Joined, client );
+			RPC.ClientJoined( client );
+
 			CurrentGameState?.OnPlayerJoin( player );
 
 			base.ClientJoined( client );
 		}
 
-		public override void ClientDisconnect( Client cl, NetworkDisconnectionReason reason )
+		public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
 		{
-			CurrentGameState?.OnPlayerLeave( cl.Pawn as Player );
+			Event.Run( PBEvent.Client.Disconnected, client, reason );
+			RPC.ClientDisconnected( client, reason );
 
-			base.ClientDisconnect( cl, reason );
+			CurrentGameState?.OnPlayerLeave( client.Pawn as Player );
+
+			base.ClientDisconnect( client, reason );
 		}
 
 		public override void MoveToSpawnpoint( Entity pawn )
@@ -194,9 +200,7 @@ namespace PaintBall
 		private void EntityPostSpawn()
 		{
 			if ( IsServer )
-			{
 				ChangeState( new WaitingForPlayersState() );
-			}
 		}
 
 		private void OnStateChanged()
