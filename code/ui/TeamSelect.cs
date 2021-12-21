@@ -1,17 +1,21 @@
 ﻿using Sandbox;
 using Sandbox.UI;
+using System;
 
 namespace PaintBall
 {
 	[UseTemplate]
-	public class TeamSelect : Panel
+	public partial class TeamSelect : Panel
 	{
+		public static TeamSelect Instance;
 		public Button Blue { get; set; }
 		public Button Red { get; set; }
+		public Label Timer { get; set; }
 		private bool _open = true;
 
 		public TeamSelect()
 		{
+			Instance = this;
 		}
 
 		public override void Tick()
@@ -25,6 +29,33 @@ namespace PaintBall
 
 			if ( !IsVisible )
 				return;
+
+			var player = Local.Pawn;
+			if ( player == null )
+				return;
+
+			var game = Game.Instance;
+			if ( game == null )
+				return;
+
+			var state = game.CurrentGameState;
+			if ( state == null )
+				return;
+
+			if ( state.UpdateTimer )
+				Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
+			else
+				Timer.Text = "";
+		}
+
+		public void Close()
+		{
+			_open = false;
+		}
+
+		public void BecomeSpectator()
+		{
+			Player.ChangeTeamCommand( Team.None );
 		}
 
 		public void JoinBlue()
@@ -35,6 +66,6 @@ namespace PaintBall
 		public void JoinRed()
 		{
 			Player.ChangeTeamCommand( Team.Red );
-		}
+		}		
 	}
 }
