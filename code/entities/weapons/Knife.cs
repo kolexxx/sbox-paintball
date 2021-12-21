@@ -26,14 +26,14 @@ namespace PaintBall
 
 		public override void AttackPrimary()
 		{
-			MeleeAttack( 50f, 100f, 4f );
+			MeleeAttack( 50f, 100f, 8f );
 
 			base.AttackPrimary();
 		}
 
 		public override void AttackSecondary()
 		{
-			MeleeAttack( 100f, 50f, 8f );
+			MeleeAttack( 100f, 50f, 16f );
 
 			base.AttackSecondary();
 		}
