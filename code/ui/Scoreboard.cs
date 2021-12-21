@@ -37,30 +37,10 @@ namespace PaintBall
 		{
 			base.Tick();
 
-			SetClass( "open", Show || Input.Down( InputButton.Score ));
+			SetClass( "open", Show || Input.Down( InputButton.Score ) );
 
 			if ( !IsVisible )
 				return;
-
-			foreach ( var client in Client.All.Except( _entries.Keys ) )
-			{
-				Team team = Team.None;
-
-				if ( client.Pawn != null )
-					team = (client.Pawn as Player).Team;
-
-				var e = AddEntry( client, team );
-				_entries[client] = e;
-			}
-
-			foreach ( var client in _entries.Keys.Except( Client.All ) )
-			{
-				if ( _entries.TryGetValue( client, out var e ) )
-				{
-					e?.Delete();
-					_entries.Remove( client );
-				}
-			}
 
 			// Up to 160 comparisons each tick. Maybe add delay for each sort?
 			for ( int i = 1; i <= 2; i++ )
@@ -76,7 +56,7 @@ namespace PaintBall
 			}
 		}
 
-	public ScoreBoardEntry AddEntry( Client client, Team team )
+		public ScoreBoardEntry AddEntry( Client client, Team team )
 		{
 			var e = _sections[(int)team].AddChild<ScoreBoardEntry>();
 			e.Client = client;
@@ -104,6 +84,28 @@ namespace PaintBall
 			}
 		}
 
+		[PBEvent.Client.Joined]
+		public void ClientJoined(Client client )
+		{
+			Team team = Team.None;
+
+			if ( client.Pawn.IsValid() )
+				team = (client.Pawn as Player).Team;
+
+			var e = AddEntry( client, team );
+			_entries[client] = e;
+		}
+
+		[PBEvent.Client.Disconnected]
+		public void ClientDisconnected(Client client, NetworkDisconnectionReason reason )
+		{
+			if ( _entries.TryGetValue( client, out var e ) )
+			{
+				e?.Delete();
+				_entries.Remove( client );
+			}
+		}
+
 		public class ScoreBoardEntry : Panel
 		{
 			public Client Client;
@@ -116,7 +118,7 @@ namespace PaintBall
 
 			public ScoreBoardEntry()
 			{
-				Name = Add.Label( "Name", "name" );				
+				Name = Add.Label( "Name", "name" );
 				Alive = Add.Label( "", "alive" );
 				Kills = Add.Label( "0", "kills" );
 				Deaths = Add.Label( "0", "deaths" );
@@ -151,7 +153,7 @@ namespace PaintBall
 					Alive.Text = "";
 
 				Deaths.Text = Client.GetInt( "deaths" ).ToString();
-				Ping.Text =  Client.IsBot ? "BOT" : Client.Ping.ToString();
+				Ping.Text = Client.IsBot ? "BOT" : Client.Ping.ToString();
 			}
 		}
 	}
