@@ -1,7 +1,8 @@
 ﻿<link rel="stylesheet" href="TeamSelect.scss" />
 
 <panel>
-    <label class="info">Press Q to open/close</label>
+    <label @ref="Timer" class="timer">00:00</label>
     <button @ref="Blue" class="blue" onclick="JoinBlue()">Join Blue</button>
     <button @ref="Red" class="red" onclick="JoinRed()">Join Red</button>
+    <button @ref="Spectator" class="spectator" onclick="BecomeSpectator()">Become Spectator</button>
 </panel>
