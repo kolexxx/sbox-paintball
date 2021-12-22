@@ -5,11 +5,9 @@ namespace PaintBall
 {
 	public partial class Player : Sandbox.Player
 	{
-		[Net, Change] public Team Team { get; set; }
 		[Net] public TimeSince TimeSinceSpawned { get; private set; }
 		public DamageInfo LastDamageInfo { get; set; }
 		public ProjectileSimulator Projectiles { get; set; }
-		public TimeSince TimeSinceTeamChanged { get; private set; }
 
 		public Player()
 		{

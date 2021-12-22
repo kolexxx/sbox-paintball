@@ -4,6 +4,9 @@ namespace PaintBall
 {
 	public partial class Player
 	{
+		[Net, Change] public Team Team { get; set; }
+		public TimeSince TimeSinceTeamChanged { get; private set; } = 5f;
+
 		public void SetTeam( Team newTeam )
 		{
 			TimeSinceTeamChanged = 0f;
