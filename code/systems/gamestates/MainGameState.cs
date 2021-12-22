@@ -16,9 +16,9 @@ namespace PaintBall
 		private int _round = 0;
 		private readonly float[] _roundStateDuration = { 5f, 60f, 5f };
 
-
 		public enum RoundState
 		{
+			None,
 			Freeze,
 			Play,
 			End
@@ -170,6 +170,8 @@ namespace PaintBall
 					if ( diff > 0 )
 						TeamBalance( diff );
 
+					Event.Run( PBEvent.Round.Start );
+
 					break;
 
 				case RoundState.Play:
@@ -180,10 +182,12 @@ namespace PaintBall
 
 				case RoundState.End:
 
+					Event.Run( PBEvent.Round.End );
+
 					break;
 			}
 
-			StateEndTime = _roundStateDuration[(int)CurrentRoundState] + Time.Now;
+			StateEndTime = _roundStateDuration[(int)CurrentRoundState - 1] + Time.Now;
 
 			// Call OnSecond() as soon as RoundState starts
 			NextSecondTime = 0f;
@@ -207,7 +211,7 @@ namespace PaintBall
 
 					Hud.UpdateCrosshairMessage( winner + " wins!" );
 
-					Audio.PlayAll( $"{winner}win".ToLower() );
+					Audio.PlayAll( $"{winner.GetString()}win" );
 
 					_ = winner == Team.Blue ? BlueScore++ : RedScore++;
 
@@ -279,8 +283,15 @@ namespace PaintBall
 
 		private void OnCurrentRoundStateChanged( RoundState oldState, RoundState newState )
 		{
-			if ( oldState == RoundState.End )
+			if ( newState == RoundState.Freeze )
+			{
 				Hud.Reset();
+				Event.Run( PBEvent.Round.Start );
+			}
+			else if ( newState == RoundState.End )
+			{
+				Event.Run( PBEvent.Round.End );
+			}
 		}
 
 		private void TeamBalance( int diff )
