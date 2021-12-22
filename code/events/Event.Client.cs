@@ -2,7 +2,7 @@
 
 namespace PaintBall
 {
-	public static class PBEvent
+	public static partial class PBEvent
 	{
 		public static class Client
 		{

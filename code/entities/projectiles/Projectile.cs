@@ -34,7 +34,7 @@ namespace PaintBall
 
 		public void Initialize( Vector3 start, Vector3 velocity, Action<Projectile, Entity, int> callback = null )
 		{
-			DestroyTime = LifeTime;	
+			DestroyTime = LifeTime;
 
 			if ( Simulator != null && Simulator.IsValid() )
 			{
@@ -70,7 +70,7 @@ namespace PaintBall
 		{
 			// We only want to create effects if we don't have a client proxy.
 			if ( !HasClientProxy() )
-				CreateEffects();			
+				CreateEffects();
 
 			base.ClientSpawn();
 		}
@@ -163,8 +163,8 @@ namespace PaintBall
 		[Event.Tick.Server]
 		protected virtual void ServerTick()
 		{
-			if ( !Simulator.IsValid() )		
-				Simulate();			
+			if ( !Simulator.IsValid() )
+				Simulate();
 		}
 
 		protected override void OnDestroy()
