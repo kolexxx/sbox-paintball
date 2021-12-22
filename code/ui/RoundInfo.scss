@@ -3,11 +3,10 @@
 roundinfo
 {
     position: absolute;
-    margin-top: 2px;
+    padding-top: 2px;
     width: 100%;
-    height: 50px;
+    height: 75px;
     justify-content: center;
-    align-items: center;
     color: white;
     opacity: 1;
     transition: all 0.05s ease-out;
@@ -20,7 +19,38 @@ roundinfo
         align-items: center;
         font-size: 30px;
         justify-content: center;
-        height: 100%;
+        height: 50px;
+    }
+
+    .bottom
+    {
+        overflow: hidden;
+        height: 25px;
+        width: 180px;
+        position: absolute;
+        margin-top: 55px;
+        border-top: 1px solid white;
+        font-size: 18px;
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+
+        .message
+        {
+            text-align: center;
+            top: -24px;
+            transition: top 0.5s linear;
+        }
+    }
+
+    .show
+    {
+        opacity: 1;
+
+        .message
+        {
+            top: auto;
+            transition: top 0.5s linear;
+        }
     }
 
     .left
@@ -53,7 +83,7 @@ roundinfo
         panel
         {
             background-color: rgba(black, 0.8);
-            height: 24.5px;
+            height: 25px;
             font-size: 20px;
             backdrop-filter: blur(5px);
         }
@@ -68,7 +98,7 @@ roundinfo
         {
             color: $blueColor;
             width: 39.5px;
-            margin-top: 1px;
+            margin-top: 0.5px;
             margin-right: 0.5px;
         }
 
@@ -76,9 +106,30 @@ roundinfo
         {
             color: $redColor;
             width: 39.5px;
-            margin-top: 2px;
+            margin-top: 0.5px;
             margin-left: 0.5px;
+        }
+    }
+}
 
+.red
+{
+    roundinfo
+    {
+        .message
+        {
+            color: $redColor;
+        }
+    }
+}
+
+.blue
+{
+    roundinfo
+    {
+        .message
+        {
+            color: $blueColor;
         }
     }
 }
