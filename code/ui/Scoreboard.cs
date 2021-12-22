@@ -2,7 +2,6 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PaintBall
 {
@@ -85,7 +84,7 @@ namespace PaintBall
 		}
 
 		[PBEvent.Client.Joined]
-		public void ClientJoined(Client client )
+		public void ClientJoined( Client client )
 		{
 			Team team = Team.None;
 
@@ -97,7 +96,7 @@ namespace PaintBall
 		}
 
 		[PBEvent.Client.Disconnected]
-		public void ClientDisconnected(Client client, NetworkDisconnectionReason reason )
+		public void ClientDisconnected( Client client, NetworkDisconnectionReason reason )
 		{
 			if ( _entries.TryGetValue( client, out var e ) )
 			{

@@ -160,11 +160,11 @@ namespace PaintBall
 						attacker.NetworkIdent,
 						client.PlayerId );
 				}
+
+				return;
 			}
-			else
-			{
-				Hud.AddKillFeed( "", client.Name, "", Team.None, victim.Team, 0, client.PlayerId );
-			}
+				
+			Hud.AddKillFeed( "", client.Name, "", Team.None, victim.Team, 0, client.PlayerId );	
 		}
 
 		public void CleanUp()
