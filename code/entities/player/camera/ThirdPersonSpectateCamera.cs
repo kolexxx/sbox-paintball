@@ -7,7 +7,7 @@ namespace PaintBall
 		private Vector3 DefaultPosition { get; set; }
 
 		private const float LERP_MODE = 0;
-		private const int CAMERA_DISTANCE = 120;
+		private const int CAMERA_DISTANCE = 240;
 
 		private Rotation _targetRot;
 		private Vector3 _targetPos;
@@ -34,7 +34,12 @@ namespace PaintBall
 			Rotation = Rotation.Slerp( Rotation, _targetRot, 10 * RealTime.Delta * (1 - LERP_MODE) );
 
 			_targetPos = GetSpectatePoint() + Rotation.Forward * -CAMERA_DISTANCE;
-			Position = _targetPos;
+
+			var trace = Trace.Ray( GetSpectatePoint(), _targetPos )
+				.Ignore( player.CurrentPlayer )
+				.Run();
+
+			Position = trace.EndPos;
 		}
 
 		private Vector3 GetSpectatePoint()
