@@ -10,16 +10,17 @@ namespace PaintBall
 			Medium,
 			High
 		}
+
 		private static Sound s_currentSound;
 		private static Priority s_currentPriority;
 
-		public static void PlayAll( string sound, Priority priority )
+		public static void AnnounceAll( string sound, Priority priority )
 		{
-			Play( To.Everyone, sound, priority );
+			Announce( To.Everyone, sound, priority );
 		}
 
 		[ClientRpc]
-		public static void Play( string sound, Priority priority )
+		public static void Announce( string sound, Priority priority )
 		{
 			if ( priority < s_currentPriority && s_currentSound.Finished )
 			{
@@ -32,6 +33,17 @@ namespace PaintBall
 				s_currentSound = Sound.FromScreen( sound );
 				s_currentPriority = priority;
 			}
+		}
+
+		public static void PlayAll(string sound )
+		{
+			Play( To.Everyone, sound );
+		}
+
+		[ClientRpc]
+		public static void Play(string sound )
+		{
+			Sound.FromScreen( sound );
 		}
 
 		[ClientRpc]
