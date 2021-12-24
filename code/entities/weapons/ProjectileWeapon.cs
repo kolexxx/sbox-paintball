@@ -10,6 +10,7 @@ namespace PaintBall
 		public virtual string HitSound => "impact";
 		public virtual string ProjectileModel => $"models/{(Owner as Player)?.Team.GetString()}_ball/ball.vmdl";
 		public virtual float ProjectileRadius => 4f;
+		public virtual float ProjectileScale=> 0.25f;
 		public virtual float Speed => 2000f;
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
@@ -54,7 +55,7 @@ namespace PaintBall
 				FollowEffect = FollowEffect,
 				HitSound = HitSound,
 				IgnoreTag = $"{owner.Team.GetString()}player",
-				Scale = 0.25f,
+				Scale = ProjectileScale,
 				Radius = ProjectileRadius,
 				Gravity = Gravity,
 				Simulator = owner.Projectiles,

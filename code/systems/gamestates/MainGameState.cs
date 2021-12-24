@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System;
+using System.Linq;
 
 namespace PaintBall
 {
@@ -61,6 +62,8 @@ namespace PaintBall
 			player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
 			player.Inventory.Add( new Pistol() );
 			player.Inventory.Add( new Knife() );
+			if ( Rand.Int( 1, 3 ) == 3 )
+				player.Inventory.Add( new Throwable() );
 
 			base.OnPlayerSpawned( player );
 		}
@@ -153,6 +156,8 @@ namespace PaintBall
 
 					FreezeTime = 0;
 
+					TeamBalance();
+
 					Game.Instance.CleanUp();
 
 					foreach ( var player in Players )
@@ -164,11 +169,6 @@ namespace PaintBall
 
 						player.Respawn();
 					}
-
-					int diff = Math.Abs( AliveBlue - AliveRed ) - 1;
-
-					if ( diff > 0 )
-						TeamBalance( diff );
 
 					Event.Run( PBEvent.Round.Start );
 
@@ -245,9 +245,15 @@ namespace PaintBall
 				return;
 
 			if ( team == Team.Blue )
+			{
 				AliveBlue += num;
+				AliveBlue = Math.Max( AliveBlue, 0 );
+			}
 			else
+			{
 				AliveRed += num;
+				AliveRed = Math.Max( AliveRed, 0 );
+			}
 		}
 
 		private Team GetWinner()
@@ -284,27 +290,26 @@ namespace PaintBall
 		private void OnCurrentRoundStateChanged( RoundState oldState, RoundState newState )
 		{
 			if ( newState == RoundState.Freeze )
-			{
-				Hud.Reset();
 				Event.Run( PBEvent.Round.Start );
-			}
 			else if ( newState == RoundState.End )
-			{
 				Event.Run( PBEvent.Round.End );
-			}
 		}
 
-		private void TeamBalance( int diff )
+		private void TeamBalance()
 		{
-			Team teamLess = AliveBlue > AliveRed ? Team.Red : Team.Blue;
-			Team teamMore = teamLess == Team.Blue ? Team.Red : Team.Blue;
+			var teamBlue = Team.Blue.GetAll();
+			var teamRed = Team.Red.GetAll();
 
-			var players = teamMore.GetAll();
+			int diff = Math.Abs( teamBlue.Count() - teamRed.Count() ) / 2;
+			if ( diff <= 0 )
+				return;
 
-			foreach ( var player in players )
+			Team teamLess = teamBlue.Count() > teamRed.Count() ? Team.Red : Team.Blue;
+			var teamMore = teamLess == Team.Blue ? teamRed : teamBlue;
+
+			foreach ( var player in teamMore )
 			{
 				player.SetTeam( teamLess );
-
 
 				if ( --diff == 0 )
 					break;

@@ -63,3 +63,13 @@ metadata
 	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
+//
+// PaintBall.Throwable
+//
+@PointClass base(BaseProperties_paintball) editormodel( "models/grenade/grenade.vmdl" ) = pb_grenade : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+

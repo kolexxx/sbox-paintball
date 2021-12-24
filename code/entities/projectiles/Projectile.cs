@@ -13,6 +13,7 @@ namespace PaintBall
 		public string Attachment { get; set; } = null;
 		public Action<Projectile, Entity, int> Callback { get; private set; }
 		public RealTimeUntil CanHitTime { get; set; } = 0.1f;
+		public virtual bool ExplodeOnDestroy => false;
 		public float Gravity { get; set; } = 10f;
 		public string IgnoreTag { get; set; }
 		public virtual float LifeTime => 10f;
@@ -115,8 +116,10 @@ namespace PaintBall
 
 			if ( DestroyTime )
 			{
-				Delete();
+				if ( ExplodeOnDestroy )
+					OnExplode();
 
+				Delete();
 				return;
 			}
 
@@ -151,6 +154,11 @@ namespace PaintBall
 				if ( DecalDefinition.ByPath.TryGetValue( decalPath, out var decal ) )
 					decal.PlaceUsingTrace( tr );
 			}
+		}
+
+		protected virtual void OnExplode()
+		{
+
 		}
 
 		[Event.Tick.Client]
