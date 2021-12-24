@@ -22,7 +22,7 @@ namespace PaintBall
 		{
 			var ac = Owner.ActiveChild as Weapon;
 
-			if ( !ac.Droppable )
+			if ( !ac.IsValid() || !ac.Droppable )
 				return null;
 
 			return base.DropActive();
