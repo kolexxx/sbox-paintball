@@ -19,9 +19,15 @@ namespace PaintBall
 			base.Tick();
 
 			if ( Local.Pawn is not Player player )
-				return;	
+				return;
 
 			SetClass( "hidden", Local.Hud.GetChild( 6 ).IsVisible || Local.Hud.GetChild( 9 ).IsVisible || (player.LifeState != LifeState.Alive && player.Camera is not FirstPersonSpectateCamera) );
+		}
+
+		[PBEvent.Round.Start]
+		private void RoundStart()
+		{
+			Message.Text = "";
 		}
 	}
 }

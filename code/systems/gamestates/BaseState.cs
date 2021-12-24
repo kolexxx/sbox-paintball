@@ -86,12 +86,6 @@ namespace PaintBall
 			}
 		}
 
-		public virtual void Finish()
-		{
-			if ( Host.IsServer )
-				return;
-
-			Hud.Reset();
-		}
+		public virtual void Finish() { }
 	}
 }

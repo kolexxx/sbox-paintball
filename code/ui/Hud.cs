@@ -25,13 +25,6 @@ namespace PaintBall
 		}
 
 		[ClientRpc]
-		public static void Reset()
-		{
-			UpdateCrosshairMessage();
-			KillFeed.Instance.DeleteChildren();
-		}
-
-		[ClientRpc]
 		public static void UpdateCrosshairMessage( string text = "" )
 		{
 			(Local.Hud

@@ -31,11 +31,5 @@ namespace PaintBall
 			anim.SetParam( "aimat_weight", 1.0f );
 			anim.SetParam( "holdtype_handedness", 0 );
 		}
-
-		// TODO: This is bad
-		public override bool CanPrimaryAttack()
-		{
-			return Input.Pressed( InputButton.Attack1 ) && base.CanPrimaryAttack();
-		}
 	}
 }
