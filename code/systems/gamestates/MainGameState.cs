@@ -12,6 +12,7 @@ namespace PaintBall
 		[Net, Change] public int RedScore { get; private set; } = 0;
 		[Net, Change] public RoundState CurrentRoundState { get; private set; }
 		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
+		private bool _firstBlood = false;
 		private int _roundLimit => 12;
 		private int _toWinScore => 7;
 		private int _round = 0;
@@ -71,6 +72,13 @@ namespace PaintBall
 		public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
 		{
 			AdjustTeam( player.Team, -1 );
+
+			if ( !_firstBlood && attacker is Player )
+			{
+				Audio.PlayAll( "first_blood" );
+				Log.Info( player.Client.Name + " has drawn first blood" );
+				_firstBlood = true;
+			}
 
 			player.MakeSpectator();
 		}
@@ -154,6 +162,7 @@ namespace PaintBall
 			{
 				case RoundState.Freeze:
 
+					_firstBlood = false;
 					FreezeTime = 0;
 
 					TeamBalance();

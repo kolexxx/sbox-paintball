@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 using System.Linq;
 
 namespace PaintBall
@@ -6,8 +7,12 @@ namespace PaintBall
 	public partial class Player : Sandbox.Player
 	{
 		[Net] public TimeSince TimeSinceSpawned { get; private set; }
+		public int ConsecutiveKills { get; private set; }
+		public int KillStreak { get; private set; }
 		public DamageInfo LastDamageInfo { get; set; }
 		public ProjectileSimulator Projectiles { get; set; }
+		public TimeSince TimeSinceLastKill { get; private set; }
+		private static readonly string[] _consecutiveKillSounds = { "double_kill", "multi_kill", "ultra_kill", "monster_kill" };
 
 		public Player()
 		{
@@ -21,6 +26,7 @@ namespace PaintBall
 		public override void Respawn()
 		{
 			TimeSinceSpawned = 0f;
+			ConsecutiveKills = 0;
 
 			RemoveCorpse();
 
@@ -91,7 +97,7 @@ namespace PaintBall
 
 		public override void StartTouch( Entity other )
 		{
-			if ( IsClient )
+			if ( !IsServer )
 				return;
 
 			if ( other is Weapon weapon && weapon.PreviousOwner == this && weapon.TimeSinceDropped < 2f )
@@ -103,7 +109,8 @@ namespace PaintBall
 				return;
 			}
 
-			Inventory?.Add( other, Inventory.Active == null );
+			if ( Inventory.Add( other, Inventory.Active == null ) )
+				Audio.Play( "pickup_weapon", other.Position );
 		}
 
 		public void Reset()
@@ -115,7 +122,7 @@ namespace PaintBall
 
 			LastAttacker = null;
 			LastDamageInfo = default;
-		}		
+		}
 
 		public override void Spawn()
 		{
@@ -141,7 +148,7 @@ namespace PaintBall
 			if ( attacker.IsValid() )
 			{
 				if ( attacker is Player killer )
-					killer?.OnPlayerKill();
+					killer?.OnPlayerKill( LastDamageInfo.HitboxIndex == 5, LastDamageInfo.Weapon is Knife );
 
 				Game.Instance.CurrentGameState?.OnPlayerKilled( this, attacker, LastDamageInfo );
 			}
@@ -158,7 +165,35 @@ namespace PaintBall
 			base.TakeDamage( info );
 		}
 
-		protected void OnPlayerKill() { }
+		protected void OnPlayerKill( bool headshot, bool melee )
+		{
+			if ( TimeSinceLastKill >= 5f )
+				ConsecutiveKills = 0;
+
+			ConsecutiveKills++;
+
+			if ( ConsecutiveKills >= 2 )
+			{
+				int index = ConsecutiveKills - 2;
+				index = Math.Min( index, 3 );
+				Audio.Play( _consecutiveKillSounds[index] );
+			}
+			else if ( headshot )
+			{
+				if ( ActiveChild is Weapon weapon )
+					weapon.AmmoClip = weapon.ClipSize;
+
+				Audio.Play( "headshot" );
+			} else if ( melee )
+			{
+				Health = 100;
+
+				Audio.Play( "humiliation" );
+			}
+
+			KillStreak++;
+			TimeSinceLastKill = 0f;
+		}
 
 		private void SwitchToBestWeapon()
 		{
