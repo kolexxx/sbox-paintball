@@ -176,19 +176,20 @@ namespace PaintBall
 			{
 				int index = ConsecutiveKills - 2;
 				index = Math.Min( index, 3 );
-				Audio.Play( _consecutiveKillSounds[index] );
+				Audio.Play( _consecutiveKillSounds[index], Audio.Priority.Low );
 			}
 			else if ( headshot )
 			{
 				if ( ActiveChild is Weapon weapon )
 					weapon.AmmoClip = weapon.ClipSize;
 
-				Audio.Play( "headshot" );
-			} else if ( melee )
+				Audio.Play( "headshot", Audio.Priority.Low );
+			}
+			else if ( melee )
 			{
 				Health = 100;
 
-				Audio.Play( "humiliation" );
+				Audio.Play( "humiliation", Audio.Priority.Low );
 			}
 
 			KillStreak++;

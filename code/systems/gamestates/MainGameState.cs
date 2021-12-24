@@ -75,11 +75,9 @@ namespace PaintBall
 
 			if ( !_firstBlood && attacker is Player )
 			{
-				Audio.PlayAll( "first_blood" );
-				Log.Info( player.Client.Name + " has drawn first blood" );
+				Audio.PlayAll( "first_blood", Audio.Priority.Medium );
 				_firstBlood = true;
 			}
-
 			player.MakeSpectator();
 		}
 
@@ -185,7 +183,7 @@ namespace PaintBall
 
 				case RoundState.Play:
 
-					Audio.PlayAll( "prepare" );
+					Audio.PlayAll( "prepare", Audio.Priority.High );
 
 					break;
 
@@ -220,7 +218,7 @@ namespace PaintBall
 
 					Hud.UpdateCrosshairMessage( winner + " wins!" );
 
-					Audio.PlayAll( $"{winner.GetString()}win" );
+					Audio.PlayAll( $"{winner.GetString()}win", Audio.Priority.High );
 
 					_ = winner == Team.Blue ? BlueScore++ : RedScore++;
 
