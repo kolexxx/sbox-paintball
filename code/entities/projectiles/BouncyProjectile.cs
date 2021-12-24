@@ -3,7 +3,8 @@ using System;
 
 namespace PaintBall
 {
-	public class BouncyProjectile : Projectile
+	[Library]
+	public partial class BouncyProjectile : Projectile
 	{
 		public float Bounciness { get; set; } = 0.6f;
 		public override float LifeTime => 5f;
