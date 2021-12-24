@@ -6,6 +6,7 @@ namespace PaintBall
 	{
 		public override bool Automatic => true;
 		public override int Bucket => 2;
+		public override int ClipSize => 0;
 		public override bool Droppable => false;
 		public override string Icon => "ui/weapons/knife.png";
 		public override float PrimaryRate => 1.5f;
