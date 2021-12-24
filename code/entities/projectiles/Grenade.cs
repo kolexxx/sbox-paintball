@@ -6,7 +6,7 @@ namespace PaintBall
 	[Library]
 	public partial class Grenade : Projectile
 	{
-		public float Bounciness { get; set; } = 0.6f;
+		public float Bounciness { get; set; } = 0.3f;
 		public override bool ExplodeOnDestroy => true;
 		public override float LifeTime => 5f;
 		private const float _pi4 = (float)Math.PI / 4;
@@ -25,10 +25,10 @@ namespace PaintBall
 			new Vector3(_pi4,_pi4, _pi4/2),
 			new Vector3(-_pi4,_pi4, _pi4/2),
 			new Vector3(-_pi4,-_pi4, _pi4/2),
-			Vector3.Left + new Vector3(0, 0, _pi4/2),
-			Vector3.Right + new Vector3(0, 0, _pi4/2),
-			Vector3.Backward + new Vector3(0, 0, _pi4/2),
-			Vector3.Forward + new Vector3(0, 0, _pi4/2)
+			Vector3.Left + new Vector3(0, 0, _pi4/4),
+			Vector3.Right + new Vector3(0, 0, _pi4/4),
+			Vector3.Backward + new Vector3(0, 0, _pi4/4),
+			Vector3.Forward + new Vector3(0, 0, _pi4/4)
 		};
 
 		protected override bool HasHitTarget( TraceResult trace )

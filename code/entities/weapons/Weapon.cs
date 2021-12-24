@@ -155,7 +155,7 @@ namespace PaintBall
 				Owner = Owner,
 				EnableViewmodelRendering = true
 			};
-
+			ViewModelEntity.FieldOfView = 70;
 			ViewModelEntity.SetModel( ViewModelPath );
 		}
 

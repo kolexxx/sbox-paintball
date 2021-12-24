@@ -9,7 +9,6 @@ namespace PaintBall
 		protected float MaxOffsetLength => 10.0f;
 		protected float BobCycleTime => 5f;
 		protected Vector3 BobDirection => new Vector3( 0.0f, 1.0f, 0.5f );
-
 		private Vector3 _swingOffset;
 		private float _lastPitch;
 		private float _lastYaw;
