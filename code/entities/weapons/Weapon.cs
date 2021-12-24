@@ -5,7 +5,7 @@ namespace PaintBall
 {
 	public partial class Weapon : BaseWeapon
 	{
-		[Net, Predicted] public int AmmoClip { get; protected set; }
+		[Net, Predicted] public int AmmoClip { get; set; }
 		[Net, Predicted] public bool IsReloading { get; protected set; }
 		[Net, Predicted] public int ReserveAmmo { get; protected set; }
 		[Net, Predicted] public TimeSince TimeSinceDeployed { get; protected set; }
