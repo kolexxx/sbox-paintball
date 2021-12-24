@@ -11,6 +11,7 @@ namespace PaintBall
 		public Button Blue { get; set; }
 		public Button Red { get; set; }
 		public Label Timer { get; set; }
+		private TimeSince _timeSinceOpened = 0f;
 		private bool _open = true;
 
 		public TeamSelect()
@@ -22,8 +23,11 @@ namespace PaintBall
 		{
 			base.Tick();
 
-			if ( Input.Pressed( InputButton.Menu ) )
+			if ( Input.Pressed( InputButton.Menu ) && _timeSinceOpened > 0.1f )
+			{
 				_open = !_open;
+				_timeSinceOpened = 0f;
+			}
 
 			SetClass( "open", _open );
 
