@@ -19,7 +19,6 @@ killfeedentry
     background-color: rgba(black 0.8);
     margin-bottom: 5px;
     color: white;
-    transition: all 0.2s ease-out;
     flex-shrink: 0;
     flex-grow: 0;
     padding: 12px;
@@ -28,6 +27,9 @@ killfeedentry
     align-items: center;
     backdrop-filter: blur(10px);
     border-radius: 5%;
+    transition: transform .30s linear;
+    transition: margin .30s linear;
+    transition: opacity .10s linear;
 
     &:intro
     {
@@ -36,6 +38,7 @@ killfeedentry
     &:outro
     {
         opacity: 0;
+        margin-top: -38px;
     }
 
     .left, .right
@@ -77,14 +80,6 @@ killfeedentry
         {
             background-image-tint: black;
         }
-    }
-
-    .message
-    {
-        color: #ccc;
-        font-size: 14px;
-        // background-color: red;
-        flex-grow: 1;
     }
 
     &.noname .name

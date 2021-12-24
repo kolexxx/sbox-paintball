@@ -32,7 +32,15 @@ namespace PaintBall
 
 			e.Method.SetTexture( method );
 
+			_ = e.DeleteAsync();
+
 			return e;
+		}
+
+		[PBEvent.Round.Start]
+		private void RoundStart()
+		{
+			DeleteChildren();
 		}
 
 		public class KillFeedEntry : Panel
@@ -46,12 +54,12 @@ namespace PaintBall
 				Left = Add.Label( "", "left" );
 				Method = Add.Image( "", "method" );
 				Right = Add.Label( "", "right" );
-				_ = DeleteAsync();
 			}
 
-			private async Task DeleteAsync()
+			public async Task DeleteAsync()
 			{
-				await Task.Delay( 5000 );
+				await Task.Delay( HasClass( "me" ) ? 8000 : 5000 );
+
 				Delete();
 			}
 		}
