@@ -8,6 +8,7 @@ namespace PaintBall
 	{
 		public override int Bucket => 3;
 		public override int ClipSize => 1;
+		public override string FireSound => "";
 		public override string FollowEffect => "";
 		public override float Gravity => 10f;
 		public override string Icon => "ui/weapons/grenade.png";
