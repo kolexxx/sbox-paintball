@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.UI;
 
 namespace PaintBall
 {
@@ -25,7 +26,7 @@ namespace PaintBall
 
 		public void OnTeamChanged( Team oldTeam, Team newTeam )
 		{
-			if ( IsLocalPawn && LifeState == LifeState.Alive )
+			if ( IsLocalPawn && !IsSpectatingPlayer )
 			{
 				Local.Hud.RemoveClass( oldTeam.GetString() );
 				Local.Hud.AddClass( newTeam.GetString() );
@@ -75,7 +76,10 @@ namespace PaintBall
 			}
 
 			if ( player.Team == team )
+			{
 				Hud.CloseTeamSelect();
+				ChatBox.AddInformation( To.Everyone, $"{client.Name} has joined Team {team}", $"avatar:{client.PlayerId}" );
+			}
 		}
 	}
 }
