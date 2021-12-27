@@ -2,7 +2,7 @@
 
 namespace PaintBall
 {
-	public partial class RPC
+	public static partial class RPC
 	{
 		[ClientRpc]
 		public static void ClientJoined( Client client )
@@ -14,6 +14,12 @@ namespace PaintBall
 		public static void ClientDisconnected( Client client, NetworkDisconnectionReason reason )
 		{
 			Event.Run( PBEvent.Client.Disconnected, client, reason );
+		}
+
+		[ClientRpc]
+		public static void OnPlayerKilled(Player player )
+		{
+			Event.Run( PBEvent.Player.Killed, player );
 		}
 	}
 }
