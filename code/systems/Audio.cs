@@ -6,12 +6,13 @@ namespace PaintBall
 	{
 		public enum Priority
 		{
+			None,
 			Low,
 			Medium,
 			High
 		}
 
-		private static Sound s_currentSound;
+		private static Sound s_currentAnnouncement;
 		private static Priority s_currentPriority;
 
 		public static void AnnounceAll( string sound, Priority priority )
@@ -22,15 +23,15 @@ namespace PaintBall
 		[ClientRpc]
 		public static void Announce( string sound, Priority priority )
 		{
-			if ( priority < s_currentPriority && s_currentSound.Finished )
+			if ( priority < s_currentPriority && s_currentAnnouncement.Finished )
 			{
-				s_currentSound = Sound.FromScreen( sound );
+				s_currentAnnouncement = Sound.FromScreen( sound );
 				s_currentPriority = priority;
 			}
 			else if ( priority >= s_currentPriority )
 			{
-				s_currentSound.Stop();
-				s_currentSound = Sound.FromScreen( sound );
+				s_currentAnnouncement.Stop();
+				s_currentAnnouncement = Sound.FromScreen( sound );
 				s_currentPriority = priority;
 			}
 		}
