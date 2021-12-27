@@ -36,18 +36,21 @@ namespace PaintBall
 
 		public void Simulate()
 		{
-			for ( int i = List.Count - 1; i >= 0; i-- )
+			using ( Entity.LagCompensation() )
 			{
-				var projectile = List[i];
-
-				if ( !projectile.IsValid() )
+				for ( int i = List.Count - 1; i >= 0; i-- )
 				{
-					List.RemoveAt( i );
-					continue;
-				}
+					var projectile = List[i];
 
-				if ( Prediction.FirstTime )
-					projectile.Simulate();
+					if ( !projectile.IsValid() )
+					{
+						List.RemoveAt( i );
+						continue;
+					}
+
+					if ( Prediction.FirstTime )
+						projectile.Simulate();
+				}
 			}
 		}
 	}

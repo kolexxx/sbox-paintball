@@ -60,8 +60,7 @@ namespace PaintBall
 
 		public override void Simulate( Client cl )
 		{
-			using ( LagCompensation() )
-				Projectiles.Simulate();
+			Projectiles.Simulate();
 
 			var controller = GetActiveController();
 
@@ -156,6 +155,9 @@ namespace PaintBall
 			{
 				Game.Instance.CurrentGameState?.OnPlayerKilled( this, null, LastDamageInfo );
 			}
+
+			Event.Run( PBEvent.Player.Killed, this );
+			RPC.OnPlayerKilled( this );
 		}
 
 		public override void TakeDamage( DamageInfo info )
