@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PaintBall
 {
-	public class KillFeed : Panel
+	public partial class KillFeed : Panel
 	{
 		public static KillFeed Instance;
 

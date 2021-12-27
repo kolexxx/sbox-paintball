@@ -50,12 +50,13 @@ namespace PaintBall
 			RootPanel.AddChild<ChatBox>();           // 1
 			RootPanel.AddChild<Crosshair>();         // 2
 			RootPanel.AddChild<InventoryBar>();      // 3
-			RootPanel.AddChild<KillFeed>();          // 4
-			RootPanel.AddChild<RoundInfo>();         // 5
-			RootPanel.AddChild<Scoreboard>();        // 6
-			RootPanel.AddChild<SpectatorControls>(); // 7
-			RootPanel.AddChild<TeamIndicator>();     // 8
-			RootPanel.AddChild<TeamSelect>();        // 9
+			RootPanel.AddChild<KillConfirmed>();     // 4
+			RootPanel.AddChild<KillFeed>();          // 5
+			RootPanel.AddChild<RoundInfo>();         // 6
+			RootPanel.AddChild<Scoreboard>();        // 7
+			RootPanel.AddChild<SpectatorControls>(); // 8
+			RootPanel.AddChild<TeamIndicator>();     // 9
+			RootPanel.AddChild<TeamSelect>();        // 10
 		}
 	}
 }

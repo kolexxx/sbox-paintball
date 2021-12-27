@@ -12,6 +12,7 @@ scoreboard
     transform-origin: 50% 50%;
     align-items: center;
     justify-content: center;
+    z-index: 100;
 
     &.open
     {
