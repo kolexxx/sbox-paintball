@@ -78,14 +78,15 @@ namespace PaintBall
 				if ( player.Team == Team.None )
 					team = (Team)Rand.Int( 1, 2 );
 
-				var spawnpoints = Entity.All
-									.OfType<PlayerSpawnPoint>()
-									.Where( e => e.Team == team )
-									.ToList();
+				var spawnpoints = All
+								 .OfType<PlayerSpawnPoint>()
+								 .Where( e => e.Team == team && !e.Occupied )
+								 .ToList();
 
 				if ( spawnpoints.Count > 0 )
 				{
 					var spawnpoint = spawnpoints[Rand.Int( 0, spawnpoints.Count - 1 )];
+					spawnpoint.Occupied = true;
 
 					pawn.Transform = spawnpoint.Transform;
 
@@ -163,13 +164,16 @@ namespace PaintBall
 
 				return;
 			}
-				
-			Hud.AddKillFeed( "", client.Name, "", Team.None, victim.Team, 0, client.PlayerId );	
+
+			Hud.AddKillFeed( "", client.Name, "", Team.None, victim.Team, 0, client.PlayerId );
 		}
 
 		public void CleanUp()
 		{
 			Sandbox.Internal.Decals.RemoveFromWorld();
+
+			foreach ( var spawnpoint in All.OfType<PlayerSpawnPoint>() )
+				spawnpoint.Occupied = false;
 
 			foreach ( var projectile in All.OfType<Projectile>() )
 			{

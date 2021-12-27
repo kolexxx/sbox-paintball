@@ -7,8 +7,7 @@ namespace PaintBall
 	[Hammer.EntityTool( "Player Spawnpoint", "PaintBall", "Defines a point where players on a team can spawn" )]
 	public partial class PlayerSpawnPoint : Entity
 	{
-		// Maybe add that this spawnpoint is occupied?
-		[Property] 
-		public Team Team { get; set; }
+		[Property] public Team Team { get; set; }
+		public bool Occupied { get; set; }
 	}
 }
