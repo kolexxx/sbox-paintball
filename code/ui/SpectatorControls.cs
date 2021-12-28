@@ -11,7 +11,7 @@ namespace PaintBall
 			Add.Label( "Spacebar - switch camera" );
 			Add.Label( "Attack (1 or 2) - switch player" );
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 9 ).IsVisible );
+			BindClass( "hidden", () => Local.Hud.GetChild( 11 ).IsVisible );
 		}
 
 		public override void Tick()

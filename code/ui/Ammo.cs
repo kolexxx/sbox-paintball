@@ -23,7 +23,7 @@ namespace PaintBall
 			if ( player == null )
 				return;
 
-			SetClass( "hidden", Local.Hud.GetChild( 9 ).IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
+			SetClass( "hidden", Local.Hud.GetChild( 11 ).IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
 
 			var weapon = player.CurrentPlayer.ActiveChild as Weapon;
 

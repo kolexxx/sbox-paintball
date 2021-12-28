@@ -21,7 +21,6 @@ namespace PaintBall
 			ent.CopyMaterialGroup( this );
 			ent.TakeDecalsFrom( this );
 			ent.EnableHitboxes = true;
-			ent.EnableAllCollisions = true;
 			ent.SurroundingBoundsMode = SurroundingBoundsType.Physics;
 			ent.RenderColor = Color.Gray;
 

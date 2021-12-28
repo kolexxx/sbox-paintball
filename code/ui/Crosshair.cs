@@ -11,6 +11,7 @@ namespace PaintBall
 		public Crosshair()
 		{
 			StyleSheet.Load( "/ui/Crosshair.scss" );
+
 			Message = Add.Label();
 		}
 
@@ -21,11 +22,11 @@ namespace PaintBall
 			if ( Local.Pawn is not Player player )
 				return;
 
-			SetClass( "hidden", Local.Hud.GetChild( 6 ).IsVisible || Local.Hud.GetChild( 9 ).IsVisible || (player.LifeState != LifeState.Alive && player.Camera is not FirstPersonSpectateCamera) );
+			SetClass( "hidden", Local.Hud.GetChild( 8 ).IsVisible || Local.Hud.GetChild( 11 ).IsVisible || (player.LifeState != LifeState.Alive && player.Camera is not FirstPersonSpectateCamera) );
 		}
 
-		[PBEvent.Round.Start]
-		private void RoundStart()
+		[PBEvent.Round.New]
+		private void OnNewRound()
 		{
 			Message.Text = "";
 		}

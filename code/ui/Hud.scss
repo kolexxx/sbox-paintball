@@ -32,7 +32,6 @@ ammo
     justify-content: center;
     align-items: center;
     background-image: linear-gradient(to left, rgba(0 0 0 1 ), rgba(0 0 0 0.6) 80%, rgba(0 0 0 0));
-    z-index: 1;
 
     label
     {
@@ -70,7 +69,6 @@ teamindicator
     min-width: 200px;
     justify-content: center;
     align-items: center;
-    z-index: 2;
 
     &.hidden
     {
@@ -97,7 +95,6 @@ teamindicator
 
 spectatorcontrols
 {
-    z-index: 3;
     color: white;
     font-size: 20px;
     align-items: center;

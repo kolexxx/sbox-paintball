@@ -9,7 +9,7 @@ namespace PaintBall
 	{
 		public bool Show { get; set; } = false;
 		public static Scoreboard Instance;
-		private Dictionary<Client, ScoreBoardEntry> _entries = new();
+		private Dictionary<Client, ScoreboardEntry> _entries = new();
 		private Panel _header;
 		private Panel[] _sections = new Panel[3];
 
@@ -29,7 +29,7 @@ namespace PaintBall
 			_header.Add.Label( "Deaths" );
 			_header.Add.Label( "Ping" );
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 9 ).IsVisible );
+			BindClass( "hidden", () => Local.Hud.GetChild( 11 ).IsVisible );
 		}
 
 		public override void Tick()
@@ -46,7 +46,7 @@ namespace PaintBall
 			{
 				_sections[i].SortChildren( e =>
 				{
-					var client = (e as ScoreBoardEntry)?.Client;
+					var client = (e as ScoreboardEntry)?.Client;
 
 					int rank = client.GetInt( "kills" );
 
@@ -55,9 +55,9 @@ namespace PaintBall
 			}
 		}
 
-		public ScoreBoardEntry AddEntry( Client client, Team team )
+		public ScoreboardEntry AddEntry( Client client, Team team )
 		{
-			var e = _sections[(int)team].AddChild<ScoreBoardEntry>();
+			var e = _sections[(int)team].AddChild<ScoreboardEntry>();
 			e.Client = client;
 
 			return e;
@@ -105,7 +105,7 @@ namespace PaintBall
 			}
 		}
 
-		public class ScoreBoardEntry : Panel
+		public class ScoreboardEntry : Panel
 		{
 			public Client Client;
 			public Label Alive;
@@ -115,7 +115,7 @@ namespace PaintBall
 			public Label Ping;
 			private TimeSince SinceUpdate;
 
-			public ScoreBoardEntry()
+			public ScoreboardEntry()
 			{
 				Name = Add.Label( "Name", "name" );
 				Alive = Add.Label( "", "alive" );

@@ -14,6 +14,18 @@ namespace PaintBall
 		public TimeSince TimeSinceLastKill { get; private set; }
 		private static readonly string[] _consecutiveKillSounds = { "double_kill", "multi_kill", "ultra_kill", "monster_kill" };
 
+		public new Inventory Inventory
+		{
+			get => base.Inventory as Inventory;
+			private init => base.Inventory = value;
+		}
+
+		public new CustomWalkController Controller
+		{
+			get => base.Controller as CustomWalkController;
+			private set => base.Controller = value;
+		}
+
 		public Player()
 		{
 			Inventory = new Inventory( this );
@@ -156,8 +168,8 @@ namespace PaintBall
 				Game.Instance.CurrentGameState?.OnPlayerKilled( this, null, LastDamageInfo );
 			}
 
-			Event.Run( PBEvent.Player.Killed, this );
-			RPC.OnPlayerKilled( this );
+			Event.Run( PBEvent.Player.Killed, this, LastAttacker );
+			RPC.OnPlayerKilled( this, LastAttacker );
 		}
 
 		public override void TakeDamage( DamageInfo info )

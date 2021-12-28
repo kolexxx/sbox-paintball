@@ -36,6 +36,8 @@ namespace PaintBall
 
 			if ( newPlayer.ActiveChild is Weapon newWeapon && newWeapon.ViewModelEntity != null )
 				newWeapon.ViewModelEntity.EnableDrawing = true;
+
+			Viewer = newPlayer;
 		}
 
 		public override void Update()
@@ -46,17 +48,9 @@ namespace PaintBall
 			bool wantToUpdate = Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 );
 
 			if ( !player.IsSpectatingPlayer || wantToUpdate )
-			{
 				player.UpdateSpectatingPlayer( Input.Pressed( InputButton.Attack2 ) ? -1 : 1 );
 
-				Position = player.CurrentPlayer.EyePos;
-				Rotation = player.CurrentPlayer.EyeRot;
-
-				Viewer = player.CurrentPlayer;
-
-				return;
-			}
-			else if ( player.CurrentPlayer.IsValid() )
+			if ( player.CurrentPlayer.IsValid() )
 			{
 				Position = Vector3.Lerp( Position, player.CurrentPlayer.EyePos, SMOOTH_SPEED * Time.Delta );
 				Rotation = Rotation.Slerp( Rotation, player.CurrentPlayer.EyeRot, SMOOTH_SPEED * Time.Delta );

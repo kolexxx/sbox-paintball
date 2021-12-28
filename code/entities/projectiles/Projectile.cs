@@ -62,7 +62,6 @@ namespace PaintBall
 		public override void Spawn()
 		{
 			Predictable = true;
-			EnableLagCompensation = true;
 
 			base.Spawn();
 		}
@@ -113,6 +112,7 @@ namespace PaintBall
 				.Run();
 
 			Position = trace.EndPos;
+			Rotation = Rotation.From( trace.Direction.EulerAngles );
 
 			if ( DestroyTime )
 			{

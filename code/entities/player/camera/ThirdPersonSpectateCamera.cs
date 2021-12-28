@@ -4,8 +4,6 @@ namespace PaintBall
 {
 	public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 	{
-		private Vector3 DefaultPosition { get; set; }
-
 		private const float LERP_MODE = 0;
 		private const int CAMERA_DISTANCE = 240;
 
@@ -45,7 +43,7 @@ namespace PaintBall
 		private Vector3 GetSpectatePoint()
 		{
 			if ( Local.Pawn is not Player player || !player.IsSpectatingPlayer )
-				return DefaultPosition;
+				return Vector3.Zero;
 
 			return player.CurrentPlayer.EyePos;
 		}

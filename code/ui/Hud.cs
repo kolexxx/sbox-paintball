@@ -46,17 +46,18 @@ namespace PaintBall
 
 			RootPanel.StyleSheet.Load( "/ui/Hud.scss" );
 
-			RootPanel.AddChild<Ammo>();              // 0
-			RootPanel.AddChild<ChatBox>();           // 1
-			RootPanel.AddChild<Crosshair>();         // 2
-			RootPanel.AddChild<InventoryBar>();      // 3
-			RootPanel.AddChild<KillConfirmed>();     // 4
-			RootPanel.AddChild<KillFeed>();          // 5
-			RootPanel.AddChild<RoundInfo>();         // 6
-			RootPanel.AddChild<Scoreboard>();        // 7
-			RootPanel.AddChild<SpectatorControls>(); // 8
-			RootPanel.AddChild<TeamIndicator>();     // 9
-			RootPanel.AddChild<TeamSelect>();        // 10
+			RootPanel.AddChild<Ammo>();                  // 0
+			RootPanel.AddChild<ChatBox>();               // 1
+			RootPanel.AddChild<Crosshair>();             // 2
+			RootPanel.AddChild<InventoryBar>();          // 3
+			RootPanel.AddChild<InventoryNotification>(); // 4
+			RootPanel.AddChild<KillConfirmed>();         // 5
+			RootPanel.AddChild<KillFeed>();              // 6
+			RootPanel.AddChild<RoundInfo>();             // 7
+			RootPanel.AddChild<Scoreboard>();            // 8
+			RootPanel.AddChild<SpectatorControls>();     // 9
+			RootPanel.AddChild<TeamIndicator>();         // 10
+			RootPanel.AddChild<TeamSelect>();            // 11
 		}
 	}
 }

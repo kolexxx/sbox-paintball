@@ -155,6 +155,7 @@ namespace PaintBall
 				Owner = Owner,
 				EnableViewmodelRendering = true
 			};
+
 			ViewModelEntity.FieldOfView = 70;
 			ViewModelEntity.SetModel( ViewModelPath );
 		}
@@ -229,9 +230,7 @@ namespace PaintBall
 			// Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 
 			if ( IsLocalPawn )
-			{
-				_ = new Sandbox.ScreenShake.Perlin( 1f, 0.2f, 0.8f );
-			}
+				_ = new Sandbox.ScreenShake.Perlin( 1f, 0.2f, 0.8f );	
 
 			ViewModelEntity?.SetAnimBool( "fire", true );
 			CrosshairPanel?.CreateEvent( "fire" );

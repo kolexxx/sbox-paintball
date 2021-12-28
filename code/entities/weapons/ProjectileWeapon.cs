@@ -1,5 +1,4 @@
 ﻿using Sandbox;
-using System;
 
 namespace PaintBall
 {
@@ -10,7 +9,7 @@ namespace PaintBall
 		public virtual string HitSound => "impact";
 		public virtual string ProjectileModel => $"models/{(Owner as Player)?.Team.GetString()}_ball/ball.vmdl";
 		public virtual float ProjectileRadius => 4f;
-		public virtual float ProjectileScale=> 0.25f;
+		public virtual float ProjectileScale => 0.25f;
 		public virtual float Speed => 2000f;
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
@@ -48,6 +47,9 @@ namespace PaintBall
 			if ( Owner is not Player owner )
 				return;
 
+			//if ( IsLocalPawn )
+			//Log.Info( owner.Projectiles.IsValid() );
+
 			var projectile = new T()
 			{
 				Owner = this,
@@ -59,12 +61,14 @@ namespace PaintBall
 				Radius = ProjectileRadius,
 				Gravity = Gravity,
 				Simulator = owner.Projectiles,
-				Model = ProjectileModel
+				Model = ProjectileModel,
+				Rotation = owner.EyeRot
 			};
 
 			var forward = owner.EyeRot.Forward;
 			forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * Spread * 0.25f;
 			forward = forward.Normal;
+
 			var position = owner.EyePos;
 
 			var velocity = forward * Speed;

@@ -20,7 +20,7 @@ namespace PaintBall
 		{
 			Instance = this;
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 6 ).IsVisible || Local.Hud.GetChild( 9 ).IsVisible );
+			BindClass( "hidden", () => Local.Hud.GetChild( 8 ).IsVisible || Local.Hud.GetChild( 11 ).IsVisible );
 		}
 
 		public override void Tick()
@@ -48,8 +48,8 @@ namespace PaintBall
 				Timer.Text = "";
 		}
 
-		[PBEvent.Round.Start]
-		public void RoundStart()
+		[PBEvent.Round.New]
+		public void OnNewRound()
 		{
 			Team team = (Local.Pawn as Player).Team;
 

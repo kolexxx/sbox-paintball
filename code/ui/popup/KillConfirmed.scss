@@ -1,0 +1,48 @@
+﻿@import "../Variables.scss";
+
+killconfirmed
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+killconfirmedentry
+{
+    position: absolute;
+    height: 100px;
+    width: 200px;
+    bottom: 100px;
+    background-color: black;
+    transition: opacity 0.2s ease-in;
+    color: white;
+    border-radius: 10%;
+    border: 1px solid grey;
+    background-color: rgba(black 0.9);
+    opacity: 1;
+    justify-content: center;
+
+    image
+    {
+        width: 64px;
+        height: 64px;
+        background-size: 100%;
+        border-radius: 10%;
+        min-height: 32px;
+        border-radius: 10%;
+        position: absolute;
+        bottom: 10px;
+    }
+
+    &:intro
+    {
+        opacity: 0;
+    }
+
+    &:outro
+    {
+        opacity: 0;
+    }
+}

@@ -15,8 +15,9 @@ namespace PaintBall
 				_spectatedPlayer = value == this ? null : value;
 			}
 		}
-		private Player _spectatedPlayer;
 		private int _index = 0;
+		private Player _spectatedPlayer;
+		private RealTimeSince _timeSincePlayerChanged;
 
 		public void ChangeSpectateCamera()
 		{
@@ -47,6 +48,11 @@ namespace PaintBall
 
 		public void UpdateSpectatingPlayer( int i )
 		{
+			if ( _timeSincePlayerChanged < 0.1f )
+				return;
+
+			_timeSincePlayerChanged = 0;
+
 			var oldPlayer = CurrentPlayer;
 
 			CurrentPlayer = null;
@@ -72,6 +78,16 @@ namespace PaintBall
 
 			if ( Camera is ISpectateCamera camera )
 				camera.OnSpectatedPlayerChanged( oldPlayer, CurrentPlayer );
+		}
+
+		[PBEvent.Player.Killed]
+		private void OnPlayerKilled( Player player, Entity attacker )
+		{
+			if ( !IsClient || !player.IsValid() )
+				return;
+
+			if ( IsSpectatingPlayer && player == CurrentPlayer )
+				UpdateSpectatingPlayer( 1 );
 		}
 	}
 }

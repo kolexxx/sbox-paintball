@@ -22,7 +22,7 @@ namespace PaintBall
 			for ( int i = 0; i < 5; i++ )
 				_slots[i] = new InventoryIcon( i + 1, this );
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 9 ).IsVisible );
+			BindClass( "hidden", () => Local.Hud.GetChild( 11 ).IsVisible );
 		}
 
 		public override void Tick()
