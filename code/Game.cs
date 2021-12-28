@@ -86,7 +86,9 @@ namespace PaintBall
 				if ( spawnpoints.Count > 0 )
 				{
 					var spawnpoint = spawnpoints[Rand.Int( 0, spawnpoints.Count - 1 )];
-					spawnpoint.Occupied = true;
+
+					if ( CurrentGameState is MainGameState )
+						spawnpoint.Occupied = true;
 
 					pawn.Transform = spawnpoint.Transform;
 
