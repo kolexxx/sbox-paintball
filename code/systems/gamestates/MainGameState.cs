@@ -43,7 +43,6 @@ namespace PaintBall
 			}
 
 			Game.Instance.MoveToSpawnpoint( player );
-
 		}
 
 		public override void OnPlayerLeave( Player player )
@@ -63,7 +62,8 @@ namespace PaintBall
 			player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
 			player.Inventory.Add( new Pistol() );
 			player.Inventory.Add( new Knife() );
-			if ( Rand.Int( 1, 3 ) == 3 )
+
+			if ( Rand.Int( 1, 3 ) == 1 )
 				player.Inventory.Add( new Throwable() );
 
 			base.OnPlayerSpawned( player );
@@ -177,13 +177,15 @@ namespace PaintBall
 						player.Respawn();
 					}
 
-					Event.Run( PBEvent.Round.Start );
+					Event.Run( PBEvent.Round.New );
 
 					break;
 
 				case RoundState.Play:
 
 					Audio.AnnounceAll( "prepare", Audio.Priority.High );
+
+					Event.Run( PBEvent.Round.Start );
 
 					break;
 
@@ -296,10 +298,26 @@ namespace PaintBall
 
 		private void OnCurrentRoundStateChanged( RoundState oldState, RoundState newState )
 		{
-			if ( newState == RoundState.Freeze )
-				Event.Run( PBEvent.Round.Start );
-			else if ( newState == RoundState.End )
-				Event.Run( PBEvent.Round.End );
+			switch ( newState )
+			{
+				case RoundState.Freeze:
+
+					Event.Run( PBEvent.Round.New );
+
+					return;
+
+				case RoundState.Play:
+
+					Event.Run( PBEvent.Round.Start );
+
+					return;
+
+				case RoundState.End:
+
+					Event.Run( PBEvent.Round.End );
+
+					return;
+			}
 		}
 
 		private void TeamBalance()

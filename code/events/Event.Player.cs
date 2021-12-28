@@ -6,7 +6,7 @@ namespace PaintBall
 	{
 		public static class Player
 		{
-			public const string Killed = "pb.player.onkilled";
+			public const string Killed = "pb.player.killed";
 
 			public class KilledAttribute : EventAttribute
 			{

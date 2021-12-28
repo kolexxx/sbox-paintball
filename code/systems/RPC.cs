@@ -17,9 +17,12 @@ namespace PaintBall
 		}
 
 		[ClientRpc]
-		public static void OnPlayerKilled(Player player )
+		public static void OnPlayerKilled( Player player, Entity attacker )
 		{
-			Event.Run( PBEvent.Player.Killed, player );
+			if ( !player.IsValid() )
+				return;
+
+			Event.Run( PBEvent.Player.Killed, player, attacker );
 		}
 	}
 }

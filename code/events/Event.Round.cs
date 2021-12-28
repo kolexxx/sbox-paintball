@@ -19,6 +19,13 @@ namespace PaintBall
 			{
 				public EndAttribute() : base( End ) { }
 			}
+
+			public const string New = "pb.round.new";
+
+			public class NewAttribute : EventAttribute
+			{
+				public NewAttribute() : base( New ) { }
+			}
 		}
 	}
 }
