@@ -5,7 +5,7 @@ namespace PaintBall
 {
 	public partial class BaseState : BaseNetworkable
 	{
-		[Net, Predicted] public TimeSince FreezeTime { get; protected set; } = 5f;
+		[Net, Predicted] public TimeUntil FreezeTime { get; protected set; }
 		public virtual bool CanPlayerSuicide => false;
 		public virtual int StateDuration => 0;
 		public float StateEndTime { get; set; }
@@ -36,6 +36,18 @@ namespace PaintBall
 		public virtual void OnPlayerJoin( Player player )
 		{
 			AddPlayer( player );
+
+			if ( player.Client.IsBot )
+			{
+				if ( Team.Blue.GetCount() >= Team.Red.GetCount() )
+					player.SetTeam( Team.Red );
+				else
+					player.SetTeam( Team.Blue );
+			}
+			else
+			{
+				player.MakeSpectator();
+			}
 		}
 
 		public virtual void OnPlayerLeave( Player player )

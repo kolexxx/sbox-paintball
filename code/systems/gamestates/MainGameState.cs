@@ -30,18 +30,6 @@ namespace PaintBall
 		{
 			base.OnPlayerJoin( player );
 
-			if ( player.Client.IsBot )
-			{
-				if ( Team.Blue.GetCount() >= Team.Red.GetCount() )
-					player.SetTeam( Team.Red );
-				else
-					player.SetTeam( Team.Blue );
-			}
-			else
-			{
-				player.MakeSpectator();
-			}
-
 			Game.Instance.MoveToSpawnpoint( player );
 		}
 
@@ -59,6 +47,8 @@ namespace PaintBall
 
 			AdjustTeam( player.Team, 1 );
 
+			// error
+			// player.Inventory.Add( new ProjectileWeapon<Projectile>() );
 			player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
 			player.Inventory.Add( new Pistol() );
 			player.Inventory.Add( new Knife() );
@@ -78,6 +68,7 @@ namespace PaintBall
 				Audio.AnnounceAll( "first_blood", Audio.Priority.Medium );
 				_firstBlood = true;
 			}
+
 			player.MakeSpectator();
 		}
 
@@ -161,7 +152,7 @@ namespace PaintBall
 				case RoundState.Freeze:
 
 					_firstBlood = false;
-					FreezeTime = 0;
+					FreezeTime = 5f;
 
 					TeamBalance();
 

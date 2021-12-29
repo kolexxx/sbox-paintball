@@ -10,18 +10,6 @@ namespace PaintBall
 		{
 			base.OnPlayerJoin( player );
 
-			if ( player.Client.IsBot )
-			{
-				if ( Team.Blue.GetCount() >= Team.Red.GetCount() )
-					player.SetTeam( Team.Red );
-				else
-					player.SetTeam( Team.Blue );
-			}
-			else
-			{
-				player.MakeSpectator();
-			}
-
 			StateEndTime = StateDuration + Time.Now;
 			NextSecondTime = 0f;
 		}
