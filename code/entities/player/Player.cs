@@ -1,18 +1,11 @@
 ﻿using Sandbox;
-using System;
-using System.Linq;
 
 namespace PaintBall
 {
 	public partial class Player : Sandbox.Player
 	{
 		[Net] public TimeSince TimeSinceSpawned { get; private set; }
-		public int ConsecutiveKills { get; private set; }
-		public int KillStreak { get; private set; }
-		public DamageInfo LastDamageInfo { get; set; }
 		public ProjectileSimulator Projectiles { get; set; }
-		public TimeSince TimeSinceLastKill { get; private set; }
-		private static readonly string[] _consecutiveKillSounds = { "double_kill", "multi_kill", "ultra_kill", "monster_kill" };
 
 		public new Inventory Inventory
 		{
@@ -31,13 +24,14 @@ namespace PaintBall
 			Inventory = new Inventory( this );
 			Projectiles = new( this );
 			EnableTouch = true;
+			EnableShadowInFirstPerson = true;
 
 			LifeState = LifeState.Dead;
 		}
 
 		public override void Respawn()
 		{
-			TimeSinceSpawned = 0f;
+			TimeSinceSpawned = 0;
 			ConsecutiveKills = 0;
 
 			RemoveCorpse();
@@ -53,10 +47,11 @@ namespace PaintBall
 			EnableAllCollisions = true;
 			EnableDrawing = true;
 			EnableHideInFirstPerson = true;
-			EnableShadowInFirstPerson = false;
+			EnableShadowInFirstPerson = true;
 
 			TimeSinceSpawned = 0f;
 			RenderColor = Team.GetColor();
+			Transmit = TransmitType.Always;
 
 			LifeState = LifeState.Alive;
 			Health = 100;
@@ -111,7 +106,7 @@ namespace PaintBall
 			if ( !IsServer )
 				return;
 
-			if ( other is Weapon weapon && weapon.PreviousOwner == this && weapon.TimeSinceDropped < 2f )
+			if ( other is Weapon weapon && weapon.PreviousOwner == this && weapon.TimeSinceDropped <= 2f )
 				return;
 
 			if ( other is PickupTrigger )
@@ -133,6 +128,8 @@ namespace PaintBall
 
 			LastAttacker = null;
 			LastDamageInfo = default;
+			ConsecutiveKills = 0;
+			KillStreak = 0;
 		}
 
 		public override void Spawn()
@@ -140,88 +137,6 @@ namespace PaintBall
 			EnableLagCompensation = true;
 
 			base.Spawn();
-		}
-
-		public override void OnKilled()
-		{
-			base.OnKilled();
-
-			SwitchToBestWeapon();
-			Inventory.DropActive();
-			Inventory.DeleteContents();
-
-			BecomeRagdollOnClient( LastDamageInfo.Force, GetHitboxBone( LastDamageInfo.HitboxIndex ) );
-
-			RemoveAllDecals();
-
-			var attacker = LastAttacker;
-
-			if ( attacker.IsValid() )
-			{
-				if ( attacker is Player killer )
-					killer?.OnPlayerKill( LastDamageInfo.HitboxIndex == 5, LastDamageInfo.Weapon is Knife );
-
-				Game.Instance.CurrentGameState?.OnPlayerKilled( this, attacker, LastDamageInfo );
-			}
-			else
-			{
-				Game.Instance.CurrentGameState?.OnPlayerKilled( this, null, LastDamageInfo );
-			}
-
-			Event.Run( PBEvent.Player.Killed, this, LastAttacker );
-			RPC.OnPlayerKilled( this, LastAttacker );
-		}
-
-		public override void TakeDamage( DamageInfo info )
-		{
-			LastDamageInfo = info;
-
-			base.TakeDamage( info );
-		}
-
-		protected void OnPlayerKill( bool headshot, bool melee )
-		{
-			if ( TimeSinceLastKill >= 5f )
-				ConsecutiveKills = 0;
-
-			ConsecutiveKills++;
-
-			if ( ConsecutiveKills >= 2 )
-			{
-				int index = ConsecutiveKills - 2;
-				index = Math.Min( index, 3 );
-				Audio.Announce( _consecutiveKillSounds[index], Audio.Priority.Low );
-			}
-			else if ( headshot )
-			{
-				if ( ActiveChild is Weapon weapon )
-					weapon.AmmoClip = weapon.ClipSize;
-
-				Audio.Announce( "headshot", Audio.Priority.Low );
-			}
-			else if ( melee )
-			{
-				Health = 100;
-
-				Audio.Announce( "humiliation", Audio.Priority.Low );
-			}
-
-			Audio.Play( To.Single( Client ), "kill_confirmed" );
-
-			KillStreak++;
-			TimeSinceLastKill = 0f;
-		}
-
-		private void SwitchToBestWeapon()
-		{
-			var best = Children.Select( x => x as Weapon )
-			.Where( x => x.IsValid() )
-			.OrderBy( x => x.Bucket )
-			.FirstOrDefault();
-
-			if ( best == null ) return;
-
-			ActiveChild = best;
 		}
 	}
 }
