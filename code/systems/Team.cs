@@ -18,7 +18,7 @@ namespace PaintBall
 			switch ( team )
 			{
 				case Team.Blue:
-					return Color.Blue;
+					return Color.FromBytes( 0, 146, 255 );
 				case Team.Red:
 					return Color.Red;
 				default:
