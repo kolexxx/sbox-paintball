@@ -3,7 +3,7 @@ using System;
 
 namespace PaintBall
 {
-	public partial class Weapon : BaseWeapon
+	public abstract partial class Weapon : BaseWeapon
 	{
 		[Net, Predicted] public int AmmoClip { get; set; }
 		[Net, Predicted] public bool IsReloading { get; protected set; }
@@ -23,10 +23,7 @@ namespace PaintBall
 		public TimeSince TimeSinceDropped { get; private set; }
 		public virtual bool UnlimitedAmmo => false;
 
-		public Weapon()
-		{
-			EnableShadowInFirstPerson = false;
-		}
+		public Weapon() { }
 
 		public override void Spawn()
 		{
@@ -91,7 +88,7 @@ namespace PaintBall
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f )
+			if ( !Game.Instance.CurrentGameState.FreezeTime )
 				return false;
 
 			if ( Automatic == false && !Input.Pressed( InputButton.Attack1 ) )
@@ -230,7 +227,7 @@ namespace PaintBall
 			// Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
 
 			if ( IsLocalPawn )
-				_ = new Sandbox.ScreenShake.Perlin( 1f, 0.2f, 0.8f );	
+				_ = new Sandbox.ScreenShake.Perlin( 1f, 0.2f, 0.8f );
 
 			ViewModelEntity?.SetAnimBool( "fire", true );
 			CrosshairPanel?.CreateEvent( "fire" );
