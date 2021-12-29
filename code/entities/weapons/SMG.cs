@@ -8,10 +8,10 @@ namespace PaintBall
 	{
 		public override bool Automatic => true;
 		public override int Bucket => 0;
-		public override int ClipSize => 20;
+		public override int ClipSize => 30;
 		public override float Gravity => 7f;
 		public override string Icon => "ui/weapons/smg.png";
-		public override float PrimaryRate => 7f;
+		public override float PrimaryRate => 8f;
 		public override float ProjectileRadius => 3f;
 		public override float ReloadTime => 3f;
 		public override float Speed => 2500f;

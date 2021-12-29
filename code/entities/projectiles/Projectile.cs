@@ -88,9 +88,7 @@ namespace PaintBall
 			}
 
 			if ( !string.IsNullOrEmpty( FollowEffect ) )
-			{
 				Follower = Particles.Create( FollowEffect, this );
-			}
 
 			if ( !string.IsNullOrEmpty( Model ) )
 				ModelEntity = SceneObject.CreateModel( Model );
@@ -156,10 +154,7 @@ namespace PaintBall
 			}
 		}
 
-		protected virtual void OnExplode()
-		{
-
-		}
+		protected virtual void OnExplode() { }
 
 		[Event.Tick.Client]
 		protected virtual void ClientTick()

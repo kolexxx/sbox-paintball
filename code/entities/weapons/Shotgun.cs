@@ -66,9 +66,9 @@ namespace PaintBall
 
 				return;
 			}
-
-			TimeSincePrimaryAttack = 0;
+	
 			AmmoClip--;
+			TimeSincePrimaryAttack = 0;
 
 			(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
 
@@ -86,39 +86,10 @@ namespace PaintBall
 
 		public override void Simulate( Client owner )
 		{
-			if ( TimeSinceDeployed < 0.6f )
-				return;
+			base.Simulate( owner );
 
-			if ( !IsReloading )
-			{
-				if ( CanReload() )
-					Reload();
-
-				if ( !Owner.IsValid() )
-					return;
-
-				if ( CanPrimaryAttack() )
-				{
-					TimeSincePrimaryAttack = 0;
-					AttackPrimary();
-				}
-
-				if ( !Owner.IsValid() )
-					return;
-
-				if ( CanSecondaryAttack() )
-				{
-					TimeSinceSecondaryAttack = 0;
-					AttackSecondary();
-				}
-			}
-			else if ( Input.Pressed( InputButton.Attack1 ) )
-			{
+			if ( IsReloading && Input.Pressed( InputButton.Attack1 ) )	
 				_attackedDuringReload = true;
-			}
-
-			if ( IsReloading && TimeSinceReload > ReloadTime )
-				OnReloadFinish();
 		}
 
 		public override void OnReloadFinish()

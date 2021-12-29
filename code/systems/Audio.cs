@@ -36,13 +36,13 @@ namespace PaintBall
 			}
 		}
 
-		public static void PlayAll(string sound )
+		public static void PlayAll( string sound )
 		{
 			Play( To.Everyone, sound );
 		}
 
 		[ClientRpc]
-		public static void Play(string sound )
+		public static void Play( string sound )
 		{
 			Sound.FromScreen( sound );
 		}

@@ -39,11 +39,16 @@ namespace PaintBall
 		{
 			base.AttackPrimary();
 
+			TimeSincePrimaryAttack = 0;
+
 			if ( !IsServer )
 				return;
 
 			if ( AmmoClip == 0 )
-				Delete();
+			{
+				(Owner as Player).SwitchToBestWeapon();
+				Delete();			
+			}
 		}
 	}
 }

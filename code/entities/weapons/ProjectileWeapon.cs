@@ -2,7 +2,7 @@
 
 namespace PaintBall
 {
-	public abstract partial class ProjectileWeapon<T> : Weapon where T : Projectile, new()
+	public partial class ProjectileWeapon<T> : Weapon where T : Projectile, new()
 	{
 		public virtual string FollowEffect => $"particles/{(Owner as Player)?.Team.GetString()}_glow.vpcf";
 		public virtual float Gravity => 0f;
@@ -15,6 +15,8 @@ namespace PaintBall
 
 		public override void AttackPrimary()
 		{
+			base.AttackPrimary();
+
 			if ( AmmoClip == 0 )
 			{
 				if ( !UnlimitedAmmo && ReserveAmmo == 0 )
@@ -24,11 +26,12 @@ namespace PaintBall
 				}
 
 				Reload();
+
 				return;
 			}
 
-			TimeSincePrimaryAttack = 0;
 			AmmoClip--;
+			TimeSincePrimaryAttack = 0;
 
 			(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
 
@@ -46,9 +49,6 @@ namespace PaintBall
 		{
 			if ( Owner is not Player owner )
 				return;
-
-			//if ( IsLocalPawn )
-			//Log.Info( owner.Projectiles.IsValid() );
 
 			var projectile = new T()
 			{
