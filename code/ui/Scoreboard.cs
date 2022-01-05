@@ -2,6 +2,7 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PaintBall
 {
@@ -29,7 +30,9 @@ namespace PaintBall
 			_header.Add.Label( "Deaths" );
 			_header.Add.Label( "Ping" );
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 11 ).IsVisible );
+			Initialize();
+
+			BindClass( "hidden", () => Local.Hud.GetChild( 10 ).IsVisible );
 		}
 
 		public override void Tick()
@@ -55,43 +58,43 @@ namespace PaintBall
 			}
 		}
 
-		public ScoreboardEntry AddEntry( Client client, Team team )
-		{
-			var e = _sections[(int)team].AddChild<ScoreboardEntry>();
-			e.Client = client;
-
-			return e;
-		}
-
-		public void UpdateEntry( Client client, Team team )
-		{
-			if ( !client.IsValid() )
-				return;
-
-			if ( _entries.ContainsKey( client ) )
-			{
-				var e = _entries[client];
-				e?.Delete();
-
-				e = AddEntry( client, team );
-				_entries[client] = e;
-			}
-			else
-			{
-				var e = AddEntry( client, team );
-				_entries[client] = e;
-			}
-		}
-
-		[PBEvent.Client.Joined]
-		public void ClientJoined( Client client )
+		public ScoreboardEntry AddEntry( Client client )
 		{
 			Team team = Team.None;
 
 			if ( client.Pawn.IsValid() )
 				team = (client.Pawn as Player).Team;
 
-			var e = AddEntry( client, team );
+			var e = _sections[(int)team].AddChild<ScoreboardEntry>();
+			e.Client = client;
+
+			return e;
+		}
+
+		[PBEvent.Player.TeamChanged]
+		public void UpdateEntry( Player player, Team oldTeam )
+		{
+			var client = player.Client;
+
+			if ( !client.IsValid() )
+				return;
+
+			var e = _entries[client];
+
+			if ( _entries.ContainsKey( client ) )
+				e?.Delete();
+
+			e = AddEntry( client );
+			_entries[client] = e;
+		}
+
+		[PBEvent.Client.Joined]
+		public void ClientJoined( Client client )
+		{
+			if ( _entries.ContainsKey( client ) )
+				return;
+
+			var e = AddEntry( client );
 			_entries[client] = e;
 		}
 
@@ -102,6 +105,19 @@ namespace PaintBall
 			{
 				e?.Delete();
 				_entries.Remove( client );
+			}
+		}
+
+		[Event.Hotload]
+		private void Initialize()
+		{
+			if ( !Host.IsClient )
+				return;
+
+			foreach ( var client in Client.All.Except( _entries.Keys ) )
+			{
+				var e = AddEntry( client );
+				_entries[client] = e;
 			}
 		}
 
