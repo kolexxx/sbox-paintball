@@ -10,7 +10,7 @@ namespace PaintBall
 		[Net] public new float DefaultSpeed { get; set; } = 250.0f;
 		public override float GetWishSpeed()
 		{
-			if ( !Game.Instance.CurrentGameState.FreezeTime )
+			if ( !Game.Current.CurrentGameState.FreezeTime )
 				return 0f;
 
 			var ws = Duck.GetWishSpeed();
@@ -25,7 +25,7 @@ namespace PaintBall
 
 		public override void CheckJumpButton()
 		{
-			if ( !Game.Instance.CurrentGameState.FreezeTime )
+			if ( !Game.Current.CurrentGameState.FreezeTime )
 				return;
 
 			base.CheckJumpButton();

@@ -32,8 +32,8 @@ namespace PaintBall
 		Head = 1,
 		Chest = 2,
 		Stomach = 3,
-		LeftArm = 4,
-		RightArm = 5,
+		RightArm = 4,
+		LeftArm = 5,
 		LeftLeg = 6,
 		RightLeg = 7,
 		Gear = 10,
@@ -43,8 +43,9 @@ namespace PaintBall
 	public partial class Player
 	{
 		public int ConsecutiveKills { get; private set; }
-		public int KillStreak { get; private set; }
+		public int KillStreak { get; set; }
 		public DamageInfo LastDamageInfo { get; private set; }
+		public int LastHitboxIndex { get; set; }
 		public TimeSince TimeSinceLastKill { get; private set; }
 		private static readonly string[] _consecutiveKillSounds = { "double_kill", "multi_kill", "ultra_kill", "monster_kill" };
 
@@ -67,20 +68,21 @@ namespace PaintBall
 				if ( attacker is Player killer )
 					killer?.OnPlayerKill( LastDamageInfo );
 
-				Game.Instance.CurrentGameState?.OnPlayerKilled( this, attacker, LastDamageInfo );
+				Game.Current.CurrentGameState?.OnPlayerKilled( this, attacker, LastDamageInfo );
 			}
 			else
 			{
-				Game.Instance.CurrentGameState?.OnPlayerKilled( this, null, LastDamageInfo );
+				Game.Current.CurrentGameState?.OnPlayerKilled( this, null, LastDamageInfo );
 			}
 
-			Event.Run( PBEvent.Player.Killed, this, LastAttacker );
-			RPC.OnPlayerKilled( this, LastAttacker );
+			Event.Run( PBEvent.Player.Killed, this, attacker );
+			RPC.OnPlayerKilled( this, attacker, LastHitboxIndex );
 		}
 
 		public override void TakeDamage( DamageInfo info )
 		{
 			LastDamageInfo = info;
+			LastHitboxIndex = info.HitboxIndex;
 
 			base.TakeDamage( info );
 		}
@@ -91,30 +93,31 @@ namespace PaintBall
 				ConsecutiveKills = 0;
 
 			ConsecutiveKills++;
+			KillStreak++;
+			TimeSinceLastKill = 0f;
 
 			if ( info.Weapon is Knife )
 			{
 				Health = 100;
 
-				Audio.Announce( "humiliation", Audio.Priority.Low );
+				Audio.AnnounceAll( "humiliation", Audio.Priority.Low );
+
+				return;
 			}
 			else if ( ConsecutiveKills >= 2 )
 			{
 				int index = ConsecutiveKills - 2;
 				index = Math.Min( index, 3 );
 
-				Audio.Announce( _consecutiveKillSounds[index], Audio.Priority.Low );
+				Audio.AnnounceAll( _consecutiveKillSounds[index], Audio.Priority.Low );
 			}
 			else if ( info.HitboxIndex == (int)HitboxIndex.Head )
 			{
-				Audio.Announce( "headshot", Audio.Priority.Low );
+				Audio.AnnounceAll( "headshot", Audio.Priority.Low );
 			}
 
 
 			Audio.Play( To.Single( Client ), "kill_confirmed" );
-
-			KillStreak++;
-			TimeSinceLastKill = 0f;
 		}
 
 		public void SwitchToBestWeapon()
