@@ -8,7 +8,6 @@ scoreboard
     height: 100%;
     //transform: translateX(-50%) translateY(-50%);
     transition: all 0.1s ease-out;
-    transform: scale( 1.05 );
     transform-origin: 50% 50%;
     align-items: center;
     justify-content: center;
@@ -17,7 +16,6 @@ scoreboard
     &.open
     {
         opacity: 1;
-        transform: scale(1);
     }
 
     panel

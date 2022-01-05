@@ -38,7 +38,7 @@ namespace PaintBall
 			if ( player == null )
 				return;
 
-			var game = Game.Instance;
+			var game = Game.Current;
 			if ( game == null )
 				return;
 
@@ -50,11 +50,6 @@ namespace PaintBall
 				Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
 			else
 				Timer.Text = "";
-		}
-
-		public void Close()
-		{
-			_open = false;
 		}
 
 		public void BecomeSpectator()
@@ -70,6 +65,18 @@ namespace PaintBall
 		public void JoinRed()
 		{
 			Player.ChangeTeamCommand( Team.Red );
-		}		
+		}
+		
+		[PBEvent.Player.TeamChanged]
+		public void OnPlayerTeamChanged(Player player, Team oldTeam )
+		{
+			if ( player.IsLocalPawn )
+				Close();
+		}
+
+		private void Close()
+		{
+			_open = false;
+		}
 	}
 }
