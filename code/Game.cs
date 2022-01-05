@@ -7,9 +7,9 @@ namespace PaintBall
 	public partial class Game : Sandbox.Game
 	{
 		public Hud Hud { get; set; }
-		public static Game Instance
+		public new static Game Current
 		{
-			get => Current as Game;
+			get; protected set;
 		}
 
 		[Net, Change( nameof( OnStateChanged ) )]
@@ -22,6 +22,8 @@ namespace PaintBall
 
 		public Game()
 		{
+			Current = this;
+
 			if ( IsServer )
 			{
 				PrecacheAssets();
@@ -54,9 +56,9 @@ namespace PaintBall
 			Event.Run( PBEvent.Client.Joined, client );
 			RPC.ClientJoined( client );
 
-			CurrentGameState?.OnPlayerJoin( player );
-
 			base.ClientJoined( client );
+
+			CurrentGameState?.OnPlayerJoin( player );	
 		}
 
 		public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
@@ -173,6 +175,9 @@ namespace PaintBall
 		public void CleanUp()
 		{
 			Sandbox.Internal.Decals.RemoveFromWorld();
+
+			foreach ( var grenade in All.OfType<Grenade>() )
+				grenade.Delete();
 
 			foreach ( var spawnpoint in All.OfType<PlayerSpawnPoint>() )
 				spawnpoint.Occupied = false;
