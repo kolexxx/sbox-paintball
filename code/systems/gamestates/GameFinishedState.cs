@@ -11,7 +11,7 @@ namespace PaintBall
 			base.OnSecond();
 
 			if ( Host.IsServer && Time.Now >= StateEndTime )
-				Game.Instance.ChangeState( new WaitingForPlayersState() );
+				Game.Current.ChangeState( new WaitingForPlayersState() );
 		}
 
 		public override void Start()
@@ -21,7 +21,7 @@ namespace PaintBall
 			foreach ( var player in Players )
 				player.Inventory?.DeleteContents();
 
-			FreezeTime = 0f;
+			FreezeTime = 5f;
 
 			if ( Host.IsClient )
 				Scoreboard.Instance.Show = true;

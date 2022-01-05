@@ -19,6 +19,8 @@ namespace PaintBall
 			base.OnPlayerKilled( player, attacker, info );
 
 			player.Respawn();
+
+			Game.Current.MoveToSpawnpoint( player );
 		}
 
 		public override void OnPlayerSpawned( Player player )
@@ -36,10 +38,6 @@ namespace PaintBall
 
 			if ( Host.IsServer )
 			{
-				if ( Players.Count >= Game.MinPlayers )
-					Hud.UpdateCrosshairMessage( $"Starting in {TimeLeftSeconds}" );
-				else
-					Hud.UpdateCrosshairMessage( "Waiting for players..." );
 			}
 		}
 
@@ -52,7 +50,7 @@ namespace PaintBall
 				if ( Players.Count > 1 )
 				{
 					if ( TimeLeft <= 0 )
-						Game.Instance.ChangeState( new MainGameState() );
+						Game.Current.ChangeState( new MainGameState() );
 				}
 				else
 				{

@@ -36,7 +36,7 @@ namespace PaintBall
 		{
 			base.AttackSecondary();
 
-			MeleeAttack( 100f, 50f, 16f );	
+			MeleeAttack( 100f, 50f, 16f );
 		}
 
 		public override void SimulateAnimator( PawnAnimator anim )

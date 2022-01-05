@@ -55,9 +55,9 @@ namespace PaintBall
 
 		public void RemoveCorpse()
 		{
-			if ( IsServer )	
+			if ( IsServer )
 				RemoveCorpseOnClient();
-			
+
 			if ( Corpse != null && Corpse.IsValid() )
 			{
 				Corpse.Delete();

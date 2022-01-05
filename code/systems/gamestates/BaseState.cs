@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace PaintBall
 {
-	public partial class BaseState : BaseNetworkable
+	public abstract partial class BaseState : BaseNetworkable
 	{
 		[Net, Predicted] public TimeUntil FreezeTime { get; protected set; }
 		public virtual bool CanPlayerSuicide => false;
@@ -93,7 +93,7 @@ namespace PaintBall
 		{
 			if ( Host.IsServer && StateDuration > 0 )
 			{
-				Game.Instance.CleanUp();
+				Game.Current.CleanUp();
 				StateEndTime = Time.Now + StateDuration;
 			}
 		}

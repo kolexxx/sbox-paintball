@@ -26,13 +26,6 @@ namespace PaintBall
 			End
 		}
 
-		public override void OnPlayerJoin( Player player )
-		{
-			base.OnPlayerJoin( player );
-
-			Game.Instance.MoveToSpawnpoint( player );
-		}
-
 		public override void OnPlayerLeave( Player player )
 		{
 			base.OnPlayerLeave( player );
@@ -49,7 +42,7 @@ namespace PaintBall
 
 			// error
 			// player.Inventory.Add( new ProjectileWeapon<Projectile>() );
-			player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
+			player.Inventory.Add( Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun(), true );
 			player.Inventory.Add( new Pistol() );
 			player.Inventory.Add( new Knife() );
 
@@ -105,11 +98,7 @@ namespace PaintBall
 				case RoundState.Play:
 
 					if ( Host.IsServer && (AliveBlue == 0 || AliveRed == 0) )
-					{
 						RoundStateFinish();
-
-						return;
-					}
 
 					break;
 
@@ -156,7 +145,7 @@ namespace PaintBall
 
 					TeamBalance();
 
-					Game.Instance.CleanUp();
+					Game.Current.CleanUp();
 
 					foreach ( var player in Players )
 					{
@@ -182,7 +171,7 @@ namespace PaintBall
 
 				case RoundState.End:
 
-					Event.Run( PBEvent.Round.End );
+					Event.Run( PBEvent.Round.End, GetWinner() );
 
 					break;
 			}
@@ -209,8 +198,6 @@ namespace PaintBall
 
 					Team winner = GetWinner();
 
-					Hud.UpdateCrosshairMessage( winner + " wins!" );
-
 					Audio.AnnounceAll( $"{winner.GetString()}win", Audio.Priority.High );
 
 					_ = winner == Team.Blue ? BlueScore++ : RedScore++;
@@ -223,7 +210,7 @@ namespace PaintBall
 
 					if ( BlueScore == _toWinScore || RedScore == _toWinScore || _round == _roundLimit )
 					{
-						Game.Instance.ChangeState( new GameFinishedState() );
+						Game.Current.ChangeState( new GameFinishedState() );
 
 						return;
 					}
@@ -305,7 +292,7 @@ namespace PaintBall
 
 				case RoundState.End:
 
-					Event.Run( PBEvent.Round.End );
+					Event.Run( PBEvent.Round.End, GetWinner() );
 
 					return;
 			}
