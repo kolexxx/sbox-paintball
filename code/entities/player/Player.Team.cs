@@ -16,12 +16,15 @@ namespace PaintBall
 			Team oldTeam = Team;
 			Tags.Remove( $"{oldTeam.GetString()}player" );
 			Team = newTeam;
+
 			Tags.Add( $"{newTeam.GetString()}player" );
+
 			Client.SetInt( "team", (int)newTeam );
 
-			Hud.OnTeamChanged( To.Everyone, Client, newTeam );
+			Event.Run( PBEvent.Player.TeamChanged, this, oldTeam );
+			ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined Team {newTeam}", $"avatar:{Client.PlayerId}" );
 
-			Game.Instance.CurrentGameState.OnPlayerChangedTeam( this, oldTeam, newTeam );
+			Game.Current.CurrentGameState.OnPlayerChangedTeam( this, oldTeam, newTeam );
 		}
 
 		public void OnTeamChanged( Team oldTeam, Team newTeam )
@@ -31,6 +34,8 @@ namespace PaintBall
 				Local.Hud.RemoveClass( oldTeam.GetString() );
 				Local.Hud.AddClass( newTeam.GetString() );
 			}
+
+			Event.Run( PBEvent.Player.TeamChanged, this, oldTeam );
 		}
 
 		[ServerCmd( "changeteam", Help = "Changes the caller's team" )]
@@ -41,18 +46,12 @@ namespace PaintBall
 			if ( client == null || client.Pawn is not Player player )
 				return;
 
-			if ( player.Team == team || player.TimeSinceTeamChanged < 5f )
-			{
-				if ( team == Team.None )
-					Hud.CloseTeamSelect();
-
-				return;
-			}
+			if ( player.Team == team || player.TimeSinceTeamChanged <= 5f )
+				return;	
 
 			if ( team == Team.None )
 			{
 				player.SetTeam( team );
-				Hud.CloseTeamSelect();
 
 				return;
 			}
@@ -73,12 +72,6 @@ namespace PaintBall
 					player.SetTeam( team );
 				else if ( team == Team.Red && (redCount < blueCount) )
 					player.SetTeam( team );
-			}
-
-			if ( player.Team == team )
-			{
-				Hud.CloseTeamSelect();
-				ChatBox.AddInformation( To.Everyone, $"{client.Name} has joined Team {team}", $"avatar:{client.PlayerId}" );
 			}
 		}
 	}
