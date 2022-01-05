@@ -9,6 +9,7 @@ namespace PaintBall
 		public override int Bucket => 0;
 		public virtual int BulletsPerFire => 4;
 		public override int ClipSize => 5;
+		public override string CrosshairClass => "shotgun";
 		public override float Gravity => 7f;
 		public override string Icon => "ui/weapons/shotgun.png";
 		public override float PrimaryRate => 1f;
