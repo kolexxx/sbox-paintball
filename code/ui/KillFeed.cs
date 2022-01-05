@@ -15,7 +15,7 @@ namespace PaintBall
 
 			StyleSheet.Load( "/ui/KillFeed.scss" );
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 11 ).IsVisible );
+			BindClass( "hidden", () => Local.Hud.GetChild( 10 ).IsVisible );
 		}
 
 		public Panel AddEntry( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )

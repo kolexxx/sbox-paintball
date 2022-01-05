@@ -22,7 +22,7 @@ namespace PaintBall
 			for ( int i = 0; i < 5; i++ )
 				_slots[i] = new InventoryIcon( i + 1, this );
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 11 ).IsVisible );
+			BindClass( "hidden", () => Local.Hud.GetChild( 10 ).IsVisible );
 		}
 
 		public override void Tick()
@@ -96,14 +96,6 @@ namespace PaintBall
 				return;
 
 			input.ActiveChild = weapon;
-		}
-
-		public void Fix( InputBuilder input )
-		{
-			for ( int i = 4; i >= 0; i-- )
-			{
-				SetActiveSlot( input, i );
-			}
 		}
 
 		public class InventoryIcon : Panel
