@@ -13,6 +13,7 @@ namespace PaintBall
 		public virtual bool Automatic => false;
 		public virtual int Bucket => 0;
 		public virtual int ClipSize => 20;
+		public virtual string CrosshairClass => "standard";
 		public virtual bool Droppable => true;
 		public virtual string FireSound => "pbg";
 		public virtual string Icon => "ui/weapons/pistol.png";
@@ -36,7 +37,6 @@ namespace PaintBall
 			};
 
 			PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
-			EnableLagCompensation = true;
 		}
 
 		public override void ClientSpawn()
@@ -49,6 +49,7 @@ namespace PaintBall
 			if ( !IsLocalPawn && IsActiveChild() )
 			{
 				CreateViewModel();
+				CreateHudElements();
 
 				if ( player.LifeState == LifeState.Alive || player.CurrentPlayer != Owner )
 					ViewModelEntity.EnableDrawing = false;
@@ -88,7 +89,7 @@ namespace PaintBall
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( !Game.Instance.CurrentGameState.FreezeTime )
+			if ( !Game.Current.CurrentGameState.FreezeTime )
 				return false;
 
 			if ( Automatic == false && !Input.Pressed( InputButton.Attack1 ) )
@@ -105,7 +106,7 @@ namespace PaintBall
 
 		public override bool CanSecondaryAttack()
 		{
-			if ( Game.Instance.CurrentGameState.FreezeTime <= 5f )
+			if ( !Game.Current.CurrentGameState.FreezeTime )
 				return false;
 
 			if ( !Input.Pressed( InputButton.Attack2 ) )
@@ -157,6 +158,19 @@ namespace PaintBall
 			ViewModelEntity.SetModel( ViewModelPath );
 		}
 
+		public override void CreateHudElements()
+		{
+			if ( Local.Hud == null ) return;
+
+			CrosshairPanel = new Crosshair
+			{
+				Parent = Local.Hud,
+				TargetWeapon = this
+			};
+
+			CrosshairPanel.AddClass( CrosshairClass );
+		}
+
 		public virtual void OnReloadFinish()
 		{
 			IsReloading = false;
@@ -200,23 +214,26 @@ namespace PaintBall
 		[ClientRpc]
 		protected void OnActiveStartClient()
 		{
-			if ( !IsLocalPawn && ViewModelEntity == null )
-			{
-				CreateViewModel();
+			if ( IsLocalPawn || ViewModelEntity != null )
+				return;
 
-				if ( (Local.Pawn as Player).CurrentPlayer != Owner )
-					ViewModelEntity.EnableDrawing = false;
+			CreateViewModel();
 
-				ViewModelEntity?.SetAnimBool( "deploy", true );
-			}
+			if ( (Local.Pawn as Player).CurrentPlayer != Owner )
+				ViewModelEntity.EnableDrawing = false;
+
+			ViewModelEntity?.SetAnimBool( "deploy", true );
 		}
 
 
 		[ClientRpc]
 		protected void OnActiveEndClient()
 		{
-			if ( !IsLocalPawn )
-				DestroyViewModel();
+			if ( IsLocalPawn )
+				return;
+
+			DestroyHudElements();
+			DestroyViewModel();
 		}
 
 		[ClientRpc]
