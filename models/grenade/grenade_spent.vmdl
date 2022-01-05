@@ -21,10 +21,10 @@
 						parent_bone = ""
 						import_filter = 
 						{
-							exclude_by_default = false
+							exclude_by_default = true
 							exception_list = 
 							[
-								"Pin",
+								"Grenade",
 							]
 						}
 					},
@@ -57,13 +57,12 @@
 				children = 
 				[
 					{
-						_class = "PhysicsShapeCapsule"
+						_class = "PhysicsShapeSphere"
 						parent_bone = ""
 						surface_prop = "rubber"
 						collision_prop = "default"
-						radius = 3.04824
-						point0 = [ 0.0, 0.0, 7.807292 ]
-						point1 = [ 0.0, 0.0, 2.68389 ]
+						radius = 3.371959
+						center = [ 0.0, 0.0, 4.02459 ]
 					},
 				]
 			},
@@ -73,25 +72,9 @@
 				[
 					{
 						_class = "GenericGameData"
-						game_class = "explosion_behavior"
-						game_keys = 
-						{
-							explosion_type = "grenade"
-							explosive_damage = 100.0
-							explosive_radius = -1.0
-							explosive_force = -1.0
-							explosion_delay = -1.0
-							explosion_buildup = ""
-							explosion_custom_effect = resource:"particles/explosion/barrel_explosion/explosion_barrel.vpcf"
-							explosion_custom_sound = "rust_pumpshotgun.shootdouble"
-						}
-					},
-					{
-						_class = "GenericGameData"
 						game_class = "prop_data"
 						game_keys = 
 						{
-							base = ""
 							allowstatic = false
 							bakelighting = true
 							spawn_motion_disabled = false

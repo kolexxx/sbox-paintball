@@ -4,54 +4,76 @@ using System;
 namespace PaintBall
 {
 	[Library]
-	public partial class Grenade : Projectile
+	public partial class Grenade : ModelEntity
 	{
-		public float Bounciness { get; set; } = 0.3f;
-		public override bool ExplodeOnDestroy => true;
-		public override float LifeTime => 5f;
-		private const float _pi4 = (float)Math.PI / 4;
+		public Action<Projectile, Entity, int> Callback { get; set; }
+		public RealTimeUntil DestroyTime { get; set; }
+		public virtual float LifeTime => 3f;
+		private static float _sqrt2over2 = (float)Math.Sqrt( 2 ) / 2f;
+		// ATTENTION! THIS IS REALLY SHIT! THIS CAN BE DONE USING A SIMPLE FOR LOOP WITH ORIENTATION!
 		private static readonly Vector3[] s_directions =
 		{
-			Vector3.Up,
 			Vector3.Left,
 			Vector3.Right,
 			Vector3.Backward,
 			Vector3.Forward,
-			new Vector3(_pi4,-_pi4, 0),
-			new Vector3(_pi4,_pi4, 0),
-			new Vector3(-_pi4,_pi4, 0),
-			new Vector3(-_pi4,-_pi4, 0),
-			new Vector3(_pi4,-_pi4, _pi4/2),
-			new Vector3(_pi4,_pi4, _pi4/2),
-			new Vector3(-_pi4,_pi4, _pi4/2),
-			new Vector3(-_pi4,-_pi4, _pi4/2),
-			Vector3.Left + new Vector3(0, 0, _pi4/4),
-			Vector3.Right + new Vector3(0, 0, _pi4/4),
-			Vector3.Backward + new Vector3(0, 0, _pi4/4),
-			Vector3.Forward + new Vector3(0, 0, _pi4/4)
+			new Vector3(_sqrt2over2,-_sqrt2over2, 0),
+			new Vector3(_sqrt2over2,_sqrt2over2, 0),
+			new Vector3(-_sqrt2over2,_sqrt2over2, 0),
+			new Vector3(-_sqrt2over2,-_sqrt2over2, 0),
+			new Vector3((float)Math.Sin(Math.PI/8),-(float)Math.Cos(Math.PI/8), 0),
+			new Vector3((float)Math.Sin(Math.PI/8),(float)Math.Cos(Math.PI/8), 0),
+			new Vector3(-(float)Math.Sin(Math.PI/8),(float)Math.Cos(Math.PI/8), 0),
+			new Vector3(-(float)Math.Sin(Math.PI/8),-(float)Math.Cos(Math.PI/8), 0),
+			new Vector3((float)Math.Cos(Math.PI/8),-(float)Math.Sin(Math.PI/8), 0),
+			new Vector3((float)Math.Cos(Math.PI/8),(float)Math.Sin(Math.PI/8), 0),
+			new Vector3(-(float)Math.Cos(Math.PI/8),(float)Math.Sin(Math.PI/8), 0),
+			new Vector3(-(float)Math.Cos(Math.PI/8),-(float)Math.Sin(Math.PI/8), 0),
+			new Vector3((float)Math.Sin(Math.PI/8),-(float)Math.Cos(Math.PI/8), _sqrt2over2/4),
+			new Vector3((float)Math.Sin(Math.PI/8),(float)Math.Cos(Math.PI/8), _sqrt2over2/4),
+			new Vector3(-(float)Math.Sin(Math.PI/8),(float)Math.Cos(Math.PI/8), _sqrt2over2/4),
+			new Vector3(-(float)Math.Sin(Math.PI/8),-(float)Math.Cos(Math.PI/8), _sqrt2over2/4),
+			new Vector3((float)Math.Cos(Math.PI/8),-(float)Math.Sin(Math.PI/8), _sqrt2over2/4),
+			new Vector3((float)Math.Cos(Math.PI/8),(float)Math.Sin(Math.PI/8), _sqrt2over2/4),
+			new Vector3(-(float)Math.Cos(Math.PI/8),(float)Math.Sin(Math.PI/8), _sqrt2over2/4),
+			new Vector3(-(float)Math.Cos(Math.PI/8),-(float)Math.Sin(Math.PI/8), _sqrt2over2/4),
+			new Vector3(_sqrt2over2,-_sqrt2over2, _sqrt2over2/4),
+			new Vector3(_sqrt2over2,_sqrt2over2, _sqrt2over2/4),
+			new Vector3(-_sqrt2over2,_sqrt2over2, _sqrt2over2/4),
+			new Vector3(-_sqrt2over2,-_sqrt2over2, _sqrt2over2/4),
+			Vector3.Left + new Vector3(0, 0, _sqrt2over2/4),
+			Vector3.Right + new Vector3(0, 0, _sqrt2over2/4),
+			Vector3.Backward + new Vector3(0, 0, _sqrt2over2/4),
+			Vector3.Forward + new Vector3(0, 0, _sqrt2over2/4)
 		};
 
-		protected override bool HasHitTarget( TraceResult trace )
+		public override void Spawn()
 		{
-			if ( trace.Hit )
-			{
-				var reflect = Vector3.Reflect( Velocity.Normal, trace.Normal );
+			base.Spawn();
 
-				GravityModifier = 0f;
-				Velocity = reflect * Velocity.Length * Bounciness;
-
-				return false;
-			}
-
-			return base.HasHitTarget( trace );
+			DestroyTime = LifeTime;
+			SetModel( "models/grenade/grenade_spent.vmdl" );
+			MoveType = MoveType.Physics;
+			UsePhysicsCollision = true;
+			SetInteractsAs( CollisionLayer.All );
+			SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
+			SetInteractsExclude( CollisionLayer.Player | CollisionLayer.Debris );
+			Tags.Add( "grenade" );
 		}
 
-		protected override void OnExplode()
+		[Event.Tick.Server]
+		public void ServerTick()
+		{
+			if ( DestroyTime )
+			{
+				OnExplode();
+				Delete();
+			}
+		}
+
+		protected void OnExplode()
 		{
 			if ( Owner is not Player owner )
-				return;
-
-			if ( IsClientOnly && !IsLocalPawn )
 				return;
 
 			foreach ( var direction in s_directions )
@@ -61,18 +83,17 @@ namespace PaintBall
 					Owner = owner,
 					Team = owner.Team,
 					FollowEffect = $"particles/{owner.Team.GetString()}_glow.vpcf",
-					HitSound = HitSound,
-					IgnoreTag = IgnoreTag,
+					HitSound = "impact",
+					IgnoreTag = $"{owner.Team.GetString()}player",
 					Scale = 0.25f,
-					Radius = Radius,
 					Gravity = 0f,
-					Simulator = owner.Projectiles,
-					Model = $"models/{owner.Team.GetString()}_ball/ball.vmdl"
+					Model = $"models/{owner.Team.GetString()}_ball/ball.vmdl",
+					IsServerOnly = true
 				};
 
-				var velocity = direction * 2500f;
+				var velocity = direction * 1000f;
 
-				projectile.Initialize( Position, velocity, Callback );
+				projectile.Initialize( PhysicsBody.MassCenter, velocity, 4f, Callback );
 			}
 		}
 	}
