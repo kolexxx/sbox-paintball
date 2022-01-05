@@ -2,7 +2,7 @@
 
 namespace PaintBall
 {
-	public partial class ProjectileWeapon<T> : Weapon where T : Projectile, new()
+	public abstract partial class ProjectileWeapon<T> : Weapon where T : Projectile, new()
 	{
 		public virtual string FollowEffect => $"particles/{(Owner as Player)?.Team.GetString()}_glow.vpcf";
 		public virtual float Gravity => 0f;
@@ -52,7 +52,7 @@ namespace PaintBall
 
 			var projectile = new T()
 			{
-				Owner = this,
+				Owner = owner,
 				Team = owner.Team,
 				FollowEffect = FollowEffect,
 				HitSound = HitSound,
