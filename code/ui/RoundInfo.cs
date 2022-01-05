@@ -20,7 +20,7 @@ namespace PaintBall
 		{
 			Instance = this;
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 8 ).IsVisible || Local.Hud.GetChild( 11 ).IsVisible );
+			BindClass( "hidden", () => Local.Hud.GetChild( 7 ).IsVisible || Local.Hud.GetChild( 10 ).IsVisible );
 		}
 
 		public override void Tick()
@@ -34,7 +34,7 @@ namespace PaintBall
 			if ( player == null )
 				return;
 
-			var game = Game.Instance;
+			var game = Game.Current;
 			if ( game == null )
 				return;
 
@@ -48,8 +48,14 @@ namespace PaintBall
 				Timer.Text = "";
 		}
 
+		[PBEvent.Round.Start]
+		private void RoundStart()
+		{
+			Bottom.SetClass( "show", false );
+		}
+
 		[PBEvent.Round.New]
-		public void OnNewRound()
+		private void OnNewRound()
 		{
 			Team team = (Local.Pawn as Player).Team;
 
@@ -57,19 +63,7 @@ namespace PaintBall
 				return;
 
 			Bottom.SetClass( "show", true );
-			Message.Text = $"Playing on Team {team}";
-			_ = HideMessage();
-		}
-
-		[PBEvent.Round.End]
-		public void RoundEnd()
-		{
-		}
-
-		private async Task HideMessage()
-		{
-			await Task.Delay( 5000 );
-			Bottom.SetClass( "show", false );
-		}
+			Message.Text = $"PLAYING ON TEAM {team.GetString().ToUpper()}";
+		}	
 	}
 }
