@@ -10,14 +10,15 @@ namespace PaintBall
 		[Net, Predicted] public string HitSound { get; set; } = "";
 		[Net, Predicted] public string Model { get; set; } = "";
 		[Net, Predicted] public string TrailEffect { get; set; } = "";
+		[Net] public bool IsServerOnly { get; set; } = false;
 		public string Attachment { get; set; } = null;
 		public Action<Projectile, Entity, int> Callback { get; private set; }
 		public RealTimeUntil CanHitTime { get; set; } = 0.1f;
 		public virtual bool ExplodeOnDestroy => false;
-		public float Gravity { get; set; } = 10f;
+		public float Gravity { get; set; } = 0f;
 		public string IgnoreTag { get; set; }
 		public virtual float LifeTime => 10f;
-		public float Radius { get; set; } = 8f;
+		public float Radius { get; set; } = 4f;
 		public ProjectileSimulator Simulator { get; set; }
 		public Vector3 StartPosition { get; private set; }
 		public Team Team { get; set; }
@@ -37,7 +38,7 @@ namespace PaintBall
 		{
 			DestroyTime = LifeTime;
 
-			if ( Simulator != null && Simulator.IsValid() )
+			if ( Simulator != null && Simulator.IsValid() && !IsServerOnly )
 			{
 				Simulator?.Add( this );
 				Owner = Simulator.Owner;
@@ -69,7 +70,7 @@ namespace PaintBall
 		public override void ClientSpawn()
 		{
 			// We only want to create effects if we don't have a client proxy.
-			if ( !HasClientProxy() )
+			if ( IsServerOnly || !HasClientProxy() )
 				CreateEffects();
 
 			base.ClientSpawn();
@@ -105,12 +106,10 @@ namespace PaintBall
 			var trace = Trace.Ray( Position, newPosition )
 				.UseHitboxes()
 				.Size( Radius )
-				.WithoutTags( "baseprojectile" )
-				.WithoutTags( IgnoreTag )
+				.WithoutTags( "baseprojectile", IgnoreTag, "grenade" )
 				.Run();
 
 			Position = trace.EndPos;
-			Rotation = Rotation.From( trace.Direction.EulerAngles );
 
 			if ( DestroyTime )
 			{
@@ -123,7 +122,7 @@ namespace PaintBall
 
 			if ( HasHitTarget( trace ) )
 			{
-				if ( Host.IsServer && !string.IsNullOrEmpty( HitSound ) )
+				if ( IsServer && !string.IsNullOrEmpty( HitSound ) )
 				{
 					CreateDecal( $"decals/{Team.GetString()}.decal", trace );
 					Audio.Play( HitSound, Position );
