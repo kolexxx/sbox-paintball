@@ -25,7 +25,7 @@ namespace PaintBall
 			Projectiles = new( this );
 			EnableTouch = true;
 			EnableShadowInFirstPerson = true;
-
+	
 			LifeState = LifeState.Dead;
 		}
 
@@ -33,6 +33,7 @@ namespace PaintBall
 		{
 			TimeSinceSpawned = 0;
 			ConsecutiveKills = 0;
+			KillStreak = 0;
 
 			RemoveCorpse();
 
@@ -62,7 +63,7 @@ namespace PaintBall
 
 			ResetInterpolation();
 
-			Game.Instance.CurrentGameState.OnPlayerSpawned( this );
+			Game.Current.CurrentGameState.OnPlayerSpawned( this );
 		}
 
 		public override void Simulate( Client cl )
@@ -134,7 +135,7 @@ namespace PaintBall
 
 		public override void Spawn()
 		{
-			EnableLagCompensation = true;
+			Transmit = TransmitType.Always;
 
 			base.Spawn();
 		}
