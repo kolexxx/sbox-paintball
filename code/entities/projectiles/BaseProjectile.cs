@@ -1,10 +1,10 @@
 using Sandbox;
-using System;
+using Sandbox.Internal;
 
 namespace PaintBall
 {
 	[Library]
-	public partial class Projectile : ModelEntity
+	public partial class BaseProjectile : ModelEntity, IProjectile
 	{
 		[Net, Predicted] public string FollowEffect { get; set; } = "";
 		[Net, Predicted] public string HitSound { get; set; } = "";
@@ -12,29 +12,28 @@ namespace PaintBall
 		[Net, Predicted] public string TrailEffect { get; set; } = "";
 		[Net] public bool IsServerOnly { get; set; } = false;
 		public string Attachment { get; set; } = null;
-		public Action<Projectile, Entity, int> Callback { get; private set; }
 		public RealTimeUntil CanHitTime { get; set; } = 0.1f;
-		public virtual bool ExplodeOnDestroy => false;
+		public RealTimeUntil DestroyTime { get; set; }
 		public float Gravity { get; set; } = 0f;
 		public string IgnoreTag { get; set; }
 		public virtual float LifeTime => 10f;
+		public Entity Origin { get; set; }
 		public float Radius { get; set; } = 4f;
 		public ProjectileSimulator Simulator { get; set; }
 		public Vector3 StartPosition { get; private set; }
 		public Team Team { get; set; }
-		protected RealTimeUntil DestroyTime { get; set; }
 		protected Particles Follower { get; set; }
 		protected float GravityModifier { get; set; }
 		protected SceneObject ModelEntity { get; set; }
 		protected Particles Trail { get; set; }
 
-		public void Initialize( Vector3 start, Vector3 velocity, float radius, Action<Projectile, Entity, int> callback = null )
+		public void Initialize( Vector3 start, Vector3 velocity, float radius )
 		{
-			Initialize( start, velocity, callback );
+			Initialize( start, velocity );
 			Radius = radius;
 		}
 
-		public void Initialize( Vector3 start, Vector3 velocity, Action<Projectile, Entity, int> callback = null )
+		public void Initialize( Vector3 start, Vector3 velocity )
 		{
 			DestroyTime = LifeTime;
 
@@ -48,7 +47,6 @@ namespace PaintBall
 			PhysicsEnabled = false;
 			EnableDrawing = false;
 			Velocity = velocity;
-			Callback = callback;
 			Position = start;
 
 			if ( IsClientOnly )
@@ -113,22 +111,20 @@ namespace PaintBall
 
 			if ( DestroyTime )
 			{
-				if ( ExplodeOnDestroy )
-					OnExplode();
-
 				Delete();
 				return;
 			}
 
-			if ( HasHitTarget( trace ) )
+			if ( HasHitTarget( ref trace ) )
 			{
 				if ( IsServer && !string.IsNullOrEmpty( HitSound ) )
 				{
-					CreateDecal( $"decals/{Team.GetString()}.decal", trace );
+					CreateDecal( $"decals/{Team.GetString()}.decal", ref trace );
 					Audio.Play( HitSound, Position );
+
+					OnHit( ref trace );
 				}
 
-				Callback?.Invoke( this, trace.Entity, trace.Bone );
 				Delete();
 			}
 		}
@@ -138,22 +134,38 @@ namespace PaintBall
 			return !IsClientOnly && Owner.IsValid() && Owner.IsLocalPawn;
 		}
 
-		protected virtual bool HasHitTarget( TraceResult trace )
+		protected virtual bool HasHitTarget( ref TraceResult trace )
 		{
 			return (trace.Hit && CanHitTime) || trace.StartedSolid;
 		}
 
-		protected void CreateDecal( string decalname, TraceResult tr )
+		protected void CreateDecal( string decalname, ref TraceResult trace )
 		{
 			var decalPath = decalname;
 			if ( decalPath != null )
 			{
 				if ( DecalDefinition.ByPath.TryGetValue( decalPath, out var decal ) )
-					decal.PlaceUsingTrace( tr );
+					decal.PlaceUsingTrace( trace );
 			}
 		}
 
-		protected virtual void OnExplode() { }
+		protected virtual void OnHit( ref TraceResult trace )
+		{
+			if ( !trace.Entity.IsValid() )
+				return;
+
+			var info = new DamageInfo()
+				.WithAttacker( Owner )
+				.WithWeapon( Origin as Weapon )
+				.WithPosition( Position )
+				.WithForce( Velocity * 0.1f )
+				.UsingTraceResult( trace );
+
+			info.Damage = float.MaxValue;
+
+			trace.Entity.TakeDamage( info );
+		}
+
 
 		[Event.Tick.Client]
 		protected virtual void ClientTick()

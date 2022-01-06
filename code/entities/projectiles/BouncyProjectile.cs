@@ -4,12 +4,12 @@ using System;
 namespace PaintBall
 {
 	[Library]
-	public partial class BouncyProjectile : Projectile
+	public partial class BouncyProjectile : BaseProjectile
 	{
 		public float Bounciness { get; set; } = 0.6f;
 		public override float LifeTime => 5f;
 
-		protected override bool HasHitTarget( TraceResult trace )
+		protected override bool HasHitTarget( ref TraceResult trace )
 		{
 			if ( trace.Hit )
 			{
@@ -26,7 +26,7 @@ namespace PaintBall
 				return false;
 			}
 
-			return base.HasHitTarget( trace );
+			return base.HasHitTarget( ref trace );
 		}
 	}
 }

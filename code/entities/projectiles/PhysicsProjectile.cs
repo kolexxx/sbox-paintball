@@ -1,14 +1,17 @@
 ﻿using Sandbox;
+using Sandbox.Internal;
 using System;
 
 namespace PaintBall
 {
 	[Library]
-	public partial class Grenade : ModelEntity
+	public partial class PhysicsProjectile : ModelEntity, IProjectile
 	{
-		public Action<Projectile, Entity, int> Callback { get; set; }
 		public RealTimeUntil DestroyTime { get; set; }
-		public virtual float LifeTime => 3f;
+		public Entity Origin { get; set; }
+		public Team Team { get; set; }
+		public float LifeTime => 3f;
+
 		private static float _sqrt2over2 = (float)Math.Sqrt( 2 ) / 2f;
 		// ATTENTION! THIS IS REALLY SHIT! THIS CAN BE DONE USING A SIMPLE FOR LOOP WITH ORIENTATION!
 		private static readonly Vector3[] s_directions =
@@ -78,22 +81,23 @@ namespace PaintBall
 
 			foreach ( var direction in s_directions )
 			{
-				var projectile = new Projectile()
+				var projectile = new BaseProjectile()
 				{
 					Owner = owner,
-					Team = owner.Team,
+					Team = Team,
 					FollowEffect = $"particles/{owner.Team.GetString()}_glow.vpcf",
 					HitSound = "impact",
 					IgnoreTag = $"{owner.Team.GetString()}player",
 					Scale = 0.25f,
 					Gravity = 0f,
 					Model = $"models/{owner.Team.GetString()}_ball/ball.vmdl",
-					IsServerOnly = true
+					IsServerOnly = true,
+					Origin = Origin
 				};
 
 				var velocity = direction * 1000f;
 
-				projectile.Initialize( PhysicsBody.MassCenter, velocity, 4f, Callback );
+				projectile.Initialize( PhysicsBody.MassCenter, velocity, 4f);
 			}
 		}
 	}
