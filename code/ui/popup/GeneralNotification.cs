@@ -6,26 +6,39 @@ namespace PaintBall
 {
 	public class GeneralNotification : Panel
 	{
+		public static GeneralNotification Instance;
 		public Label Message;
-		private Panel _currentPopUp;
 
-		public GeneralNotification() { }
+		public GeneralNotification()
+		{
+			Instance = this;
+
+			Message = Add.Label( "", "text" );
+			StyleSheet.Load( "/ui/popup/GeneralNotification.scss" );
+		}
 
 		public override void Tick()
 		{
 			base.Tick();
 
-			if ( _currentPopUp == null )
-				return;
+			SetClass( "hidden", Local.Hud.GetChild( 7 ).IsVisible || Local.Hud.GetChild( 10 ).IsVisible || string.IsNullOrEmpty( Message.Text ) );
 		}
 
-		public void AddMessage( string text )
+		public void UpdateMessage( string text = "" )
 		{
-			if ( string.IsNullOrWhiteSpace( text ) )
-				return;
+			Message.Text = text;
+		}
 
-			_currentPopUp = Add.Panel();
-			Message = _currentPopUp.Add.Label( text );
+		[PBEvent.Round.New]
+		public void OnNewRound()
+		{
+			UpdateMessage();
+		}
+
+		[PBEvent.Round.End]
+		public void RoundEnd(Team winner )
+		{
+			UpdateMessage( $"{winner} wins" );
 		}
 	}
 }
