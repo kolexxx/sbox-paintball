@@ -10,7 +10,6 @@ namespace PaintBall
 		public override int ClipSize => 10;
 		public override float Gravity => 10f;
 		public override float PrimaryRate => 15f;
-		public override float ProjectileRadius => 3f;
 		public override float ReloadTime => 2.0f;
 		public override float Speed => 1500f;
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";

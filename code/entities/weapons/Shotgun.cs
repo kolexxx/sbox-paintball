@@ -4,7 +4,7 @@ namespace PaintBall
 {
 	[Library( "pb_shotgun", Title = "Shotgun", Spawnable = true )]
 	[Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
-	public partial class Shotgun : ProjectileWeapon<Projectile>
+	public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 	{
 		public override int Bucket => 0;
 		public virtual int BulletsPerFire => 4;
@@ -13,7 +13,6 @@ namespace PaintBall
 		public override float Gravity => 7f;
 		public override string Icon => "ui/weapons/shotgun.png";
 		public override float PrimaryRate => 1f;
-		public override float ProjectileRadius => 3f;
 		public override float ReloadTime => 0.7f;
 		public override float Speed => 2500f;
 		public override float Spread => 0.05f;

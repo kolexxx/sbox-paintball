@@ -2,13 +2,13 @@
 
 namespace PaintBall
 {
-	public abstract partial class ProjectileWeapon<T> : Weapon where T : Projectile, new()
+	public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProjectile, new()
 	{
 		public virtual string FollowEffect => $"particles/{(Owner as Player)?.Team.GetString()}_glow.vpcf";
 		public virtual float Gravity => 0f;
 		public virtual string HitSound => "impact";
 		public virtual string ProjectileModel => $"models/{(Owner as Player)?.Team.GetString()}_ball/ball.vmdl";
-		public virtual float ProjectileRadius => 4f;
+		public virtual float ProjectileRadius => 3f;
 		public virtual float ProjectileScale => 0.25f;
 		public virtual float Speed => 2000f;
 		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
@@ -62,7 +62,8 @@ namespace PaintBall
 				Gravity = Gravity,
 				Simulator = owner.Projectiles,
 				Model = ProjectileModel,
-				Rotation = owner.EyeRot
+				Rotation = owner.EyeRot,
+				Origin = this
 			};
 
 			var forward = owner.EyeRot.Forward;
@@ -73,27 +74,7 @@ namespace PaintBall
 
 			var velocity = forward * Speed;
 
-			projectile.Initialize( position, velocity, OnProjectileHit );
-		}
-
-		protected virtual void OnProjectileHit( Projectile projectile, Entity entity, int hitbox )
-		{
-			if ( IsServer && entity.IsValid() )
-				DealDamage( entity, projectile.Owner, projectile.Position, projectile.Velocity * 0.1f, hitbox );
-		}
-
-		protected void DealDamage( Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox )
-		{
-			var info = new DamageInfo()
-				.WithAttacker( attacker )
-				.WithWeapon( this )
-				.WithPosition( position )
-				.WithForce( force )
-				.WithHitbox( hitbox );
-
-			info.Damage = float.MaxValue;
-
-			entity.TakeDamage( info );
+			projectile.Initialize( position, velocity );
 		}
 	}
 }

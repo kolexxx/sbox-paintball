@@ -47,26 +47,31 @@ namespace PaintBall
 			CurrentGameState?.Start();
 		}
 
+		public override bool CanHearPlayerVoice( Client source, Client dest )
+		{
+			return true;
+		}
+
 		public override void ClientJoined( Client client )
 		{
 			var player = new Player();
 
 			client.Pawn = player;
 
-			Event.Run( PBEvent.Client.Joined, client );
-			RPC.ClientJoined( client );
-
 			base.ClientJoined( client );
 
-			CurrentGameState?.OnPlayerJoin( player );	
+			CurrentGameState?.OnPlayerJoin( player );
+
+			Event.Run( PBEvent.Client.Joined, client );
+			RPC.ClientJoined( client );
 		}
 
 		public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
 		{
+			CurrentGameState?.OnPlayerLeave( client.Pawn as Player );
+
 			Event.Run( PBEvent.Client.Disconnected, client, reason );
 			RPC.ClientDisconnected( client, reason );
-
-			CurrentGameState?.OnPlayerLeave( client.Pawn as Player );
 
 			base.ClientDisconnect( client, reason );
 		}
@@ -176,16 +181,13 @@ namespace PaintBall
 		{
 			Sandbox.Internal.Decals.RemoveFromWorld();
 
-			foreach ( var grenade in All.OfType<Grenade>() )
-				grenade.Delete();
-
 			foreach ( var spawnpoint in All.OfType<PlayerSpawnPoint>() )
 				spawnpoint.Occupied = false;
 
-			foreach ( var projectile in All.OfType<Projectile>() )
+			foreach ( var entity in All.OfType<ModelEntity>() )
 			{
-				if ( projectile.IsValid() )
-					projectile.Delete();
+				if ( entity is IProjectile )
+					entity.Delete();
 			}
 
 			foreach ( var weapon in All.OfType<Weapon>() )

@@ -256,6 +256,20 @@ namespace PaintBall
 			ViewModelEntity?.SetAnimBool( "reload", true );
 		}
 
+		public void DealDamage( Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox )
+		{
+			var info = new DamageInfo()
+				.WithAttacker( attacker )
+				.WithWeapon( this )
+				.WithPosition( position )
+				.WithForce( force )
+				.WithHitbox( hitbox );
+
+			info.Damage = float.MaxValue;
+
+			entity.TakeDamage( info );
+		}
+
 		protected virtual int TakeAmmo( int ammo )
 		{
 			if ( UnlimitedAmmo )

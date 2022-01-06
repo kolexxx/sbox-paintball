@@ -38,36 +38,16 @@ namespace PaintBall
 
 			using ( Prediction.Off() )
 			{
-				var ent = new Grenade();
+				var ent = new PhysicsProjectile();
 				ent.Rotation = Owner.EyeRot;
 				ent.Position = Owner.EyePos + (Owner.EyeRot.Forward * 40);
 				ent.Velocity = Owner.EyeRot.Forward * 1000 + Vector3.Up * 100;
-				ent.Callback = OnProjectileHit;
 				ent.Owner = Owner;
+				ent.Origin = this;
 
 				(Owner as Player).SwitchToBestWeapon();
 				Delete();
 			}
-		}
-
-		protected virtual void OnProjectileHit( Projectile projectile, Entity entity, int hitbox )
-		{
-			if ( IsServer && entity.IsValid() )
-				DealDamage( entity, projectile.Owner, projectile.Position, projectile.Velocity * 0.1f, hitbox );
-		}
-
-		protected void DealDamage( Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox )
-		{
-			var info = new DamageInfo()
-				.WithAttacker( attacker )
-				.WithWeapon( this )
-				.WithPosition( position )
-				.WithForce( force )
-				.WithHitbox( hitbox );
-
-			info.Damage = float.MaxValue;
-
-			entity.TakeDamage( info );
 		}
 	}
 }

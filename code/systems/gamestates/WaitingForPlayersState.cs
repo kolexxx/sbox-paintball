@@ -38,6 +38,10 @@ namespace PaintBall
 
 			if ( Host.IsServer )
 			{
+				if ( Players.Count > 1 )
+					Hud.UpdateMessage( $"Starting in {TimeLeftSeconds}" );
+				else
+					Hud.UpdateMessage( "Waiting for players..." );
 			}
 		}
 

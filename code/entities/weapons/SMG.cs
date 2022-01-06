@@ -4,7 +4,7 @@ namespace PaintBall
 {
 	[Library( "pb_smg", Title = "SMG", Spawnable = true )]
 	[Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
-	public partial class SMG : ProjectileWeapon<Projectile>
+	public partial class SMG : ProjectileWeapon<BaseProjectile>
 	{
 		public override bool Automatic => true;
 		public override int Bucket => 0;
@@ -12,7 +12,6 @@ namespace PaintBall
 		public override float Gravity => 7f;
 		public override string Icon => "ui/weapons/smg.png";
 		public override float PrimaryRate => 8f;
-		public override float ProjectileRadius => 3f;
 		public override float ReloadTime => 3f;
 		public override float Speed => 2500f;
 		public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
