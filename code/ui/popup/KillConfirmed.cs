@@ -14,7 +14,6 @@ namespace PaintBall
 			StyleSheet.Load( "/ui/popup/KillConfirmed.scss" );
 		}
 
-
 		[PBEvent.Player.Killed]
 		public void OnPlayerKilled( Player player, Entity attacker )
 		{
@@ -23,7 +22,7 @@ namespace PaintBall
 
 			_currentPopUp?.Delete();
 			_currentPopUp = AddChild<KillConfirmedEntry>();
-			_currentPopUp.Name.Text = $"YOU KILLED {player.Client.Name.ToUpper()}";
+			_currentPopUp.Name.Text = _currentPopUp.Name.Text = $"YOU KILLED {player.Client.Name.ToUpper()}"; ;
 			_currentPopUp.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
 			_currentPopUp.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastHitboxIndex ) );
 		}
@@ -63,7 +62,6 @@ namespace PaintBall
 
 			public void SetHit( HitboxGroup hitboxGroup )
 			{
-				Log.Info( hitboxGroup );
 				switch ( hitboxGroup )
 				{
 					case HitboxGroup.Head:

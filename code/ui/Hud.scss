@@ -7,6 +7,8 @@ rootpanel
     transition: background-color 0.2s ease-in;
     transform-origin: 50% 50%;
     font-family: Roboto;
+    align-items: center;
+    justify-content: center;
 
     &.spawnmenuopen
     {
