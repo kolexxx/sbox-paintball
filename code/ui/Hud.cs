@@ -42,6 +42,7 @@ namespace PaintBall
 			RootPanel.AddChild<SpectatorControls>();     // 8
 			RootPanel.AddChild<TeamIndicator>();         // 9
 			RootPanel.AddChild<TeamSelect>();            // 10
+			RootPanel.AddChild<VoiceList>();
 			RootPanel.AddChild<GeneralNotification>();
 		}
 	}
