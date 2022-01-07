@@ -55,7 +55,7 @@ roundinfo
     .left
     {
         margin: 0px 2px 0px 0px;
-        background-color: $blueColor;
+        background-color: $blue;
         width: 60px;
         text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     }
@@ -63,7 +63,7 @@ roundinfo
     .right
     {
         margin: 0px 0px 0px 2px;
-        background-color: $redColor;
+        background-color: $red;
         width: 60px;
         text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     }
@@ -98,14 +98,14 @@ roundinfo
 
         .bluescore
         {
-            color: $blueColor;
+            color: $blue;
             width: 44.5px;
             margin-right: 0.5px;
         }
 
         .redscore
         {
-            color: $redColor;
+            color: $red;
             width: 44.5px;
             margin-left: 0.5px;
         }
@@ -118,7 +118,7 @@ roundinfo
     {
         .message
         {
-            color: $redColor;
+            color: $red;
         }
     }
 }
@@ -129,7 +129,7 @@ roundinfo
     {
         .message
         {
-            color: $blueColor;
+            color: $blue;
         }
     }
 }
