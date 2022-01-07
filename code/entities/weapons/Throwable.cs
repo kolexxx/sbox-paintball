@@ -4,7 +4,7 @@ namespace PaintBall
 {
 	[Library( "pb_grenade", Title = "grenade", Spawnable = true )]
 	[Hammer.EditorModel( "models/grenade/grenade.vmdl" )]
-	public partial class Throwable : Weapon
+	public sealed partial class Throwable : Weapon
 	{
 		public override int Bucket => 3;
 		public override int ClipSize => 1;

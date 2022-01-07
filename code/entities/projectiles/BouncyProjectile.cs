@@ -4,7 +4,7 @@ using System;
 namespace PaintBall
 {
 	[Library]
-	public partial class BouncyProjectile : BaseProjectile
+	public sealed partial class BouncyProjectile : BaseProjectile
 	{
 		public float Bounciness { get; set; } = 0.6f;
 		public override float LifeTime => 5f;
