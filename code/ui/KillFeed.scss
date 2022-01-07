@@ -54,12 +54,12 @@ killfeedentry
 
     .red
     {
-        color: $redColor;
+        color: $red;
     }
 
     .blue
     {
-        color: $blueColor;
+        color: $blue;
     }
 
     .method
@@ -73,7 +73,7 @@ killfeedentry
 
     &.me
     {
-        background-color: rgba(255 255 255 0.6);
+        background-color: $transparentWhite;
         color: black;
 
         .method
