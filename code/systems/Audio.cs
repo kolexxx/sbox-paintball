@@ -4,7 +4,7 @@ namespace PaintBall
 {
 	public static partial class Audio
 	{
-		public enum Priority
+		public enum Priority : byte
 		{
 			None,
 			Low,
