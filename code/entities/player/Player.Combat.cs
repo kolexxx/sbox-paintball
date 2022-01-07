@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PaintBall
 {
-	public enum HitboxIndex
+	public enum HitboxIndex : sbyte
 	{
 		Pelvis = 1,
 		Stomach = 2,
@@ -25,7 +25,7 @@ namespace PaintBall
 		LeftFoot = 19,
 	}
 
-	public enum HitboxGroup
+	public enum HitboxGroup : sbyte
 	{
 		None = -1,
 		Generic = 0,
