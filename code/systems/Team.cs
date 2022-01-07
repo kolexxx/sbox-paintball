@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PaintBall
 {
-	public enum Team
+	public enum Team : byte
 	{
 		None,
 		Blue,
