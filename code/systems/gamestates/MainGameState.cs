@@ -18,7 +18,7 @@ namespace PaintBall
 		private int _round = 0;
 		private readonly float[] _roundStateDuration = { 5f, 60f, 5f };
 
-		public enum RoundState
+		public enum RoundState : byte
 		{
 			None,
 			Freeze,
@@ -115,7 +115,7 @@ namespace PaintBall
 			foreach ( var player in Players )
 				player.Reset();
 
-			CurrentRoundState = RoundState.Freeze; // No need for this.
+			CurrentRoundState = RoundState.Freeze;
 
 			if ( Host.IsServer )
 				RoundStateStart();
@@ -156,6 +156,9 @@ namespace PaintBall
 
 						player.Respawn();
 					}
+
+					if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
+						Hud.UpdateMessage( To.Everyone, "Matchpoint!" );
 
 					Event.Run( PBEvent.Round.New );
 
