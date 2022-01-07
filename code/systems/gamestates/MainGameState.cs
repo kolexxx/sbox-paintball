@@ -6,6 +6,12 @@ namespace PaintBall
 {
 	public partial class MainGameState : BaseState
 	{
+		[ServerVar( "pb_freeze_duration", Help = "The duration of the freeze period" )]
+		public static float FreezeDuration { get; set; } = 5f;
+		[ServerVar( "pb_play_duration", Help = "The duration of the play period" )]
+		public static float PlayDuration { get; set; } = 60f;
+		[ServerVar( "pb_end_duration", Help = "The duration of the end period" )]
+		public static float EndDuration { get; set; } = 5f;
 		[Net, Change] public int AliveBlue { get; private set; } = 0;
 		[Net, Change] public int AliveRed { get; private set; } = 0;
 		[Net, Change] public int BlueScore { get; private set; } = 0;
@@ -16,7 +22,6 @@ namespace PaintBall
 		private int _roundLimit => 12;
 		private int _toWinScore => 7;
 		private int _round = 0;
-		private readonly float[] _roundStateDuration = { 5f, 60f, 5f };
 
 		public enum RoundState : byte
 		{
@@ -63,15 +68,6 @@ namespace PaintBall
 			}
 
 			player.MakeSpectator();
-		}
-
-		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
-		{
-			if ( player.LifeState != LifeState.Dead )
-			{
-				AdjustTeam( oldTeam, -1 );
-				AdjustTeam( newTeam, 1 );
-			}
 		}
 
 		public override void OnSecond()
@@ -162,6 +158,8 @@ namespace PaintBall
 
 					Event.Run( PBEvent.Round.New );
 
+					StateEndTime = FreezeDuration + Time.Now;
+
 					break;
 
 				case RoundState.Play:
@@ -170,16 +168,18 @@ namespace PaintBall
 
 					Event.Run( PBEvent.Round.Start );
 
+					StateEndTime = PlayDuration + Time.Now;
+
 					break;
 
 				case RoundState.End:
 
 					Event.Run( PBEvent.Round.End, GetWinner() );
 
+					StateEndTime = EndDuration + Time.Now;
+
 					break;
 			}
-
-			StateEndTime = _roundStateDuration[(int)CurrentRoundState - 1] + Time.Now;
 
 			// Call OnSecond() as soon as RoundState starts
 			NextSecondTime = 0f;
