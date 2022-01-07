@@ -13,12 +13,6 @@ namespace PaintBall
 		}
 
 		[ClientRpc]
-		public static void UpdateMessage(string text = "" )
-		{
-			GeneralNotification.Instance.UpdateMessage( text );
-		}
-
-		[ClientRpc]
 		public static void UpdateTeamScore( Team team, string text = "0" )
 		{
 			(RoundInfo.Instance.Middle.GetChild( (int)team ).GetChild( 0 ) as Label).Text = text;

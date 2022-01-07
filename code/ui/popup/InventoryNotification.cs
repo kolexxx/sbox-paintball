@@ -8,10 +8,5 @@ namespace PaintBall
 		private Panel _currentPopUp;
 
 		public InventoryNotification() { }
-
-		public class InventoryNotificationEntry : Panel
-		{
-
-		}
 	}
 }

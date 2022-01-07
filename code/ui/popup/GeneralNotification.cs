@@ -1,19 +1,18 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
+using System.Threading.Tasks;
 
 namespace PaintBall
 {
-	public class GeneralNotification : Panel
+	public partial class GeneralNotification : Panel
 	{
 		public static GeneralNotification Instance;
-		public Label Message;
-
+		private Panel _current;
 		public GeneralNotification()
 		{
 			Instance = this;
 
-			Message = Add.Label( "", "text" );
 			StyleSheet.Load( "/ui/popup/GeneralNotification.scss" );
 		}
 
@@ -21,30 +20,46 @@ namespace PaintBall
 		{
 			base.Tick();
 
-			SetClass( "hidden", Local.Hud.GetChild( 7 ).IsVisible || Local.Hud.GetChild( 10 ).IsVisible || string.IsNullOrEmpty( Message.Text ) );
+			SetClass( "hidden", Local.Hud.GetChild( 7 ).IsVisible || Local.Hud.GetChild( 10 ).IsVisible );
 		}
 
-		public void UpdateMessage( string text = "" )
+		public void CreateNotification( string text = "", int time = 0 )
 		{
-			Message.Text = text;
+			_current?.Delete();
+
+			_current = Add.Panel( "notification" );
+			_current.Add.Label( text, "text" );
 		}
 
 		[PBEvent.Round.New]
 		public void OnNewRound()
 		{
-			UpdateMessage();
+			Instance.DeleteChildren();
 		}
 
 		[PBEvent.Round.Start]
 		public void RoundStart()
 		{
-			UpdateMessage();
+			Instance.DeleteChildren();
 		}
 
 		[PBEvent.Round.End]
-		public void RoundEnd(Team winner )
+		public void RoundEnd( Team winner )
 		{
-			UpdateMessage( $"{winner} wins" );
+			CreateNotification( $"{winner} wins", MainGameState.EndDuration );
+		}
+
+		[ClientRpc]
+		public static void Create( string text = "", int time = 0 )
+		{
+			Instance.CreateNotification( text, time );
+		}
+
+		private async Task DeleteAsync( int time )
+		{
+			await Task.Delay( time * 1000 );
+
+			_current.Delete();
 		}
 	}
 }
