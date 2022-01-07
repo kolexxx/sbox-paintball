@@ -9,6 +9,7 @@ namespace PaintBall
 	{
 		public RealTimeUntil DestroyTime { get; set; }
 		public Entity Origin { get; set; }
+		public string Model => "models/grenade/grenade_spent.vmdl";
 		public Team Team { get; set; }
 		public float LifeTime => 3f;
 
@@ -55,7 +56,7 @@ namespace PaintBall
 			base.Spawn();
 
 			DestroyTime = LifeTime;
-			SetModel( "models/grenade/grenade_spent.vmdl" );
+			SetModel( Model );
 			MoveType = MoveType.Physics;
 			UsePhysicsCollision = true;
 			SetInteractsAs( CollisionLayer.All );
