@@ -35,6 +35,12 @@ namespace PaintBall
 			UpdateMessage();
 		}
 
+		[PBEvent.Round.Start]
+		public void RoundStart()
+		{
+			UpdateMessage();
+		}
+
 		[PBEvent.Round.End]
 		public void RoundEnd(Team winner )
 		{
