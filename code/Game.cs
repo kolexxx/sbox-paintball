@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace PaintBall
 {
+	[Hammer.Skip]
+	[Library( "paintball", Title = "PaintBall" )]
 	public partial class Game : Sandbox.Game
 	{
 		public Hud Hud { get; set; }
