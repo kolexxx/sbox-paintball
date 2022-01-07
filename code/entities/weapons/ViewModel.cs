@@ -2,13 +2,13 @@
 
 namespace PaintBall
 {
-	partial class ViewModel : BaseViewModel
+	public sealed class ViewModel : BaseViewModel
 	{
-		protected float SwingInfluence => 0.05f;
-		protected float ReturnSpeed => 5.0f;
-		protected float MaxOffsetLength => 10.0f;
-		protected float BobCycleTime => 5f;
-		protected Vector3 BobDirection => new Vector3( 0.0f, 1.0f, 0.5f );
+		private float _swingInfluence => 0.05f;
+		private float _returnSpeed => 5.0f;
+		private float _maxOffsetLength => 10.0f;
+		private float _bobCycleTime => 5f;
+		private Vector3 _bobDirection => new Vector3( 0.0f, 1.0f, 0.5f );
 		private Vector3 _swingOffset;
 		private float _lastPitch;
 		private float _lastYaw;
@@ -71,24 +71,24 @@ namespace PaintBall
 			_lastYaw = newYaw;
 		}
 
-		protected Vector3 CalcSwingOffset( float pitchDelta, float yawDelta )
+		private Vector3 CalcSwingOffset( float pitchDelta, float yawDelta )
 		{
 			Vector3 swingVelocity = new Vector3( 0, yawDelta, pitchDelta );
 
-			_swingOffset -= _swingOffset * ReturnSpeed * Time.Delta;
-			_swingOffset += (swingVelocity * SwingInfluence);
+			_swingOffset -= _swingOffset * _returnSpeed * Time.Delta;
+			_swingOffset += (swingVelocity * _swingInfluence);
 
-			if ( _swingOffset.Length > MaxOffsetLength )
+			if ( _swingOffset.Length > _maxOffsetLength )
 			{
-				_swingOffset = _swingOffset.Normal * MaxOffsetLength;
+				_swingOffset = _swingOffset.Normal * _maxOffsetLength;
 			}
 
 			return _swingOffset;
 		}
 
-		protected Vector3 CalcBobbingOffset( Vector3 velocity )
+		private Vector3 CalcBobbingOffset( Vector3 velocity )
 		{
-			_bobAnim += Time.Delta * BobCycleTime;
+			_bobAnim += Time.Delta * _bobCycleTime;
 
 			var twoPI = System.MathF.PI * 2.0f;
 
@@ -99,7 +99,7 @@ namespace PaintBall
 
 			var speed = new Vector2( velocity.x, velocity.y ).Length;
 			speed = speed > 10.0 ? speed : 0.0f;
-			var offset = BobDirection * (speed * 0.005f) * System.MathF.Cos( _bobAnim );
+			var offset = _bobDirection * (speed * 0.005f) * System.MathF.Cos( _bobAnim );
 			offset = offset.WithZ( -System.MathF.Abs( offset.z ) );
 
 			return offset;
