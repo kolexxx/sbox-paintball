@@ -3,18 +3,13 @@
 rootpanel
 {
     margin: 0;
+    padding: 0;
     background-color: rgba(0 0 0 0);
     transition: background-color 0.2s ease-in;
     transform-origin: 50% 50%;
     font-family: Roboto;
     align-items: center;
     justify-content: center;
-
-    &.spawnmenuopen
-    {
-        transition: background-color 0.3s ease-out;
-        background-color: rgba( #333, 0.9 );
-    }
 
     &.devcamera
     {
@@ -46,7 +41,7 @@ ammo
     image
     {
         background-size: 100%;
-        background-image-tint: slategray;
+        background-image-tint: #ff0;
         width: 30px;
         height: 30px;
         position: absolute;
@@ -82,7 +77,7 @@ teamindicator
 {
     teamindicator
     {
-        color: $blueColor;
+        color: $blue;
     }
 }
 
@@ -91,7 +86,7 @@ teamindicator
 {
     teamindicator
     {
-        color: $redColor;
+        color: $red;
     }
 }
 
