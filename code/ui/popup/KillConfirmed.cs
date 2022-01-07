@@ -1,13 +1,12 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
-using System.Threading.Tasks;
 
 namespace PaintBall
 {
 	public class KillConfirmed : Panel
 	{
-		private KillConfirmedEntry _currentPopUp;
+		private Entry _currentEntry;
 
 		public KillConfirmed()
 		{
@@ -20,23 +19,26 @@ namespace PaintBall
 			if ( attacker != Local.Pawn )
 				return;
 
-			_currentPopUp?.Delete();
-			_currentPopUp = AddChild<KillConfirmedEntry>();
-			_currentPopUp.Name.Text = _currentPopUp.Name.Text = $"YOU KILLED {player.Client.Name.ToUpper()}"; ;
-			_currentPopUp.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
-			_currentPopUp.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastHitboxIndex ) );
+			_currentEntry?.Delete( true );
+
+			AddChild( new Entry( 5f ) );
+
+			_currentEntry = GetChild( 0 ) as Entry;
+			_currentEntry.Name.Text = _currentEntry.Name.Text = $"YOU KILLED {player.Client.Name.ToUpper()}"; ;
+			_currentEntry.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
+			_currentEntry.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastHitboxIndex ) );
 		}
 
 		[PBEvent.Round.New]
 		private void RoundStart()
 		{
-			_currentPopUp?.Delete();
+			_currentEntry?.Delete();
 		}
 
-		public class KillConfirmedEntry : Panel
+		public sealed class Entry : PopUp
 		{
-			public Image Icon { get; set; }
-			public Label Name { get; set; }
+			public Image Icon { get; internal set; }
+			public Label Name { get; internal set; }
 			private Image _head;
 			private Image _chest;
 			private Image _stomach;
@@ -45,7 +47,7 @@ namespace PaintBall
 			private Image _leftLeg;
 			private Image _rightLeg;
 
-			public KillConfirmedEntry()
+			public Entry( float lifeTime ) : base( lifeTime )
 			{
 				Icon = Add.Image( "", "icon" );
 				Name = Add.Label( "", "name" );
@@ -56,8 +58,6 @@ namespace PaintBall
 				_rightArm = Add.Image( "ui/terry/rightarm.png", "terry" );
 				_leftLeg = Add.Image( "ui/terry/leftleg.png", "terry" );
 				_rightLeg = Add.Image( "ui/terry/rightleg.png", "terry" );
-
-				_ = DeleteAsync();
 			}
 
 			public void SetHit( HitboxGroup hitboxGroup )
@@ -86,13 +86,6 @@ namespace PaintBall
 						_rightLeg.SetClass( "hit", true );
 						return;
 				}
-			}
-
-			private async Task DeleteAsync()
-			{
-				await Task.Delay( 5000 );
-
-				Delete();
 			}
 		}
 	}

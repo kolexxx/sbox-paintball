@@ -1,7 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
-using System.Threading.Tasks;
 
 namespace PaintBall
 {
@@ -20,9 +19,13 @@ namespace PaintBall
 
 		public Panel AddEntry( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
 		{
-			var e = AddChild<KillFeedEntry>();
+			bool isLocalClient = Local.Client.PlayerId == lsteamid || Local.Client.PlayerId == rsteamid;
 
-			e.SetClass( "me", Local.Client.PlayerId == lsteamid || Local.Client.PlayerId == rsteamid );
+			AddChild( new Entry( isLocalClient ? 8f : 5f ) );
+
+			var e = GetChild( ChildrenCount - 1 ) as Entry;
+
+			e.SetClass( "me", isLocalClient );
 
 			e.Left.Text = left;
 			e.Left.SetClass( teamLeft.GetString(), true );
@@ -31,8 +34,6 @@ namespace PaintBall
 			e.Right.SetClass( teamRight.GetString(), true );
 
 			e.Method.SetTexture( method );
-
-			_ = e.DeleteAsync();
 
 			return e;
 		}
@@ -43,24 +44,17 @@ namespace PaintBall
 			DeleteChildren();
 		}
 
-		public class KillFeedEntry : Panel
+		public sealed class Entry : PopUp
 		{
 			public Label Left { get; internal set; }
-			public Label Right { get; internal set; }
 			public Image Method { get; internal set; }
+			public Label Right { get; internal set; }
 
-			public KillFeedEntry()
+			public Entry( float lifeTime ) : base( lifeTime )
 			{
 				Left = Add.Label( "", "left" );
 				Method = Add.Image( "", "method" );
 				Right = Add.Label( "", "right" );
-			}
-
-			public async Task DeleteAsync()
-			{
-				await Task.Delay( HasClass( "me" ) ? 8000 : 5000 );
-
-				Delete();
 			}
 		}
 	}
