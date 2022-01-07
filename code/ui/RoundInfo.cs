@@ -1,7 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 using System;
-using System.Threading.Tasks;
 
 namespace PaintBall
 {
