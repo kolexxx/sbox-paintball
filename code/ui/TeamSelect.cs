@@ -67,7 +67,7 @@ namespace PaintBall
 			Player.ChangeTeamCommand( Team.Red );
 		}
 		
-		[PBEvent.Player.TeamChanged]
+		[PBEvent.Player.Team.Changed]
 		public void OnPlayerTeamChanged(Player player, Team oldTeam )
 		{
 			if ( player.IsLocalPawn )

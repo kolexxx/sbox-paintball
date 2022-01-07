@@ -21,7 +21,7 @@ namespace PaintBall
 
 			Client.SetInt( "team", (int)newTeam );
 
-			Event.Run( PBEvent.Player.TeamChanged, this, oldTeam );
+			Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
 			ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined Team {newTeam}", $"avatar:{Client.PlayerId}" );
 
 			Game.Current.CurrentGameState.OnPlayerChangedTeam( this, oldTeam, newTeam );
@@ -35,7 +35,7 @@ namespace PaintBall
 				Local.Hud.AddClass( newTeam.GetString() );
 			}
 
-			Event.Run( PBEvent.Player.TeamChanged, this, oldTeam );
+			Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
 		}
 
 		[ServerCmd( "changeteam", Help = "Changes the caller's team" )]

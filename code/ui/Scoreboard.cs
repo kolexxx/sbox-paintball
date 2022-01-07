@@ -8,8 +8,8 @@ namespace PaintBall
 {
 	public class Scoreboard : Panel
 	{
-		public bool Show { get; set; } = false;
 		public static Scoreboard Instance;
+		public bool Show { get; set; } = false;	
 		private Dictionary<Client, ScoreboardEntry> _entries = new();
 		private Panel _header;
 		private Panel[] _sections = new Panel[3];
@@ -71,7 +71,7 @@ namespace PaintBall
 			return e;
 		}
 
-		[PBEvent.Player.TeamChanged]
+		[PBEvent.Player.Team.Changed]
 		public void UpdateEntry( Player player, Team oldTeam )
 		{
 			var client = player.Client;
@@ -91,6 +91,13 @@ namespace PaintBall
 		[PBEvent.Client.Joined]
 		public void ClientJoined( Client client )
 		{
+			if ( !client.IsValid() )
+			{
+				Initialize();
+
+				return;
+			}
+
 			if ( _entries.ContainsKey( client ) )
 				return;
 
@@ -150,7 +157,7 @@ namespace PaintBall
 				if ( !Client.IsValid() )
 					return;
 
-				if ( SinceUpdate < 0.1f )
+				if ( SinceUpdate < 0.2f )
 					return;
 
 				SinceUpdate = 0f;
