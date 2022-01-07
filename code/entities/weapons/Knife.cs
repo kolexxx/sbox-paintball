@@ -62,7 +62,12 @@ namespace PaintBall
 				.Radius( radius )
 				.Run();
 
-			if ( !trace.Hit || !IsServer )
+			if ( !trace.Hit )
+				return;
+
+			trace.Surface.DoBulletImpact( trace );
+
+			if ( !IsServer )
 				return;
 
 			if ( trace.Entity is Player player && Owner is Player owner )
@@ -79,8 +84,7 @@ namespace PaintBall
 					.WithWeapon( this );
 
 				info.Damage = damage;
-
-				trace.Surface.DoBulletImpact( trace );
+				
 				trace.Entity.TakeDamage( info );
 			}
 		}
