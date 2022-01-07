@@ -33,6 +33,10 @@ namespace PaintBall
 		{
 			base.AttackPrimary();
 
+			TimeSincePrimaryAttack = 0;
+
+			var trace = Trace.Ray( Owner.EyePos, (Owner.EyeRot.Forward * 40) ).Run();
+
 			if ( !IsServer )
 				return;
 
@@ -40,7 +44,7 @@ namespace PaintBall
 			{
 				var ent = new PhysicsProjectile();
 				ent.Rotation = Owner.EyeRot;
-				ent.Position = Owner.EyePos + (Owner.EyeRot.Forward * 40);
+				ent.Position = trace.EndPos;
 				ent.Velocity = Owner.EyeRot.Forward * 1000 + Vector3.Up * 100;
 				ent.Owner = Owner;
 				ent.Origin = this;
