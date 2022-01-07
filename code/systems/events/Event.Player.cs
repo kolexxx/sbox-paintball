@@ -18,16 +18,34 @@ namespace PaintBall
 				public KilledAttribute() : base( Killed ) { }
 			}
 
-			public const string TeamChanged = "pb.player.teamchanged";
-
-			/// <summary>
-			/// Runs when a player changes teams.
-			/// <para>Event is passed the <strong><see cref="PaintBall.Player"/></strong> instance of the player 
-			/// who changed teams and the old <strong><see cref="PaintBall.Team"/></strong>.</para>
-			/// </summary>
-			public class TeamChangedAttribute : EventAttribute
+			public static class Spectating
 			{
-				public TeamChangedAttribute() : base( TeamChanged ) { }
+				public const string Changed = "pb.player.spectating.changed";
+
+				/// <summary>
+				/// Runs when the current spectated player changes.
+				/// <para>Event is passed the <strong><see cref="PaintBall.Player"/></strong> instance of the old 
+				/// spectated player and the <strong><see cref="PaintBall.Player"/></strong> instance of the new spactated player.</para>
+				/// </summary>
+				public class ChangedAttribute : EventAttribute
+				{
+					public ChangedAttribute() : base( Changed ) { }
+				}
+			}
+
+			public static class Team
+			{
+				public const string Changed = "pb.player.team.changed";
+
+				/// <summary>
+				/// Runs when a player changes teams.
+				/// <para>Event is passed the <strong><see cref="PaintBall.Player"/></strong> instance of the player 
+				/// who changed teams and the old <strong><see cref="PaintBall.Team"/></strong>.</para>
+				/// </summary>
+				public class ChangedAttribute : EventAttribute
+				{
+					public ChangedAttribute() : base( Changed ) { }
+				}
 			}
 		}
 	}
