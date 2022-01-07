@@ -10,7 +10,7 @@ namespace PaintBall
 	{
 		public static Scoreboard Instance;
 		public bool Show { get; set; } = false;
-		private Dictionary<Client, ScoreboardEntry> _entries = new();
+		private Dictionary<Client, Entry> _entries = new();
 		private Panel _header;
 		private Panel[] _sections = new Panel[3];
 
@@ -52,7 +52,7 @@ namespace PaintBall
 			{
 				_sections[i].SortChildren( e =>
 				{
-					var client = (e as ScoreboardEntry)?.Client;
+					var client = (e as Entry)?.Client;
 
 					int rank = client.GetInt( "kills" );
 
@@ -61,14 +61,14 @@ namespace PaintBall
 			}
 		}
 
-		public ScoreboardEntry AddEntry( Client client )
+		public Entry AddEntry( Client client )
 		{
 			Team team = Team.None;
 
 			if ( client.Pawn.IsValid() )
 				team = (client.Pawn as Player).Team;
 
-			var e = _sections[(int)team].AddChild<ScoreboardEntry>();
+			var e = _sections[(int)team].AddChild<Entry>();
 			e.Client = client;
 
 			return e;
@@ -131,7 +131,7 @@ namespace PaintBall
 			}
 		}
 
-		public class ScoreboardEntry : Panel
+		public sealed class Entry : Panel
 		{
 			public Client Client;
 			public Label Alive;
@@ -141,7 +141,7 @@ namespace PaintBall
 			public Label Ping;
 			private TimeSince SinceUpdate;
 
-			public ScoreboardEntry()
+			public Entry()
 			{
 				Name = Add.Label( "Name", "name" );
 				Alive = Add.Label( "", "alive" );
