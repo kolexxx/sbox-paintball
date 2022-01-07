@@ -7,11 +7,11 @@ namespace PaintBall
 	public partial class MainGameState : BaseState
 	{
 		[ServerVar( "pb_freeze_duration", Help = "The duration of the freeze period" )]
-		public static float FreezeDuration { get; set; } = 5f;
+		public static int FreezeDuration { get; set; } = 5;
 		[ServerVar( "pb_play_duration", Help = "The duration of the play period" )]
-		public static float PlayDuration { get; set; } = 60f;
+		public static int PlayDuration { get; set; } = 60;
 		[ServerVar( "pb_end_duration", Help = "The duration of the end period" )]
-		public static float EndDuration { get; set; } = 5f;
+		public static int EndDuration { get; set; } = 5;
 		[Net, Change] public int AliveBlue { get; private set; } = 0;
 		[Net, Change] public int AliveRed { get; private set; } = 0;
 		[Net, Change] public int BlueScore { get; private set; } = 0;
@@ -154,7 +154,7 @@ namespace PaintBall
 					}
 
 					if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
-						Hud.UpdateMessage( To.Everyone, "Matchpoint!" );
+						GeneralNotification.Create( To.Everyone, "Matchpoint!", FreezeDuration );
 
 					Event.Run( PBEvent.Round.New );
 
