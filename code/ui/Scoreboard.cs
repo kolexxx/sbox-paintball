@@ -9,7 +9,7 @@ namespace PaintBall
 	public class Scoreboard : Panel
 	{
 		public static Scoreboard Instance;
-		public bool Show { get; set; } = false;	
+		public bool Show { get; set; } = false;
 		private Dictionary<Client, ScoreboardEntry> _entries = new();
 		private Panel _header;
 		private Panel[] _sections = new Panel[3];
@@ -43,8 +43,11 @@ namespace PaintBall
 
 			if ( !IsVisible )
 				return;
+		}
 
-			// Up to 160 comparisons each tick. Maybe add delay for each sort?
+		[PBEvent.Player.Killed]
+		public void OnPlayerKilled( Player player, Entity attacker )
+		{
 			for ( int i = 1; i <= 2; i++ )
 			{
 				_sections[i].SortChildren( e =>
