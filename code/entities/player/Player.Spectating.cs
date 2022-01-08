@@ -84,7 +84,7 @@ namespace PaintBall
 		}
 
 		[PBEvent.Player.Killed]
-		private void OnPlayerKilled( Player player, Entity attacker )
+		private void OnPlayerKilled( Player player )
 		{
 			if ( !IsClient || !player.IsValid() )
 				return;

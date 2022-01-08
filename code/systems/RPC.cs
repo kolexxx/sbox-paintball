@@ -17,14 +17,12 @@ namespace PaintBall
 		}
 
 		[ClientRpc]
-		public static void OnPlayerKilled( Player player, Entity attacker, int lastHitboxIndex )
+		public static void OnPlayerKilled( Player player )
 		{
 			if ( !player.IsValid() )
 				return;
 
-			player.LastHitboxIndex = lastHitboxIndex;
-
-			Event.Run( PBEvent.Player.Killed, player, attacker );
+			Event.Run( PBEvent.Player.Killed, player );
 		}
 	}
 }

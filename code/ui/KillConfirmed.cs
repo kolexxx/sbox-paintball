@@ -37,12 +37,9 @@ namespace PaintBall
 		}
 
 		[PBEvent.Player.Killed]
-		public static void OnPlayerKilled( Player player, Entity attacker )
+		public static void OnPlayerKilled( Player player )
 		{
-			if ( !Host.IsClient )
-				return;
-
-			if ( attacker != Local.Pawn )
+			if ( !Host.IsClient || player.LastAttacker != Local.Pawn )
 				return;
 
 			s_current?.Delete( true );

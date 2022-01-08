@@ -46,7 +46,7 @@ namespace PaintBall
 		}
 
 		[PBEvent.Player.Killed]
-		public void OnPlayerKilled( Player player, Entity attacker )
+		public void OnPlayerKilled( Player player )
 		{
 			for ( int i = 1; i <= 2; i++ )
 			{
@@ -160,7 +160,7 @@ namespace PaintBall
 				if ( !Client.IsValid() )
 					return;
 
-				if ( SinceUpdate < 0.2f )
+				if ( SinceUpdate < 0.5f )
 					return;
 
 				SinceUpdate = 0f;
