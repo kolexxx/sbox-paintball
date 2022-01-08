@@ -19,7 +19,7 @@ namespace PaintBall
 		{
 			Instance = this;
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 7 ).IsVisible || Local.Hud.GetChild( 10 ).IsVisible );
+			BindClass( "hidden", () => Scoreboard.Instance.IsVisible || TeamSelect.Instance.IsVisible );
 		}
 
 		public override void Tick()
@@ -37,7 +37,7 @@ namespace PaintBall
 			if ( game == null )
 				return;
 
-			var state = game.CurrentGameState;
+			var state = game.State;
 			if ( state == null )
 				return;
 

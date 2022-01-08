@@ -13,7 +13,7 @@ namespace PaintBall
 		public Label Message { get; set; }
 		private static Notification s_current;
 
-		public Notification(  string text, float lifeTime ) : base( lifeTime )
+		public Notification( string text, float lifeTime ) : base( lifeTime )
 		{
 			s_current = this;
 

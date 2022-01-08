@@ -13,7 +13,7 @@ namespace PaintBall
 		public Label Timer { get; set; }
 		private TimeSince _timeSinceOpened = 0f;
 		private bool _open = true;
-
+		
 		public TeamSelect()
 		{
 			Instance = this;
@@ -42,7 +42,7 @@ namespace PaintBall
 			if ( game == null )
 				return;
 
-			var state = game.CurrentGameState;
+			var state = game.State;
 			if ( state == null )
 				return;
 

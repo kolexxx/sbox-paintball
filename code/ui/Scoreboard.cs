@@ -32,7 +32,7 @@ namespace PaintBall
 
 			Initialize();
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 10 ).IsVisible );
+			BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 		}
 
 		public override void Tick()
