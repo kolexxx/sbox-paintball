@@ -20,7 +20,7 @@ namespace PaintBall
 		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
 		private bool _firstBlood = false;
 		private int _roundLimit => 12;
-		private int _toWinScore => 7;
+		private int _toWinScore => 2;
 		private int _round = 0;
 
 		public enum RoundState : byte
@@ -154,7 +154,7 @@ namespace PaintBall
 					}
 
 					if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
-						GeneralNotification.Create( To.Everyone, "Matchpoint!", FreezeDuration );
+						Notification.Create( To.Everyone, "Matchpoint!", FreezeDuration );
 
 					Event.Run( PBEvent.Round.New );
 

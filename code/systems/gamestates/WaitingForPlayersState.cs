@@ -39,9 +39,9 @@ namespace PaintBall
 			if ( Host.IsServer )
 			{
 				if ( Players.Count > 1 )
-					GeneralNotification.Create( $"Starting in {TimeLeftSeconds}" );
+					Notification.Create( $"Starting in {TimeLeftSeconds}" );
 				else
-					GeneralNotification.Create( "Waiting for players..." );
+					Notification.Create( "Waiting for players..." );
 			}
 		}
 
