@@ -14,16 +14,18 @@ namespace PaintBall
 
 			StyleSheet.Load( "/ui/KillFeed.scss" );
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 10 ).IsVisible );
+			BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 		}
 
-		public Panel AddEntry( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
+		public void AddEntry( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
 		{
+			Host.AssertClient();
+
 			bool isLocalClient = Local.Client.PlayerId == lsteamid || Local.Client.PlayerId == rsteamid;
 
-			AddChild( new Entry( isLocalClient ? 8f : 5f ) );
+			Instance.AddChild( new Entry( isLocalClient ? 8f : 5f ) );
 
-			var e = GetChild( ChildrenCount - 1 ) as Entry;
+			var e = Instance.GetChild( Instance.ChildrenCount - 1 ) as Entry;
 
 			e.SetClass( "me", isLocalClient );
 
@@ -34,8 +36,6 @@ namespace PaintBall
 			e.Right.SetClass( teamRight.GetString(), true );
 
 			e.Method.SetTexture( method );
-
-			return e;
 		}
 
 		[PBEvent.Round.New]
@@ -44,11 +44,17 @@ namespace PaintBall
 			DeleteChildren();
 		}
 
-		public sealed class Entry : PopUp
+		[PBEvent.Game.StateChanged]
+		private void OnStatechanged( BaseState oldState, BaseState newState )
 		{
-			public Label Left { get; internal set; }
-			public Image Method { get; internal set; }
-			public Label Right { get; internal set; }
+			DeleteChildren();
+		}
+
+		public sealed class Entry : Popup
+		{
+			public Label Left { get; init; }
+			public Image Method { get; init; }
+			public Label Right { get; init; }
 
 			public Entry( float lifeTime ) : base( lifeTime )
 			{
