@@ -25,7 +25,7 @@ namespace PaintBall
 				/// <summary>
 				/// Runs when the current spectated player changes.
 				/// <para>Event is passed the <strong><see cref="PaintBall.Player"/></strong> instance of the old 
-				/// spectated player and the <strong><see cref="PaintBall.Player"/></strong> instance of the new spactated player.</para>
+				/// spectated player and the <strong><see cref="PaintBall.Player"/></strong> instance of the new spectated player.</para>
 				/// </summary>
 				public class ChangedAttribute : EventAttribute
 				{
