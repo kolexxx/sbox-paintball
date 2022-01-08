@@ -25,6 +25,9 @@ namespace PaintBall
 
 			SetClass( "hidden", TeamSelect.Instance.IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
 
+			if ( !IsVisible )
+				return;
+
 			var weapon = player.CurrentPlayer.ActiveChild as Weapon;
 
 			if ( weapon == null )
