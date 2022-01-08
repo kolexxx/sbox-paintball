@@ -21,7 +21,7 @@ namespace PaintBall
 			if ( Local.Pawn is not Player player )
 				return;
 
-			SetClass( "hidden", Local.Hud.GetChild( 7 ).IsVisible || Local.Hud.GetChild( 10 ).IsVisible || !TargetWeapon.ViewModelEntity.EnableDrawing );	
+			SetClass( "hidden", Scoreboard.Instance.IsVisible || TeamSelect.Instance.IsVisible || !TargetWeapon.ViewModelEntity.EnableDrawing );	
 			SetClass( "fire", _fireCount > 0 );
 			
 			_fireCount = Math.Max( 0, _fireCount - 1 );
