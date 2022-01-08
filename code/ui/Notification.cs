@@ -60,7 +60,6 @@ namespace PaintBall
 			if ( s_current != null && !s_current.HasLifetime )
 			{
 				s_current.Message.Text = text;
-
 				return;
 			}
 
