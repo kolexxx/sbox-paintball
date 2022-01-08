@@ -1,0 +1,71 @@
+﻿@import "Variables.scss";
+
+killconfirmed
+{
+    position: absolute;
+
+    &.hidden
+    {
+        display: none;
+    }
+
+    height: 150px;
+    width: 300px;
+    bottom: 100px;
+    background-color: black;
+    transition: opacity 0.2s ease-in;
+    color: white;
+    border-radius: 10%;
+    border: 1px solid grey;
+    background-color: $allPurposeBlack;
+    opacity: 1;
+    padding: 10px;
+
+    label
+    {
+        left: 10px;
+        top: 20px;
+    }
+
+    image
+    {
+        width: 64px;
+        height: 64px;
+        background-size: 100%;
+        border-radius: 10%;
+        min-height: 32px;
+        border-radius: 10%;
+        position: absolute;
+
+        &.terry
+        {
+            right: 0;
+            background-size: 100%;
+            width: 128px;
+            height: 128px;
+            bottom: 10px;
+
+            &.hit
+            {
+                background-image-tint: green;
+            }
+        }
+
+        &.icon
+        {
+            left: 50px;
+            bottom: 20px;
+        }
+    }
+
+
+    &:intro
+    {
+        opacity: 0;
+    }
+
+    &:outro
+    {
+        opacity: 0;
+    }
+}
