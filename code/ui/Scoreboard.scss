@@ -28,7 +28,7 @@ scoreboard
 
     .blue
     {
-        scoreboardentry
+        entry
         {
             background-color: rgba($blue 0.6);
         }
@@ -36,7 +36,7 @@ scoreboard
 
     .red
     {
-        scoreboardentry
+        entry
         {
             background-color: rgba($red 0.6);
         }
@@ -60,7 +60,7 @@ scoreboard
     }
 }
 
-scoreboardentry
+entry
 {
     color: white;
     width: 750px;
