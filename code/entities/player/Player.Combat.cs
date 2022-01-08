@@ -75,14 +75,16 @@ namespace PaintBall
 				Game.Current.State?.OnPlayerKilled( this, null, LastDamageInfo );
 			}
 
-			Event.Run( PBEvent.Player.Killed, this, attacker );
-			RPC.OnPlayerKilled( this, attacker, LastHitboxIndex );
+			Event.Run( PBEvent.Player.Killed, this );
+			RPC.OnPlayerKilled( this );
 		}
 
 		public override void TakeDamage( DamageInfo info )
 		{
 			LastDamageInfo = info;
 			LastHitboxIndex = info.HitboxIndex;
+
+			ClientGetDamageInfo( info.Attacker, info.Weapon, info.HitboxIndex, info.Position, info.Damage );
 
 			base.TakeDamage( info );
 		}
@@ -130,6 +132,21 @@ namespace PaintBall
 			if ( best == null ) return;
 
 			ActiveChild = best;
+		}
+
+		[ClientRpc]
+		public void ClientGetDamageInfo( Entity attacker, Entity weapon, int hitboxIndex, Vector3 position, float damage )
+		{
+			var info = new DamageInfo()
+				.WithAttacker( attacker )
+				.WithWeapon( weapon )
+				.WithHitbox( hitboxIndex )
+				.WithPosition( position );
+
+			info.Damage = damage;
+
+			LastDamageInfo = info;
+			LastAttacker = info.Attacker;
 		}
 	}
 }
