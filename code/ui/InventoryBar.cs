@@ -1,7 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace PaintBall
@@ -22,7 +21,7 @@ namespace PaintBall
 			for ( int i = 0; i < 5; i++ )
 				_slots[i] = new InventoryIcon( i + 1, this );
 
-			BindClass( "hidden", () => Local.Hud.GetChild( 10 ).IsVisible );
+			BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 		}
 
 		public override void Tick()
