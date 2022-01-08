@@ -20,6 +20,7 @@ namespace PaintBall
 			StyleSheet.Load( "/ui/Notification.scss" );
 
 			Message = Add.Label( text, "text" );
+			BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 		}
 
 		public Notification( string text, Func<bool> condition ) : base( condition )
