@@ -15,7 +15,7 @@ namespace PaintBall
 		}
 
 		[Net, Change( nameof( OnStateChanged ) )]
-		public BaseState CurrentGameState { get; private set; }
+		public BaseState State { get; private set; }
 
 		[ServerVar( "pb_min_players", Help = "The minimum players required to start." )]
 		public static int MinPlayers { get; set; } = 2;
@@ -37,16 +37,20 @@ namespace PaintBall
 		[Event.Tick]
 		private void Tick()
 		{
-			CurrentGameState?.Tick();
+			State?.Tick();
 		}
 
 		public void ChangeState( BaseState state )
 		{
 			Assert.NotNull( state );
 
-			CurrentGameState?.Finish();
-			CurrentGameState = state;
-			CurrentGameState?.Start();
+			var oldState = State;
+
+			State?.Finish();
+			State = state;
+			State?.Start();
+
+			Event.Run( PBEvent.Game.StateChanged, oldState, state );
 		}
 
 		public override bool CanHearPlayerVoice( Client source, Client dest )
@@ -62,7 +66,7 @@ namespace PaintBall
 
 			base.ClientJoined( client );
 
-			CurrentGameState?.OnPlayerJoin( player );
+			State?.OnPlayerJoin( player );
 
 			Event.Run( PBEvent.Client.Joined, client );
 			RPC.ClientJoined( client );
@@ -70,7 +74,7 @@ namespace PaintBall
 
 		public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
 		{
-			CurrentGameState?.OnPlayerLeave( client.Pawn as Player );
+			State?.OnPlayerLeave( client.Pawn as Player );
 
 			Event.Run( PBEvent.Client.Disconnected, client, reason );
 			RPC.ClientDisconnected( client, reason );
@@ -96,7 +100,7 @@ namespace PaintBall
 				{
 					var spawnpoint = spawnpoints[Rand.Int( 0, spawnpoints.Count - 1 )];
 
-					if ( CurrentGameState is MainGameState )
+					if ( State is MainGameState )
 						spawnpoint.Occupied = true;
 
 					pawn.Transform = spawnpoint.Transform;
@@ -112,7 +116,7 @@ namespace PaintBall
 
 		public override void Shutdown()
 		{
-			CurrentGameState = null;
+			State = null;
 			_lastGameState = null;
 
 			base.Shutdown();
@@ -136,7 +140,7 @@ namespace PaintBall
 
 		public override void DoPlayerSuicide( Client cl )
 		{
-			if ( CurrentGameState?.CanPlayerSuicide == false )
+			if ( State?.CanPlayerSuicide == false )
 				return;
 
 			base.DoPlayerSuicide( cl );
@@ -220,11 +224,15 @@ namespace PaintBall
 
 		private void OnStateChanged()
 		{
-			if ( _lastGameState != CurrentGameState )
+			if ( _lastGameState != State )
 			{
+				var oldState = _lastGameState;
+
 				_lastGameState?.Finish();
-				_lastGameState = CurrentGameState;
+				_lastGameState = State;
 				_lastGameState.Start();
+
+				Event.Run( PBEvent.Game.StateChanged, oldState, _lastGameState );
 			}
 		}
 

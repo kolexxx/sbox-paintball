@@ -1,8 +1,10 @@
-﻿using Sandbox;
+﻿using Hammer;
+using Sandbox;
 using System;
 
 namespace PaintBall
 {
+	[Skip]
 	public abstract partial class Weapon : BaseWeapon
 	{
 		[Net, Predicted] public int AmmoClip { get; set; }
@@ -17,6 +19,7 @@ namespace PaintBall
 		public virtual bool Droppable => true;
 		public virtual string FireSound => "pbg";
 		public virtual string Icon => "ui/weapons/pistol.png";
+		public virtual string ModelPath => "";
 		public PickupTrigger PickupTrigger { get; protected set; }
 		public Entity PreviousOwner { get; private set; }
 		public virtual float ReloadTime => 5f;
@@ -89,7 +92,7 @@ namespace PaintBall
 
 		public override bool CanPrimaryAttack()
 		{
-			if ( !Game.Current.CurrentGameState.FreezeTime )
+			if ( !Game.Current.State.FreezeTime )
 				return false;
 
 			if ( Automatic == false && !Input.Pressed( InputButton.Attack1 ) )
@@ -106,7 +109,7 @@ namespace PaintBall
 
 		public override bool CanSecondaryAttack()
 		{
-			if ( !Game.Current.CurrentGameState.FreezeTime )
+			if ( !Game.Current.State.FreezeTime )
 				return false;
 
 			if ( !Input.Pressed( InputButton.Attack2 ) )

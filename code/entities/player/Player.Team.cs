@@ -24,7 +24,7 @@ namespace PaintBall
 			Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
 			ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined Team {newTeam}", $"avatar:{Client.PlayerId}" );
 
-			Game.Current.CurrentGameState.OnPlayerChangedTeam( this, oldTeam, newTeam );
+			Game.Current.State.OnPlayerChangedTeam( this, oldTeam, newTeam );
 		}
 
 		public void OnTeamChanged( Team oldTeam, Team newTeam )

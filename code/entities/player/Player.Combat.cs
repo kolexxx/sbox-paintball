@@ -68,11 +68,11 @@ namespace PaintBall
 				if ( attacker is Player killer )
 					killer?.OnPlayerKill( LastDamageInfo );
 
-				Game.Current.CurrentGameState?.OnPlayerKilled( this, attacker, LastDamageInfo );
+				Game.Current.State?.OnPlayerKilled( this, attacker, LastDamageInfo );
 			}
 			else
 			{
-				Game.Current.CurrentGameState?.OnPlayerKilled( this, null, LastDamageInfo );
+				Game.Current.State?.OnPlayerKilled( this, null, LastDamageInfo );
 			}
 
 			Event.Run( PBEvent.Player.Killed, this, attacker );

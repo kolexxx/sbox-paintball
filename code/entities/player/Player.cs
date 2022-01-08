@@ -63,7 +63,7 @@ namespace PaintBall
 
 			ResetInterpolation();
 
-			Game.Current.CurrentGameState.OnPlayerSpawned( this );
+			Game.Current.State.OnPlayerSpawned( this );
 		}
 
 		public override void Simulate( Client cl )
