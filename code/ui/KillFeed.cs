@@ -4,7 +4,7 @@ using Sandbox.UI.Construct;
 
 namespace PaintBall
 {
-	public partial class KillFeed : Panel
+	public sealed class KillFeed : Panel
 	{
 		public static KillFeed Instance;
 
@@ -17,11 +17,13 @@ namespace PaintBall
 			BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 		}
 
-		public void AddEntry( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
+		[PBEvent.Player.Killed]
+		public void OnPlayerKilled( Player player )
 		{
-			Host.AssertClient();
+			var attacker = player.LastAttacker;
 
-			bool isLocalClient = Local.Client.PlayerId == lsteamid || Local.Client.PlayerId == rsteamid;
+			bool isLocalClient = attacker.Client?.PlayerId == Local.Client.PlayerId;
+			isLocalClient = isLocalClient || Local.Client.PlayerId == player.Client.PlayerId;
 
 			Instance.AddChild( new Entry( isLocalClient ? 8f : 5f ) );
 
@@ -29,13 +31,13 @@ namespace PaintBall
 
 			e.SetClass( "me", isLocalClient );
 
-			e.Left.Text = left;
-			e.Left.SetClass( teamLeft.GetString(), true );
+			e.Left.Text = attacker?.Client.Name ?? attacker.Name;
+			e.Left.SetClass( (attacker as Player)?.Team.GetString(), true );
 
-			e.Right.Text = right;
-			e.Right.SetClass( teamRight.GetString(), true );
+			e.Right.Text = player.Client.Name;
+			e.Right.SetClass( player.Team.GetString(), true );
 
-			e.Method.SetTexture( method );
+			e.Method.SetTexture( (player.LastDamageInfo.Weapon as Weapon)?.Icon );
 		}
 
 		[PBEvent.Round.New]
