@@ -27,17 +27,13 @@ namespace PaintBall
 
 			RootPanel.AddChild<Ammo>();                  // 0
 			RootPanel.AddChild<ChatBox>();               // 1
-			RootPanel.AddChild<InventoryBar>();          // 2
-			RootPanel.AddChild<InventoryNotification>(); // 3
-			RootPanel.AddChild<KillConfirmed>();         // 4
-			RootPanel.AddChild<KillFeed>();              // 5
-			RootPanel.AddChild<RoundInfo>();             // 6
-			RootPanel.AddChild<Scoreboard>();            // 7
-			RootPanel.AddChild<SpectatorControls>();     // 8
+			RootPanel.AddChild<InventoryBar>();          // 3
+			RootPanel.AddChild<KillFeed>();              // 6
+			RootPanel.AddChild<RoundInfo>();             // 7
+			RootPanel.AddChild<Scoreboard>();            // 8
 			RootPanel.AddChild<TeamIndicator>();         // 9
 			RootPanel.AddChild<TeamSelect>();            // 10
-			RootPanel.AddChild<VoiceList>();
-			RootPanel.AddChild<GeneralNotification>();
+			RootPanel.AddChild<VoiceList>();             // 11
 		}
 	}
 }
