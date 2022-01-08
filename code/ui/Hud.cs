@@ -7,12 +7,6 @@ namespace PaintBall
 	public partial class Hud : HudEntity<RootPanel>
 	{
 		[ClientRpc]
-		public static void AddKillFeed( string left, string right, string method, Team teamLeft, Team teamRight, long lsteamid, long rsteamid )
-		{
-			KillFeed.Instance.AddEntry( left, right, method, teamLeft, teamRight, lsteamid, rsteamid );
-		}
-
-		[ClientRpc]
 		public static void UpdateTeamScore( Team team, string text = "0" )
 		{
 			(RoundInfo.Instance.Middle.GetChild( (int)team ).GetChild( 0 ) as Label).Text = text;

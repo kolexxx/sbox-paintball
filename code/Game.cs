@@ -1,10 +1,11 @@
-﻿using Sandbox;
+﻿using Hammer;
+using Sandbox;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace PaintBall
 {
-	[Hammer.Skip]
+	[Skip]
 	[Library( "paintball", Title = "PaintBall" )]
 	public partial class Game : Sandbox.Game
 	{
@@ -20,7 +21,7 @@ namespace PaintBall
 		[ServerVar( "pb_min_players", Help = "The minimum players required to start." )]
 		public static int MinPlayers { get; set; } = 2;
 
-		private BaseState _lastGameState { get; set; }
+		private BaseState _lastState { get; set; }
 
 		public Game()
 		{
@@ -117,7 +118,7 @@ namespace PaintBall
 		public override void Shutdown()
 		{
 			State = null;
-			_lastGameState = null;
+			_lastState = null;
 
 			base.Shutdown();
 		}
@@ -144,43 +145,6 @@ namespace PaintBall
 				return;
 
 			base.DoPlayerSuicide( cl );
-		}
-
-		public override void OnKilled( Client client, Entity pawn )
-		{
-			Host.AssertServer();
-
-			var attacker = pawn.LastAttacker?.Client?.Pawn as Player;
-			var victim = pawn as Player;
-
-			if ( attacker != null )
-			{
-				if ( attacker.Client != null )
-				{
-					Hud.AddKillFeed(
-						attacker.Client.Name,
-						client.Name,
-						(pawn.LastAttackerWeapon as Weapon).Icon,
-						attacker.Team, victim.Team,
-						attacker.Client.PlayerId,
-						client.PlayerId );
-				}
-				else
-				{
-					Hud.AddKillFeed(
-						attacker.Name,
-						client.Name,
-						"killed",
-						attacker.Team,
-						victim.Team,
-						attacker.NetworkIdent,
-						client.PlayerId );
-				}
-
-				return;
-			}
-
-			Hud.AddKillFeed( "", client.Name, "", Team.None, victim.Team, 0, client.PlayerId );
 		}
 
 		public void CleanUp()
@@ -224,15 +188,15 @@ namespace PaintBall
 
 		private void OnStateChanged()
 		{
-			if ( _lastGameState != State )
+			if ( _lastState != State )
 			{
-				var oldState = _lastGameState;
+				var oldState = _lastState;
 
-				_lastGameState?.Finish();
-				_lastGameState = State;
-				_lastGameState.Start();
+				_lastState?.Finish();
+				_lastState = State;
+				_lastState.Start();
 
-				Event.Run( PBEvent.Game.StateChanged, oldState, _lastGameState );
+				Event.Run( PBEvent.Game.StateChanged, oldState, _lastState );
 			}
 		}
 
