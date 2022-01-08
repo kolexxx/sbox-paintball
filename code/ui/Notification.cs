@@ -22,13 +22,6 @@ namespace PaintBall
 			Message = Add.Label( text, "text" );
 		}
 
-		public override void Tick()
-		{
-			base.Tick();
-			if ( Message.Text == "Matchpoint!" )
-				Log.Info( UntilDelete );
-		}
-
 		public Notification( string text, Func<bool> condition ) : base( condition )
 		{
 			s_current = this;
@@ -47,6 +40,7 @@ namespace PaintBall
 			Create( $"{winner } wins!", MainGameState.EndDuration );
 		}
 
+		// We are creating a notification that will last the entire WaitingForPlayersState
 		[PBEvent.Game.StateChanged]
 		public static void OnStateChanged( BaseState oldState, BaseState newState )
 		{

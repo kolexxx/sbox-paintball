@@ -2,5 +2,6 @@
     "sharedassets": "*.*",
     "type": "game",
     "name": "PaintBall",
-    "ident": "kole.paintball"
+    "ident": "kole.paintball",
+    "rootnamespace": "PaintBall"
 }
