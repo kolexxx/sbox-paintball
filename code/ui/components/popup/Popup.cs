@@ -16,7 +16,6 @@ namespace PaintBall
 		public bool HasLifetime { get; init; } = false;
 		private RealTimeSince _sinceConditionCheck = 0.2f;
 
-
 		public Popup( float lifeTime )
 		{
 			UntilDelete = lifeTime;
