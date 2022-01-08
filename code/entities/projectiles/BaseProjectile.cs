@@ -1,14 +1,15 @@
+using Hammer;
 using Sandbox;
-using Sandbox.Internal;
 
 namespace PaintBall
 {
 	[Library]
+	[Skip]
 	public partial class BaseProjectile : ModelEntity, IProjectile
 	{
 		[Net, Predicted] public string FollowEffect { get; set; } = "";
 		[Net, Predicted] public string HitSound { get; set; } = "";
-		[Net, Predicted] public string Model { get; set; } = "";
+		[Net, Predicted] public string ModelPath { get; set; } = "";
 		[Net, Predicted] public string TrailEffect { get; set; } = "";
 		[Net] public bool IsServerOnly { get; set; } = false;
 		public string Attachment { get; set; } = null;
@@ -89,8 +90,8 @@ namespace PaintBall
 			if ( !string.IsNullOrEmpty( FollowEffect ) )
 				Follower = Particles.Create( FollowEffect, this );
 
-			if ( !string.IsNullOrEmpty( Model ) )
-				ModelEntity = SceneObject.CreateModel( Model );
+			if ( !string.IsNullOrEmpty( ModelPath ) )
+				ModelEntity = SceneObject.CreateModel( ModelPath );
 		}
 
 		public virtual void Simulate()

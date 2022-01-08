@@ -1,9 +1,11 @@
-﻿using Sandbox;
+﻿using Hammer;
+using Sandbox;
 using System;
 
 namespace PaintBall
 {
 	[Library]
+	[Skip]
 	public sealed partial class BouncyProjectile : BaseProjectile
 	{
 		public float Bounciness { get; set; } = 0.6f;

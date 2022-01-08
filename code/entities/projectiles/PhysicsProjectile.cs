@@ -1,15 +1,16 @@
-﻿using Sandbox;
-using Sandbox.Internal;
+﻿using Hammer;
+using Sandbox;
 using System;
 
 namespace PaintBall
 {
 	[Library]
+	[Skip]
 	public partial class PhysicsProjectile : ModelEntity, IProjectile
 	{
 		public RealTimeUntil DestroyTime { get; set; }
 		public Entity Origin { get; set; }
-		public string Model => "models/grenade/grenade_spent.vmdl";
+		public string ModelPath => "models/grenade/grenade_spent.vmdl";
 		public Team Team { get; set; }
 		public float LifeTime => 3f;
 
@@ -56,7 +57,7 @@ namespace PaintBall
 			base.Spawn();
 
 			DestroyTime = LifeTime;
-			SetModel( Model );
+			SetModel( ModelPath );
 			MoveType = MoveType.Physics;
 			UsePhysicsCollision = true;
 			SetInteractsAs( CollisionLayer.All );
@@ -91,7 +92,7 @@ namespace PaintBall
 					IgnoreTag = $"{owner.Team.GetString()}player",
 					Scale = 0.25f,
 					Gravity = 0f,
-					Model = $"models/{owner.Team.GetString()}_ball/ball.vmdl",
+					ModelPath = $"models/{owner.Team.GetString()}_ball/ball.vmdl",
 					IsServerOnly = true,
 					Origin = Origin
 				};

@@ -6,7 +6,7 @@ namespace PaintBall
 	{
 		public RealTimeUntil DestroyTime { get; }
 		public float LifeTime { get; }
-		public string Model { get; }
+		public string ModelPath { get; }
 		public Entity Origin { get; }
 		public Team Team { get; }		
 	}

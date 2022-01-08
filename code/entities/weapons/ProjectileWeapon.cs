@@ -1,7 +1,9 @@
-﻿using Sandbox;
+﻿using Hammer;
+using Sandbox;
 
 namespace PaintBall
 {
+	[Skip]
 	public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProjectile, new()
 	{
 		public virtual string FollowEffect => $"particles/{(Owner as Player)?.Team.GetString()}_glow.vpcf";
@@ -61,7 +63,7 @@ namespace PaintBall
 				Radius = ProjectileRadius,
 				Gravity = Gravity,
 				Simulator = owner.Projectiles,
-				Model = ProjectileModel,
+				ModelPath = ProjectileModel,
 				Rotation = owner.EyeRot,
 				Origin = this
 			};
