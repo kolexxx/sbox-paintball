@@ -11,7 +11,7 @@ namespace PaintBall
 			/// <summary>
 			/// Runs when a player dies.
 			/// <para>Event is passed the <strong><see cref="PaintBall.Player"/></strong> 
-			/// instance of the player who died</para>
+			/// instance of the player who died.</para>
 			/// </summary>
 			public class KilledAttribute : EventAttribute
 			{

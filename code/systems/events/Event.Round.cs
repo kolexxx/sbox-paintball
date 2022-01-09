@@ -20,7 +20,7 @@ namespace PaintBall
 
 			/// <summary>
 			/// Runs when the play duration of the current round has ended.
-			/// <para>Event is passed the <strong><see cref="PaintBall.Team"/></strong> which won the round</para>
+			/// <para>Event is passed the <strong><see cref="PaintBall.Team"/></strong> which won the round.</para>
 			/// </summary>
 			public class EndAttribute : EventAttribute
 			{
