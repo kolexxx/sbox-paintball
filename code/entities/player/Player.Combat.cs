@@ -84,7 +84,7 @@ namespace PaintBall
 			LastDamageInfo = info;
 			LastHitboxIndex = info.HitboxIndex;
 
-			ClientGetDamageInfo( info.Attacker, info.Weapon, info.HitboxIndex, info.Position, info.Damage );
+			GetDamageInfo( info.Attacker, info.Weapon, info.HitboxIndex, info.Position, info.Damage );
 
 			base.TakeDamage( info );
 		}
@@ -135,7 +135,7 @@ namespace PaintBall
 		}
 
 		[ClientRpc]
-		public void ClientGetDamageInfo( Entity attacker, Entity weapon, int hitboxIndex, Vector3 position, float damage )
+		public void GetDamageInfo( Entity attacker, Entity weapon, int hitboxIndex, Vector3 position, float damage )
 		{
 			var info = new DamageInfo()
 				.WithAttacker( attacker )
