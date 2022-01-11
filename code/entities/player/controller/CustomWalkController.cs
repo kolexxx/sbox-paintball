@@ -16,7 +16,6 @@ namespace PaintBall
 			var ws = Duck.GetWishSpeed();
 			if ( ws >= 0 ) return ws;
 
-
 			if ( Input.Down( InputButton.Run ) ) return SprintSpeed;
 			if ( Input.Down( InputButton.Walk ) ) return WalkSpeed;
 
