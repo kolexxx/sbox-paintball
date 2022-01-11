@@ -102,7 +102,7 @@ metadata
 //
 // PaintBall.Throwable
 //
-@PointClass base(BaseProperties_paintball) editormodel( "models/grenade/grenade.vmdl" ) = pb_grenade : ""
+@PointClass base(BaseProperties_paintball) editormodel( "models/grenade/grenade.vmdl" ) = pb_spike : ""
 [
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
