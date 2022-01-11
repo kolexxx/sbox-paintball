@@ -158,7 +158,7 @@ namespace PaintBall
 			var info = new DamageInfo()
 				.WithAttacker( Owner )
 				.WithWeapon( Origin as Weapon )
-				.WithPosition( Position )
+				.WithPosition( StartPosition )
 				.WithForce( Velocity * 0.1f )
 				.UsingTraceResult( trace );
 
