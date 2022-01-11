@@ -14,10 +14,10 @@ namespace PaintBall
 			TakeDamage( DamageInfo.Generic( float.MaxValue ) );
 
 			Team oldTeam = Team;
-			Tags.Remove( $"{oldTeam.GetString()}player" );
+			Tags.Remove( $"{oldTeam.GetString()}" );
 			Team = newTeam;
 
-			Tags.Add( $"{newTeam.GetString()}player" );
+			Tags.Add( $"{newTeam.GetString()}" );
 
 			Client.SetInt( "team", (int)newTeam );
 

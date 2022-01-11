@@ -136,6 +136,7 @@ namespace PaintBall
 		public override void Spawn()
 		{
 			Transmit = TransmitType.Always;
+			Tags.Add( "player" );
 
 			base.Spawn();
 		}

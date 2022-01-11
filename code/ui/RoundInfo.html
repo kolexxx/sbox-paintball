@@ -1,13 +1,13 @@
 ﻿<link rel="stylesheet" href="RoundInfo.scss" />
 
 <panel>
-    <panel @ref="Left" class="left"><label>0</label></panel>
-    <panel @ref="Middle" class="middle">
+    <panel class="left"><label @ref="AliveBlue">0</label></panel>
+    <panel class="middle">
         <panel class="timer"><label @ref="Timer">00:00</label></panel>
-        <panel class="bluescore"><label>0</label></panel>
-        <panel class="redscore"><label>0</label></panel>
+        <panel class="bluescore"><label @ref="BlueScore">0</label></panel>
+        <panel class="redscore"><label @ref="RedScore">0</label></panel>
     </panel>
-    <panel @ref="Right" class="right"><label>0</label></panel>
+    <panel class="right"><label @ref="AliveRed">0</label></panel>
     <panel @ref="Bottom" class="bottom">
         <label @ref="Message" class="message">Playing on Team Red</label>
     </panel>
