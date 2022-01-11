@@ -3,7 +3,6 @@ using Sandbox;
 
 namespace PaintBall
 {
-	[Library]
 	[Skip]
 	public partial class BaseProjectile : ModelEntity, IProjectile
 	{
@@ -16,7 +15,6 @@ namespace PaintBall
 		public RealTimeUntil CanHitTime { get; set; } = 0.1f;
 		public RealTimeUntil DestroyTime { get; set; }
 		public float Gravity { get; set; } = 0f;
-		public string IgnoreTag { get; set; }
 		public virtual float LifeTime => 10f;
 		public Entity Origin { get; set; }
 		public float Radius { get; set; } = 4f;
@@ -49,6 +47,8 @@ namespace PaintBall
 			EnableDrawing = false;
 			Velocity = velocity;
 			Position = start;
+
+			Tags.Add( "projectile" );
 
 			if ( IsClientOnly )
 			{
@@ -105,7 +105,7 @@ namespace PaintBall
 			var trace = Trace.Ray( Position, newPosition )
 				.UseHitboxes()
 				.Size( Radius )
-				.WithoutTags( "baseprojectile", IgnoreTag, "grenade" )
+				.WithoutTags( Team.GetString(), "projectile" )
 				.Run();
 
 			Position = trace.EndPos;

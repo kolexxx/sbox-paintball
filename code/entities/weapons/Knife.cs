@@ -9,6 +9,7 @@ namespace PaintBall
 		public override int ClipSize => 0;
 		public override bool Droppable => false;
 		public override string Icon => "ui/weapons/knife.png";
+		public override bool IsMelee => true;
 		public override string ModelPath => "models/rust_boneknife/rust_boneknife.vmdl";
 		public override float PrimaryRate => 1.5f;
 		public override float SecondaryRate => 0.75f;
@@ -85,7 +86,7 @@ namespace PaintBall
 					.WithWeapon( this );
 
 				info.Damage = damage;
-				
+
 				trace.Entity.TakeDamage( info );
 			}
 		}

@@ -4,7 +4,6 @@ using System;
 
 namespace PaintBall
 {
-	[Library]
 	[Skip]
 	public sealed partial class BouncyProjectile : BaseProjectile
 	{

@@ -4,7 +4,6 @@ using System;
 
 namespace PaintBall
 {
-	[Library]
 	[Skip]
 	public partial class PhysicsProjectile : ModelEntity, IProjectile
 	{
@@ -89,7 +88,6 @@ namespace PaintBall
 					Team = Team,
 					FollowEffect = $"particles/{owner.Team.GetString()}_glow.vpcf",
 					HitSound = "impact",
-					IgnoreTag = $"{owner.Team.GetString()}player",
 					Scale = 0.25f,
 					Gravity = 0f,
 					ModelPath = $"models/{owner.Team.GetString()}_ball/ball.vmdl",

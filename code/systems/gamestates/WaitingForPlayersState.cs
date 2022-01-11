@@ -54,7 +54,7 @@ namespace PaintBall
 				if ( Players.Count > 1 )
 				{
 					if ( TimeLeft <= 0 )
-						Game.Current.ChangeState( new MainGameState() );
+						Game.Current.ChangeState( new GameplayState() );
 				}
 				else
 				{

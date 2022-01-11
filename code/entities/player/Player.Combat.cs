@@ -45,7 +45,6 @@ namespace PaintBall
 		public int ConsecutiveKills { get; private set; }
 		public int KillStreak { get; set; }
 		public DamageInfo LastDamageInfo { get; private set; }
-		public int LastHitboxIndex { get; set; }
 		public TimeSince TimeSinceLastKill { get; private set; }
 		private static readonly string[] _consecutiveKillSounds = { "double_kill", "multi_kill", "ultra_kill", "monster_kill" };
 
@@ -61,19 +60,12 @@ namespace PaintBall
 
 			RemoveAllDecals();
 
-			var attacker = LastAttacker;
+			var attacker = LastAttacker.IsValid() ? LastAttacker : null;
 
-			if ( attacker.IsValid() )
-			{
-				if ( attacker is Player killer )
-					killer?.OnPlayerKill( LastDamageInfo );
+			if ( attacker is Player killer )
+				killer?.OnPlayerKill( LastDamageInfo );
 
-				Game.Current.State?.OnPlayerKilled( this, attacker, LastDamageInfo );
-			}
-			else
-			{
-				Game.Current.State?.OnPlayerKilled( this, null, LastDamageInfo );
-			}
+			Game.Current.State?.OnPlayerKilled( this, attacker ?? null, LastDamageInfo );
 
 			Event.Run( PBEvent.Player.Killed, this );
 			RPC.OnPlayerKilled( this );
@@ -82,7 +74,6 @@ namespace PaintBall
 		public override void TakeDamage( DamageInfo info )
 		{
 			LastDamageInfo = info;
-			LastHitboxIndex = info.HitboxIndex;
 
 			GetDamageInfo( info.Attacker, info.Weapon, info.HitboxIndex, info.Position, info.Damage );
 

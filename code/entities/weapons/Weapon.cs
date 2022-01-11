@@ -19,6 +19,7 @@ namespace PaintBall
 		public virtual bool Droppable => true;
 		public virtual string FireSound => "pbg";
 		public virtual string Icon => "ui/weapons/pistol.png";
+		public virtual bool IsMelee => false;
 		public virtual string ModelPath => "";
 		public PickupTrigger PickupTrigger { get; protected set; }
 		public Entity PreviousOwner { get; private set; }

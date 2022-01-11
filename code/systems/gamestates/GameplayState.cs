@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace PaintBall
 {
-	public partial class MainGameState : BaseState
+	public partial class GameplayState : BaseState
 	{
 		[ServerVar( "pb_freeze_duration", Help = "The duration of the freeze period" )]
 		public static int FreezeDuration { get; set; } = 5;
@@ -14,13 +14,13 @@ namespace PaintBall
 		public static int EndDuration { get; set; } = 5;
 		[Net, Change] public int AliveBlue { get; private set; } = 0;
 		[Net, Change] public int AliveRed { get; private set; } = 0;
-		[Net, Change] public int BlueScore { get; private set; } = 0;
-		[Net, Change] public int RedScore { get; private set; } = 0;
+		[Net] public int BlueScore { get; private set; } = 0;
+		[Net] public int RedScore { get; private set; } = 0;
 		[Net, Change] public RoundState CurrentRoundState { get; private set; }
 		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
 		private bool _firstBlood = false;
 		private int _roundLimit => 12;
-		private int _toWinScore => 2;
+		private int _toWinScore => 7;
 		private int _round = 0;
 
 		public enum RoundState : byte
@@ -115,19 +115,6 @@ namespace PaintBall
 
 			if ( Host.IsServer )
 				RoundStateStart();
-		}
-
-		public override void Finish()
-		{
-			base.Finish();
-
-			if ( Host.IsClient )
-			{
-				Hud.UpdateTeamScore( Team.Blue );
-				Hud.UpdateTeamScore( Team.Red );
-				(RoundInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
-				(RoundInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = "0";
-			}
 		}
 
 		private void RoundStateStart()
@@ -257,26 +244,6 @@ namespace PaintBall
 				return Team.Red;
 		}
 
-		private void OnAliveBlueChanged()
-		{
-			(RoundInfo.Instance.Left.GetChild( 0 ) as Sandbox.UI.Label).Text = AliveBlue.ToString();
-		}
-
-		private void OnAliveRedChanged()
-		{
-			(RoundInfo.Instance.Right.GetChild( 0 ) as Sandbox.UI.Label).Text = AliveRed.ToString();
-		}
-
-		private void OnBlueScoreChanged()
-		{
-			Hud.UpdateTeamScore( Team.Blue, BlueScore.ToString() );
-		}
-
-		private void OnRedScoreChanged()
-		{
-			Hud.UpdateTeamScore( Team.Red, RedScore.ToString() );
-		}
-
 		private void OnCurrentRoundStateChanged( RoundState oldState, RoundState newState )
 		{
 			switch ( newState )
@@ -307,6 +274,7 @@ namespace PaintBall
 			var teamRed = Team.Red.GetAll();
 
 			int diff = Math.Abs( teamBlue.Count() - teamRed.Count() ) / 2;
+
 			if ( diff <= 0 )
 				return;
 
@@ -320,6 +288,16 @@ namespace PaintBall
 				if ( --diff == 0 )
 					break;
 			}
+		}
+
+		private void OnAliveBlueChanged()
+		{
+			RoundInfo.Instance.AliveBlue.Text = AliveBlue.ToString();
+		}
+
+		private void OnAliveRedChanged()
+		{
+			RoundInfo.Instance.AliveRed.Text = AliveRed.ToString();
 		}
 	}
 }

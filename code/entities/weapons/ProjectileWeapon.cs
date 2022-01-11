@@ -1,11 +1,11 @@
-﻿using Hammer;
-using Sandbox;
+﻿using Sandbox;
 
 namespace PaintBall
 {
-	[Skip]
+	[Hammer.Skip]
 	public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProjectile, new()
 	{
+		public virtual int BulletsPerFire => 1;
 		public virtual string FollowEffect => $"particles/{(Owner as Player)?.Team.GetString()}_glow.vpcf";
 		public virtual float Gravity => 0f;
 		public virtual string HitSound => "impact";
@@ -43,7 +43,9 @@ namespace PaintBall
 			if ( Prediction.FirstTime )
 			{
 				Rand.SetSeed( Time.Tick );
-				FireProjectile();
+
+				for ( int i = 0; i < BulletsPerFire; i++ )
+					FireProjectile();
 			}
 		}
 
@@ -58,7 +60,6 @@ namespace PaintBall
 				Team = owner.Team,
 				FollowEffect = FollowEffect,
 				HitSound = HitSound,
-				IgnoreTag = $"{owner.Team.GetString()}player",
 				Scale = ProjectileScale,
 				Radius = ProjectileRadius,
 				Gravity = Gravity,

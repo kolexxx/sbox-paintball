@@ -5,7 +5,7 @@ namespace PaintBall
 {
 	public abstract partial class BaseState : BaseNetworkable
 	{
-		[Net, Predicted] public TimeUntil FreezeTime { get; protected set; }
+		[Net] public TimeUntil FreezeTime { get; protected set; }
 		[Net] public int TimeLeftSeconds { get; set; }
 		public virtual bool CanPlayerSuicide => false;
 		public virtual int StateDuration => 0;

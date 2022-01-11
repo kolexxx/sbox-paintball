@@ -7,7 +7,7 @@ namespace PaintBall
 	public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 	{
 		public override int Bucket => 0;
-		public virtual int BulletsPerFire => 4;
+		public override int BulletsPerFire => 4;
 		public override int ClipSize => 5;
 		public override string CrosshairClass => "shotgun";
 		public override float Gravity => 7f;
@@ -50,38 +50,6 @@ namespace PaintBall
 				return true;
 
 			return TimeSincePrimaryAttack > (1 / rate);
-		}
-
-		public override void AttackPrimary()
-		{
-			if ( AmmoClip == 0 )
-			{
-				if ( !UnlimitedAmmo && ReserveAmmo == 0 )
-				{
-					// Play dryfire sound
-					return;
-				}
-
-				Reload();
-
-				return;
-			}
-	
-			AmmoClip--;
-			TimeSincePrimaryAttack = 0;
-
-			(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
-
-			ShootEffects();
-			PlaySound( FireSound );
-
-			if ( Prediction.FirstTime )
-			{
-				Rand.SetSeed( Time.Tick );
-
-				for ( int i = 0; i < BulletsPerFire; i++ )
-					FireProjectile();
-			}
 		}
 
 		public override void Simulate( Client owner )
