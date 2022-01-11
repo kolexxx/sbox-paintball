@@ -78,7 +78,7 @@ namespace PaintBall
 		[PBEvent.Game.StateChanged]
 		private void StateChanged( BaseState oldState, BaseState newState )
 		{
-			if ( oldState is not GameplayState && newState is not GameplayState )
+			if ( oldState is not GameplayState || newState is GameplayState )
 				return;
 
 			BlueScore.Text = "0";
