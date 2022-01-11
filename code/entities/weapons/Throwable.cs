@@ -2,7 +2,7 @@
 
 namespace PaintBall
 {
-	[Library( "pb_grenade", Title = "grenade", Spawnable = true )]
+	[Library( "pb_spike", Title = "Spike", Spawnable = true )]
 	[Hammer.EditorModel( "models/grenade/grenade.vmdl" )]
 	public sealed partial class Throwable : Weapon
 	{
@@ -13,6 +13,14 @@ namespace PaintBall
 		public override float PrimaryRate => 15f;
 		public override float ReloadTime => 2.0f;
 		public override string ViewModelPath => "models/grenade/v_grenade.vmdl";
+		private bool _isHoldingDownAttack = false;
+
+		public override void ActiveStart( Entity entity )
+		{
+			base.ActiveStart( entity );
+
+			_isHoldingDownAttack = false;
+		}
 
 		public override void Spawn()
 		{
@@ -27,6 +35,26 @@ namespace PaintBall
 		{
 			anim.SetParam( "holdtype", 5 );
 			anim.SetParam( "aimat_weight", 1.0f );
+		}
+
+		public override bool CanPrimaryAttack()
+		{
+			if ( !Game.Current.State.FreezeTime )
+				return false;
+
+			if ( Input.Down( InputButton.Attack1 ) )
+			{
+				_isHoldingDownAttack = true;
+
+				return false;
+			}
+			else if ( !Input.Down( InputButton.Attack1 ) && _isHoldingDownAttack )
+			{
+				return true;
+			}
+
+			_isHoldingDownAttack = false;
+			return false;
 		}
 
 		public override void AttackPrimary()
@@ -48,7 +76,7 @@ namespace PaintBall
 				ent.Velocity = Owner.EyeRot.Forward * 1000 + Vector3.Up * 100;
 				ent.Owner = Owner;
 				ent.Origin = this;
-
+				ent.Team = (Owner as Player).Team;
 				(Owner as Player).SwitchToBestWeapon();
 				Delete();
 			}
