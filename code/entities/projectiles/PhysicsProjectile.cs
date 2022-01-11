@@ -95,7 +95,7 @@ namespace PaintBall
 					Origin = Origin
 				};
 
-				var velocity = direction * 1000f;
+				var velocity = direction * 2500f;
 
 				projectile.Initialize( PhysicsBody.MassCenter, velocity, 4f);
 			}
