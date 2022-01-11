@@ -63,7 +63,7 @@ namespace PaintBall
 				return;
 
 			Bottom.SetClass( "show", true );
-			Message.Text = $"PLAYING ON TEAM {team.GetString().ToUpper()}";
+			Message.Text = $"Playing on Team {team.GetString()}";
 		}
 
 		[PBEvent.Round.End]
