@@ -10,9 +10,10 @@ namespace PaintBall
 		public static RoundInfo Instance;
 		public Label Timer { get; set; }
 		public Label Message { get; set; }
-		public Panel Left { get; set; }
-		public Panel Middle { get; set; }
-		public Panel Right { get; set; }
+		public Label AliveBlue { get; set; }
+		public Label AliveRed { get; set; }
+		public Label BlueScore { get; set; }
+		public Label RedScore { get; set; }
 		public Panel Bottom { get; set; }
 
 		public RoundInfo()
@@ -63,6 +64,27 @@ namespace PaintBall
 
 			Bottom.SetClass( "show", true );
 			Message.Text = $"PLAYING ON TEAM {team.GetString().ToUpper()}";
-		}	
+		}
+
+		[PBEvent.Round.End]
+		private void RoundEnd( Team winner )
+		{
+			var gameplayState = Game.Current.State as GameplayState;
+
+			BlueScore.Text = gameplayState.BlueScore.ToString();
+			RedScore.Text = gameplayState.RedScore.ToString();
+		}
+
+		[PBEvent.Game.StateChanged]
+		private void StateChanged( BaseState oldState, BaseState newState )
+		{
+			if ( oldState is not GameplayState && newState is not GameplayState )
+				return;
+
+			BlueScore.Text = "0";
+			RedScore.Text = "0";
+			AliveBlue.Text = "0";
+			AliveRed.Text = "0";
+		}
 	}
 }

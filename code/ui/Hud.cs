@@ -6,12 +6,6 @@ namespace PaintBall
 	[Library]
 	public partial class Hud : HudEntity<RootPanel>
 	{
-		[ClientRpc]
-		public static void UpdateTeamScore( Team team, string text = "0" )
-		{
-			(RoundInfo.Instance.Middle.GetChild( (int)team ).GetChild( 0 ) as Label).Text = text;
-		}
-
 		public Hud()
 		{
 			if ( !IsClient )

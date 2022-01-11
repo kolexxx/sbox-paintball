@@ -49,7 +49,7 @@ namespace PaintBall
 			s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as KillConfirmed;
 			s_current.Name.Text = s_current.Name.Text = $"YOU KILLED {player.Client.Name.ToUpper()}"; ;
 			s_current.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
-			s_current.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastHitboxIndex ) );
+			s_current.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastDamageInfo.HitboxIndex ) );
 		}
 
 		public void SetHit( HitboxGroup hitboxGroup )

@@ -39,7 +39,7 @@ namespace PaintBall
 			if ( !Host.IsClient )
 				return;
 
-			Create( $"{winner } wins!", MainGameState.EndDuration );
+			Create( $"{winner } wins!", GameplayState.EndDuration );
 		}
 
 		// We are creating a notification that will last the entire WaitingForPlayersState
