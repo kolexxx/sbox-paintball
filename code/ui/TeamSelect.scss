@@ -2,76 +2,83 @@
 
 $csc: #ffa800;
 
-teamselect {
+teamselect
+{
     width: 80%;
     height: 80%;
     background-color: $allPurposeBlack;
-    align-content:baseline;
+    align-content: baseline;
     flex-wrap: wrap;
     font-family: 'Verdana' sans-serif;
     padding: 20px;
-
     pointer-events: all;
-
     text-transform: uppercase;
-
     color: $csc;
     opacity: 0;
 
-    &.hidden {
+    &.hidden
+    {
         display: none;
     }
 
-    &.open {
+    &.open
+    {
         opacity: 1;
     }
 
-    .logo {
+    .logo
+    {
         position: absolute;
-        top: 20;
-        left: 20;
-    
+        top: 20px;
+        left: 20px;
         font-size: 100px;
     }
-    
-    .button-1 {
+
+    .button-1
+    {
         position: absolute;
         top: 150px;
         left: 0;
     }
-    
-    .button-2 {
+
+    .button-2
+    {
         position: absolute;
         top: 220px;
         left: 0;
     }
-    
-    .button-3 {
+
+    .button-3
+    {
         position: absolute;
         top: 360px;
         left: 0;
     }
-    
-    .left-container {
+
+    .left-container
+    {
         flex-wrap: wrap;
         height: 10%;
         width: 50%;
     }
-    
-    button:hover {
+
+    button:hover
+    {
         color: black;
         background-color: $csc;
     }
-    
-    button {
+
+    button
+    {
         font-size: 40px;
         width: 100%;
         height: 55px;
         padding-left: 10px;
         border: 1px solid $csc;
     }
-    
-    .breaker {
+
+    .breaker
+    {
         width: 100%;
     }
 }
