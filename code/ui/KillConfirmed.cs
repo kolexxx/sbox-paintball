@@ -6,8 +6,10 @@ namespace PaintBall
 {
 	public class KillConfirmed : Popup
 	{
+		public Label Distance { get; init; }
 		public Image Icon { get; init; }
 		public Label Name { get; init; }
+		private static KillConfirmed s_current;
 		private Image _head;
 		private Image _chest;
 		private Image _stomach;
@@ -15,7 +17,6 @@ namespace PaintBall
 		private Image _rightArm;
 		private Image _leftLeg;
 		private Image _rightLeg;
-		private static KillConfirmed s_current;
 
 		public KillConfirmed( float lifeTime ) : base( lifeTime )
 		{
@@ -23,6 +24,7 @@ namespace PaintBall
 
 			StyleSheet.Load( "/ui/KillConfirmed.scss" );
 
+			Distance = Add.Label( "", "distance" );
 			Icon = Add.Image( "", "icon" );
 			Name = Add.Label( "", "name" );
 			_head = Add.Image( "ui/terry/head.png", "terry" );
@@ -45,11 +47,12 @@ namespace PaintBall
 			s_current?.Delete( true );
 
 			Local.Hud.AddChild( new KillConfirmed( 5f ) );
-
 			s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as KillConfirmed;
 			s_current.Name.Text = s_current.Name.Text = $"YOU KILLED {player.Client.Name.ToUpper()}"; ;
 			s_current.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
 			s_current.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastDamageInfo.HitboxIndex ) );
+			s_current.Distance.Text = $"Distance: {Vector3.DistanceBetween( player.LastDamageInfo.Position, player.Position )}";
+			Sound.FromScreen( "kill_confirmed" );
 		}
 
 		public void SetHit( HitboxGroup hitboxGroup )

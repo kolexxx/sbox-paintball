@@ -23,8 +23,20 @@ killconfirmed
 
     label
     {
-        left: 10px;
-        top: 20px;
+        text-align: center;
+        position: absolute;
+        &.name
+        {
+            left: 20px;
+            top: 20px;
+        }
+
+        &.distance
+        {
+            width: 100px;
+            left: 20px;
+            bottom: 5px;
+        }
     }
 
     image
@@ -39,7 +51,7 @@ killconfirmed
 
         &.terry
         {
-            right: 0;
+            right: 20px;
             background-size: 100%;
             width: 128px;
             height: 128px;
@@ -53,8 +65,8 @@ killconfirmed
 
         &.icon
         {
-            left: 50px;
-            bottom: 20px;
+            left: 40px;
+            bottom: 40px;
         }
     }
 
