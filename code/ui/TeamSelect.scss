@@ -1,73 +1,77 @@
 ﻿@import "Variables.scss";
 
-teamselect
-{
-    width: 100%;
-    height: 100%;
+$csc: #ffa800;
+
+teamselect {
+    width: 80%;
+    height: 80%;
     background-color: $allPurposeBlack;
-    position: absolute;
-    left: 0;
-    top: 0;
+    align-content:baseline;
+    flex-wrap: wrap;
+    font-family: 'Verdana' sans-serif;
+    padding: 20px;
+
     pointer-events: all;
+
+    text-transform: uppercase;
+
+    color: $csc;
     opacity: 0;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    z-index: 0;
 
-    .timer
-    {
-        font-size: 50px;
-        top: 200px;
-        position: absolute;
-    }
-
-    &.hidden
-    {
+    &.hidden {
         display: none;
     }
 
-    &.open
-    {
+    &.open {
         opacity: 1;
     }
 
-    button
-    {
-        border: 1px solid white;
-        margin-left: 37.5px;
-        margin-right: 37.5px;
-        width: 200px;
-        height: 100px;
+    .logo {
+        position: absolute;
+        top: 20;
+        left: 20;
+    
+        font-size: 100px;
+    }
+    
+    .button-1 {
+        position: absolute;
+        top: 150px;
+        left: 0;
+    }
+    
+    .button-2 {
+        position: absolute;
+        top: 220px;
+        left: 0;
+    }
+    
+    .button-3 {
+        position: absolute;
+        top: 360px;
+        left: 0;
+    }
+    
+    .left-container {
+        flex-wrap: wrap;
+        height: 10%;
+        width: 50%;
+    }
+    
+    button:hover {
+        color: black;
+        background-color: $csc;
+    }
+    
+    button {
         font-size: 40px;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        margin-bottom: 300px;
-
-        &.red
-        {
-            color: $red;
-        }
-
-        &.spectator
-        {
-            color: gray;
-            position: absolute;
-            width: 150px;
-            height: 75px;
-            font-size: 15px;
-            margin-bottom: 0;
-        }
-
-        &.blue
-        {
-            color: $blue;
-        }
-
-        &:hover
-        {
-            background-color: white;
-        }
+        width: 100%;
+        height: 55px;
+        padding-left: 10px;
+        border: 1px solid $csc;
+    }
+    
+    .breaker {
+        width: 100%;
     }
 }
