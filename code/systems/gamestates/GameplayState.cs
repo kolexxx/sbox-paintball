@@ -70,6 +70,8 @@ namespace PaintBall
 			player.MakeSpectator();
 		}
 
+		public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam ) { }
+
 		public override void OnSecond()
 		{
 			if ( Host.IsServer )

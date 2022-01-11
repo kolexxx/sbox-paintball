@@ -27,7 +27,6 @@ namespace PaintBall
 				Scoreboard.Instance.Show = true;
 		}
 
-
 		public override void Finish()
 		{
 			base.Finish();

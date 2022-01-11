@@ -65,7 +65,7 @@ namespace PaintBall
 			if ( attacker is Player killer )
 				killer?.OnPlayerKill( LastDamageInfo );
 
-			Game.Current.State?.OnPlayerKilled( this, attacker ?? null, LastDamageInfo );
+			Game.Current.State?.OnPlayerKilled( this, attacker, LastDamageInfo );
 
 			Event.Run( PBEvent.Player.Killed, this );
 			RPC.OnPlayerKilled( this );
@@ -74,8 +74,7 @@ namespace PaintBall
 		public override void TakeDamage( DamageInfo info )
 		{
 			LastDamageInfo = info;
-
-			GetDamageInfo( info.Attacker, info.Weapon, info.HitboxIndex, info.Position, info.Damage );
+			GetDamageInfo( To.Everyone, info.Attacker, info.Weapon, info.HitboxIndex, info.Position, info.Damage );
 
 			base.TakeDamage( info );
 		}
@@ -100,7 +99,7 @@ namespace PaintBall
 			else if ( ConsecutiveKills >= 2 )
 			{
 				int index = ConsecutiveKills - 2;
-				index = Math.Min( index, 3 );
+				index = Math.Min( index, _consecutiveKillSounds.Length - 1 );
 
 				Audio.AnnounceAll( _consecutiveKillSounds[index], Audio.Priority.Low );
 			}
@@ -108,9 +107,6 @@ namespace PaintBall
 			{
 				Audio.AnnounceAll( "headshot", Audio.Priority.Low );
 			}
-
-
-			Audio.Play( To.Single( Client ), "kill_confirmed" );
 		}
 
 		public void SwitchToBestWeapon()
@@ -135,7 +131,6 @@ namespace PaintBall
 				.WithPosition( position );
 
 			info.Damage = damage;
-
 			LastDamageInfo = info;
 			LastAttacker = info.Attacker;
 		}

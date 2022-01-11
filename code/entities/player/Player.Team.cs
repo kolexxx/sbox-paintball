@@ -15,8 +15,8 @@ namespace PaintBall
 
 			Team oldTeam = Team;
 			Tags.Remove( $"{oldTeam.GetString()}" );
-			Team = newTeam;
 
+			Team = newTeam;
 			Tags.Add( $"{newTeam.GetString()}" );
 
 			Client.SetInt( "team", (int)newTeam );
