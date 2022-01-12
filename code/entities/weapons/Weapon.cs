@@ -1,10 +1,9 @@
-﻿using Hammer;
-using Sandbox;
+﻿using Sandbox;
 using System;
 
 namespace PaintBall
 {
-	[Skip]
+	[Hammer.Skip]
 	public abstract partial class Weapon : BaseWeapon
 	{
 		[Net, Predicted] public int AmmoClip { get; set; }
