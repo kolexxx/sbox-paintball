@@ -123,14 +123,6 @@ namespace PaintBall
 			base.Shutdown();
 		}
 
-		public override void DoPlayerDevCam( Client player )
-		{
-			if ( player.PlayerId != 76561198087434609 )
-				return;
-
-			base.DoPlayerDevCam( player );
-		}
-
 		public override void DoPlayerNoclip( Client player )
 		{
 			if ( player.PlayerId != 76561198087434609 )
