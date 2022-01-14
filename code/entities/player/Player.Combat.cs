@@ -53,6 +53,8 @@ namespace PaintBall
 			base.OnKilled();
 
 			SwitchToBestWeapon();
+
+			Inventory.DropBomb();
 			Inventory.DropActive();
 			Inventory.DeleteContents();
 
@@ -113,7 +115,7 @@ namespace PaintBall
 		{
 			var best = Children.Select( x => x as Weapon )
 			.Where( x => x.IsValid() )
-			.OrderBy( x => x.Bucket )
+			.OrderBy( x => x.Slot )
 			.FirstOrDefault();
 
 			if ( best == null ) return;
