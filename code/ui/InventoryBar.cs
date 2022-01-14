@@ -35,7 +35,7 @@ namespace PaintBall
 				_weapons[i] = null;
 
 			foreach ( var weapon in player.CurrentPlayer.Children.OfType<Weapon>() )
-				_weapons[weapon.Bucket] = weapon;
+				_weapons[(int)weapon.Slot] = weapon;
 
 			for ( int i = 0; i < 5; i++ )
 			{
