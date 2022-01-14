@@ -73,7 +73,7 @@ metadata
 //
 // PaintBall.Bomb
 //
-@PointClass base(BaseProperties_paintball) editormodel( "weapons/rust_shotgun/rust_shotgun.vmdl" ) = pb_bomb : "A bomb that can be planted on a bombsite"
+@PointClass base(BaseProperties_paintball) editormodel( "weapons/rust_shotgun/rust_shotgun.vmdl" ) = pb_bomb : "A bomb that can be planted on a bombsite."
 [
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
