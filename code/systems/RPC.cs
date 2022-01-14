@@ -11,9 +11,9 @@ namespace PaintBall
 		}
 
 		[ClientRpc]
-		public static void ClientDisconnected( Client client, NetworkDisconnectionReason reason )
+		public static void ClientDisconnected( long playerId, NetworkDisconnectionReason reason )
 		{
-			Event.Run( PBEvent.Client.Disconnected, client, reason );
+			Event.Run( PBEvent.Client.Disconnected, playerId, reason );
 		}
 
 		[ClientRpc]

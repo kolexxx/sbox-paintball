@@ -2,7 +2,6 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PaintBall
 {
@@ -10,7 +9,7 @@ namespace PaintBall
 	{
 		public static Scoreboard Instance;
 		public bool Show { get; set; } = false;
-		private Dictionary<Client, Entry> _entries = new();
+		private Dictionary<long, Entry> _entries = new();
 		private Panel _header;
 		private Panel[] _sections = new Panel[3];
 
@@ -75,20 +74,20 @@ namespace PaintBall
 		}
 
 		[PBEvent.Player.Team.Changed]
-		public void UpdateEntry( Player player, Team oldTeam )
+		public void UpdateEntry( Player player, Team oldTeam = Team.None )
 		{
 			var client = player.Client;
 
 			if ( !client.IsValid() )
 				return;
 
-			var e = _entries[client];
+			var e = _entries[client.PlayerId];
 
-			if ( _entries.ContainsKey( client ) )
+			if ( _entries.ContainsKey( client.PlayerId ) )
 				e?.Delete();
 
 			e = AddEntry( client );
-			_entries[client] = e;
+			_entries[client.PlayerId] = e;
 		}
 
 		[PBEvent.Client.Joined]
@@ -101,20 +100,20 @@ namespace PaintBall
 				return;
 			}
 
-			if ( _entries.ContainsKey( client ) )
+			if ( _entries.ContainsKey( client.PlayerId ) )
 				return;
 
 			var e = AddEntry( client );
-			_entries[client] = e;
+			_entries[client.PlayerId] = e;
 		}
 
 		[PBEvent.Client.Disconnected]
-		public void ClientDisconnected( Client client, NetworkDisconnectionReason reason )
+		public void ClientDisconnected( long playerId, NetworkDisconnectionReason reason )
 		{
-			if ( _entries.TryGetValue( client, out var e ) )
+			if ( _entries.TryGetValue( playerId, out var e ) )
 			{
 				e?.Delete();
-				_entries.Remove( client );
+				_entries.Remove( playerId );
 			}
 		}
 
@@ -124,10 +123,9 @@ namespace PaintBall
 			if ( !Host.IsClient )
 				return;
 
-			foreach ( var client in Client.All.Except( _entries.Keys ) )
+			foreach ( var client in Client.All )
 			{
-				var e = AddEntry( client );
-				_entries[client] = e;
+				ClientJoined( client );
 			}
 		}
 
@@ -154,13 +152,13 @@ namespace PaintBall
 			{
 				base.Tick();
 
+				if ( SinceUpdate < 0.5f )
+					return;
+
 				if ( !IsVisible )
 					return;
 
 				if ( !Client.IsValid() )
-					return;
-
-				if ( SinceUpdate < 0.5f )
 					return;
 
 				SinceUpdate = 0f;
