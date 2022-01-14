@@ -6,16 +6,19 @@ namespace PaintBall
 {
 	public partial class GameplayState : BaseState
 	{
-		[ServerVar( "pb_freeze_duration", Help = "The duration of the freeze period" )]
+		[ServerVar( "pb_freeze_duration", Help = "The duration of the freeze period." )]
 		public static int FreezeDuration { get; set; } = 5;
-		[ServerVar( "pb_play_duration", Help = "The duration of the play period" )]
+		[ServerVar( "pb_play_duration", Help = "The duration of the play period." )]
 		public static int PlayDuration { get; set; } = 60;
-		[ServerVar( "pb_end_duration", Help = "The duration of the end period" )]
+		[ServerVar( "pb_end_duration", Help = "The duration of the end period." )]
 		public static int EndDuration { get; set; } = 5;
+		[ServerVar( "pb_bomb_duration", Help = "The time needed for the bomb to explode." )]
+		public static int BombDuration { get; set; } = 30;
 		[Net, Change] public int AliveBlue { get; private set; } = 0;
 		[Net, Change] public int AliveRed { get; private set; } = 0;
 		[Net] public int BlueScore { get; private set; } = 0;
 		[Net] public int RedScore { get; private set; } = 0;
+		[Net] public PlantedBomb Bomb { get; set; }
 		[Net, Change] public RoundState CurrentRoundState { get; private set; }
 		public override bool UpdateTimer => CurrentRoundState != RoundState.End;
 		private bool _firstBlood = false;
@@ -36,7 +39,10 @@ namespace PaintBall
 			base.OnPlayerLeave( player );
 
 			if ( player.LifeState != LifeState.Dead )
+			{
 				AdjustTeam( player.Team, -1 );
+				player.Inventory.DropBomb();
+			}
 		}
 
 		public override void OnPlayerSpawned( Player player )
@@ -51,7 +57,7 @@ namespace PaintBall
 			player.Inventory.Add( new Pistol() );
 			player.Inventory.Add( new Knife() );
 
-			if ( Rand.Int( 1, 3 ) == 1 )
+			if ( Rand.Int( 1, 1 ) == 1 )
 				player.Inventory.Add( new Throwable() );
 
 			base.OnPlayerSpawned( player );
@@ -95,7 +101,7 @@ namespace PaintBall
 
 				case RoundState.Play:
 
-					if ( Host.IsServer && (AliveBlue == 0 || AliveRed == 0) )
+					if ( Host.IsServer && (AliveBlue == 0 || (!Bomb.IsValid() && AliveRed == 0)) )
 						RoundStateFinish();
 
 					break;
@@ -104,6 +110,8 @@ namespace PaintBall
 
 					break;
 			}
+
+			Bomb?.Tick();
 		}
 
 		public override void Start()
@@ -132,6 +140,8 @@ namespace PaintBall
 
 					Game.Current.CleanUp();
 
+					int index = Rand.Int( 1, Team.Red.GetCount() );
+
 					foreach ( var player in Players )
 					{
 						if ( !player.IsValid() || player.Team == Team.None )
@@ -140,6 +150,8 @@ namespace PaintBall
 						player.Inventory.DeleteContents();
 
 						player.Respawn();
+						if ( --index == 0 )
+							player.Inventory.Add( new Bomb() );
 					}
 
 					if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
@@ -218,6 +230,31 @@ namespace PaintBall
 			RoundStateStart();
 		}
 
+		public void BombPlanted()
+		{
+			if ( CurrentRoundState == RoundState.Play )
+			{
+				StateEndTime = Time.Now + 30f;
+				NextSecondTime = 0f;
+			}
+		}
+
+		public void BombExplode()
+		{
+			if ( CurrentRoundState == RoundState.Play )
+			{
+				RoundStateFinish();
+			}
+		}
+
+		public void BombDefused()
+		{
+			if ( CurrentRoundState == RoundState.Play )
+			{
+				RoundStateFinish();
+			}
+		}
+
 		private void AdjustTeam( Team team, int num )
 		{
 			if ( team == Team.None )
@@ -237,6 +274,15 @@ namespace PaintBall
 
 		private Team GetWinner()
 		{
+			Debug.CheckRealms();
+			if ( Bomb.IsValid() )
+			{
+				if ( Bomb.Defused )
+					return Team.Blue;
+				else
+					return Team.Red;
+			}
+
 			if ( AliveBlue != 0 && AliveRed != 0 )
 				return Team.Blue; // Blue always wins
 
