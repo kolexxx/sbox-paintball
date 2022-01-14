@@ -2,11 +2,13 @@
 
 namespace PaintBall
 {
-	public partial class Player : Sandbox.Player
+	public partial class Player : Sandbox.Player, ITeamEntity
 	{
+		[Net] public bool IsOnBombsite { get; set; }
 		[Net] public TimeSince TimeSinceSpawned { get; private set; }
 		public ProjectileSimulator Projectiles { get; set; }
-
+		public bool CanPlantBomb => Team == Team.Red && GroundEntity is WorldEntity && IsOnBombsite && Game.Current.State is GameplayState;
+		
 		public new Inventory Inventory
 		{
 			get => base.Inventory as Inventory;
@@ -25,9 +27,10 @@ namespace PaintBall
 			Projectiles = new( this );
 			EnableTouch = true;
 			EnableShadowInFirstPerson = true;
-	
+
 			LifeState = LifeState.Dead;
 		}
+
 
 		public override void Respawn()
 		{
@@ -84,20 +87,8 @@ namespace PaintBall
 				return;
 			}
 
-			if ( Input.Pressed( InputButton.Drop ) )
-			{
-				var dropped = Inventory.DropActive();
-
-				if ( dropped != null )
-				{
-					if ( dropped.PhysicsGroup != null )
-					{
-						dropped.PhysicsGroup.Velocity = Velocity + (EyeRot.Forward + EyeRot.Up) * 300;
-
-						SwitchToBestWeapon();
-					}
-				}
-			}
+			TickPlayerUse();
+			TickPlayerDrop();
 
 			controller?.Simulate( cl, this, GetActiveAnimator() );
 		}
@@ -139,6 +130,24 @@ namespace PaintBall
 			Tags.Add( "player" );
 
 			base.Spawn();
+		}
+
+		private void TickPlayerDrop()
+		{
+			if ( Input.Pressed( InputButton.Drop ) )
+			{
+				var dropped = Inventory.DropActive();
+
+				if ( dropped != null )
+				{
+					if ( dropped.PhysicsGroup != null )
+					{
+						dropped.PhysicsGroup.Velocity = Velocity + (EyeRot.Forward + EyeRot.Up) * 300;
+
+						SwitchToBestWeapon();
+					}
+				}
+			}
 		}
 	}
 }
