@@ -6,10 +6,10 @@ namespace PaintBall
 	public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProjectile, new()
 	{
 		public virtual int BulletsPerFire => 1;
-		public virtual string FollowEffect => $"particles/{(Owner as Player)?.Team.GetString()}_glow.vpcf";
+		public virtual string FollowEffect => $"particles/{Owner.Team.GetString()}_glow.vpcf";
 		public virtual float Gravity => 0f;
 		public virtual string HitSound => "impact";
-		public virtual string ProjectileModel => $"models/{(Owner as Player)?.Team.GetString()}_ball/ball.vmdl";
+		public virtual string ProjectileModel => $"models/{Owner.Team.GetString()}_ball/ball.vmdl";
 		public virtual float ProjectileRadius => 3f;
 		public virtual float ProjectileScale => 0.25f;
 		public virtual float Speed => 2000f;
@@ -35,7 +35,7 @@ namespace PaintBall
 			AmmoClip--;
 			TimeSincePrimaryAttack = 0;
 
-			(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+			Owner.SetAnimBool( "b_attack", true );
 
 			ShootEffects();
 			PlaySound( FireSound );
