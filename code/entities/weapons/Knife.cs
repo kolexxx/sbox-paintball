@@ -2,10 +2,11 @@
 
 namespace PaintBall
 {
+	[Hammer.Skip]
 	public partial class Knife : Weapon
 	{
 		public override bool Automatic => true;
-		public override int Bucket => 2;
+		public override SlotType Slot => SlotType.Melee;
 		public override int ClipSize => 0;
 		public override bool Droppable => false;
 		public override string Icon => "ui/weapons/knife.png";

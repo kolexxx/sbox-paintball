@@ -7,7 +7,7 @@ namespace PaintBall
 	public partial class SMG : ProjectileWeapon<BaseProjectile>
 	{
 		public override bool Automatic => true;
-		public override int Bucket => 0;
+		public override SlotType Slot => SlotType.Primary;
 		public override int ClipSize => 30;
 		public override float Gravity => 7f;
 		public override string Icon => "ui/weapons/smg.png";

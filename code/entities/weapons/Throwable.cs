@@ -6,7 +6,7 @@ namespace PaintBall
 	[Hammer.EditorModel( "models/grenade/grenade.vmdl" )]
 	public sealed partial class Throwable : Weapon
 	{
-		public override int Bucket => 3;
+		public override SlotType Slot => SlotType.Utility;
 		public override int ClipSize => 1;
 		public override string FireSound => "";
 		public override string Icon => "ui/weapons/grenade.png";

@@ -6,7 +6,7 @@ namespace PaintBall
 	[Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
 	public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 	{
-		public override int Bucket => 0;
+		public override SlotType Slot => SlotType.Primary;
 		public override int BulletsPerFire => 4;
 		public override int ClipSize => 5;
 		public override string CrosshairClass => "shotgun";

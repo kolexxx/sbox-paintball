@@ -6,7 +6,7 @@ namespace PaintBall
 	[Hammer.EditorModel( "weapons/rust_pistol/rust_pistol.vmdl" )]
 	public partial class Pistol : ProjectileWeapon<BouncyProjectile>
 	{
-		public override int Bucket => 1;
+		public override SlotType Slot => SlotType.Secondary;
 		public override int ClipSize => 10;
 		public override float Gravity => 10f;
 		public override float PrimaryRate => 15f;
