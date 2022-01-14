@@ -28,8 +28,8 @@ namespace PaintBall
 			Icon = Add.Image( "", "icon" );
 			Name = Add.Label( "", "name" );
 			_head = Add.Image( "ui/terry/head.png", "terry" );
-			_chest = Add.Image( "ui/terry/stomach.png", "terry" );
-			_stomach = _chest;
+			_chest = Add.Image( "ui/terry/chest.png", "terry" );
+			_stomach = Add.Image( "ui/terry/stomach.png", "terry" );
 			_leftArm = Add.Image( "ui/terry/leftarm.png", "terry" );
 			_rightArm = Add.Image( "ui/terry/rightarm.png", "terry" );
 			_leftLeg = Add.Image( "ui/terry/leftleg.png", "terry" );
@@ -51,7 +51,8 @@ namespace PaintBall
 			s_current.Name.Text = s_current.Name.Text = $"YOU KILLED {player.Client.Name.ToUpper()}"; ;
 			s_current.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
 			s_current.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastDamageInfo.HitboxIndex ) );
-			s_current.Distance.Text = $"Distance: {Vector3.DistanceBetween( player.LastDamageInfo.Position, player.Position )}";
+			if ( player.LastDamageInfo.Weapon is not Knife )
+				s_current.Distance.Text = $"Distance: {Vector3.DistanceBetween( player.LastDamageInfo.Position, player.Position )}";
 			Sound.FromScreen( "kill_confirmed" );
 		}
 
