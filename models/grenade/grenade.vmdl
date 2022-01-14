@@ -78,7 +78,7 @@
 				[
 					{
 						_class = "PhysicsShapeCapsule"
-						parent_bone = ""
+						parent_bone = "hold_R"
 						surface_prop = "default"
 						collision_prop = "default"
 						radius = 3.04824
