@@ -36,6 +36,30 @@ namespace PaintBall
 			{
 				public NewAttribute() : base( New ) { }
 			}
+
+			public static class Bomb
+			{
+				public const string Planted = "pb.round.bomb.planted";
+
+				public class PlantedAttribute : EventAttribute
+				{
+					public PlantedAttribute() : base( Planted ) { }
+				}
+
+				public const string Explode = "pb.round.bomb.explode";
+
+				public class ExplodeAttribute : EventAttribute
+				{
+					public ExplodeAttribute() : base( Explode ) { }
+				}
+
+				public const string Defused = "pb.round.bomb.defused";
+
+				public class DefusedAttribute : EventAttribute
+				{
+					public DefusedAttribute() : base( Defused ) { }
+				}
+			}
 		}
 	}
 }
