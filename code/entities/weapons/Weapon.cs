@@ -3,8 +3,18 @@ using System;
 
 namespace PaintBall
 {
+	public enum SlotType : byte
+	{
+		Primary = 0,
+		Secondary = 1,
+		Melee = 2,
+		Utility = 3,
+		Deployable = 4,
+	}
+
+
 	[Hammer.Skip]
-	public abstract partial class Weapon : BaseWeapon
+	public abstract partial class Weapon : BaseWeapon, IUse
 	{
 		[Net, Predicted] public int AmmoClip { get; set; }
 		[Net, Predicted] public bool IsReloading { get; protected set; }
@@ -12,10 +22,11 @@ namespace PaintBall
 		[Net, Predicted] public TimeSince TimeSinceDeployed { get; protected set; }
 		[Net, Predicted] public TimeSince TimeSinceReload { get; protected set; }
 		public virtual bool Automatic => false;
-		public virtual int Bucket => 0;
+		public virtual SlotType Slot => SlotType.Primary;
 		public virtual int ClipSize => 20;
 		public virtual string CrosshairClass => "standard";
 		public virtual bool Droppable => true;
+		public virtual Team ExclusiveFor => Team.None;
 		public virtual string FireSound => "pbg";
 		public virtual string Icon => "ui/weapons/pistol.png";
 		public virtual bool IsMelee => false;
@@ -26,6 +37,12 @@ namespace PaintBall
 		public virtual float Spread => 0f;
 		public TimeSince TimeSinceDropped { get; private set; }
 		public virtual bool UnlimitedAmmo => false;
+
+		public new Player Owner
+		{
+			get => base.Owner as Player;
+			set => base.Owner = value;
+		}
 
 		public Weapon() { }
 
@@ -130,7 +147,7 @@ namespace PaintBall
 			TimeSinceReload = 0;
 			IsReloading = true;
 
-			(Owner as AnimEntity).SetAnimBool( "b_reload", true );
+			Owner.SetAnimBool( "b_reload", true );
 
 			ReloadEffects();
 		}
@@ -282,6 +299,19 @@ namespace PaintBall
 			ReserveAmmo -= available;
 
 			return available;
+		}
+
+		bool IUse.OnUse( Entity user )
+		{
+			if ( user is Player player )
+				player.Inventory.Add( this );
+
+			return false;
+		}
+
+		bool IUse.IsUsable( Entity user )
+		{
+			return Owner == null && user is Player;
 		}
 	}
 }
