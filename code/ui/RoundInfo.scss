@@ -29,14 +29,23 @@ roundinfo
         width: 210px;
         position: absolute;
         margin-top: 65px;
-        border-top: 1px solid white;
         font-size: 18px;
         opacity: 0;
         transition: opacity 0.5s ease-out;
+        flex-direction: column;
 
         .message
         {
             text-align: center;
+            top: -24px;
+            transition: top 0.5s linear;
+        }
+
+        panel
+        {
+            background-image: linear-gradient( to right, transparent, white 40%, white 60%, transparent );
+            width: 100%;
+            height: 1px;
             top: -24px;
             transition: top 0.5s linear;
         }
@@ -47,6 +56,12 @@ roundinfo
         opacity: 1;
 
         .message
+        {
+            top: auto;
+            transition: top 0.5s linear;
+        }
+
+        panel
         {
             top: auto;
             transition: top 0.5s linear;
