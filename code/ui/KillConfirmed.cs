@@ -52,7 +52,10 @@ namespace PaintBall
 			s_current.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
 			s_current.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastDamageInfo.HitboxIndex ) );
 			if ( player.LastDamageInfo.Weapon is not Knife )
-				s_current.Distance.Text = $"Distance: {Vector3.DistanceBetween( player.LastDamageInfo.Position, player.Position )}";
+			{
+				int distance = (Vector3.DistanceBetween( player.LastDamageInfo.Position, player.Position ) / 12f / 3.2808399f).CeilToInt();
+				s_current.Distance.Text = $"Distance: {distance}m";
+			}
 			Sound.FromScreen( "kill_confirmed" );
 		}
 
