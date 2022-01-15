@@ -304,7 +304,7 @@ namespace PaintBall
 		bool IUse.OnUse( Entity user )
 		{
 			if ( user is Player player )
-				player.Inventory.Add( this );
+				player.Inventory.Swap( this );
 
 			return false;
 		}
