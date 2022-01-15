@@ -52,6 +52,20 @@ ammo
     {
         display: none;
     }
+
+    progressbar
+    {
+        right: 60px;
+        width: 100px;
+        height: 10px;
+        transform: scale(-1);
+
+        .inner
+        {
+            transition: width 0.2s ease-out;
+            background-color: #ff0;
+        }
+    }
 }
 
 teamindicator

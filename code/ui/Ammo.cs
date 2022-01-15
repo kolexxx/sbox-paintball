@@ -6,14 +6,29 @@ namespace PaintBall
 {
 	public class Ammo : Panel
 	{
-		public Label AmmoCount;
+		public Label Reserve;
 		public Image AmmoIcon;
+		public ProgressBar Clip;
 
 		public Ammo()
 		{
-			AmmoCount = Add.Label( "100" );
-			AmmoIcon = Add.Image( "", "icon" );
-			AmmoIcon.SetTexture( "ui/ammo.png" );
+			AmmoIcon = Add.Image( "ui/ammo.png", "icon" );
+			Reserve = Add.Label( "100" );	
+			AddChild( new ProgressBar( () =>
+			 {
+				 var player = Local.Pawn as Player;
+				 if ( player == null )
+					 return 0;
+
+				 var weapon = player.CurrentPlayer.ActiveChild as Weapon;
+				 if ( weapon == null )
+					 return 0;
+
+				 return weapon.AmmoClip / (float)weapon.ClipSize;
+			 } ) );
+
+			Clip = GetChild( ChildrenCount - 1 ) as ProgressBar;
+			Clip.AddClass( "clip" );
 		}
 
 		public override void Tick()
@@ -32,13 +47,12 @@ namespace PaintBall
 
 			if ( weapon == null )
 			{
-				AmmoCount.Text = "";
+				Reserve.Text = "";
 
 				return;
 			}
 
-			string reserve = weapon.UnlimitedAmmo ? "∞" : $"{weapon.ReserveAmmo}";
-			AmmoCount.Text = $"{weapon.AmmoClip}/{reserve}";
+			Reserve.Text = weapon.UnlimitedAmmo ? "∞" : $"{weapon.ReserveAmmo}";
 		}
 	}
 }
