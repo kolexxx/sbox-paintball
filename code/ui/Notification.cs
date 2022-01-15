@@ -33,27 +33,6 @@ namespace PaintBall
 			BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 		}
 
-		[PBEvent.Round.End]
-		public static void RoundEnd( Team winner )
-		{
-			if ( !Host.IsClient )
-				return;
-
-			Create( $"{winner } wins!", GameplayState.EndDuration );
-		}
-
-		// We are creating a notification that will last the entire WaitingForPlayersState
-		[PBEvent.Game.StateChanged]
-		public static void OnStateChanged( BaseState oldState, BaseState newState )
-		{
-			if ( !Host.IsClient || newState is not WaitingForPlayersState )
-				return;
-
-			s_current?.Delete( true );
-			Local.Hud.AddChild( new Notification( "Waiting for players...", () => Game.Current.State is not WaitingForPlayersState ) );
-			s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as Notification;
-		}
-
 		[ClientRpc]
 		public static void Create( string text = "", float lifeTime = 0f )
 		{
@@ -65,6 +44,30 @@ namespace PaintBall
 
 			s_current?.Delete( true );
 			Local.Hud.AddChild( new Notification( text, lifeTime ) );
+			s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as Notification;
+		}
+
+		[PBEvent.Round.End]
+		private static void RoundEnd( Team winner )
+		{
+			if ( !Host.IsClient )
+				return;
+
+			// We only want to create a standard notification if the bomb didn't trigger the round to end
+
+			Create( $"{winner } wins!", GameplayState.EndDuration );
+			Audio.Announce( $"{winner.GetString()}win", Audio.Priority.High );
+		}
+
+		// We are creating a notification that will last the entire WaitingForPlayersState
+		[PBEvent.Game.StateChanged]
+		private static void OnStateChanged( BaseState oldState, BaseState newState )
+		{
+			if ( !Host.IsClient || newState is not WaitingForPlayersState )
+				return;
+
+			s_current?.Delete( true );
+			Local.Hud.AddChild( new Notification( "Waiting for players...", () => Game.Current.State is not WaitingForPlayersState ) );
 			s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as Notification;
 		}
 
