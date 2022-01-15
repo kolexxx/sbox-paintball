@@ -37,6 +37,17 @@ namespace PaintBall
 			return base.DropActive();
 		}
 
+		public Weapon Swap( Weapon weapon )
+		{
+			var ent = List.Find( x => (x as Weapon).Slot == weapon.Slot );
+			bool wasActive = ent?.IsActiveChild() ?? false;
+
+			Drop( ent );
+			Add( weapon, wasActive );
+
+			return ent as Weapon;
+		}
+
 		public Bomb DropBomb()
 		{
 			if ( Owner.Team != Team.Red )
