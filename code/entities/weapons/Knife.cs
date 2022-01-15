@@ -7,7 +7,7 @@ namespace PaintBall
 	{
 		public override bool Automatic => true;
 		public override SlotType Slot => SlotType.Melee;
-		public override int ClipSize => 0;
+		public override int ClipSize => 1;
 		public override bool Droppable => false;
 		public override string Icon => "ui/weapons/knife.png";
 		public override bool IsMelee => true;
@@ -15,6 +15,7 @@ namespace PaintBall
 		public override float PrimaryRate => 1.5f;
 		public override float SecondaryRate => 0.75f;
 		public override string ViewModelPath => "models/rust_boneknife/v_rust_boneknife.vmdl";
+		public override bool UnlimitedAmmo => true;
 
 		public override void Spawn()
 		{
