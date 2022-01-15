@@ -5,11 +5,13 @@ namespace PaintBall
 	[Hammer.Skip]
 	public partial class PlantedBomb : ModelEntity, IUse
 	{
-		[Net] public TimeUntil UntilDefuse { get; set; } = 5f;
-		[Net] public TimeUntil UntilExplode { get; set; }
-		[Net, Predicted] public bool Defused { get; set; } = false;
-		[Net] public Player Planter { get; set; }
 		[Net] public Player Defuser { get; set; }
+		[Net] public Player Planter { get; set; }
+		[Net, Change( nameof( OnDisabled ) )] public bool Disabled { get; set; }
+		public TimeSince TimeSinceStartedBeingDefused { get; set; } = 0f;
+		public TimeUntil TimeUntilExplode { get; set; }
+		public RealTimeUntil UntilTickSound { get; set; }
+		private GameplayState _gameplayState;
 
 		public override void Spawn()
 		{
@@ -17,69 +19,94 @@ namespace PaintBall
 
 			SetModel( $"models/red_ball/ball.vmdl" );
 			PhysicsEnabled = false;
-			UsePhysicsCollision = true;
-			SetInteractsAs( CollisionLayer.All );
+			UsePhysicsCollision = false;
+			SetInteractsAs( CollisionLayer.Solid );
 			SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
 
-			UntilExplode = GameplayState.BombDuration;
-			(Game.Current.State as GameplayState).Bomb = this;
+			_gameplayState = Game.Current.State as GameplayState;
+			_gameplayState.Bomb = this;
 
-			(Game.Current.State as GameplayState).BombPlanted();
-			Event.Run( PBEvent.Round.Bomb.Planted, this );
+			if ( _gameplayState.RoundState == RoundState.Play )
+			{
+				_gameplayState.RoundState = RoundState.Bomb;
+				_gameplayState.RoundStateStart();
+				TimeUntilExplode = _gameplayState.TimeLeft;
+			}
+			else
+			{
+				TimeUntilExplode = GameplayState.BombDuration;
+			}
 		}
 
 		public override void ClientSpawn()
 		{
 			base.ClientSpawn();
 
-			(Game.Current.State as GameplayState).Bomb = this;
-			Event.Run( PBEvent.Round.Bomb.Planted, this );
+			_gameplayState = Game.Current.State as GameplayState;
+			_gameplayState.Bomb = this;
 
-			Notification.Create( "Bomb has been planted!", 5 );
+			Notification.Create( "Bomb has been planted!", 3 );
 			Audio.Announce( "bomb_planted", Audio.Priority.Medium );
 		}
 
 		public void Tick()
 		{
-			if ( Defused )
-			{
-				Event.Unregister( this );
+			if ( Disabled )
 				return;
-			}
 
-			if ( UntilDefuse )
+			if ( TimeSinceStartedBeingDefused >= 5f )
 			{
-				Defused = true;
-				if ( IsServer )
-					(Game.Current.State as GameplayState).BombDefused();
-				
+				if ( _gameplayState.RoundState == RoundState.Bomb )
+					_gameplayState.RoundStateFinish();
+
+				Disabled = true;
 				Event.Run( PBEvent.Round.Bomb.Defused, this );
 			}
-			else if ( UntilExplode )
+			else if ( TimeUntilExplode )
 			{
-				if ( IsServer )
-					(Game.Current.State as GameplayState).BombExplode();
+				if ( _gameplayState.RoundState == RoundState.Bomb )
+					_gameplayState.RoundStateFinish();
 
+				Defuser = null;
+				Disabled = true;
 				Event.Run( PBEvent.Round.Bomb.Explode, this );
 			}
-			else if ( IsServer )
+			else
 			{
 				if ( Defuser == null )
-					UntilDefuse = 5f;
+					TimeSinceStartedBeingDefused = 0f;
 
 				Defuser = null;
 			}
 		}
 
-		public bool IsUsable( Entity user )
+		[Event.Tick.Client]
+		public void ClientTick()
 		{
-			return user is Player player && player.Team == Team.Blue && Defuser == null;
+			if ( !Disabled && UntilTickSound )
+			{
+				Sound.FromEntity( "bomb_tick", this );
+				UntilTickSound = 1f;
+			}
 		}
 
-		public bool OnUse( Entity user )
+		private void OnDisabled()
+		{
+			if ( Defuser != null )
+				Event.Run( PBEvent.Round.Bomb.Defused, this );
+			else
+				Event.Run( PBEvent.Round.Bomb.Explode, this );
+		}
+
+		bool IUse.IsUsable( Entity user )
+		{
+			return !Disabled && user is Player player && player.Team == Team.Blue && Defuser == null;
+		}
+
+		bool IUse.OnUse( Entity user )
 		{
 			Defuser = user as Player;
-			return true;
+			return !Disabled;
 		}
 	}
 }
