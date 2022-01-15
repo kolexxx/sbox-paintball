@@ -1,7 +1,15 @@
 {
-    "sharedassets": "*.*",
-    "type": "game",
-    "name": "PaintBall",
-    "ident": "kole.paintball",
-    "rootnamespace": "PaintBall"
+  "SharedAssets": "*.*",
+  "Title": "PaintBall",
+  "Type": "game",
+  "Org": "local",
+  "Ident": "paintball",
+  "FullIdent": "local.paintball",
+  "Schema": 1,
+  "NeedsUpgrade": false,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "HasCode": true,
+  "CodePath": "code",
+  "RootNamespace": "PaintBall"
 }

@@ -274,7 +274,6 @@ namespace PaintBall
 
 		private Team GetWinner()
 		{
-			Debug.CheckRealms();
 			if ( Bomb.IsValid() )
 			{
 				if ( Bomb.Defused )
