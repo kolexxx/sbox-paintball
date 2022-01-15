@@ -6,7 +6,7 @@ namespace PaintBall
 	[Hammer.EditorModel( "weapons/rust_shotgun/rust_shotgun.vmdl" )]
 	public partial class Bomb : Weapon
 	{
-		[Net] public TimeUntil TimeUntilPlant { get; set; }
+		[Net] public TimeSince TimeSinceStartedPlanting { get; set; }
 		public override bool Automatic => true;
 		public override SlotType Slot => SlotType.Deployable;
 		public override int ClipSize => 1;
@@ -21,7 +21,15 @@ namespace PaintBall
 		{
 			base.ActiveStart( entity );
 
-			TimeUntilPlant = 5f;
+			TimeSinceStartedPlanting = 0;
+		}
+
+		public override void ActiveEnd( Entity ent, bool dropped )
+		{
+			base.ActiveEnd( ent, dropped );
+
+			if ( Owner.IsValid() )
+				Owner.IsPlantingBomb = false;
 		}
 
 		public override void Spawn()
@@ -35,9 +43,13 @@ namespace PaintBall
 		public override bool CanPrimaryAttack()
 		{
 			if ( Owner.CanPlantBomb && base.CanPrimaryAttack() )
+			{
+				Owner.IsPlantingBomb = true;
 				return true;
+			}
 
-			TimeUntilPlant = 1f;
+			TimeSinceStartedPlanting = 0f;
+			Owner.IsPlantingBomb = false;
 			return false;
 		}
 
@@ -45,27 +57,26 @@ namespace PaintBall
 		{
 			base.AttackPrimary();
 
-			if ( TimeUntilPlant )
+			if ( TimeSinceStartedPlanting >= 1f )
 			{
+				Owner.IsPlantingBomb = false;
 				FinishPlanting();
 
 				var trace = Trace.Ray( Owner.Position, Owner.Position + Vector3.Down * 64 )
-					.HitLayer( CollisionLayer.WORLD_GEOMETRY )
+					.WorldOnly()
 					.Run();
 
 				if ( IsServer )
 				{
-					using ( Prediction.Off() )
-					{
-						var bomb = new PlantedBomb();
-						bomb.Position = trace.EndPos;
-						bomb.Rotation = Owner.Rotation;
-						bomb.Planter = Owner;
-					}
+					var bomb = new PlantedBomb();
+					bomb.Position = trace.EndPos;
+					bomb.Rotation = Owner.Rotation;
+					bomb.Planter = Owner;
 
-					Owner.SwitchToBestWeapon();
 					Delete();
 				}
+
+				Owner.SwitchToBestWeapon();
 			}
 		}
 
