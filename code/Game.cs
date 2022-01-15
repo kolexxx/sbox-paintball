@@ -156,7 +156,7 @@ namespace PaintBall
 
 			foreach ( var entity in All.OfType<ModelEntity>() )
 			{
-				if ( entity is IProjectile || entity is PlantedBomb )
+				if ( entity is IProjectile )
 					entity.Delete();
 			}
 
