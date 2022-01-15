@@ -19,9 +19,9 @@ namespace PaintBall
 		private Player _spectatedPlayer;
 		private RealTimeSince _timeSincePlayerChanged;
 
-		public void ChangeSpectateCamera()
+		public void TickPlayerChangeSpectateCamera()
 		{
-			if ( !IsServer || !Input.Pressed( InputButton.Jump ) )
+			if ( !IsServer || this.Alive()|| !Input.Pressed( InputButton.Jump ) )
 				return;
 
 			Camera = Camera switch

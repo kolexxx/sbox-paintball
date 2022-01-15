@@ -8,7 +8,8 @@ namespace PaintBall
 		[Net] public TimeSince TimeSinceSpawned { get; private set; }
 		public ProjectileSimulator Projectiles { get; set; }
 		public bool CanPlantBomb => Team == Team.Red && GroundEntity is WorldEntity && IsOnBombsite && Game.Current.State is GameplayState;
-		
+		public bool IsPlantingBomb { get; set; }
+
 		public new Inventory Inventory
 		{
 			get => base.Inventory as Inventory;
@@ -80,13 +81,7 @@ namespace PaintBall
 			if ( Input.ActiveChild != null )
 				ActiveChild = Input.ActiveChild;
 
-			if ( LifeState != LifeState.Alive )
-			{
-				ChangeSpectateCamera();
-
-				return;
-			}
-
+			TickPlayerChangeSpectateCamera();
 			TickPlayerUse();
 			TickPlayerDrop();
 
