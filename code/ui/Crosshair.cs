@@ -2,32 +2,31 @@
 using Sandbox.UI;
 using System;
 
-namespace PaintBall
+namespace PaintBall;
+
+public class Crosshair : Panel
 {
-	public class Crosshair : Panel
+	public Weapon TargetWeapon { get; set; }
+	private int _fireCount = 0;
+
+	public Crosshair()
 	{
-		public Weapon TargetWeapon { get; set; }
-		private int _fireCount = 0;
-
-		public Crosshair()
-		{
-			StyleSheet.Load( "/ui/Crosshair.scss" );
-		}
-
-		public override void Tick()
-		{
-			base.Tick();
-
-			if ( Local.Pawn is not Player player )
-				return;
-
-			SetClass( "hidden", Scoreboard.Instance.IsVisible || TeamSelect.Instance.IsVisible || !TargetWeapon.ViewModelEntity.EnableDrawing );	
-			SetClass( "fire", _fireCount > 0 );
-			
-			_fireCount = Math.Max( 0, _fireCount - 1 );
-		}
-
-		[PanelEvent]
-		public void FireEvent() { _fireCount += 5; }
+		StyleSheet.Load( "/ui/Crosshair.scss" );
 	}
+
+	public override void Tick()
+	{
+		base.Tick();
+
+		if ( Local.Pawn is not Player player )
+			return;
+
+		SetClass( "hidden", Scoreboard.Instance.IsVisible || TeamSelect.Instance.IsVisible || !TargetWeapon.ViewModelEntity.EnableDrawing );
+		SetClass( "fire", _fireCount > 0 );
+
+		_fireCount = Math.Max( 0, _fireCount - 1 );
+	}
+
+	[PanelEvent]
+	public void FireEvent() { _fireCount += 5; }
 }

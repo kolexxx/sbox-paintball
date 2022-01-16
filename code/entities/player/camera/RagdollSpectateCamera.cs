@@ -1,22 +1,21 @@
 ﻿using Sandbox;
 
-namespace PaintBall
+namespace PaintBall;
+
+public class RagdollSpectateCamera : Camera, ISpectateCamera
 {
-	public class RagdollSpectateCamera : Camera, ISpectateCamera
+	public override void Activated()
 	{
-		public override void Activated()
-		{
-			Position = CurrentView.Position;
+		Position = CurrentView.Position;
 
-			base.Activated();
-		}
+		base.Activated();
+	}
 
-		public override void Update()
-		{
-		}
+	public override void Update()
+	{
+	}
 
-		public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
-		{
-		}
+	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
+	{
 	}
 }

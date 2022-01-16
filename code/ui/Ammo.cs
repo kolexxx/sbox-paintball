@@ -2,57 +2,56 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace PaintBall
+namespace PaintBall;
+
+public class Ammo : Panel
 {
-	public class Ammo : Panel
+	public Label Reserve;
+	public Image AmmoIcon;
+	public ProgressBar Clip;
+
+	public Ammo()
 	{
-		public Label Reserve;
-		public Image AmmoIcon;
-		public ProgressBar Clip;
+		AmmoIcon = Add.Image( "ui/ammo.png", "icon" );
+		Reserve = Add.Label( "100" );
+		AddChild( new ProgressBar( () =>
+		 {
+			 var player = Local.Pawn as Player;
+			 if ( player == null )
+				 return 0;
 
-		public Ammo()
+			 var weapon = player.CurrentPlayer.ActiveChild as Weapon;
+			 if ( weapon == null )
+				 return 0;
+
+			 return weapon.AmmoClip / (float)weapon.ClipSize;
+		 } ) );
+
+		Clip = GetChild( ChildrenCount - 1 ) as ProgressBar;
+		Clip.AddClass( "clip" );
+	}
+
+	public override void Tick()
+	{
+		var player = Local.Pawn as Player;
+
+		if ( player == null )
+			return;
+
+		SetClass( "hidden", TeamSelect.Instance.IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
+
+		if ( !IsVisible )
+			return;
+
+		var weapon = player.CurrentPlayer.ActiveChild as Weapon;
+
+		if ( weapon == null )
 		{
-			AmmoIcon = Add.Image( "ui/ammo.png", "icon" );
-			Reserve = Add.Label( "100" );	
-			AddChild( new ProgressBar( () =>
-			 {
-				 var player = Local.Pawn as Player;
-				 if ( player == null )
-					 return 0;
+			Reserve.Text = "";
 
-				 var weapon = player.CurrentPlayer.ActiveChild as Weapon;
-				 if ( weapon == null )
-					 return 0;
-
-				 return weapon.AmmoClip / (float)weapon.ClipSize;
-			 } ) );
-
-			Clip = GetChild( ChildrenCount - 1 ) as ProgressBar;
-			Clip.AddClass( "clip" );
+			return;
 		}
 
-		public override void Tick()
-		{
-			var player = Local.Pawn as Player;
-
-			if ( player == null )
-				return;
-
-			SetClass( "hidden", TeamSelect.Instance.IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
-
-			if ( !IsVisible )
-				return;
-
-			var weapon = player.CurrentPlayer.ActiveChild as Weapon;
-
-			if ( weapon == null )
-			{
-				Reserve.Text = "";
-
-				return;
-			}
-
-			Reserve.Text = weapon.UnlimitedAmmo ? "∞" : $"{weapon.ReserveAmmo}";
-		}
+		Reserve.Text = weapon.UnlimitedAmmo ? "∞" : $"{weapon.ReserveAmmo}";
 	}
 }

@@ -2,27 +2,26 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace PaintBall
+namespace PaintBall;
+
+public class TeamIndicator : Panel
 {
-	public class TeamIndicator : Panel
+	public Label TeamName;
+
+	public TeamIndicator()
 	{
-		public Label TeamName;
+		TeamName = Add.Label( "None" );
+	}
 
-		public TeamIndicator()
-		{
-			TeamName = Add.Label( "None" );
-		}
+	public override void Tick()
+	{
+		base.Tick();
 
-		public override void Tick()
-		{
-			base.Tick();
+		if ( Local.Pawn is not Player player )
+			return;
 
-			if ( Local.Pawn is not Player player )
-				return;
+		SetClass( "hidden", TeamSelect.Instance.IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
 
-			SetClass( "hidden", TeamSelect.Instance.IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
-
-			TeamName.Text = player.CurrentPlayer == player ? player.Team.ToString() : player.CurrentPlayer.Client.Name;
-		}
+		TeamName.Text = player.CurrentPlayer == player ? player.Team.ToString() : player.CurrentPlayer.Client.Name;
 	}
 }

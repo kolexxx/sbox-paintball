@@ -1,79 +1,78 @@
 ﻿using Sandbox;
 
-namespace PaintBall
+namespace PaintBall;
+
+public static partial class PBEvent
 {
-	public static partial class PBEvent
+	public static class Round
 	{
-		public static class Round
+		public const string Start = "pb.round.start";
+
+		/// <summary>
+		/// Runs when the play duration of the current round has started.
+		/// </summary>
+		public class StartAttribute : EventAttribute
 		{
-			public const string Start = "pb.round.start";
+			public StartAttribute() : base( Start ) { }
+		}
+
+		public const string End = "pb.round.end";
+
+		/// <summary>
+		/// Runs when the play duration of the current round has ended.
+		/// <para>Event is passed the <strong><see cref="PaintBall.Team"/></strong> which won the round.</para>
+		/// </summary>
+		public class EndAttribute : EventAttribute
+		{
+			public EndAttribute() : base( End ) { }
+		}
+
+		public const string New = "pb.round.new";
+
+		/// <summary>
+		/// Runs at the beginning of a new round.
+		/// </summary>
+		public class NewAttribute : EventAttribute
+		{
+			public NewAttribute() : base( New ) { }
+		}
+
+		public static class Bomb
+		{
+			public const string Planted = "pb.round.bomb.planted";
 
 			/// <summary>
-			/// Runs when the play duration of the current round has started.
+			/// Runs when the bomb has been planted.
+			/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
+			/// of the bomb.</para>
 			/// </summary>
-			public class StartAttribute : EventAttribute
+			public class PlantedAttribute : EventAttribute
 			{
-				public StartAttribute() : base( Start ) { }
+				public PlantedAttribute() : base( Planted ) { }
 			}
-
-			public const string End = "pb.round.end";
 
 			/// <summary>
-			/// Runs when the play duration of the current round has ended.
-			/// <para>Event is passed the <strong><see cref="PaintBall.Team"/></strong> which won the round.</para>
+			/// Runs when the bomb has exploded.
+			/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
+			/// of the bomb.</para>
 			/// </summary>
-			public class EndAttribute : EventAttribute
+			public const string Explode = "pb.round.bomb.explode";
+
+			public class ExplodeAttribute : EventAttribute
 			{
-				public EndAttribute() : base( End ) { }
+				public ExplodeAttribute() : base( Explode ) { }
 			}
 
-			public const string New = "pb.round.new";
+			public const string Defused = "pb.round.bomb.defused";
 
 			/// <summary>
-			/// Runs at the beginning of a new round.
+			/// Runs when the bomb has been defused.
+			/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
+			/// of the bomb.</para>
 			/// </summary>
-			public class NewAttribute : EventAttribute
+			public class DefusedAttribute : EventAttribute
 			{
-				public NewAttribute() : base( New ) { }
-			}
-
-			public static class Bomb
-			{
-				public const string Planted = "pb.round.bomb.planted";
-
-				/// <summary>
-				/// Runs when the bomb has been planted.
-				/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
-				/// of the bomb.</para>
-				/// </summary>
-				public class PlantedAttribute : EventAttribute
-				{
-					public PlantedAttribute() : base( Planted ) { }
-				}
-
-				/// <summary>
-				/// Runs when the bomb has exploded.
-				/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
-				/// of the bomb.</para>
-				/// </summary>
-				public const string Explode = "pb.round.bomb.explode";
-
-				public class ExplodeAttribute : EventAttribute
-				{
-					public ExplodeAttribute() : base( Explode ) { }
-				}
-
-				public const string Defused = "pb.round.bomb.defused";
-
-				/// <summary>
-				/// Runs when the bomb has been defused.
-				/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
-				/// of the bomb.</para>
-				/// </summary>
-				public class DefusedAttribute : EventAttribute
-				{
-					public DefusedAttribute() : base( Defused ) { }
-				}
+				public DefusedAttribute() : base( Defused ) { }
 			}
 		}
 	}

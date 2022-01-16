@@ -1,12 +1,11 @@
 using Sandbox;
 
-namespace PaintBall
+namespace PaintBall;
+
+public static class Debug
 {
-	public static class Debug
+	public static void CheckRealms()
 	{
-		public static void CheckRealms()
-		{
-			Log.Info( $"Client : {Host.IsClient} | Server : {Host.IsServer}" );
-		}
+		Log.Info( $"Client : {Host.IsClient} | Server : {Host.IsServer}" );
 	}
 }

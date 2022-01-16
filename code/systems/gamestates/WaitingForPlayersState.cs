@@ -1,84 +1,83 @@
 using Sandbox;
 
-namespace PaintBall
+namespace PaintBall;
+
+public partial class WaitingForPlayersState : BaseState
 {
-	public partial class WaitingForPlayersState : BaseState
+	public override int StateDuration => 10;
+
+	public override void OnPlayerJoin( Player player )
 	{
-		public override int StateDuration => 10;
+		base.OnPlayerJoin( player );
 
-		public override void OnPlayerJoin( Player player )
+		StateEndTime = StateDuration + Time.Now;
+		NextSecondTime = 0f;
+	}
+
+	public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
+	{
+		base.OnPlayerKilled( player, attacker, info );
+
+		player.Respawn();
+
+		Game.Current.MoveToSpawnpoint( player );
+	}
+
+	public override void OnPlayerSpawned( Player player )
+	{
+		player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
+		player.Inventory.Add( new Pistol() );
+		player.Inventory.Add( new Knife() );
+
+		base.OnPlayerSpawned( player );
+	}
+
+	public override void OnSecond()
+	{
+		base.OnSecond();
+
+		if ( Host.IsServer )
 		{
-			base.OnPlayerJoin( player );
-
-			StateEndTime = StateDuration + Time.Now;
-			NextSecondTime = 0f;
+			if ( Players.Count > 1 )
+				Notification.Create( $"Starting in {TimeLeftSeconds}" );
+			else
+				Notification.Create( "Waiting for players..." );
 		}
+	}
 
-		public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
+	public override void Tick()
+	{
+		base.Tick();
+
+		if ( Host.IsServer )
 		{
-			base.OnPlayerKilled( player, attacker, info );
+			if ( Players.Count > 1 )
+			{
+				if ( TimeLeft <= 0 )
+					Game.Current.ChangeState( new GameplayState() );
+			}
+			else
+			{
+				StateEndTime = Time.Now;
+			}
+		}
+	}
+
+	public override void Start()
+	{
+		base.Start();
+
+		if ( Players.Count > 1 )
+			StateEndTime = StateDuration + Time.Now;
+
+		foreach ( var player in Players )
+		{
+			if ( player.Team == Team.None )
+				continue;
+
+			player.Reset();
 
 			player.Respawn();
-
-			Game.Current.MoveToSpawnpoint( player );
-		}
-
-		public override void OnPlayerSpawned( Player player )
-		{
-			player.Inventory.Add( (Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun()), true );
-			player.Inventory.Add( new Pistol() );
-			player.Inventory.Add( new Knife() );
-
-			base.OnPlayerSpawned( player );
-		}
-
-		public override void OnSecond()
-		{
-			base.OnSecond();
-
-			if ( Host.IsServer )
-			{
-				if ( Players.Count > 1 )
-					Notification.Create( $"Starting in {TimeLeftSeconds}" );
-				else
-					Notification.Create( "Waiting for players..." );
-			}
-		}
-
-		public override void Tick()
-		{
-			base.Tick();
-
-			if ( Host.IsServer )
-			{
-				if ( Players.Count > 1 )
-				{
-					if ( TimeLeft <= 0 )
-						Game.Current.ChangeState( new GameplayState() );
-				}
-				else
-				{
-					StateEndTime = Time.Now;
-				}
-			}
-		}
-
-		public override void Start()
-		{
-			base.Start();
-
-			if ( Players.Count > 1 )
-				StateEndTime = StateDuration + Time.Now;
-
-			foreach ( var player in Players )
-			{
-				if ( player.Team == Team.None )
-					continue;
-
-				player.Reset();
-
-				player.Respawn();
-			}
 		}
 	}
 }

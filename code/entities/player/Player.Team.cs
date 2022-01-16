@@ -1,78 +1,77 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 
-namespace PaintBall
+namespace PaintBall;
+
+public partial class Player
 {
-	public partial class Player
+	[Net, Change] public Team Team { get; set; }
+	public TimeSince TimeSinceTeamChanged { get; private set; } = 5f;
+
+	public void SetTeam( Team newTeam )
 	{
-		[Net, Change] public Team Team { get; set; }
-		public TimeSince TimeSinceTeamChanged { get; private set; } = 5f;
+		TimeSinceTeamChanged = 0f;
+		TakeDamage( DamageInfo.Generic( float.MaxValue ) );
 
-		public void SetTeam( Team newTeam )
+		Team oldTeam = Team;
+		Tags.Remove( $"{oldTeam.GetString()}" );
+
+		Team = newTeam;
+		Tags.Add( $"{newTeam.GetString()}" );
+
+		Client.SetInt( "team", (int)newTeam );
+
+		Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
+		ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined Team {newTeam}", $"avatar:{Client.PlayerId}" );
+
+		Game.Current.State.OnPlayerChangedTeam( this, oldTeam, newTeam );
+	}
+
+	public void OnTeamChanged( Team oldTeam, Team newTeam )
+	{
+		if ( IsLocalPawn && !IsSpectatingPlayer )
 		{
-			TimeSinceTeamChanged = 0f;
-			TakeDamage( DamageInfo.Generic( float.MaxValue ) );
-
-			Team oldTeam = Team;
-			Tags.Remove( $"{oldTeam.GetString()}" );
-
-			Team = newTeam;
-			Tags.Add( $"{newTeam.GetString()}" );
-
-			Client.SetInt( "team", (int)newTeam );
-
-			Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
-			ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined Team {newTeam}", $"avatar:{Client.PlayerId}" );
-
-			Game.Current.State.OnPlayerChangedTeam( this, oldTeam, newTeam );
+			Local.Hud.RemoveClass( oldTeam.GetString() );
+			Local.Hud.AddClass( newTeam.GetString() );
 		}
 
-		public void OnTeamChanged( Team oldTeam, Team newTeam )
-		{
-			if ( IsLocalPawn && !IsSpectatingPlayer )
-			{
-				Local.Hud.RemoveClass( oldTeam.GetString() );
-				Local.Hud.AddClass( newTeam.GetString() );
-			}
+		Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
+	}
 
-			Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
+	[ServerCmd( "changeteam", Help = "Changes the caller's team" )]
+	public static void ChangeTeamCommand( Team team )
+	{
+		Client client = ConsoleSystem.Caller;
+
+		if ( client == null || client.Pawn is not Player player )
+			return;
+
+		if ( player.Team == team || player.TimeSinceTeamChanged <= 5f )
+			return;
+
+		if ( team == Team.None )
+		{
+			player.SetTeam( team );
+
+			return;
 		}
 
-		[ServerCmd( "changeteam", Help = "Changes the caller's team" )]
-		public static void ChangeTeamCommand( Team team )
+		int redCount = Team.Red.GetCount();
+		int blueCount = Team.Blue.GetCount();
+
+		if ( player.Team == Team.None )
 		{
-			Client client = ConsoleSystem.Caller;
-
-			if ( client == null || client.Pawn is not Player player )
-				return;
-
-			if ( player.Team == team || player.TimeSinceTeamChanged <= 5f )
-				return;	
-
-			if ( team == Team.None )
-			{
+			if ( team == Team.Blue && (blueCount <= redCount) )
 				player.SetTeam( team );
-
-				return;
-			}
-
-			int redCount = Team.Red.GetCount();
-			int blueCount = Team.Blue.GetCount();
-
-			if ( player.Team == Team.None )
-			{
-				if ( team == Team.Blue && (blueCount <= redCount) )
-					player.SetTeam( team );
-				else if ( team == Team.Red && (redCount <= blueCount) )
-					player.SetTeam( team );
-			}
-			else
-			{
-				if ( team == Team.Blue && (blueCount < redCount) )
-					player.SetTeam( team );
-				else if ( team == Team.Red && (redCount < blueCount) )
-					player.SetTeam( team );
-			}
+			else if ( team == Team.Red && (redCount <= blueCount) )
+				player.SetTeam( team );
+		}
+		else
+		{
+			if ( team == Team.Blue && (blueCount < redCount) )
+				player.SetTeam( team );
+			else if ( team == Team.Red && (redCount < blueCount) )
+				player.SetTeam( team );
 		}
 	}
 }

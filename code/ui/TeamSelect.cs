@@ -2,84 +2,83 @@
 using Sandbox.UI;
 using System;
 
-namespace PaintBall
+namespace PaintBall;
+
+[UseTemplate]
+public partial class TeamSelect : Panel
 {
-	[UseTemplate]
-	public partial class TeamSelect : Panel
+	public static TeamSelect Instance;
+	public Button Blue { get; set; }
+	public Button Red { get; set; }
+	public Label Timer { get; set; }
+	public Label ServerInfo { get; set; }
+	public Image MapImage { get; set; }
+	private TimeSince _timeSinceOpened = 0f;
+	private bool _open = true;
+
+	public TeamSelect()
 	{
-		public static TeamSelect Instance;
-		public Button Blue { get; set; }
-		public Button Red { get; set; }
-		public Label Timer { get; set; }
-		public Label ServerInfo { get; set; }
-		public Image MapImage { get; set; }
-		private TimeSince _timeSinceOpened = 0f;
-		private bool _open = true;
+		Instance = this;
+		ServerInfo.Text = Global.Lobby.Title + " | " + Global.MapName;
+	}
 
-		public TeamSelect()
+	public override void Tick()
+	{
+		base.Tick();
+
+		if ( Input.Pressed( InputButton.Menu ) && _timeSinceOpened > 0.1f )
 		{
-			Instance = this;
-			ServerInfo.Text = Global.Lobby.Title + " | " + Global.MapName;
+			_open = !_open;
+			_timeSinceOpened = 0f;
 		}
 
-		public override void Tick()
-		{
-			base.Tick();
+		SetClass( "open", _open );
 
-			if ( Input.Pressed( InputButton.Menu ) && _timeSinceOpened > 0.1f )
-			{
-				_open = !_open;
-				_timeSinceOpened = 0f;
-			}
+		if ( !IsVisible )
+			return;
 
-			SetClass( "open", _open );
+		var player = Local.Pawn;
+		if ( player == null )
+			return;
 
-			if ( !IsVisible )
-				return;
+		var game = Game.Current;
+		if ( game == null )
+			return;
 
-			var player = Local.Pawn;
-			if ( player == null )
-				return;
+		var state = game.State;
+		if ( state == null )
+			return;
 
-			var game = Game.Current;
-			if ( game == null )
-				return;
+		if ( state.UpdateTimer )
+			Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
+		else
+			Timer.Text = "";
+	}
 
-			var state = game.State;
-			if ( state == null )
-				return;
+	public void BecomeSpectator()
+	{
+		Player.ChangeTeamCommand( Team.None );
+	}
 
-			if ( state.UpdateTimer )
-				Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
-			else
-				Timer.Text = "";
-		}
+	public void JoinBlue()
+	{
+		Player.ChangeTeamCommand( Team.Blue );
+	}
 
-		public void BecomeSpectator()
-		{
-			Player.ChangeTeamCommand( Team.None );
-		}
+	public void JoinRed()
+	{
+		Player.ChangeTeamCommand( Team.Red );
+	}
 
-		public void JoinBlue()
-		{
-			Player.ChangeTeamCommand( Team.Blue );
-		}
+	[PBEvent.Player.Team.Changed]
+	public void OnPlayerTeamChanged(Player player, Team oldTeam)
+	{
+		if ( player.IsLocalPawn )
+			Close();
+	}
 
-		public void JoinRed()
-		{
-			Player.ChangeTeamCommand( Team.Red );
-		}
-
-		[PBEvent.Player.Team.Changed]
-		public void OnPlayerTeamChanged( Player player, Team oldTeam )
-		{
-			if ( player.IsLocalPawn )
-				Close();
-		}
-
-		private void Close()
-		{
-			_open = false;
-		}
+	private void Close()
+	{
+		_open = false;
 	}
 }

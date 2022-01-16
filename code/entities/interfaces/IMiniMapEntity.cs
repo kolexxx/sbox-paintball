@@ -1,8 +1,8 @@
-﻿namespace PaintBall
+﻿namespace PaintBall;
+
+public interface IMiniMapEntity
 {
-	public interface IMiniMapEntity
-	{
-		public string Icon { get; }
-		public void Update();
-	}
+	public string Icon { get; }
+	public void Update();
 }
+

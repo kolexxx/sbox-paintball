@@ -1,62 +1,61 @@
 ﻿using Sandbox;
 using System.Linq;
 
-namespace PaintBall
+namespace PaintBall;
+
+public class Inventory : BaseInventory
 {
-	public class Inventory : BaseInventory
+	public Inventory( Player player ) : base( player ) { }
+
+	public new Player Owner
 	{
-		public Inventory( Player player ) : base( player ) { }
+		get => base.Owner as Player;
+		init => base.Owner = value;
+	}
 
-		public new Player Owner
-		{
-			get => base.Owner as Player;
-			init => base.Owner = value;
-		}
+	public override bool Add( Entity entity, bool makeActive = false )
+	{
+		if ( entity is not Weapon weapon )
+			return false;
 
-		public override bool Add( Entity entity, bool makeActive = false )
-		{
-			if ( entity is not Weapon weapon )
-				return false;
+		if ( weapon.ExclusiveFor != Team.None && weapon.ExclusiveFor != Owner.Team )
+			return false;
 
-			if ( weapon.ExclusiveFor != Team.None && weapon.ExclusiveFor != Owner.Team )
-				return false;
+		if ( List.Any( x => (x as Weapon).Slot == weapon.Slot ) )
+			return false;
 
-			if ( List.Any( x => (x as Weapon).Slot == weapon.Slot ) )
-				return false;
+		return base.Add( entity, makeActive );
+	}
 
-			return base.Add( entity, makeActive );
-		}
+	public override Entity DropActive()
+	{
+		var ac = Owner.ActiveChild as Weapon;
 
-		public override Entity DropActive()
-		{
-			var ac = Owner.ActiveChild as Weapon;
+		if ( !ac.IsValid() || !ac.Droppable )
+			return null;
 
-			if ( !ac.IsValid() || !ac.Droppable )
-				return null;
+		return base.DropActive();
+	}
 
-			return base.DropActive();
-		}
+	public Weapon Swap( Weapon weapon )
+	{
+		var ent = List.Find( x => (x as Weapon).Slot == weapon.Slot );
+		bool wasActive = ent?.IsActiveChild() ?? false;
 
-		public Weapon Swap( Weapon weapon )
-		{
-			var ent = List.Find( x => (x as Weapon).Slot == weapon.Slot );
-			bool wasActive = ent?.IsActiveChild() ?? false;
+		Drop( ent );
+		Add( weapon, wasActive );
 
-			Drop( ent );
-			Add( weapon, wasActive );
+		return ent as Weapon;
+	}
 
-			return ent as Weapon;
-		}
+	public Bomb DropBomb()
+	{
+		if ( Owner.Team != Team.Red )
+			return null;
 
-		public Bomb DropBomb()
-		{
-			if ( Owner.Team != Team.Red )
-				return null;
+		var bomb = List.Find( x => x is Bomb ) as Bomb;
+		Drop( bomb );
 
-			var bomb = List.Find( x => x is Bomb ) as Bomb;
-			Drop( bomb );
-
-			return bomb;
-		}
+		return bomb;
 	}
 }

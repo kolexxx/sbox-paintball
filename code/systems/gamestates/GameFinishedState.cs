@@ -1,38 +1,37 @@
 ﻿using Sandbox;
 
-namespace PaintBall
+namespace PaintBall;
+
+public partial class GameFinishedState : BaseState
 {
-	public partial class GameFinishedState : BaseState
+	public override int StateDuration => 5;
+
+	public override void OnSecond()
 	{
-		public override int StateDuration => 5;
+		base.OnSecond();
 
-		public override void OnSecond()
-		{
-			base.OnSecond();
+		if ( Host.IsServer && Time.Now >= StateEndTime )
+			Game.Current.ChangeState( new WaitingForPlayersState() );
+	}
 
-			if ( Host.IsServer && Time.Now >= StateEndTime )
-				Game.Current.ChangeState( new WaitingForPlayersState() );
-		}
+	public override void Start()
+	{
+		base.Start();
 
-		public override void Start()
-		{
-			base.Start();
+		foreach ( var player in Players )
+			player.Inventory?.DeleteContents();
 
-			foreach ( var player in Players )
-				player.Inventory?.DeleteContents();
+		FreezeTime = 5f;
 
-			FreezeTime = 5f;
+		if ( Host.IsClient )
+			Scoreboard.Instance.Show = true;
+	}
 
-			if ( Host.IsClient )
-				Scoreboard.Instance.Show = true;
-		}
+	public override void Finish()
+	{
+		base.Finish();
 
-		public override void Finish()
-		{
-			base.Finish();
-
-			if ( Host.IsClient )
-				Scoreboard.Instance.Show = false;
-		}
+		if ( Host.IsClient )
+			Scoreboard.Instance.Show = false;
 	}
 }

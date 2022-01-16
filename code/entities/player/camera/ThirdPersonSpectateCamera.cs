@@ -1,79 +1,78 @@
 ﻿using Sandbox;
 
-namespace PaintBall
+namespace PaintBall;
+
+public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 {
-	public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
+	private const float LERP_MODE = 0;
+	private const int CAMERA_DISTANCE = 240;
+
+	private Rotation _targetRot;
+	private Vector3 _targetPos;
+	private Angles _lookAngles;
+
+	public override void Activated()
 	{
-		private const float LERP_MODE = 0;
-		private const int CAMERA_DISTANCE = 240;
+		base.Activated();
 
-		private Rotation _targetRot;
-		private Vector3 _targetPos;
-		private Angles _lookAngles;
+		Rotation = CurrentView.Rotation;
+	}
 
-		public override void Activated()
+	public override void Update()
+	{
+		if ( Local.Pawn is not Player player )
+			return;
+
+		bool wantToUpdate = Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 );
+
+		if ( !player.IsSpectatingPlayer || wantToUpdate )
+			player.UpdateSpectatingPlayer( Input.Pressed( InputButton.Attack2 ) ? -1 : 1 );
+
+		_targetRot = Rotation.From( _lookAngles );
+		Rotation = Rotation.Slerp( Rotation, _targetRot, 10 * RealTime.Delta * (1 - LERP_MODE) );
+
+		_targetPos = GetSpectatePoint() + Rotation.Forward * -CAMERA_DISTANCE;
+
+		var trace = Trace.Ray( GetSpectatePoint(), _targetPos )
+			.Ignore( player.CurrentPlayer )
+			.Run();
+
+		Position = trace.EndPos;
+	}
+
+	private Vector3 GetSpectatePoint()
+	{
+		if ( Local.Pawn is not Player player || !player.IsSpectatingPlayer )
+			return Vector3.Zero;
+
+		return player.CurrentPlayer.EyePos;
+	}
+
+	public override void BuildInput( InputBuilder input )
+	{
+		_lookAngles += input.AnalogLook;
+		_lookAngles.roll = 0;
+
+		base.BuildInput( input );
+	}
+
+	public override void Deactivated()
+	{
+		if ( Local.Pawn is not Player player )
+			return;
+
+		if ( Host.IsClient && player.CurrentPlayer.IsValid() )
 		{
-			base.Activated();
-
-			Rotation = CurrentView.Rotation;
+			Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetString() );
+			Local.Hud.AddClass( player.Team.GetString() );
 		}
 
-		public override void Update()
-		{
-			if ( Local.Pawn is not Player player )
-				return;
+		player.CurrentPlayer = null;
+	}
 
-			bool wantToUpdate = Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 );
-
-			if ( !player.IsSpectatingPlayer || wantToUpdate )
-				player.UpdateSpectatingPlayer( Input.Pressed( InputButton.Attack2 ) ? -1 : 1 );
-
-			_targetRot = Rotation.From( _lookAngles );
-			Rotation = Rotation.Slerp( Rotation, _targetRot, 10 * RealTime.Delta * (1 - LERP_MODE) );
-
-			_targetPos = GetSpectatePoint() + Rotation.Forward * -CAMERA_DISTANCE;
-
-			var trace = Trace.Ray( GetSpectatePoint(), _targetPos )
-				.Ignore( player.CurrentPlayer )
-				.Run();
-
-			Position = trace.EndPos;
-		}
-
-		private Vector3 GetSpectatePoint()
-		{
-			if ( Local.Pawn is not Player player || !player.IsSpectatingPlayer )
-				return Vector3.Zero;
-
-			return player.CurrentPlayer.EyePos;
-		}
-
-		public override void BuildInput( InputBuilder input )
-		{
-			_lookAngles += input.AnalogLook;
-			_lookAngles.roll = 0;
-
-			base.BuildInput( input );
-		}
-
-		public override void Deactivated()
-		{
-			if ( Local.Pawn is not Player player )
-				return;
-
-			if ( Host.IsClient && player.CurrentPlayer.IsValid() )
-			{
-				Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetString() );
-				Local.Hud.AddClass( player.Team.GetString() );
-			}
-
-			player.CurrentPlayer = null;
-		}
-
-		public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
-		{
-			Local.Hud.RemoveClass( oldPlayer.Team.GetString() );
-			Local.Hud.AddClass( newPlayer.Team.GetString() );
-		}
+	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
+	{
+		Local.Hud.RemoveClass( oldPlayer.Team.GetString() );
+		Local.Hud.AddClass( newPlayer.Team.GetString() );
 	}
 }

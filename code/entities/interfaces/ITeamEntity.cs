@@ -1,7 +1,6 @@
-﻿namespace PaintBall
+﻿namespace PaintBall;
+
+public interface ITeamEntity
 {
-	public interface ITeamEntity
-	{
-		public Team Team { get; }
-	}
+	public Team Team { get; }
 }

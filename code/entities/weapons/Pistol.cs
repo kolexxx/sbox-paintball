@@ -1,34 +1,33 @@
 ﻿using Sandbox;
 
-namespace PaintBall
+namespace PaintBall;
+
+[Library( "pb_pistol", Title = "Pistol", Spawnable = true )]
+[Hammer.EditorModel( "weapons/rust_pistol/rust_pistol.vmdl" )]
+public partial class Pistol : ProjectileWeapon<BouncyProjectile>
 {
-	[Library( "pb_pistol", Title = "Pistol", Spawnable = true )]
-	[Hammer.EditorModel( "weapons/rust_pistol/rust_pistol.vmdl" )]
-	public partial class Pistol : ProjectileWeapon<BouncyProjectile>
+	public override SlotType Slot => SlotType.Secondary;
+	public override int ClipSize => 10;
+	public override float Gravity => 10f;
+	public override float PrimaryRate => 15f;
+	public override float ReloadTime => 2.0f;
+	public override float Speed => 1500f;
+	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
+
+	public override void Spawn()
 	{
-		public override SlotType Slot => SlotType.Secondary;
-		public override int ClipSize => 10;
-		public override float Gravity => 10f;
-		public override float PrimaryRate => 15f;
-		public override float ReloadTime => 2.0f;
-		public override float Speed => 1500f;
-		public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
+		base.Spawn();
 
-		public override void Spawn()
-		{
-			base.Spawn();
+		AmmoClip = ClipSize;
+		ReserveAmmo = 20;
 
-			AmmoClip = ClipSize;
-			ReserveAmmo = 20;
+		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+	}
 
-			SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
-		}
-
-		public override void SimulateAnimator( PawnAnimator anim )
-		{
-			anim.SetParam( "holdtype", 1 );
-			anim.SetParam( "aimat_weight", 1.0f );
-			anim.SetParam( "holdtype_handedness", 0 );
-		}
+	public override void SimulateAnimator(PawnAnimator anim)
+	{
+		anim.SetParam( "holdtype", 1 );
+		anim.SetParam( "aimat_weight", 1.0f );
+		anim.SetParam( "holdtype_handedness", 0 );
 	}
 }

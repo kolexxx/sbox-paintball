@@ -1,65 +1,64 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
 
-namespace PaintBall
+namespace PaintBall;
+
+public partial class ProjectileSimulator
 {
-	public partial class ProjectileSimulator
+	public List<BaseProjectile> List { get; private set; }
+	public Player Owner { get; private set; }
+
+	public ProjectileSimulator(Player owner)
 	{
-		public List<BaseProjectile> List { get; private set; }
-		public Player Owner { get; private set; }
+		List = new();
+		Owner = owner;
+	}
 
-		public ProjectileSimulator( Player owner )
+	public void Add(BaseProjectile projectile)
+	{
+		List.Add( projectile );
+	}
+
+	public void Remove(BaseProjectile projectile)
+	{
+		List.Remove( projectile );
+	}
+
+	public void Clear()
+	{
+		foreach ( var projectile in List )
 		{
-			List = new();
-			Owner = owner;
+			projectile.Delete();
 		}
 
-		public void Add( BaseProjectile projectile )
-		{
-			List.Add( projectile );
-		}
+		List.Clear();
+	}
 
-		public void Remove( BaseProjectile projectile )
+	public void Simulate()
+	{
+		using ( Entity.LagCompensation() )
 		{
-			List.Remove( projectile );
-		}
-
-		public void Clear()
-		{
-			foreach ( var projectile in List )
+			for ( int i = List.Count - 1; i >= 0; i-- )
 			{
-				projectile.Delete();
-			}
+				var projectile = List[i];
 
-			List.Clear();
-		}
-
-		public void Simulate()
-		{
-			using ( Entity.LagCompensation() )
-			{
-				for ( int i = List.Count - 1; i >= 0; i-- )
+				if ( !projectile.IsValid() )
 				{
-					var projectile = List[i];
-
-					if ( !projectile.IsValid() )
-					{
-						List.RemoveAt( i );
-						continue;
-					}
-
-					if ( Prediction.FirstTime )
-						projectile.Simulate();
+					List.RemoveAt( i );
+					continue;
 				}
+
+				if ( Prediction.FirstTime )
+					projectile.Simulate();
 			}
 		}
 	}
+}
 
-	public static class ProjectileSimulatorExtensions
+public static class ProjectileSimulatorExtensions
+{
+	public static bool IsValid(this ProjectileSimulator simulator)
 	{
-		public static bool IsValid( this ProjectileSimulator simulator )
-		{
-			return simulator != null && (simulator.Owner?.IsValid() ?? false);
-		}
+		return simulator != null && (simulator.Owner?.IsValid() ?? false);
 	}
 }

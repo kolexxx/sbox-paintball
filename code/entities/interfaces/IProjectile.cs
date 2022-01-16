@@ -1,12 +1,11 @@
 ﻿using Sandbox;
 
-namespace PaintBall
+namespace PaintBall;
+
+public interface IProjectile : ITeamEntity
 {
-	public interface IProjectile : ITeamEntity
-	{
-		public RealTimeUntil DestroyTime { get; }
-		public float LifeTime { get; }
-		public string ModelPath { get; }
-		public Entity Origin { get; }	
-	}
+	public RealTimeUntil DestroyTime { get; }
+	public float LifeTime { get; }
+	public string ModelPath { get; }
+	public Entity Origin { get; }
 }
