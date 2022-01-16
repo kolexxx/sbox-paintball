@@ -26,13 +26,13 @@ public partial class BaseProjectile : ModelEntity, IProjectile
 	protected SceneObject ModelEntity { get; set; }
 	protected Particles Trail { get; set; }
 
-	public void Initialize(Vector3 start, Vector3 velocity, float radius)
+	public void Initialize( Vector3 start, Vector3 velocity, float radius )
 	{
 		Initialize( start, velocity );
 		Radius = radius;
 	}
 
-	public void Initialize(Vector3 start, Vector3 velocity)
+	public void Initialize( Vector3 start, Vector3 velocity )
 	{
 		DestroyTime = LifeTime;
 
@@ -135,12 +135,12 @@ public partial class BaseProjectile : ModelEntity, IProjectile
 		return !IsClientOnly && Owner.IsValid() && Owner.IsLocalPawn;
 	}
 
-	protected virtual bool HasHitTarget(ref TraceResult trace)
+	protected virtual bool HasHitTarget( ref TraceResult trace )
 	{
 		return (trace.Hit && CanHitTime) || trace.StartedSolid;
 	}
 
-	protected void CreateDecal(string decalname, ref TraceResult trace)
+	protected void CreateDecal( string decalname, ref TraceResult trace )
 	{
 		var decalPath = decalname;
 		if ( decalPath != null )
@@ -150,7 +150,7 @@ public partial class BaseProjectile : ModelEntity, IProjectile
 		}
 	}
 
-	protected virtual void OnHit(ref TraceResult trace)
+	protected virtual void OnHit( ref TraceResult trace )
 	{
 		if ( !trace.Entity.IsValid() )
 			return;

@@ -16,7 +16,7 @@ public partial class Popup : Panel
 	public bool HasLifetime { get; init; } = false;
 	private RealTimeSince _sinceConditionCheck = 0.2f;
 
-	public Popup(float lifeTime)
+	public Popup( float lifeTime )
 	{
 		UntilDelete = lifeTime;
 		HasLifetime = true;
@@ -24,7 +24,7 @@ public partial class Popup : Panel
 		Condition = () => UntilDelete;
 	}
 
-	public Popup(Func<bool> condition)
+	public Popup( Func<bool> condition )
 	{
 		Condition = condition;
 	}

@@ -8,18 +8,18 @@ public partial class ProjectileSimulator
 	public List<BaseProjectile> List { get; private set; }
 	public Player Owner { get; private set; }
 
-	public ProjectileSimulator(Player owner)
+	public ProjectileSimulator( Player owner )
 	{
 		List = new();
 		Owner = owner;
 	}
 
-	public void Add(BaseProjectile projectile)
+	public void Add( BaseProjectile projectile )
 	{
 		List.Add( projectile );
 	}
 
-	public void Remove(BaseProjectile projectile)
+	public void Remove( BaseProjectile projectile )
 	{
 		List.Remove( projectile );
 	}
@@ -57,7 +57,7 @@ public partial class ProjectileSimulator
 
 public static class ProjectileSimulatorExtensions
 {
-	public static bool IsValid(this ProjectileSimulator simulator)
+	public static bool IsValid( this ProjectileSimulator simulator )
 	{
 		return simulator != null && (simulator.Owner?.IsValid() ?? false);
 	}

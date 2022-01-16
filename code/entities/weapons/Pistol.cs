@@ -24,7 +24,7 @@ public partial class Pistol : ProjectileWeapon<BouncyProjectile>
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 	}
 
-	public override void SimulateAnimator(PawnAnimator anim)
+	public override void SimulateAnimator( PawnAnimator anim )
 	{
 		anim.SetParam( "holdtype", 1 );
 		anim.SetParam( "aimat_weight", 1.0f );

@@ -45,7 +45,7 @@ public class Scoreboard : Panel
 	}
 
 	[PBEvent.Player.Killed]
-	public void OnPlayerKilled(Player player)
+	public void OnPlayerKilled( Player player )
 	{
 		for ( int i = 1; i <= 2; i++ )
 		{
@@ -60,7 +60,7 @@ public class Scoreboard : Panel
 		}
 	}
 
-	public Entry AddEntry(Client client)
+	public Entry AddEntry( Client client )
 	{
 		Team team = Team.None;
 
@@ -74,7 +74,7 @@ public class Scoreboard : Panel
 	}
 
 	[PBEvent.Player.Team.Changed]
-	public void UpdateEntry(Player player, Team oldTeam = Team.None)
+	public void UpdateEntry( Player player, Team oldTeam = Team.None )
 	{
 		var client = player.Client;
 
@@ -91,7 +91,7 @@ public class Scoreboard : Panel
 	}
 
 	[PBEvent.Client.Joined]
-	public void ClientJoined(Client client)
+	public void ClientJoined( Client client )
 	{
 		if ( !client.IsValid() )
 		{
@@ -108,7 +108,7 @@ public class Scoreboard : Panel
 	}
 
 	[PBEvent.Client.Disconnected]
-	public void ClientDisconnected(long playerId, NetworkDisconnectionReason reason)
+	public void ClientDisconnected( long playerId, NetworkDisconnectionReason reason )
 	{
 		if ( _entries.TryGetValue( playerId, out var e ) )
 		{

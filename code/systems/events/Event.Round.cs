@@ -51,13 +51,14 @@ public static partial class PBEvent
 				public PlantedAttribute() : base( Planted ) { }
 			}
 
+			public const string Explode = "pb.round.bomb.explode";
+
 			/// <summary>
 			/// Runs when the bomb has exploded.
 			/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
-			/// of the bomb.</para>
+			/// of the bomb. Gets called before <strong><see cref="PaintBall.PBEvent.Round.EndAttribute"/></strong>
+			/// if the bomb explosion triggered the round to end.</para>
 			/// </summary>
-			public const string Explode = "pb.round.bomb.explode";
-
 			public class ExplodeAttribute : EventAttribute
 			{
 				public ExplodeAttribute() : base( Explode ) { }
@@ -68,7 +69,8 @@ public static partial class PBEvent
 			/// <summary>
 			/// Runs when the bomb has been defused.
 			/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
-			/// of the bomb.</para>
+			/// of the bomb. Gets called before <strong><see cref="PaintBall.PBEvent.Round.EndAttribute"/></strong>
+			/// if the bomb defuse triggered the round to end.</para>
 			/// </summary>
 			public class DefusedAttribute : EventAttribute
 			{

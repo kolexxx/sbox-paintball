@@ -18,7 +18,7 @@ public class KillConfirmed : Popup
 	private Image _leftLeg;
 	private Image _rightLeg;
 
-	public KillConfirmed(float lifeTime) : base( lifeTime )
+	public KillConfirmed( float lifeTime ) : base( lifeTime )
 	{
 		s_current = this;
 
@@ -39,7 +39,7 @@ public class KillConfirmed : Popup
 	}
 
 	[PBEvent.Player.Killed]
-	public static void OnPlayerKilled(Player player)
+	public static void OnPlayerKilled( Player player )
 	{
 		if ( !Host.IsClient || player.LastAttacker != Local.Pawn )
 			return;
@@ -61,7 +61,7 @@ public class KillConfirmed : Popup
 		Sound.FromScreen( "kill_confirmed" );
 	}
 
-	public void SetHit(HitboxGroup hitboxGroup)
+	private void SetHit( HitboxGroup hitboxGroup )
 	{
 		switch ( hitboxGroup )
 		{

@@ -17,14 +17,14 @@ public partial class Bomb : Weapon
 	public override float ReloadTime => 2.0f;
 	public override string ViewModelPath => "weapons/rust_shotgun/v_rust_shotgun.vmdl";
 
-	public override void ActiveStart(Entity entity)
+	public override void ActiveStart( Entity entity )
 	{
 		base.ActiveStart( entity );
 
 		TimeSinceStartedPlanting = 0;
 	}
 
-	public override void ActiveEnd(Entity ent, bool dropped)
+	public override void ActiveEnd( Entity ent, bool dropped )
 	{
 		base.ActiveEnd( ent, dropped );
 

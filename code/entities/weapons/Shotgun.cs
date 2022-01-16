@@ -29,7 +29,7 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 		SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );
 	}
 
-	public override void ActiveStart(Entity entity)
+	public override void ActiveStart( Entity entity )
 	{
 		base.ActiveStart( entity );
 
@@ -52,7 +52,7 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 		return TimeSincePrimaryAttack > (1 / rate);
 	}
 
-	public override void Simulate(Client owner)
+	public override void Simulate( Client owner )
 	{
 		base.Simulate( owner );
 
@@ -76,7 +76,7 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 		_attackedDuringReload = false;
 	}
 
-	public override void SimulateAnimator(PawnAnimator anim)
+	public override void SimulateAnimator( PawnAnimator anim )
 	{
 		anim.SetParam( "holdtype", 3 );
 	}

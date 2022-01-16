@@ -19,7 +19,7 @@ public class ProgressBar : Panel
 	private RealTimeSince _sinceGetPercentage = 0.25f;
 	private Panel _innerPanel;
 
-	public ProgressBar(Func<float> fraction, bool deleteOnComplete = false)
+	public ProgressBar( Func<float> fraction, bool deleteOnComplete = false )
 	{
 		DeleteOnComplete = deleteOnComplete;
 		Fraction = fraction;

@@ -18,7 +18,7 @@ public sealed class KillFeed : Panel
 	}
 
 	[PBEvent.Player.Killed]
-	public void OnPlayerKilled(Player player)
+	public void OnPlayerKilled( Player player )
 	{
 		var attacker = player.LastAttacker;
 
@@ -55,7 +55,7 @@ public sealed class KillFeed : Panel
 	}
 
 	[PBEvent.Game.StateChanged]
-	private void OnStatechanged(BaseState oldState, BaseState newState)
+	private void OnStatechanged( BaseState oldState, BaseState newState )
 	{
 		DeleteChildren();
 	}
@@ -66,7 +66,7 @@ public sealed class KillFeed : Panel
 		public Image Method { get; init; }
 		public Label Right { get; init; }
 
-		public Entry(float lifeTime) : base( lifeTime )
+		public Entry( float lifeTime ) : base( lifeTime )
 		{
 			Left = Add.Label( "", "left" );
 			Method = Add.Image( "", "method" );

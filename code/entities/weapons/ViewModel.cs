@@ -16,7 +16,7 @@ public sealed class ViewModel : BaseViewModel
 
 	private bool _activated = false;
 
-	public override void PostCameraSetup(ref CameraSetup camSetup)
+	public override void PostCameraSetup( ref CameraSetup camSetup )
 	{
 		base.PostCameraSetup( ref camSetup );
 
@@ -71,7 +71,7 @@ public sealed class ViewModel : BaseViewModel
 		_lastYaw = newYaw;
 	}
 
-	private Vector3 CalcSwingOffset(float pitchDelta, float yawDelta)
+	private Vector3 CalcSwingOffset( float pitchDelta, float yawDelta )
 	{
 		Vector3 swingVelocity = new Vector3( 0, yawDelta, pitchDelta );
 
@@ -86,7 +86,7 @@ public sealed class ViewModel : BaseViewModel
 		return _swingOffset;
 	}
 
-	private Vector3 CalcBobbingOffset(Vector3 velocity)
+	private Vector3 CalcBobbingOffset( Vector3 velocity )
 	{
 		_bobAnim += Time.Delta * _bobCycleTime;
 

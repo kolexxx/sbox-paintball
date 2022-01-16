@@ -13,7 +13,7 @@ public enum Team : byte
 
 public static class TeamExtensions
 {
-	public static Color GetColor(this Team team)
+	public static Color GetColor( this Team team )
 	{
 		switch ( team )
 		{
@@ -26,7 +26,7 @@ public static class TeamExtensions
 		}
 	}
 
-	public static string GetString(this Team team)
+	public static string GetString( this Team team )
 	{
 		switch ( team )
 		{
@@ -39,12 +39,12 @@ public static class TeamExtensions
 		}
 	}
 
-	public static IEnumerable<Player> GetAll(this Team team)
+	public static IEnumerable<Player> GetAll( this Team team )
 	{
 		return Entity.All.OfType<Player>().Where( e => e.Team == team );
 	}
 
-	public static int GetCount(this Team team)
+	public static int GetCount( this Team team )
 	{
 		return Entity.All.OfType<Player>().Where( e => e.Team == team ).Count();
 	}

@@ -26,7 +26,7 @@ public partial class SMG : ProjectileWeapon<BaseProjectile>
 		SetModel( "weapons/rust_smg/rust_smg.vmdl" );
 	}
 
-	public override void SimulateAnimator(PawnAnimator anim)
+	public override void SimulateAnimator( PawnAnimator anim )
 	{
 		anim.SetParam( "holdtype", 2 );
 		anim.SetParam( "aimat_weight", 1.0f );

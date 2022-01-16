@@ -58,7 +58,7 @@ public class InventoryBar : Panel
 	}
 
 	[Event.BuildInput]
-	private void BuildInput(InputBuilder input)
+	private void BuildInput( InputBuilder input )
 	{
 		if ( Local.Pawn is not Player player )
 			return;
@@ -77,7 +77,7 @@ public class InventoryBar : Panel
 		if ( input.Pressed( InputButton.Slot5 ) ) SetActiveSlot( input, 4 );
 	}
 
-	private void SetActiveSlot(InputBuilder input, int i)
+	private void SetActiveSlot( InputBuilder input, int i )
 	{
 		_close = 3f;
 
@@ -103,7 +103,7 @@ public class InventoryBar : Panel
 		public Image Icon;
 		public Label Number;
 
-		public InventoryIcon(int i, Panel parent)
+		public InventoryIcon( int i, Panel parent )
 		{
 			Parent = parent;
 			Icon = Add.Image( "", "slot-icon" );
@@ -116,7 +116,7 @@ public class InventoryBar : Panel
 			SetClass( "hidden", true );
 		}
 
-		public void UpdateWeapon(Weapon weapon)
+		public void UpdateWeapon( Weapon weapon )
 		{
 			TargetWeapon = weapon;
 			Icon.SetTexture( weapon?.Icon );

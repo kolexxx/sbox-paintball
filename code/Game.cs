@@ -17,6 +17,13 @@ public partial class Game : Sandbox.Game
 	[Net, Change( nameof( OnStateChanged ) )]
 	public BaseState State { get; private set; }
 
+	[ServerVar( "pb_max_players", Help = "The maximum amount of players allowed to be on the server." )]
+	public static int MaxPlayers
+	{
+		get => Global.Lobby.MaxMembers;
+		set => Global.Lobby.MaxMembers = value;
+	}
+
 	[ServerVar( "pb_min_players", Help = "The minimum players required to start." )]
 	public static int MinPlayers { get; set; } = 2;
 
@@ -40,7 +47,7 @@ public partial class Game : Sandbox.Game
 		State?.Tick();
 	}
 
-	public void ChangeState(BaseState state)
+	public void ChangeState( BaseState state )
 	{
 		Assert.NotNull( state );
 
@@ -53,12 +60,12 @@ public partial class Game : Sandbox.Game
 		Event.Run( PBEvent.Game.StateChanged, oldState, state );
 	}
 
-	public override bool CanHearPlayerVoice(Client source, Client dest)
+	public override bool CanHearPlayerVoice( Client source, Client dest )
 	{
 		return true;
 	}
 
-	public override void ClientJoined(Client client)
+	public override void ClientJoined( Client client )
 	{
 		var player = new Player();
 
@@ -72,7 +79,7 @@ public partial class Game : Sandbox.Game
 		RPC.ClientJoined( client );
 	}
 
-	public override void ClientDisconnect(Client client, NetworkDisconnectionReason reason)
+	public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
 	{
 		State?.OnPlayerLeave( client.Pawn as Player );
 
@@ -82,14 +89,14 @@ public partial class Game : Sandbox.Game
 		base.ClientDisconnect( client, reason );
 	}
 
-	public override void MoveToSpawnpoint(Entity pawn)
+	public override void MoveToSpawnpoint( Entity pawn )
 	{
 		if ( pawn is Player player )
 		{
 			Team team = player.Team;
 
 			if ( player.Team == Team.None )
-				team = (Team)Rand.Int( 1, 2 );
+				team = (Team) Rand.Int( 1, 2 );
 
 			var spawnpoints = All
 							 .OfType<PlayerSpawnPoint>()
@@ -122,7 +129,7 @@ public partial class Game : Sandbox.Game
 		base.Shutdown();
 	}
 
-	public override void DoPlayerDevCam(Client player)
+	public override void DoPlayerDevCam( Client player )
 	{
 		if ( player.PlayerId != 76561198087434609 )
 			return;
@@ -130,7 +137,7 @@ public partial class Game : Sandbox.Game
 		base.DoPlayerDevCam( player );
 	}
 
-	public override void DoPlayerNoclip(Client player)
+	public override void DoPlayerNoclip( Client player )
 	{
 		if ( player.PlayerId != 76561198087434609 )
 			return;
@@ -138,7 +145,7 @@ public partial class Game : Sandbox.Game
 		base.DoPlayerNoclip( player );
 	}
 
-	public override void DoPlayerSuicide(Client cl)
+	public override void DoPlayerSuicide( Client cl )
 	{
 		if ( State?.CanPlayerSuicide == false )
 			return;

@@ -43,13 +43,13 @@ public partial class Knife : Weapon
 		MeleeAttack( 100f, 50f, 16f );
 	}
 
-	public override void SimulateAnimator(PawnAnimator anim)
+	public override void SimulateAnimator( PawnAnimator anim )
 	{
 		anim.SetParam( "holdtype", 5 );
 		anim.SetParam( "aimat_weight", 1.0f );
 	}
 
-	protected void MeleeAttack(float damage, float range, float radius)
+	protected void MeleeAttack( float damage, float range, float radius )
 	{
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;

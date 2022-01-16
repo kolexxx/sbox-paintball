@@ -75,7 +75,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 		}
 	}
 
-	public override void ActiveStart(Entity entity)
+	public override void ActiveStart( Entity entity )
 	{
 		base.ActiveStart( entity );
 
@@ -86,7 +86,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 			OnActiveStartClient( To.Everyone );
 	}
 
-	public override void ActiveEnd(Entity ent, bool dropped)
+	public override void ActiveEnd( Entity ent, bool dropped )
 	{
 		base.ActiveEnd( ent, dropped );
 
@@ -94,7 +94,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 			OnActiveEndClient( To.Everyone );
 	}
 
-	public override void Simulate(Client owner)
+	public override void Simulate( Client owner )
 	{
 		if ( TimeSinceDeployed < 0.6f )
 			return;
@@ -196,7 +196,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 		AmmoClip += TakeAmmo( ClipSize - AmmoClip );
 	}
 
-	public override void OnCarryStart(Entity carrier)
+	public override void OnCarryStart( Entity carrier )
 	{
 		base.OnCarryStart( carrier );
 
@@ -206,7 +206,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 		PreviousOwner = Owner;
 	}
 
-	public override void OnCarryDrop(Entity dropper)
+	public override void OnCarryDrop( Entity dropper )
 	{
 		base.OnCarryDrop( dropper );
 
@@ -275,7 +275,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 		ViewModelEntity?.SetAnimBool( "reload", true );
 	}
 
-	public void DealDamage(Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox)
+	public void DealDamage( Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox )
 	{
 		var info = new DamageInfo()
 			.WithAttacker( attacker )
@@ -289,7 +289,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 		entity.TakeDamage( info );
 	}
 
-	protected virtual int TakeAmmo(int ammo)
+	protected virtual int TakeAmmo( int ammo )
 	{
 		if ( UnlimitedAmmo )
 			return ammo;
@@ -300,7 +300,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 		return available;
 	}
 
-	bool IUse.OnUse(Entity user)
+	bool IUse.OnUse( Entity user )
 	{
 		if ( user is Player player )
 			player.Inventory.Swap( this );
@@ -308,7 +308,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 		return false;
 	}
 
-	bool IUse.IsUsable(Entity user)
+	bool IUse.IsUsable( Entity user )
 	{
 		return Owner == null && user is Player;
 	}

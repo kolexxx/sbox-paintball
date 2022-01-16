@@ -15,7 +15,7 @@ public sealed partial class Throwable : Weapon
 	public override string ViewModelPath => "models/grenade/v_grenade.vmdl";
 	private bool _isHoldingDownAttack = false;
 
-	public override void ActiveStart(Entity entity)
+	public override void ActiveStart( Entity entity )
 	{
 		base.ActiveStart( entity );
 
@@ -31,7 +31,7 @@ public sealed partial class Throwable : Weapon
 		SetModel( "models/grenade/grenade.vmdl" );
 	}
 
-	public override void SimulateAnimator(PawnAnimator anim)
+	public override void SimulateAnimator( PawnAnimator anim )
 	{
 		anim.SetParam( "holdtype", 5 );
 		anim.SetParam( "aimat_weight", 1.0f );
