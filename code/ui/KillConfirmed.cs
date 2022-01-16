@@ -48,14 +48,16 @@ namespace PaintBall
 
 			Local.Hud.AddChild( new KillConfirmed( 5f ) );
 			s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as KillConfirmed;
-			s_current.Name.Text = s_current.Name.Text = $"YOU KILLED {player.Client.Name.ToUpper()}"; ;
+			s_current.Name.Text = s_current.Name.Text = $"You killed {player.Client.Name}"; ;
 			s_current.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
 			s_current.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastDamageInfo.HitboxIndex ) );
+
 			if ( player.LastDamageInfo.Weapon is not Knife )
 			{
 				int distance = (Vector3.DistanceBetween( player.LastDamageInfo.Position, player.Position ) / 12f / 3.2808399f).CeilToInt();
 				s_current.Distance.Text = $"Distance: {distance}m";
 			}
+
 			Sound.FromScreen( "kill_confirmed" );
 		}
 
