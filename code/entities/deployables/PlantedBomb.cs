@@ -20,6 +20,7 @@ namespace PaintBall
 			SetModel( $"models/red_ball/ball.vmdl" );
 			PhysicsEnabled = false;
 			UsePhysicsCollision = false;
+			EnableAllCollisions = false;
 			SetInteractsAs( CollisionLayer.Solid );
 			SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
 
