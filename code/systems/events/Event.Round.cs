@@ -41,11 +41,21 @@ namespace PaintBall
 			{
 				public const string Planted = "pb.round.bomb.planted";
 
+				/// <summary>
+				/// Runs when the bomb has been planted.
+				/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
+				/// of the bomb.</para>
+				/// </summary>
 				public class PlantedAttribute : EventAttribute
 				{
 					public PlantedAttribute() : base( Planted ) { }
 				}
 
+				/// <summary>
+				/// Runs when the bomb has exploded.
+				/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
+				/// of the bomb.</para>
+				/// </summary>
 				public const string Explode = "pb.round.bomb.explode";
 
 				public class ExplodeAttribute : EventAttribute
@@ -55,6 +65,11 @@ namespace PaintBall
 
 				public const string Defused = "pb.round.bomb.defused";
 
+				/// <summary>
+				/// Runs when the bomb has been defused.
+				/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
+				/// of the bomb.</para>
+				/// </summary>
 				public class DefusedAttribute : EventAttribute
 				{
 					public DefusedAttribute() : base( Defused ) { }
