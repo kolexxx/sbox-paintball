@@ -12,7 +12,6 @@ namespace PaintBall
 		Deployable = 4,
 	}
 
-
 	[Hammer.Skip]
 	public abstract partial class Weapon : BaseWeapon, IUse
 	{
