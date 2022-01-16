@@ -356,9 +356,9 @@ public partial class GameplayState : BaseState
 	private void OnDisabled()
 	{
 		if ( Defuser != null )
-			Event.Run( PBEvent.Round.Bomb.Defused, this );
+			Event.Run( PBEvent.Round.Bomb.Defused, Bomb );
 		else
-			Event.Run( PBEvent.Round.Bomb.Explode, this );
+			Event.Run( PBEvent.Round.Bomb.Explode, Bomb );
 	}
 
 	private void OnAliveBlueChanged()
