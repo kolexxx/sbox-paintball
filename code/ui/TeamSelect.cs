@@ -11,12 +11,15 @@ namespace PaintBall
 		public Button Blue { get; set; }
 		public Button Red { get; set; }
 		public Label Timer { get; set; }
+		public Label ServerInfo { get; set; }
+		public Image MapImage { get; set; }
 		private TimeSince _timeSinceOpened = 0f;
 		private bool _open = true;
-		
+
 		public TeamSelect()
 		{
 			Instance = this;
+			ServerInfo.Text = Global.Lobby.Title + " | " + Global.MapName;
 		}
 
 		public override void Tick()
@@ -66,9 +69,9 @@ namespace PaintBall
 		{
 			Player.ChangeTeamCommand( Team.Red );
 		}
-		
+
 		[PBEvent.Player.Team.Changed]
-		public void OnPlayerTeamChanged(Player player, Team oldTeam )
+		public void OnPlayerTeamChanged( Player player, Team oldTeam )
 		{
 			if ( player.IsLocalPawn )
 				Close();

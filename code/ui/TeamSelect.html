@@ -8,4 +8,10 @@
         <button @ref="Red" class="red button button-2" onclick="JoinRed()">Join Red</button>
         <button @ref="Spectator" class="spectator button button-3" onclick="BecomeSpectator()">Spectate</button>
     </panel>
+    <panel class="right-container">
+        <label @ref="ServerInfo" class="server-info">Server Info</label>
+        <panel class="map-info">
+            <image @ref="MapImage" class="map-image"></image>
+        </panel>
+    </panel>
 </panel>

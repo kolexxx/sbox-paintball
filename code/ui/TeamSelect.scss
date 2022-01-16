@@ -63,6 +63,39 @@ teamselect
         width: 50%;
     }
 
+    .right-container
+    {
+        text-transform: none;
+        height: 100%;
+        width: 50%;
+        flex-direction: column;
+    }
+
+    .server-info
+    {
+        left: 80px;
+        top: 78px;
+        font-size: 24px;
+    }
+
+    .map-info
+    {
+        left: 80px;
+        top: 80px;
+        width: 80%;
+        height: 80%;
+        border-top: 1px solid $csc;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .map-image
+    {
+        width: 512px;
+        height: 512px;
+        border: 1px solid $csc;
+    }
+
     button:hover
     {
         color: black;
