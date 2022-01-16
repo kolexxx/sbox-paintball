@@ -14,6 +14,7 @@ namespace PaintBall
 		{
 			base.Spawn();
 
+			SurroundingBoundsMode = SurroundingBoundsType.Obb;
 			Transmit = TransmitType.Always;
 		}
 
