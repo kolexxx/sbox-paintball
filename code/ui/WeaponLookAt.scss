@@ -1,0 +1,33 @@
+﻿@import "Variables.scss";
+
+weaponlookat
+{
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    color: white;
+    width: 200px;
+    height: 100px;
+    background-color: $allPurposeBlack;
+    bottom: 400px;
+    border-radius: 25%;
+    transition: opacity 0.2s ease-in;
+
+    .icon
+    {
+        width: 80px;
+        height: 80px;
+        background-size: 100%;
+        background-image-tint: white;
+    }
+
+    &:intro
+    {
+        opacity: 0;
+    }
+
+    &:outro
+    {
+        opacity: 0;
+    }
+}

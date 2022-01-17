@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.UI;
 using System;
 
 namespace PaintBall;
@@ -13,7 +14,7 @@ public enum SlotType : byte
 }
 
 [Hammer.Skip]
-public abstract partial class Weapon : BaseWeapon, IUse
+public abstract partial class Weapon : BaseWeapon, IUse, ILook
 {
 	[Net, Predicted] public int AmmoClip { get; set; }
 	[Net, Predicted] public bool IsReloading { get; protected set; }
@@ -29,6 +30,7 @@ public abstract partial class Weapon : BaseWeapon, IUse
 	public virtual string FireSound => "pbg";
 	public virtual string Icon => "ui/weapons/pistol.png";
 	public virtual bool IsMelee => false;
+	public Panel LookPanel { get; set; }
 	public virtual string ModelPath => "";
 	public PickupTrigger PickupTrigger { get; protected set; }
 	public Entity PreviousOwner { get; private set; }
@@ -311,5 +313,18 @@ public abstract partial class Weapon : BaseWeapon, IUse
 	bool IUse.IsUsable( Entity user )
 	{
 		return Owner == null && user is Player;
+	}
+
+	void ILook.StartLook()
+	{
+		LookPanel = Local.Hud.AddChild<WeaponLookAt>();
+		(LookPanel as WeaponLookAt).Icon.SetTexture( Icon );
+	}
+
+	void ILook.Update() { }
+
+	void ILook.EndLook()
+	{
+		LookPanel.Delete();
 	}
 }
