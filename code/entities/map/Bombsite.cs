@@ -18,6 +18,13 @@ public partial class Bombsite : BaseTrigger
 		Transmit = TransmitType.Always;
 	}
 
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+
+		SetupPhysicsFromModel( PhysicsMotionType.Static );
+	}
+
 	public override void OnTouchStart( Entity toucher )
 	{
 		base.OnTouchStart( toucher );
