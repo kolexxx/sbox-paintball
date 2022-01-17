@@ -82,7 +82,7 @@ public partial class Player : Sandbox.Player, ITeamEntity
 			ActiveChild = Input.ActiveChild;
 
 		TickPlayerChangeSpectateCamera();
-		TickPlayerUse();
+		TickPlayerLook();
 		TickPlayerDrop();
 
 		controller?.Simulate( cl, this, GetActiveAnimator() );
@@ -90,15 +90,13 @@ public partial class Player : Sandbox.Player, ITeamEntity
 
 	public override void StartTouch( Entity other )
 	{
-		if ( !IsServer )
-			return;
-
 		if ( other is Weapon weapon && weapon.PreviousOwner == this && weapon.TimeSinceDropped <= 2f )
 			return;
 
 		if ( other is PickupTrigger )
 		{
 			StartTouch( other.Parent );
+
 			return;
 		}
 
