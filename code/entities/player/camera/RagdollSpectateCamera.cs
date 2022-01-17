@@ -15,7 +15,5 @@ public class RagdollSpectateCamera : Camera, ISpectateCamera
 	{
 	}
 
-	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
-	{
-	}
+	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer ) { }
 }
