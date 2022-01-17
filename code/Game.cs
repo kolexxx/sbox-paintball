@@ -76,7 +76,7 @@ public partial class Game : Sandbox.Game
 		State?.OnPlayerJoin( player );
 
 		Event.Run( PBEvent.Client.Joined, client );
-		RPC.ClientJoined( client );
+		RPC.ClientJoined( To.Everyone, client );
 	}
 
 	public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
@@ -84,7 +84,7 @@ public partial class Game : Sandbox.Game
 		State?.OnPlayerLeave( client.Pawn as Player );
 
 		Event.Run( PBEvent.Client.Disconnected, client.PlayerId, reason );
-		RPC.ClientDisconnected( client.PlayerId, reason );
+		RPC.ClientDisconnected( To.Everyone, client.PlayerId, reason );
 
 		base.ClientDisconnect( client, reason );
 	}
@@ -96,7 +96,7 @@ public partial class Game : Sandbox.Game
 			Team team = player.Team;
 
 			if ( player.Team == Team.None )
-				team = (Team) Rand.Int( 1, 2 );
+				team = (Team)Rand.Int( 1, 2 );
 
 			var spawnpoints = All
 							 .OfType<PlayerSpawnPoint>()
