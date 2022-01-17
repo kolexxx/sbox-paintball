@@ -59,9 +59,9 @@ public partial class PhysicsProjectile : ModelEntity, IProjectile
 		SetModel( ModelPath );
 		MoveType = MoveType.Physics;
 		UsePhysicsCollision = true;
-		SetInteractsAs( CollisionLayer.All );
+		SetInteractsAs( CollisionLayer.Solid );
 		SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
-		SetInteractsExclude( CollisionLayer.Player | CollisionLayer.Debris );
+		SetInteractsExclude( CollisionLayer.Player );
 		Tags.Add( "grenade" );
 	}
 
