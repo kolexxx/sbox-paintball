@@ -3,9 +3,9 @@
 namespace PaintBall;
 
 [Hammer.Skip]
-public partial class PlantedBomb : ModelEntity, IUse
+public partial class PlantedBomb : ModelEntity, IUse, ILook
 {
-	public Player Defuser { get; set; }
+	[Net] public Player Defuser { get; set; }
 	public Player Planter { get; set; }
 	public bool Disabled { get; set; }
 	public TimeSince TimeSinceStartedBeingDefused { get; set; } = 0f;
@@ -28,6 +28,7 @@ public partial class PlantedBomb : ModelEntity, IUse
 		_gameplayState.Planter = Planter;
 		_gameplayState.Defuser = null;
 		_gameplayState.Disabled = false;
+
 		if ( _gameplayState.RoundState == RoundState.Play )
 		{
 			_gameplayState.RoundState = RoundState.Bomb;
@@ -106,4 +107,10 @@ public partial class PlantedBomb : ModelEntity, IUse
 		Defuser = user as Player;
 		return !Disabled;
 	}
+
+	void ILook.StartLook() { }
+
+	void ILook.Update() { }
+
+	void ILook.EndLook() { }
 }
