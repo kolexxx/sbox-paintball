@@ -34,7 +34,7 @@ public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 		_targetPos = GetSpectatePoint() + Rotation.Forward * -CAMERA_DISTANCE;
 
 		var trace = Trace.Ray( GetSpectatePoint(), _targetPos )
-			.Ignore( player.CurrentPlayer )
+			.WorldOnly()
 			.Run();
 
 		Position = trace.EndPos;
