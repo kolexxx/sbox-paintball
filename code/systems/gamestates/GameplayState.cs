@@ -172,8 +172,11 @@ public partial class GameplayState : BaseState
 					player.Inventory.DeleteContents();
 
 					player.Respawn();
-					if ( --index == 0 )
+					if ( --index <= 0 )
+					{
 						player.Inventory.Add( new Bomb() );
+						index = int.MaxValue;
+					}
 				}
 
 				if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
@@ -247,6 +250,8 @@ public partial class GameplayState : BaseState
 
 				if ( BlueScore == _toWinScore || RedScore == _toWinScore || _round >= RoundLimit )
 				{
+					Bomb?.Delete();
+					Bomb = null;
 					Game.Current.ChangeState( new GameFinishedState() );
 
 					return;
