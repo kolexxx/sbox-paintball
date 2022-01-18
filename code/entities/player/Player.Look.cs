@@ -4,127 +4,55 @@ namespace PaintBall;
 
 public partial class Player
 {
-	[Net]
-	public new Entity Using { get; set; }
 	public Entity Looking { get; set; }
 
-	public bool IsUseDisabled()
+	protected void TickPlayerLook()
 	{
-		return ActiveChild is IUse use && use.IsUsable( this );
-	}
+		if ( !IsClient )
+			return;
 
-	protected virtual void TickPlayerLook()
-	{
 		var lastLookingEntity = Looking;
 
-		Looking = FindEntity();
+		Looking = IsValidLookEntity( Using ) ? Using : FindLookable();
 
-		if ( IsClient )
+		if ( lastLookingEntity != Looking )
 		{
-			if ( lastLookingEntity != Looking )
-			{
-				(lastLookingEntity as ILook)?.EndLook();
-				(Looking as ILook)?.StartLook();
-			}
-			else
-			{
-				(lastLookingEntity as ILook)?.Update();
-			}
+			(lastLookingEntity as ILook)?.EndLook();
+			(Looking as ILook)?.StartLook();
+
+			return;
 		}
 
-		if ( !IsServer ) return;
+		if ( Looking == null )
+			return;
 
-		// Turn prediction off
-		using ( Prediction.Off() )
+		if ( (Looking as ILook).IsLookable( this ) )
 		{
-			if ( Input.Pressed( InputButton.Use ) )
-			{
-				Using = FindUsable();
-
-				if ( Using == null )
-				{
-					UseFail();
-					return;
-				}
-			}
-
-			if ( !Input.Down( InputButton.Use ) )
-			{
-				StopUsing();
-				return;
-			}
-
-			if ( !Using.IsValid() )
-				return;
-
-			// If we move too far away or something we should probably ClearUse()?
-
-			//
-			// If use returns true then we can keep using it
-			//
-			if ( Using is IUse use && use.OnUse( this ) )
-				return;
-
-			StopUsing();
+			(Looking as ILook).Update();
+		}
+		else
+		{
+			(Looking as ILook).EndLook();
+			Looking = null;
 		}
 	}
 
-	protected virtual Entity FindEntity()
+	protected Entity FindLookable()
 	{
 		var tr = Trace.Ray( EyePos, EyePos + EyeRot.Forward * (105 * Scale) )
 			.HitLayer( CollisionLayer.All )
 			.Ignore( this )
 			.Run();
 
-		// See if any of the parent entities are usable if we ain't.
 		var ent = tr.Entity;
 
-		// Still no good? Bail.
-		if ( !ent.IsValid() ) return null;
+		if ( !IsValidLookEntity( ent ) ) return null;
 
 		return ent;
 	}
 
-	protected override Entity FindUsable()
+	protected bool IsValidLookEntity( Entity entity )
 	{
-		if ( IsUseDisabled() )
-			return null;
-
-		// See if any of the parent entities are usable if we ain't.
-		var ent = Looking;
-		while ( ent.IsValid() && !IsValidUseEntity( ent ) )
-		{
-			ent = ent.Parent;
-		}
-
-		// Nothing found, try a wider search
-		if ( !IsValidUseEntity( ent ) )
-		{
-			var tr = Trace.Ray( EyePos, EyePos + EyeRot.Forward * (105 * Scale) )
-			.Radius( 2 )
-			.HitLayer( CollisionLayer.All )
-			.Ignore( this )
-			.Run();
-
-			// See if any of the parent entities are usable if we ain't.
-			ent = tr.Entity;
-			while ( ent.IsValid() && !IsValidUseEntity( ent ) )
-			{
-				ent = ent.Parent;
-			}
-		}
-
-		// Still no good? Bail.
-		if ( !IsValidUseEntity( ent ) ) return null;
-
-		return ent;
-	}
-
-	protected override void UseFail()
-	{
-		if ( IsUseDisabled() )
-			return;
-
-		base.UseFail();
+		return entity.IsValid() && entity is ILook iLook && iLook.IsLookable( this );
 	}
 }
