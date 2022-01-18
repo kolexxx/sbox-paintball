@@ -14,6 +14,7 @@ public class Ammo : Panel
 	{
 		AmmoIcon = Add.Image( "ui/ammo.png", "icon" );
 		Reserve = Add.Label( "100" );
+
 		AddChild( new ProgressBar( () =>
 		 {
 			 var player = Local.Pawn as Player;
