@@ -39,10 +39,10 @@ metadata
 		1024 : "Physics Debris" : 0
 	]
 
-	input Enable(void) : ""
-	input Disable(void) : ""
-	input Toggle(void) : ""
-	input SetColor(string) : ""
+	input Enable(void) : "Enables this trigger"
+	input Disable(void) : "Disables this trigger"
+	input Toggle(void) : "Toggles this trigger between enabled and disabled states"
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 
 	output OnStartTouch(void) : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
 	output OnEndTouch(void) : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
@@ -91,7 +91,7 @@ metadata
 [
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
-	input SetColor(string) : ""
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
 //
@@ -101,7 +101,7 @@ metadata
 [
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
-	input SetColor(string) : ""
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
 //
@@ -111,7 +111,7 @@ metadata
 [
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
-	input SetColor(string) : ""
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
 //
@@ -121,7 +121,7 @@ metadata
 [
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
-	input SetColor(string) : ""
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
 //
@@ -131,6 +131,6 @@ metadata
 [
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
-	input SetColor(string) : ""
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 ]
 
