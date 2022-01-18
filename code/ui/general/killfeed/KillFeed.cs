@@ -12,7 +12,7 @@ public sealed class KillFeed : Panel
 	{
 		Instance = this;
 
-		StyleSheet.Load( "/ui/KillFeed.scss" );
+		StyleSheet.Load( "/ui/general/killfeed/KillFeed.scss" );
 
 		BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 	}

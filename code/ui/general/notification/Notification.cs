@@ -17,7 +17,7 @@ public partial class Notification : Popup
 	{
 		s_current = this;
 
-		StyleSheet.Load( "/ui/Notification.scss" );
+		StyleSheet.Load( "/ui/general/notification/Notification.scss" );
 
 		Message = Add.Label( text, "text" );
 		BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
@@ -27,7 +27,7 @@ public partial class Notification : Popup
 	{
 		s_current = this;
 
-		StyleSheet.Load( "/ui/Notification.scss" );
+		StyleSheet.Load( "/ui/general/notification/Notification.scss" );
 
 		Message = Add.Label( text, "text" );
 		BindClass( "hidden", () => TeamSelect.Instance.IsVisible );

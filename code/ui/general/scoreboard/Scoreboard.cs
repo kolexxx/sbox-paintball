@@ -17,7 +17,7 @@ public class Scoreboard : Panel
 	{
 		Instance = this;
 
-		StyleSheet.Load( "/ui/Scoreboard.scss" );
+		StyleSheet.Load( "/ui/general/scoreboard/Scoreboard.scss" );
 
 		_sections[0] = Add.Panel( "none" );
 		_sections[1] = Add.Panel( "blue" );

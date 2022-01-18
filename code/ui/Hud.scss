@@ -57,10 +57,11 @@ ammo
         height: 10px;
         transform: scale(-1);
 
-        .inner
+        .inner-panel
         {
-            transition: width 0.2s ease-out;
+            transition: width 0.05s ease-out;
             background-color: #ff0;
+            border-radius: 25%;
         }
     }
 }
