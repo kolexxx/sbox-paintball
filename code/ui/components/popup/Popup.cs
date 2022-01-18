@@ -31,6 +31,8 @@ public partial class Popup : Panel
 
 	public override void Tick()
 	{
+		base.Tick();
+
 		if ( _sinceConditionCheck < 0.2f )
 			return;
 
