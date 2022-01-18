@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.UI;
 
 namespace PaintBall;
 
@@ -6,9 +7,10 @@ namespace PaintBall;
 public partial class PlantedBomb : ModelEntity, IUse, ILook
 {
 	[Net] public Player Defuser { get; set; }
+	[Net] public TimeSince TimeSinceStartedBeingDefused { get; set; } = 0f;
 	public Player Planter { get; set; }
 	public bool Disabled { get; set; }
-	public TimeSince TimeSinceStartedBeingDefused { get; set; } = 0f;
+	public Panel LookPanel { get; set; }
 	public TimeUntil TimeUntilExplode { get; set; }
 	public RealTimeUntil UntilTickSound { get; set; }
 	private GameplayState _gameplayState;
@@ -108,9 +110,43 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		return !Disabled;
 	}
 
-	void ILook.StartLook() { }
+	bool ILook.IsLookable( Entity viewer )
+	{
+		return !_gameplayState.Disabled && (Defuser == null || Defuser == Local.Pawn);
+	}
 
-	void ILook.Update() { }
+	void ILook.StartLook()
+	{
+		if ( Defuser == null )
+		{
+			LookPanel = Local.Hud.AddChild<WeaponLookAt>();
+			(LookPanel as WeaponLookAt).Text.Text = "Press E to defuse";
+			(LookPanel as WeaponLookAt).Icon.SetTexture( "ui/weapons/bomb.png" );
+		}
+		else if ( Defuser == Local.Pawn )
+		{
+			LookPanel = Local.Hud.AddChild<BombDefuse>();
+		}
+	}
 
-	void ILook.EndLook() { }
+	void ILook.Update()
+	{
+		if ( Defuser == Local.Pawn && LookPanel is WeaponLookAt )
+		{
+			LookPanel.Delete();
+			LookPanel = Local.Hud.AddChild<BombDefuse>();
+		}
+		else if ( Defuser == null && LookPanel is not WeaponLookAt )
+		{
+			LookPanel?.Delete();
+			LookPanel = Local.Hud.AddChild<WeaponLookAt>();
+			(LookPanel as WeaponLookAt).Text.Text = "Press E to defuse";
+			(LookPanel as WeaponLookAt).Icon.SetTexture( "ui/weapons/bomb.png" );
+		}
+	}
+
+	void ILook.EndLook()
+	{
+		LookPanel.Delete();
+	}
 }
