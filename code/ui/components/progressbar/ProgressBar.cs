@@ -11,19 +11,18 @@ namespace PaintBall;
 /// </summary>
 public class ProgressBar : Panel
 {
-	public bool DeleteOnComplete { get; init; }
 	/// <summary>
 	/// Function that returns a float between 0 and 1.
 	/// </summary>
 	public Func<float> Fraction { get; init; }
-	private RealTimeSince _sinceGetPercentage = 0.25f;
+	private RealTimeSince _sinceGetPercentage = 0.1f;
 	private Panel _innerPanel;
 
-	public ProgressBar( Func<float> fraction, bool deleteOnComplete = false )
+	public ProgressBar( Func<float> fraction )
 	{
-		DeleteOnComplete = deleteOnComplete;
 		Fraction = fraction;
-		_innerPanel = Add.Panel( "inner" );
+
+		_innerPanel = Add.Panel( "inner-panel" );
 	}
 
 	public override void Tick()
@@ -33,7 +32,7 @@ public class ProgressBar : Panel
 		if ( !IsVisible )
 			return;
 
-		if ( _sinceGetPercentage < 0.2f )
+		if ( _sinceGetPercentage < 0.1f )
 			return;
 
 		_sinceGetPercentage = 0;
@@ -41,8 +40,5 @@ public class ProgressBar : Panel
 		float result = Fraction();
 
 		_innerPanel.Style.Width = Length.Fraction( result );
-
-		if ( result >= 1f && DeleteOnComplete )
-			Delete();
 	}
 }
