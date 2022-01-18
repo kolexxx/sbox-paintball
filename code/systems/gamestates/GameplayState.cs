@@ -172,10 +172,9 @@ public partial class GameplayState : BaseState
 					player.Inventory.DeleteContents();
 
 					player.Respawn();
-					if ( --index <= 0 )
+					if ( player.Team == Team.Red && --index == 0 )
 					{
 						player.Inventory.Add( new Bomb() );
-						index = int.MaxValue;
 					}
 				}
 
