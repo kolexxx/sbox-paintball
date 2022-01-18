@@ -82,6 +82,7 @@ public partial class Player : Sandbox.Player, ITeamEntity
 			ActiveChild = Input.ActiveChild;
 
 		TickPlayerChangeSpectateCamera();
+		TickPlayerUse();
 		TickPlayerLook();
 		TickPlayerDrop();
 
