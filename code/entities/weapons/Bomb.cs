@@ -60,7 +60,6 @@ public partial class Bomb : Weapon
 		if ( TimeSinceStartedPlanting >= 1f )
 		{
 			Owner.IsPlantingBomb = false;
-			FinishPlanting();
 
 			var trace = Trace.Ray( Owner.Position, Owner.Position + Vector3.Down * 64 )
 				.WorldOnly()
@@ -78,11 +77,5 @@ public partial class Bomb : Weapon
 
 			Owner.SwitchToBestWeapon();
 		}
-	}
-
-	[ClientRpc]
-	protected void FinishPlanting()
-	{
-		// finish animation
 	}
 }
