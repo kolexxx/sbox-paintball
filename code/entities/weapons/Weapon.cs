@@ -315,6 +315,11 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		return Owner == null && user is Player;
 	}
 
+	bool ILook.IsLookable( Entity viewer )
+	{
+		return true;
+	}
+
 	void ILook.StartLook()
 	{
 		LookPanel = Local.Hud.AddChild<WeaponLookAt>();
