@@ -6,6 +6,6 @@ public static class Debug
 {
 	public static void CheckRealms()
 	{
-		Log.Info( $"Client : {Host.IsClient} | Server : {Host.IsServer}" );
+		Log.Info( Host.IsServer ? "Server: " : "Client: " );
 	}
 }
