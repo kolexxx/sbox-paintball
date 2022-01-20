@@ -6,7 +6,7 @@ namespace PaintBall;
 [Hammer.Skip]
 public partial class PlantedBomb : ModelEntity, IUse, ILook
 {
-	[Net] public Player Defuser { get; set; }
+	[Net, Predicted] public Player Defuser { get; set; }
 	[Net] public TimeSince TimeSinceStartedBeingDefused { get; set; } = 0f;
 	public Player Planter { get; set; }
 	public bool Disabled { get; set; }
@@ -80,12 +80,10 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			if ( _gameplayState.RoundState == RoundState.Bomb )
 				_gameplayState.RoundStateFinish();
 		}
-		else
+		else if ( Defuser?.Using != this )
 		{
-			if ( Defuser == null )
-				TimeSinceStartedBeingDefused = 0f;
-
 			Defuser = null;
+			TimeSinceStartedBeingDefused = 0f;
 		}
 	}
 
@@ -112,7 +110,10 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 
 	bool ILook.IsLookable( Entity viewer )
 	{
-		return !_gameplayState.Disabled && (Defuser == null || Defuser == Local.Pawn);
+		if ( viewer is not Player player )
+			return false;
+
+		return !_gameplayState.Disabled && player.Team == Team.Blue && (Defuser == null || Defuser == Local.Pawn);
 	}
 
 	void ILook.StartLook()
