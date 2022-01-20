@@ -4,10 +4,10 @@ namespace PaintBall;
 
 public partial class Player : Sandbox.Player, ITeamEntity
 {
-	[Net] public bool IsOnBombsite { get; set; }
+	[Net] public Bombsite Bombsite { get; set; }
 	[Net] public TimeSince TimeSinceSpawned { get; private set; }
 	public ProjectileSimulator Projectiles { get; set; }
-	public bool CanPlantBomb => Team == Team.Red && GroundEntity is WorldEntity && IsOnBombsite && Game.Current.State is GameplayState;
+	public bool CanPlantBomb => Team == Team.Red && GroundEntity is WorldEntity && Bombsite.IsValid() && Game.Current.State is GameplayState;
 	public bool IsPlantingBomb { get; set; }
 
 	public new Inventory Inventory

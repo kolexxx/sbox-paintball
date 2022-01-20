@@ -9,6 +9,9 @@ namespace PaintBall;
 public partial class Bombsite : BaseTrigger
 {
 	[Net, Property] public char Letter { get; set; }
+	protected Output BombPlanted { get; set; }
+	protected Output BombExplode { get; set; }
+	protected Output BombDefused { get; set; }
 
 	public override void Spawn()
 	{
@@ -29,14 +32,14 @@ public partial class Bombsite : BaseTrigger
 	{
 		base.OnTouchStart( toucher );
 
-		(toucher as Player).IsOnBombsite = true;
+		(toucher as Player).Bombsite = this;
 	}
 
 	public override void OnTouchEnd( Entity toucher )
 	{
 		base.EndTouch( toucher );
 
-		(toucher as Player).IsOnBombsite = false;
+		(toucher as Player).Bombsite = null;
 	}
 
 	public override bool PassesTriggerFilters( Entity other )
