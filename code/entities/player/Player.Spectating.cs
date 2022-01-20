@@ -57,23 +57,22 @@ public partial class Player
 
 		CurrentPlayer = null;
 
-		var ValidPlayers =
+		var validPlayers =
 			All.OfType<Player>()
 			.Where( x => x.IsValid() && x.LifeState == LifeState.Alive )
-			.OrderByDescending( x => x.Name )
 			.ToList();
 
-		if ( ValidPlayers.Count > 0 )
+		if ( validPlayers.Count > 0 )
 		{
 			_index += i;
 
-			if ( _index >= ValidPlayers.Count )
+			if ( _index >= validPlayers.Count )
 				_index = 0;
 
 			if ( _index < 0 )
-				_index = ValidPlayers.Count - 1;
+				_index = validPlayers.Count - 1;
 
-			CurrentPlayer = ValidPlayers[_index];
+			CurrentPlayer = validPlayers[_index];
 		}
 
 		if ( Camera is ISpectateCamera camera )
