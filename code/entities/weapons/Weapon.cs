@@ -304,7 +304,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 
 	bool IUse.OnUse( Entity user )
 	{
-		if ( user is Player player )
+		if ( IsServer && user is Player player )
 			player.Inventory.Swap( this );
 
 		return false;
