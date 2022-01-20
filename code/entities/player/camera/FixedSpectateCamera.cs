@@ -4,6 +4,8 @@ namespace PaintBall;
 
 public class FixedSpectateCamera : Camera, ISpectateCamera
 {
+	private int _index = 0;
+
 	public override void Update()
 	{
 		throw new System.NotImplementedException();
