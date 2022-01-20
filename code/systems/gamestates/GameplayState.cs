@@ -63,7 +63,7 @@ public partial class GameplayState : BaseState
 		player.Inventory.Add( new Pistol() );
 		player.Inventory.Add( new Knife() );
 
-		if ( Rand.Int( 1, 1 ) == 1 )
+		if ( Rand.Int( 1, 3 ) == 1 )
 			player.Inventory.Add( new Throwable() );
 
 		base.OnPlayerSpawned( player );
@@ -173,9 +173,7 @@ public partial class GameplayState : BaseState
 
 					player.Respawn();
 					if ( player.Team == Team.Red && --index == 0 )
-					{
 						player.Inventory.Add( new Bomb() );
-					}
 				}
 
 				if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
