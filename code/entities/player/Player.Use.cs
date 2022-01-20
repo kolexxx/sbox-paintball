@@ -4,7 +4,7 @@ namespace PaintBall;
 
 public partial class Player
 {
-	[Net]
+	[Net, Predicted]
 	public new Entity Using { get; set; }
 
 	public bool IsUseDisabled()
@@ -12,10 +12,43 @@ public partial class Player
 		return ActiveChild is IUse use && use.IsUsable( this );
 	}
 
+	protected override void TickPlayerUse()
+	{
+		if ( Input.Pressed( InputButton.Use ) )
+		{
+			Using = FindUsable();
+
+			if ( Using == null )
+			{
+				UseFail();
+				return;
+			}
+		}
+
+		if ( !Input.Down( InputButton.Use ) )
+		{
+			StopUsing();
+			return;
+		}
+
+		if ( !Using.IsValid() )
+			return;
+
+		if ( Using is IUse use && use.OnUse( this ) )
+			return;
+
+		StopUsing();
+	}
+
+	protected override void StopUsing()
+	{
+		Using = null;
+	}
+
 	protected override Entity FindUsable()
 	{
-		if ( IsUseDisabled() )
-			return null;
+		if ( IsUseDisabled() )	
+			return null;	
 
 		// First try a direct 0 width line
 		var tr = Trace.Ray( EyePos, EyePos + EyeRot.Forward * (105 * Scale) )
