@@ -44,6 +44,9 @@ metadata
 	input Toggle(void) : "Toggles this trigger between enabled and disabled states"
 	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
 
+	output BombPlanted(void) : ""
+	output BombExplode(void) : ""
+	output BombDefused(void) : ""
 	output OnStartTouch(void) : "Fired when an entity starts touching this trigger. The touching entity must pass this trigger's filters to cause this output to fire."
 	output OnEndTouch(void) : "Fired when an entity stops touching this trigger. Only entities that passed this trigger's filters will cause this output to fire."
 	output OnStartTouchAll(void) : "Fired when an entity starts touching this trigger while no other passing entities are touching it."
@@ -73,7 +76,7 @@ metadata
 //
 // PaintBall.SpectatePoint
 //
-@PointClass base(BaseProperties_kole_paintball) 
+@PointClass base(BaseProperties_kole_paintball) editormodel( "models/editor/camera.vmdl" ) 
 metadata
 {
 	entity_tool_name = "Spectate Point"
@@ -82,6 +85,7 @@ metadata
 }
 = pb_spectatepoint : ""
 [
+	index(string) : "Index" :  : ""
 ]
 
 //
