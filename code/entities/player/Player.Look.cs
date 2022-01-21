@@ -8,17 +8,18 @@ public partial class Player
 
 	protected void TickPlayerLook()
 	{
-		if ( !IsClient )
+		if ( !IsClient || ( !this.Alive() && !IsSpectatingPlayer) )
 			return;
 
 		var lastLookingEntity = Looking;
 
 		Looking = IsValidLookEntity( Using ) ? Using : FindLookable();
 
+
 		if ( lastLookingEntity != Looking )
 		{
-			(lastLookingEntity as ILook)?.EndLook();
-			(Looking as ILook)?.StartLook();
+			(lastLookingEntity as ILook)?.EndLook( CurrentPlayer ); ;
+			(Looking as ILook)?.StartLook( CurrentPlayer );
 
 			return;
 		}
@@ -26,22 +27,15 @@ public partial class Player
 		if ( Looking == null )
 			return;
 
-		if ( (Looking as ILook).IsLookable( this ) )
-		{
-			(Looking as ILook).Update();
-		}
-		else
-		{
-			(Looking as ILook).EndLook();
-			Looking = null;
-		}
+		if ( !(Looking as ILook).IsLookable( CurrentPlayer ) )	
+			StopLooking();
 	}
 
 	protected Entity FindLookable()
 	{
-		var tr = Trace.Ray( EyePos, EyePos + EyeRot.Forward * (105 * Scale) )
+		var tr = Trace.Ray( CurrentPlayer.EyePos, CurrentPlayer.EyePos + CurrentPlayer.EyeRot.Forward * (105 * Scale) )
 			.HitLayer( CollisionLayer.All )
-			.Ignore( this )
+			.Ignore( CurrentPlayer )
 			.Run();
 
 		var ent = tr.Entity;
@@ -51,8 +45,14 @@ public partial class Player
 		return ent;
 	}
 
+	protected void StopLooking()
+	{
+		(Looking as ILook)?.EndLook( CurrentPlayer );
+		Looking = null;
+	}
+
 	protected bool IsValidLookEntity( Entity entity )
 	{
-		return entity.IsValid() && entity is ILook iLook && iLook.IsLookable( this );
+		return entity.IsValid() && entity is ILook iLook && iLook.IsLookable( CurrentPlayer );
 	}
 }
