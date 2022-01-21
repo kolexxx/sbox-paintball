@@ -25,6 +25,7 @@ public partial class Bombsite : BaseTrigger
 	{
 		base.ClientSpawn();
 
+		EnableTouch = true;
 		SetupPhysicsFromModel( PhysicsMotionType.Static );
 	}
 
