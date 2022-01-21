@@ -5,7 +5,6 @@ namespace PaintBall;
 public interface ILook
 {
 	public bool IsLookable( Entity viewer );
-	public void StartLook();
-	public void Update();
-	public void EndLook();
+	public void StartLook( Entity viewer );
+	public void EndLook( Entity viewer );
 }
