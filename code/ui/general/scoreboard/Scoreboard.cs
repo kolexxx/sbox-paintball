@@ -170,7 +170,7 @@ public class Scoreboard : Panel
 			Name.Text = Client.Name;
 			Kills.Text = Client.GetInt( "kills" ).ToString();
 
-			if ( !Client.Pawn.IsValid() || Client.Pawn.LifeState != LifeState.Alive )
+			if ( !Client.Pawn.IsValid() || !Client.Pawn.Alive() )
 				Alive.Text = "Dead";
 			else
 				Alive.Text = "";

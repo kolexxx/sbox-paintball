@@ -15,6 +15,7 @@ public partial class Player
 			_spectatedPlayer = value == this ? null : value;
 		}
 	}
+
 	private int _index = 0;
 	private Player _spectatedPlayer;
 	private RealTimeSince _timeSincePlayerChanged;
@@ -59,7 +60,7 @@ public partial class Player
 
 		var validPlayers =
 			All.OfType<Player>()
-			.Where( x => x.IsValid() && x.LifeState == LifeState.Alive )
+			.Where( x => x.IsValid() && x.Alive() )
 			.ToList();
 
 		if ( validPlayers.Count > 0 )

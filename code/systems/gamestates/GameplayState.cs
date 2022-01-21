@@ -44,7 +44,7 @@ public partial class GameplayState : BaseState
 	{
 		base.OnPlayerLeave( player );
 
-		if ( player.LifeState != LifeState.Dead )
+		if ( player.Alive() )
 		{
 			AdjustTeam( player.Team, -1 );
 			player.Inventory.DropBomb();
