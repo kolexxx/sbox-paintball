@@ -51,6 +51,8 @@ public partial class Player
 	public override void OnKilled()
 	{
 		base.OnKilled();
+		StopUsing();
+		StopLooking();
 
 		SwitchToBestWeapon();
 
