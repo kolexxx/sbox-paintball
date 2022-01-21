@@ -58,4 +58,17 @@ public class Inventory : BaseInventory
 
 		return bomb;
 	}
+
+	public override void DeleteContents()
+	{
+		Host.AssertServer();
+
+		foreach ( var item in List.ToArray() )
+		{
+			item.OnCarryDrop( Owner );
+			item.Delete();
+		}
+
+		List.Clear();
+	}
 }
