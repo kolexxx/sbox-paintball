@@ -6,12 +6,12 @@ namespace PaintBall;
 [Hammer.Skip]
 public partial class PlantedBomb : ModelEntity, IUse, ILook
 {
-	[Net, Predicted] public Player Defuser { get; set; }
+	[Net, Change] public Player Defuser { get; set; }
 	[Net] public TimeSince TimeSinceStartedBeingDefused { get; set; } = 0f;
+	public TimeUntil TimeUntilExplode { get; set; }
 	public Player Planter { get; set; }
 	public bool Disabled { get; set; }
 	public Panel LookPanel { get; set; }
-	public TimeUntil TimeUntilExplode { get; set; }
 	public RealTimeUntil UntilTickSound { get; set; }
 	private GameplayState _gameplayState;
 
@@ -49,6 +49,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 
 		_gameplayState = Game.Current.State as GameplayState;
 		_gameplayState.Bomb = this;
+		TimeUntilExplode = 30f;
 
 		Notification.Create( "Bomb has been planted!", 3 );
 		Audio.Announce( "bomb_planted", Audio.Priority.Medium );
@@ -72,8 +73,8 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		else if ( TimeUntilExplode )
 		{
 			Disabled = true;
-			_gameplayState.Disabled = true;
 			Defuser = null;
+			_gameplayState.Disabled = true;
 			_gameplayState.Defuser = null;
 			Event.Run( PBEvent.Round.Bomb.Explode, this );
 
@@ -99,7 +100,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 
 	bool IUse.IsUsable( Entity user )
 	{
-		return !Disabled && user is Player player && player.Team == Team.Blue && Defuser == null;
+		return !Disabled && user is Player player && player.Team == Team.Blue && Defuser == null && user.GroundEntity is WorldEntity;
 	}
 
 	bool IUse.OnUse( Entity user )
@@ -113,41 +114,49 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		if ( viewer is not Player player )
 			return false;
 
-		return !_gameplayState.Disabled && player.Team == Team.Blue && (Defuser == null || Defuser == Local.Pawn);
+		return !_gameplayState.Disabled && player.Team == Team.Blue && (Defuser == null || Defuser == player);
 	}
 
-	void ILook.StartLook()
+	void ILook.StartLook( Entity viewer )
 	{
-		if ( Defuser == null )
+		if ( Defuser == null && viewer == Local.Pawn )
 		{
 			LookPanel = Local.Hud.AddChild<WeaponLookAt>();
 			(LookPanel as WeaponLookAt).Text.Text = "Press E to defuse";
 			(LookPanel as WeaponLookAt).Icon.SetTexture( "ui/weapons/bomb.png" );
 		}
-		else if ( Defuser == Local.Pawn )
+		else if ( Defuser == viewer )
 		{
 			LookPanel = Local.Hud.AddChild<BombDefuse>();
 		}
 	}
 
-	void ILook.Update()
+	void ILook.EndLook( Entity viewer )
 	{
-		if ( Defuser == Local.Pawn && LookPanel is WeaponLookAt )
-		{
-			LookPanel.Delete();
-			LookPanel = Local.Hud.AddChild<BombDefuse>();
-		}
-		else if ( Defuser == null && LookPanel is not WeaponLookAt )
+		LookPanel?.Delete();
+	}
+
+	private void OnDefuserChanged( Player oldDefuser, Player newDefuser )
+	{
+		if ( (Local.Pawn as Player).Looking != this )
+			return;
+
+		if ( newDefuser == (Local.Pawn as Player).CurrentPlayer && LookPanel is not BombDefuse )
 		{
 			LookPanel?.Delete();
+			LookPanel = Local.Hud.AddChild<BombDefuse>();
+		}
+		else if ( newDefuser == null && LookPanel is BombDefuse )
+		{
+			LookPanel?.Delete();
+			LookPanel = null;
+
+			if ( !Local.Pawn.Alive() )
+				return;
+
 			LookPanel = Local.Hud.AddChild<WeaponLookAt>();
 			(LookPanel as WeaponLookAt).Text.Text = "Press E to defuse";
 			(LookPanel as WeaponLookAt).Icon.SetTexture( "ui/weapons/bomb.png" );
 		}
-	}
-
-	void ILook.EndLook()
-	{
-		LookPanel.Delete();
 	}
 }

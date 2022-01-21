@@ -72,7 +72,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 			CreateViewModel();
 			CreateHudElements();
 
-			if ( player.LifeState == LifeState.Alive || player.CurrentPlayer != Owner )
+			if ( player.Alive() || player.CurrentPlayer != Owner )
 				ViewModelEntity.EnableDrawing = false;
 		}
 	}
@@ -320,16 +320,17 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		return true;
 	}
 
-	void ILook.StartLook()
+	void ILook.StartLook( Entity viewer )
 	{
+		if ( viewer != Local.Pawn )
+			return;
+
 		LookPanel = Local.Hud.AddChild<WeaponLookAt>();
 		(LookPanel as WeaponLookAt).Icon.SetTexture( Icon );
 	}
 
-	void ILook.Update() { }
-
-	void ILook.EndLook()
+	void ILook.EndLook( Entity viewer )
 	{
-		LookPanel.Delete();
+		LookPanel?.Delete();
 	}
 }
