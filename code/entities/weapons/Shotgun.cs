@@ -7,14 +7,14 @@ namespace PaintBall;
 public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 {
 	public override SlotType Slot => SlotType.Primary;
-	public override int BulletsPerFire => 4;
+	public override int BulletsPerFire => 6;
 	public override int ClipSize => 5;
 	public override string CrosshairClass => "shotgun";
 	public override float Gravity => 7f;
 	public override string Icon => "ui/weapons/shotgun.png";
 	public override float PrimaryRate => 1f;
-	public override float ReloadTime => 0.7f;
-	public override float Speed => 2500f;
+	public override float ReloadTime => 0.5f;
+	public override float Speed => 3000f;
 	public override float Spread => 0.05f;
 	public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
 	private bool _attackedDuringReload = false;
