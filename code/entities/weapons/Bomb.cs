@@ -4,9 +4,10 @@ namespace PaintBall;
 
 [Library( "pb_bomb", Title = "Bomb", Description = "A bomb that can be planted on a bombsite.", Spawnable = false )]
 [Hammer.EditorModel( "weapons/rust_shotgun/rust_shotgun.vmdl" )]
-public partial class Bomb : Weapon
+public sealed partial class Bomb : Weapon
 {
-	[Net] public TimeSince TimeSinceStartedPlanting { get; set; }
+	[Net, Predicted] public TimeSince Delay { get; set; } = 2f;
+	[Net, Predicted] public TimeSince TimeSinceStartedPlanting { get; set; }
 	public override bool Automatic => true;
 	public override SlotType Slot => SlotType.Deployable;
 	public override int ClipSize => 1;
@@ -42,11 +43,20 @@ public partial class Bomb : Weapon
 
 	public override bool CanPrimaryAttack()
 	{
-		if ( Owner.CanPlantBomb && base.CanPrimaryAttack() )
+		if ( Owner.CanPlantBomb && base.CanPrimaryAttack() && Delay >= 2f )
 		{
+			if ( !Owner.IsPlantingBomb )
+			{
+				PlaySound( "started_planting" );
+				ShootEffects();
+			}
+
 			Owner.IsPlantingBomb = true;
 			return true;
 		}
+
+		if ( Owner.IsPlantingBomb )
+			Delay = 0;
 
 		TimeSinceStartedPlanting = 0f;
 		Owner.IsPlantingBomb = false;
@@ -57,7 +67,7 @@ public partial class Bomb : Weapon
 	{
 		base.AttackPrimary();
 
-		if ( TimeSinceStartedPlanting >= 1f )
+		if ( TimeSinceStartedPlanting >= 2f )
 		{
 			Owner.IsPlantingBomb = false;
 
@@ -77,5 +87,15 @@ public partial class Bomb : Weapon
 
 			Owner.SwitchToBestWeapon();
 		}
+	}
+
+	public override void OnCarryDrop( Entity dropper )
+	{
+		base.OnCarryDrop( dropper );
+
+		if ( dropper is not Player player )
+			return;
+
+		player.IsPlantingBomb = false;
 	}
 }
