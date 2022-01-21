@@ -6,8 +6,9 @@ public partial class Player : Sandbox.Player, ITeamEntity
 {
 	[Net] public Bombsite Bombsite { get; set; }
 	[Net] public TimeSince TimeSinceSpawned { get; private set; }
-	public ProjectileSimulator Projectiles { get; set; }
+	public ProjectileSimulator Projectiles { get; init; }
 	public bool CanPlantBomb => Team == Team.Red && GroundEntity is WorldEntity && Bombsite.IsValid() && Game.Current.State is GameplayState;
+	public bool IsDefusingBomb => Team == Team.Blue && Using is PlantedBomb;
 	public bool IsPlantingBomb { get; set; }
 
 	public new Inventory Inventory
@@ -128,6 +129,9 @@ public partial class Player : Sandbox.Player, ITeamEntity
 
 	private void TickPlayerDrop()
 	{
+		if ( !this.Alive() )
+			return;
+
 		if ( Input.Pressed( InputButton.Drop ) )
 		{
 			var dropped = Inventory.DropActive();

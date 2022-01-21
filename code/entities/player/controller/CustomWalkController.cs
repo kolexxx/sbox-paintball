@@ -9,9 +9,15 @@ public partial class CustomWalkController : WalkController
 	[Net] public new float WalkSpeed { get; set; } = 150.0f;
 	[Net] public new float DefaultSpeed { get; set; } = 250.0f;
 
+	public new Player Pawn
+	{
+		get => base.Pawn as Player;
+		set=> base.Pawn = value;
+	}
+
 	public override float GetWishSpeed()
 	{
-		if ( !Game.Current.State.FreezeTime || (Pawn as Player).IsPlantingBomb )
+		if ( !Game.Current.State.FreezeTime || Pawn.IsPlantingBomb || Pawn.IsDefusingBomb )
 			return 0f;
 
 		var ws = Duck.GetWishSpeed();
@@ -25,7 +31,7 @@ public partial class CustomWalkController : WalkController
 
 	public override void CheckJumpButton()
 	{
-		if ( !Game.Current.State.FreezeTime || (Pawn as Player).IsPlantingBomb )
+		if ( !Game.Current.State.FreezeTime || Pawn.IsPlantingBomb || Pawn.IsDefusingBomb )
 			return;
 
 		base.CheckJumpButton();
