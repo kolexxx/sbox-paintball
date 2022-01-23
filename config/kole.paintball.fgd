@@ -14,18 +14,18 @@
 ]
 
 //
-// PaintBall.Map
+// Paintball.Map
 //
 @PointClass base(BaseProperties_kole_paintball) = pb_map : ""
 [
 
 	output RoundStart(void) : ""
-	output RounEnd(void) : ""
+	output RoundEnd(void) : ""
 	output RoundNew(void) : ""
 ]
 
 //
-// PaintBall.Bombsite
+// Paintball.Bombsite
 //
 @SolidClass base(BaseProperties_kole_paintball) tags( Trigger, Trigger ) 
 metadata
@@ -65,7 +65,7 @@ metadata
 ]
 
 //
-// PaintBall.PlayerSpawnPoint
+// Paintball.PlayerSpawnPoint
 //
 @PointClass base(BaseProperties_kole_paintball) editormodel( "models/editor/playerstart.vmdl", fixedbounds ) 
 metadata
@@ -85,7 +85,7 @@ metadata
 ]
 
 //
-// PaintBall.SpectatePoint
+// Paintball.SpectatePoint
 //
 @PointClass base(BaseProperties_kole_paintball) editormodel( "models/editor/camera.vmdl" ) 
 metadata
@@ -100,7 +100,7 @@ metadata
 ]
 
 //
-// PaintBall.Bomb
+// Paintball.Bomb
 //
 @PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_shotgun/rust_shotgun.vmdl" ) = pb_bomb : "A bomb that can be planted on a bombsite."
 [
@@ -110,7 +110,7 @@ metadata
 ]
 
 //
-// PaintBall.Pistol
+// Paintball.Pistol
 //
 @PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_pistol/rust_pistol.vmdl" ) = pb_pistol : ""
 [
@@ -120,7 +120,7 @@ metadata
 ]
 
 //
-// PaintBall.Shotgun
+// Paintball.Shotgun
 //
 @PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" ) = pb_shotgun : ""
 [
@@ -130,7 +130,7 @@ metadata
 ]
 
 //
-// PaintBall.SMG
+// Paintball.SMG
 //
 @PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_smg : ""
 [
@@ -140,7 +140,7 @@ metadata
 ]
 
 //
-// PaintBall.Throwable
+// Paintball.Throwable
 //
 @PointClass base(BaseProperties_kole_paintball) editormodel( "models/grenade/grenade.vmdl" ) = pb_spike : ""
 [
