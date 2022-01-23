@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace PaintBall;
+namespace Paintball;
 
 public class KillConfirmed : Popup
 {
@@ -100,5 +100,11 @@ public class KillConfirmed : Popup
 	private void OnNewRound()
 	{
 		Delete();
+	}
+
+	[PBEvent.Player.Spectating.Changed]
+	private void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
+	{
+		Delete( true );
 	}
 }
