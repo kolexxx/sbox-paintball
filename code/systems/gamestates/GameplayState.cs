@@ -7,9 +7,21 @@ namespace PaintBall;
 public enum RoundState : byte
 {
 	None,
+	/// <summary>
+	/// Players aren't able to move and can buy weapons.
+	/// </summary>
 	Freeze,
+	/// <summary>
+	/// Players are able to move freely and do objectives.
+	/// </summary>
 	Play,
+	/// <summary>
+	/// The bomb has been planted and it can explode or be defused.
+	/// </summary>
 	Bomb,
+	/// <summary>
+	/// Rest period between rounds.
+	/// </summary>
 	End
 }
 
@@ -120,10 +132,10 @@ public partial class GameplayState : BaseState
 				if ( !Host.IsServer )
 					break;
 
+				Bomb.Tick();
+
 				if ( AliveBlue == 0 || Bomb.Disabled )
 					RoundStateFinish();
-
-				Bomb.Tick();
 
 				break;
 
