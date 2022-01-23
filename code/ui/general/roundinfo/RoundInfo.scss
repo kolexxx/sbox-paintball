@@ -96,11 +96,12 @@ roundinfo
         flex-direction: row;
         flex-wrap: wrap;
         width: 90px;
+        justify-content: space-between;
 
         panel
         {
             background-color: $allPurposeBlack;
-            height: 29.5px;
+            height: 49%;
             font-size: 21px;
             backdrop-filter: blur(5px);
         }
@@ -109,21 +110,19 @@ roundinfo
         {
             width: 100%;
             font-size: 21px;
-            margin-bottom: 1px;
+            margin-bottom: 2%;
         }
 
         .bluescore
         {
             color: $blue;
-            width: 44.5px;
-            margin-right: 0.5px;
+            width: 49%;
         }
 
         .redscore
         {
             color: $red;
-            width: 44.5px;
-            margin-left: 0.5px;
+            width: 49%;
         }
     }
 }
