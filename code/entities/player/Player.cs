@@ -2,7 +2,7 @@
 
 namespace PaintBall;
 
-public partial class Player : Sandbox.Player, ITeamEntity
+public partial class Player : Sandbox.Player
 {
 	[Net] public Bombsite Bombsite { get; set; }
 	[Net] public TimeSince TimeSinceSpawned { get; private set; }

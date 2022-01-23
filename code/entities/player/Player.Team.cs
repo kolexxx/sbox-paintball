@@ -3,7 +3,7 @@ using Sandbox.UI;
 
 namespace PaintBall;
 
-public partial class Player
+public partial class Player : ITeamEntity
 {
 	[Net, Change] public Team Team { get; set; }
 	public TimeSince TimeSinceTeamChanged { get; private set; } = 5f;
