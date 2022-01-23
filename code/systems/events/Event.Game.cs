@@ -6,7 +6,7 @@ public static partial class PBEvent
 {
 	public static class Game
 	{
-		public const string StateChanged = "pb.state.changed";
+		public const string StateChanged = "pb.game.state.changed";
 
 		/// <summary>
 		/// Runs when the Game state changes.
@@ -16,6 +16,13 @@ public static partial class PBEvent
 		public class StateChangedAttribute : EventAttribute
 		{
 			public StateChangedAttribute() : base( StateChanged ) { }
+		}
+
+		public const string MapInfoFetched = "pb.game.mapinfofetched";
+
+		public class MapInfoFetchedAttribute : EventAttribute
+		{
+			public MapInfoFetchedAttribute() : base( MapInfoFetched ) { }
 		}
 	}
 }
