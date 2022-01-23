@@ -70,7 +70,7 @@ public sealed partial class Throwable : Weapon
 
 		using ( Prediction.Off() )
 		{
-			var ent = new PhysicsProjectile();
+			var ent = new Grenade();
 			ent.Rotation = Owner.EyeRot;
 			ent.Position = trace.EndPos;
 			ent.Velocity = Owner.EyeRot.Forward * 1000 + Vector3.Up * 100;
