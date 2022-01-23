@@ -12,8 +12,9 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 	public override string CrosshairClass => "shotgun";
 	public override float Gravity => 7f;
 	public override string Icon => "ui/weapons/shotgun.png";
+	public override float MovementSpeedMultiplier => 0.85f;
 	public override float PrimaryRate => 1f;
-	public override float ReloadTime => 0.5f;
+	public override float ReloadTime => 0.7f;
 	public override float Speed => 3000f;
 	public override float Spread => 0.05f;
 	public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";

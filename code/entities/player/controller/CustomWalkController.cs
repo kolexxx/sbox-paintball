@@ -12,7 +12,7 @@ public partial class CustomWalkController : WalkController
 	public new Player Pawn
 	{
 		get => base.Pawn as Player;
-		set=> base.Pawn = value;
+		set => base.Pawn = value;
 	}
 
 	public override float GetWishSpeed()
@@ -26,7 +26,12 @@ public partial class CustomWalkController : WalkController
 		if ( Input.Down( InputButton.Run ) ) return SprintSpeed;
 		if ( Input.Down( InputButton.Walk ) ) return WalkSpeed;
 
-		return DefaultSpeed;
+		float movementSpeedMultiplier = 1f;
+
+		if ( Pawn.ActiveChild is Weapon weapon )
+			movementSpeedMultiplier = weapon.MovementSpeedMultiplier;
+
+		return DefaultSpeed * movementSpeedMultiplier;
 	}
 
 	public override void CheckJumpButton()
