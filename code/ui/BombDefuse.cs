@@ -1,4 +1,5 @@
-﻿using Sandbox.UI;
+﻿using Sandbox;
+using Sandbox.UI;
 using Sandbox.UI.Construct;
 
 namespace PaintBall;
@@ -12,7 +13,7 @@ public class BombDefuse : Panel
 	{
 		StyleSheet.Load( "/ui/BombDefuse.scss" );
 
-		Instructions = Add.Label( "Keep holding E to defuse", "instructions" );
+		Instructions = Add.Label( $"Keep holding {Input.GetButtonOrigin( InputButton.Use, false )} to defuse", "instructions" );
 		AddChild( new ProgressBar( () =>
 		  {
 			  var bomb = (Game.Current.State as GameplayState).Bomb;
