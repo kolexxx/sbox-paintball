@@ -48,7 +48,7 @@ public partial class Notification : Popup
 	}
 
 	[PBEvent.Round.End]
-	private static void RoundEnd( Team winner )
+	private static void OnRoundEnd( Team winner )
 	{
 		if ( !Host.IsClient )
 			return;

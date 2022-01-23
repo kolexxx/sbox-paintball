@@ -49,9 +49,18 @@ public class RoundInfo : Panel
 	}
 
 	[PBEvent.Round.Start]
-	private void RoundStart()
+	private void OnRoundStart()
 	{
 		Bottom.SetClass( "show", false );
+	}
+
+	[PBEvent.Round.End]
+	private void OnRoundEnd( Team winner )
+	{
+		var gameplayState = Game.Current.State as GameplayState;
+
+		BlueScore.Text = gameplayState.BlueScore.ToString();
+		RedScore.Text = gameplayState.RedScore.ToString();
 	}
 
 	[PBEvent.Round.New]
@@ -66,17 +75,8 @@ public class RoundInfo : Panel
 		Message.Text = $"Playing on Team {team.GetString()}";
 	}
 
-	[PBEvent.Round.End]
-	private void RoundEnd( Team winner )
-	{
-		var gameplayState = Game.Current.State as GameplayState;
-
-		BlueScore.Text = gameplayState.BlueScore.ToString();
-		RedScore.Text = gameplayState.RedScore.ToString();
-	}
-
 	[PBEvent.Game.StateChanged]
-	private void StateChanged( BaseState oldState, BaseState newState )
+	private void OnStateChanged( BaseState oldState, BaseState newState )
 	{
 		if ( oldState is not GameplayState || newState is GameplayState )
 			return;
