@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace PaintBall;
+namespace Paintball;
 
 public enum RoundState : byte
 {
@@ -38,15 +38,12 @@ public partial class GameplayState : BaseState
 	[ServerVar( "pb_round_limit", Help = "The amount of rounds." )]
 	public static int RoundLimit { get; set; } = 12;
 
-	public PlantedBomb Bomb { get; set; }
-	[Net] public Player Defuser { get; set; }
-	[Net] public Player Planter { get; set; }
-	[Net, Change( nameof( OnDisabled ) )] public bool Disabled { get; set; }
 	[Net, Change] public int AliveBlue { get; private set; } = 0;
 	[Net, Change] public int AliveRed { get; private set; } = 0;
 	[Net] public int BlueScore { get; private set; } = 0;
 	[Net] public int RedScore { get; private set; } = 0;
-	[Net, Change] public RoundState RoundState { get; set; }
+	public PlantedBomb Bomb { get; set; }
+	public RoundState RoundState { get; set; }
 	public override bool UpdateTimer => RoundState != RoundState.End;
 	private bool _firstBlood = false;
 	private int _toWinScore => 7;
@@ -69,8 +66,6 @@ public partial class GameplayState : BaseState
 
 		AdjustTeam( player.Team, 1 );
 
-		// error
-		// player.Inventory.Add( new ProjectileWeapon<Projectile>() );
 		player.Inventory.Add( Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun(), true );
 		player.Inventory.Add( new Pistol() );
 		player.Inventory.Add( new Knife() );
@@ -111,6 +106,8 @@ public partial class GameplayState : BaseState
 	{
 		base.Tick();
 
+		Bomb?.Tick();
+
 		switch ( RoundState )
 		{
 			case RoundState.Freeze:
@@ -131,8 +128,6 @@ public partial class GameplayState : BaseState
 
 				if ( !Host.IsServer )
 					break;
-
-				Bomb.Tick();
 
 				if ( AliveBlue == 0 || Bomb.Disabled )
 					RoundStateFinish();
@@ -192,6 +187,7 @@ public partial class GameplayState : BaseState
 					Notification.Create( To.Everyone, "Matchpoint!", FreezeDuration );
 
 				Event.Run( PBEvent.Round.New );
+				RPC.OnRoundStateChanged( RoundState.Freeze );
 
 				StateEndTime = FreezeDuration + Time.Now;
 
@@ -202,6 +198,7 @@ public partial class GameplayState : BaseState
 				Audio.AnnounceAll( "prepare", Audio.Priority.High );
 
 				Event.Run( PBEvent.Round.Start );
+				RPC.OnRoundStateChanged( RoundState.Play );
 
 				StateEndTime = PlayDuration + Time.Now;
 
@@ -209,15 +206,14 @@ public partial class GameplayState : BaseState
 
 			case RoundState.Bomb:
 
-				Event.Run( PBEvent.Round.Bomb.Planted, Bomb );
-
-				StateEndTime = BombDuration + Time.Now;
+				StateEndTime = Bomb.TimeUntilExplode + Time.Now;
 
 				break;
 
 			case RoundState.End:
 
 				Event.Run( PBEvent.Round.End, GetWinner() );
+				RPC.OnRoundStateChanged( RoundState.End, GetWinner() );
 
 				StateEndTime = EndDuration + Time.Now;
 
@@ -296,9 +292,9 @@ public partial class GameplayState : BaseState
 
 	private Team GetWinner()
 	{
-		if ( Bomb.IsValid() && Disabled )
+		if ( Bomb.IsValid() && Bomb.Disabled )
 		{
-			if ( Defuser != null )
+			if ( Bomb.Defuser != null )
 				return Team.Blue;
 			else
 				return Team.Red;
@@ -311,36 +307,6 @@ public partial class GameplayState : BaseState
 			return Team.Blue;
 		else
 			return Team.Red;
-	}
-
-	private void OnRoundStateChanged( RoundState oldState, RoundState newState )
-	{
-		switch ( newState )
-		{
-			case RoundState.Freeze:
-
-				Event.Run( PBEvent.Round.New );
-
-				return;
-
-			case RoundState.Play:
-
-				Event.Run( PBEvent.Round.Start );
-
-				return;
-
-			case RoundState.Bomb:
-
-				Event.Run( PBEvent.Round.Bomb.Planted, Bomb );
-
-				return;
-
-			case RoundState.End:
-
-				Event.Run( PBEvent.Round.End, GetWinner() );
-
-				return;
-		}
 	}
 
 	private void TeamBalance()
@@ -365,14 +331,6 @@ public partial class GameplayState : BaseState
 			if ( --diff == 0 )
 				break;
 		}
-	}
-
-	private void OnDisabled()
-	{
-		if ( Defuser != null )
-			Event.Run( PBEvent.Round.Bomb.Defused, Bomb );
-		else
-			Event.Run( PBEvent.Round.Bomb.Explode, Bomb );
 	}
 
 	private void OnAliveBlueChanged()
