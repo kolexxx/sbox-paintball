@@ -63,30 +63,37 @@ public class KillConfirmed : Popup
 
 	private void SetHit( HitboxGroup hitboxGroup )
 	{
+		Image bodyPart;
+
 		switch ( hitboxGroup )
 		{
 			case HitboxGroup.Head:
-				_head.SetClass( "hit", true );
-				return;
+				bodyPart = _head;
+				break;
 			case HitboxGroup.Chest:
-				_chest.SetClass( "hit", true );
-				return;
+				bodyPart = _chest;
+				break;
 			case HitboxGroup.Stomach:
-				_stomach.SetClass( "hit", true );
-				return;
+				bodyPart = _stomach;
+				break;
 			case HitboxGroup.LeftArm:
-				_leftArm.SetClass( "hit", true );
-				return;
+				bodyPart = _leftArm;
+				break;
 			case HitboxGroup.RightArm:
-				_rightArm.SetClass( "hit", true );
-				return;
+				bodyPart = _rightArm;
+				break;
 			case HitboxGroup.LeftLeg:
-				_leftLeg.SetClass( "hit", true );
-				return;
+				bodyPart = _leftLeg;
+				break;
 			case HitboxGroup.RightLeg:
-				_rightLeg.SetClass( "hit", true );
+				bodyPart = _rightLeg;
+				break;
+			default:
 				return;
 		}
+
+		bodyPart.SetClass( "hit", true );
+		bodyPart.Style.ZIndex = 100;
 	}
 
 	[PBEvent.Round.New]
