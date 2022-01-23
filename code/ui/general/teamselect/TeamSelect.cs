@@ -81,4 +81,10 @@ public partial class TeamSelect : Panel
 	{
 		_open = false;
 	}
+
+	[PBEvent.Game.MapInfoFetched]
+	private void OnMapInfoFetched()
+	{
+		MapImage.SetTexture( Game.Current.Map.Info.Thumb );
+	}
 }
