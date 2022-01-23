@@ -7,3 +7,4 @@ _bakeresourcecache
 tools_thumbnail_cache.bin
 .vs/*
 *.los
+unaltered
