@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using System;
 
-namespace PaintBall;
+namespace Paintball;
 
 [UseTemplate]
 public partial class TeamSelect : Panel
@@ -86,5 +86,6 @@ public partial class TeamSelect : Panel
 	private void OnMapInfoFetched()
 	{
 		MapImage.SetTexture( Game.Current.Map.Info.Thumb );
+		ServerInfo.Text = Global.Lobby.Title + " | " + Game.Current.Map.Info.Title;
 	}
 }
