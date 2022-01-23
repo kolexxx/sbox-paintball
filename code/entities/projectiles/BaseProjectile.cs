@@ -4,7 +4,7 @@ using Sandbox;
 namespace PaintBall;
 
 [Skip]
-public partial class BaseProjectile : ModelEntity, IProjectile
+public partial class BaseProjectile : ModelEntity, ITeamEntity
 {
 	[Net, Predicted] public string FollowEffect { get; set; } = "";
 	[Net, Predicted] public string HitSound { get; set; } = "";
