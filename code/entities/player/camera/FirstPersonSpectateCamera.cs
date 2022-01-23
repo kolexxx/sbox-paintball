@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 {
@@ -23,6 +23,7 @@ public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 			Local.Hud.AddClass( player.Team.GetString() );
 		}
 
+		Event.Run( PBEvent.Player.Spectating.Changed, player.CurrentPlayer, player );
 		player.CurrentPlayer = null;
 	}
 

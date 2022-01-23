@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System.Linq;
 
-namespace PaintBall;
+namespace Paintball;
 
 public partial class Player
 {

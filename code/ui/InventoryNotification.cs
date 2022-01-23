@@ -1,6 +1,6 @@
 ﻿using Sandbox.UI;
 
-namespace PaintBall;
+namespace Paintball;
 
 public class InventoryNotification : Panel
 {

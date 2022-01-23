@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Library( "pb_shotgun", Title = "Shotgun", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]

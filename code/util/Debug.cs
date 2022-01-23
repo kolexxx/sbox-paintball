@@ -1,6 +1,6 @@
 using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 public static class Debug
 {

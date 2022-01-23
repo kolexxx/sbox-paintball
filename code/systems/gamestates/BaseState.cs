@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
 
-namespace PaintBall;
+namespace Paintball;
 
 public abstract partial class BaseState : BaseNetworkable
 {

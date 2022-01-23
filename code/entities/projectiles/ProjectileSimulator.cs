@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
 
-namespace PaintBall;
+namespace Paintball;
 
 public partial class ProjectileSimulator
 {

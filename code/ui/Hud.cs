@@ -1,7 +1,7 @@
 using Sandbox;
 using Sandbox.UI;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Library]
 public partial class Hud : HudEntity<RootPanel>

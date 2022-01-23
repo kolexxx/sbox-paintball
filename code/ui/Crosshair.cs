@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using System;
 
-namespace PaintBall;
+namespace Paintball;
 
 public class Crosshair : Panel
 {

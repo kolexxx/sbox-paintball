@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Library( "pb_bombsite", Description = "Place where the Red Team can plant the bomb." )]
 [Hammer.AutoApplyMaterial( "materials/tools/toolstrigger.vmat" )]

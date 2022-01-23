@@ -1,4 +1,4 @@
-﻿namespace PaintBall;
+﻿namespace Paintball;
 
 public interface ITeamEntity
 {

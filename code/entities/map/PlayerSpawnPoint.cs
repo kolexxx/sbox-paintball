@@ -1,6 +1,6 @@
 using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Library( "pb_spawnpoint" )]
 [Hammer.EditorModel( "models/editor/playerstart.vmdl", FixedBounds = true )]

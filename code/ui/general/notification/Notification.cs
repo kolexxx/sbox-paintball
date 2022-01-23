@@ -3,7 +3,7 @@ using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System;
 
-namespace PaintBall;
+namespace Paintball;
 
 /// <summary>
 /// Header notification. Might change the name later.

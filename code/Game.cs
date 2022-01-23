@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Hammer.Skip]
 [Library( "paintball", Title = "PaintBall" )]
@@ -190,7 +190,6 @@ public partial class Game : Sandbox.Game
 			ChangeState( new WaitingForPlayersState() );
 
 		Map = new Map();
-		Map.GetInfo();
 	}
 
 	private void OnStateChanged()

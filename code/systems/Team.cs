@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PaintBall;
+namespace Paintball;
 
 public enum Team : byte
 {

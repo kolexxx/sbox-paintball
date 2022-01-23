@@ -1,7 +1,7 @@
 using Hammer;
 using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Skip]
 public partial class BaseProjectile : ModelEntity, ITeamEntity

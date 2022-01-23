@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Hammer.Skip]
 public partial class Knife : Weapon

@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using System;
 
-namespace PaintBall;
+namespace Paintball;
 
 /// <summary>
 /// A <strong><see cref="Sandbox.UI.Panel"></see></strong> that changes width

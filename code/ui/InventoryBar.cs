@@ -3,7 +3,7 @@ using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System.Linq;
 
-namespace PaintBall;
+namespace Paintball;
 
 public class InventoryBar : Panel
 {

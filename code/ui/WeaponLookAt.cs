@@ -1,7 +1,7 @@
 ﻿using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace PaintBall;
+namespace Paintball;
 
 public class WeaponLookAt : Panel
 {

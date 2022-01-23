@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace PaintBall;
+namespace Paintball;
 
 public enum HitboxIndex : sbyte
 {

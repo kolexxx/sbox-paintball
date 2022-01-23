@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Library( "pb_spectatepoint" )]
 [Hammer.EditorModel( "models/editor/camera.vmdl" )]

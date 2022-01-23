@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 
-namespace PaintBall;
+namespace Paintball;
 
 public partial class Player : ITeamEntity
 {

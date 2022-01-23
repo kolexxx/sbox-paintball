@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using System;
 
-namespace PaintBall;
+namespace Paintball;
 
 [UseTemplate]
 public class RoundInfo : Panel

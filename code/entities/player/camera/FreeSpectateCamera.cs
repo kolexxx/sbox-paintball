@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 public class FreeSpectateCamera : Camera, ISpectateCamera
 {

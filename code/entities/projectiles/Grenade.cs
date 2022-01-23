@@ -2,7 +2,7 @@
 using Sandbox;
 using System;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Skip]
 public partial class Grenade : ModelEntity, ITeamEntity

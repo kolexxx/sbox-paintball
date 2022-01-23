@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Hammer.Skip]
 public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProjectile, new()

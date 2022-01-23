@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Library( "pb_spike", Title = "Spike", Spawnable = true )]
 [Hammer.EditorModel( "models/grenade/grenade.vmdl" )]

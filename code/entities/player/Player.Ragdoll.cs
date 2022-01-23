@@ -1,6 +1,6 @@
 using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 partial class Player
 {
