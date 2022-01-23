@@ -1,2 +1,2 @@
 # sbox-paintball
-PaintBall for s&amp;box
+Paintball for s&amp;box
