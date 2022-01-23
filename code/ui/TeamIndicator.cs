@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace PaintBall;
+namespace Paintball;
 
 public class TeamIndicator : Panel
 {
@@ -22,6 +22,6 @@ public class TeamIndicator : Panel
 
 		SetClass( "hidden", TeamSelect.Instance.IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
 
-		TeamName.Text = player.CurrentPlayer == player ? player.Team.ToString() : player.CurrentPlayer.Client.Name;
+		TeamName.Text = player.CurrentPlayer.Team.ToString();
 	}
 }
