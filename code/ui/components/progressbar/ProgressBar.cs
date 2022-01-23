@@ -14,13 +14,13 @@ public class ProgressBar : Panel
 	/// <summary>
 	/// Function that returns a float between 0 and 1.
 	/// </summary>
-	public Func<float> Fraction { get; init; }
+	public Func<float> GetFraction { get; init; }
 	private RealTimeSince _sinceGetPercentage = 0.1f;
 	private Panel _innerPanel;
 
-	public ProgressBar( Func<float> fraction )
+	public ProgressBar( Func<float> getFraction )
 	{
-		Fraction = fraction;
+		GetFraction = getFraction;
 
 		_innerPanel = Add.Panel( "inner-panel" );
 	}
@@ -37,7 +37,7 @@ public class ProgressBar : Panel
 
 		_sinceGetPercentage = 0;
 
-		float result = Fraction();
+		float result = GetFraction();
 
 		_innerPanel.Style.Width = Length.Fraction( result );
 	}
