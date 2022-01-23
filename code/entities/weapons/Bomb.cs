@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 [Library( "pb_bomb", Title = "Bomb", Description = "A bomb that can be planted on a bombsite.", Spawnable = false )]
 [Hammer.EditorModel( "weapons/rust_shotgun/rust_shotgun.vmdl" )]
@@ -83,6 +83,9 @@ public sealed partial class Bomb : Weapon
 				bomb.Position = trace.EndPos;
 				bomb.Rotation = Owner.Rotation;
 				bomb.Planter = Owner;
+				bomb.Bombsite = Owner.Bombsite;
+
+				bomb.Initialize();
 
 				Delete();
 			}
