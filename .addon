@@ -1,6 +1,6 @@
 {
   "SharedAssets": "*.*",
-  "Title": "PaintBall",
+  "Title": "Paintball",
   "Type": "game",
   "Org": "kole",
   "Ident": "paintball",
@@ -9,5 +9,5 @@
   "AssetsPath": "",
   "HasCode": true,
   "CodePath": "code",
-  "RootNamespace": "PaintBall"
+  "RootNamespace": "Paintball"
 }
