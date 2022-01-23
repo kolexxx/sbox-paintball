@@ -101,13 +101,37 @@ public class InventoryBar : Panel
 	{
 		public Weapon TargetWeapon;
 		public Image Icon;
-		public Label Number;
+		public InputHint InputHint;
 
 		public InventoryIcon( int i, Panel parent )
 		{
 			Parent = parent;
 			Icon = Add.Image( "", "slot-icon" );
-			Number = Add.Label( $"{i}", "slot-number" );
+
+			InputHint = AddChild<InputHint>();
+
+			InputButton button = 0;
+
+			switch ( i )
+			{
+				case 1:
+					button = InputButton.Slot1;
+					break;
+				case 2:
+					button = InputButton.Slot2;
+					break;
+				case 3:
+					button = InputButton.Slot3;
+					break;
+				case 4:
+					button = InputButton.Slot4;
+					break;
+				case 5:
+					button = InputButton.Slot5;
+					break;
+			}
+
+			InputHint.SetButton( button );
 		}
 
 		public void Clear()
@@ -124,6 +148,7 @@ public class InventoryBar : Panel
 			if ( weapon.IsActiveChild() && !HasClass( "active" ) )
 				Instance._close = 3f;
 
+			InputHint.SetClass( "hidden", !Local.Pawn.Alive() );
 			SetClass( "active", weapon.IsActiveChild() );
 			SetClass( "hidden", false );
 		}

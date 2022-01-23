@@ -34,28 +34,17 @@ inventoryicon
     transition: height 0.5s ease-out;
     opacity: 1;
 
-    label
-    {
-        text-align: center;
-        color: #00ff21;
-    }
-
     &.active
     {
         background-image: linear-gradient(to left, rgba(0 0 0 0.7 ), rgba(0 0 0 0.4) 80%, rgba(0 0 0 0 ));
 
-        image
+        .slot-icon
         {
             background-image-tint: white;
         }
-
-        .slot-number
-        {
-            color: white;
-        }
     }
 
-    image
+    .slot-icon
     {
         position: absolute;
         right: 0;
@@ -66,12 +55,22 @@ inventoryicon
         background-image-tint: slategray;
     }
 
-    .slot-number
+    inputhint
     {
-        color: slategray;
-        position: absolute;
         right: 0;
         top: 0;
+        position: absolute;
+
+        .glyph
+        {
+            width: auto;
+            height: auto;
+        }
+
+        &.hidden
+        {
+            display: none;
+        }
     }
 
     &.hidden
