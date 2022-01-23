@@ -8,8 +8,9 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 {
 	[Net, Change] public Player Defuser { get; set; }
 	[Net] public TimeSince TimeSinceStartedBeingDefused { get; set; } = 0f;
-	public Player Planter { get; set; }
-	public TimeUntil TimeUntilExplode { get; set; }
+	[Net] public TimeUntil TimeUntilExplode { get; set; }
+	public Bombsite Bombsite { get; set; }
+	public Player Planter { get; set; }	
 	public bool Disabled { get; set; }
 	public Panel LookPanel { get; set; }
 	public RealTimeUntil UntilTickSound { get; set; }
@@ -20,31 +21,28 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		base.Spawn();
 
 		SetModel( $"models/red_ball/ball.vmdl" );
+
 		PhysicsEnabled = false;
 		UsePhysicsCollision = true;
+
 		SetInteractsAs( CollisionLayer.All );
 		SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
 	}
 
 	public void Initialize()
 	{
+		TimeUntilExplode = GameplayState.BombDuration;
 		_gameplayState = Game.Current.State as GameplayState;
-		_gameplayState.Bomb = this;
+		_gameplayState.Bomb = this;	
 
 		if ( _gameplayState.RoundState == RoundState.Play )
 		{
 			_gameplayState.RoundState = RoundState.Bomb;
 			_gameplayState.RoundStateStart();
-
-			TimeUntilExplode = _gameplayState.TimeLeft;
 		}
-		else
-		{
-			Event.Run( PBEvent.Round.Bomb.Planted, this );
-			OnPlanted( Planter );
 
-			TimeUntilExplode = GameplayState.BombDuration;
-		}
+		Event.Run( PBEvent.Round.Bomb.Planted, this );
+		OnPlanted( Planter );
 	}
 
 	public void Tick()
@@ -95,7 +93,6 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			_gameplayState.RoundState = RoundState.Bomb;
 
 		_gameplayState.Bomb = this;
-		TimeUntilExplode = 30f;
 
 		Event.Run( PBEvent.Round.Bomb.Planted, this );
 		Notification.Create( "Bomb has been planted!", 3 );
