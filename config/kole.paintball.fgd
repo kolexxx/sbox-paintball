@@ -14,6 +14,17 @@
 ]
 
 //
+// PaintBall.Map
+//
+@PointClass base(BaseProperties_kole_paintball) = pb_map : ""
+[
+
+	output RoundStart(void) : ""
+	output RounEnd(void) : ""
+	output RoundNew(void) : ""
+]
+
+//
 // PaintBall.Bombsite
 //
 @SolidClass base(BaseProperties_kole_paintball) tags( Trigger, Trigger ) 
