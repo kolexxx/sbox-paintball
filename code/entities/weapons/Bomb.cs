@@ -75,6 +75,8 @@ public sealed partial class Bomb : Weapon
 				.WorldOnly()
 				.Run();
 
+			Owner.SwitchToBestWeapon();
+
 			if ( IsServer )
 			{
 				var bomb = new PlantedBomb();
@@ -84,8 +86,6 @@ public sealed partial class Bomb : Weapon
 
 				Delete();
 			}
-
-			Owner.SwitchToBestWeapon();
 		}
 	}
 
