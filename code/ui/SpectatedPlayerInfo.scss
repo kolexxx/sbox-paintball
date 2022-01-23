@@ -1,0 +1,80 @@
+﻿@import "Variables.scss";
+
+spectatedplayerinfo
+{
+    position: absolute;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+    height: 100px;
+    bottom: 100px;
+
+    .player-info
+    {
+        border-radius: 10%;
+        background-color: white;
+        width: 100%;
+        height: 60%;
+        align-items: center;
+        justify-content: center;
+
+        .avatar
+        {
+            width: 50px;
+            height: 50px;
+            background-size: 100%;
+            border: 1px solid black;
+        }
+
+        .name
+        {
+            font-size: 24px;
+        }
+    }
+
+    .spectator-controls
+    {
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 40%;
+        padding: 2%;
+
+        inputhint
+        {
+            flex-direction: row-reverse;
+            color: white;
+
+
+            .glyph
+            {
+                background-image-tint: white;
+                margin-right: 5px;
+            }
+        }
+    }
+
+    &.blue
+    {
+        .player-info
+        {
+            background-color: $darkBlue;
+            border: 1px solid $darkerBlue;
+        }
+    }
+
+    &.red
+    {
+        .player-info
+        {
+            background-color: $darkRed;
+            border: 1px solid $darkerRed;
+        }
+    }
+
+    &.hidden
+    {
+        display: none;
+    }
+}

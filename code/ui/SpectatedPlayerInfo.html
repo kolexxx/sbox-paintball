@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿<link rel="stylesheet" href="SpectatedPlayerInfo.scss" />
 
-namespace PaintBall.ui
-{
-    class SpectatedPlayerInfo
-    {
-    }
-}
+<panel>
+    <panel @ref="PlayerInfo" class="player-info">
+        <image @ref="Avatar" class="avatar"></image>
+        <label @ref="Name" class="name">Player</label>
+    </panel>
+    <panel @ref="SpectatorControls" class="spectator-controls">
+        <inputhint></inputhint>
+        <inputhint></inputhint>
+        <inputhint></inputhint>
+    </panel>
+</panel>
