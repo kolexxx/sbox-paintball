@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using System;
 
-namespace PaintBall;
+namespace Paintball;
 
 public enum SlotType : byte
 {
@@ -318,7 +318,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 
 	bool ILook.IsLookable( Entity viewer )
 	{
-		return true;
+		return viewer is Player player && (ExclusiveFor == Team.None || player.Team == ExclusiveFor);
 	}
 
 	void ILook.StartLook( Entity viewer )
