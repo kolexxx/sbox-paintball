@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-namespace PaintBall;
+namespace Paintball;
 
 public static partial class RPC
 {
@@ -23,5 +23,33 @@ public static partial class RPC
 			return;
 
 		Event.Run( PBEvent.Player.Killed, player );
+	}
+
+	[ClientRpc]
+	public static void OnRoundStateChanged( RoundState roundState, Team winner = Team.None )
+	{
+		var gameplayState = Game.Current.State as GameplayState;
+		gameplayState.RoundState = roundState;
+
+		switch ( roundState )
+		{
+			case RoundState.Freeze:
+
+				Event.Run( PBEvent.Round.New );
+
+				return;
+
+			case RoundState.Play:
+
+				Event.Run( PBEvent.Round.Start );
+
+				return;
+
+			case RoundState.End:
+
+				Event.Run( PBEvent.Round.End, winner );
+
+				return;
+		}
 	}
 }
