@@ -2,7 +2,7 @@
 
 namespace PaintBall;
 
-public partial class Player
+public partial class Player : ILook
 {
 	public Entity Looking { get; set; }
 
@@ -54,5 +54,20 @@ public partial class Player
 	protected bool IsValidLookEntity( Entity entity )
 	{
 		return entity.IsValid() && entity is ILook iLook && iLook.IsLookable( CurrentPlayer );
+	}
+
+	bool ILook.IsLookable( Entity viewer )
+	{
+		return viewer is Player player && !player.IsSpectatingPlayer && player.Team == Team;
+	}
+
+	void ILook.StartLook( Entity viewer )
+	{
+		// implement NamePlates
+	}
+
+	void ILook.EndLook( Entity viewer )
+	{
+		// delete NamePlate
 	}
 }
