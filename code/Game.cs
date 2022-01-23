@@ -14,6 +14,8 @@ public partial class Game : Sandbox.Game
 		get; protected set;
 	}
 
+	public Map Map { get; set; }
+
 	[Net, Change( nameof( OnStateChanged ) )]
 	public BaseState State { get; private set; }
 
@@ -162,13 +164,9 @@ public partial class Game : Sandbox.Game
 
 		foreach ( var entity in All.OfType<ModelEntity>() )
 		{
-			if ( entity is IProjectile )
+			if ( entity is BaseProjectile || entity is Grenade )
 				entity.Delete();
-		}
-
-		foreach ( var weapon in All.OfType<Weapon>() )
-		{
-			if ( weapon.IsValid() && weapon.Owner == null )
+			else if ( entity is Weapon weapon && weapon.IsValid() && weapon.Owner == null )
 				weapon.Delete();
 		}
 
@@ -190,6 +188,9 @@ public partial class Game : Sandbox.Game
 	{
 		if ( IsServer )
 			ChangeState( new WaitingForPlayersState() );
+
+		Map = new Map();
+		Map.GetInfo();
 	}
 
 	private void OnStateChanged()
