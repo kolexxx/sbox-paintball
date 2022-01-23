@@ -32,6 +32,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	public virtual bool IsMelee => false;
 	public Panel LookPanel { get; set; }
 	public virtual string ModelPath => "";
+	public virtual float MovementSpeedMultiplier => 1;
 	public PickupTrigger PickupTrigger { get; protected set; }
 	public Entity PreviousOwner { get; private set; }
 	public virtual float ReloadTime => 5f;
