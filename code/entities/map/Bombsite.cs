@@ -9,9 +9,9 @@ namespace Paintball;
 public partial class Bombsite : BaseTrigger
 {
 	[Net, Property] public char Letter { get; set; }
-	protected Output BombPlanted { get; set; }
-	protected Output BombExplode { get; set; }
-	protected Output BombDefused { get; set; }
+	public Output BombPlanted { get; set; }
+	public Output BombExplode { get; set; }
+	public Output BombDefused { get; set; }
 
 	public override void Spawn()
 	{
