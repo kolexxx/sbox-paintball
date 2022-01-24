@@ -8,13 +8,15 @@ public partial class Player : ILook
 
 	protected void TickPlayerLook()
 	{
-		if ( !IsClient || ( !this.Alive() && !IsSpectatingPlayer) )
+		if ( !IsClient || (!this.Alive() && !IsSpectatingPlayer) )
+		{
+			StopLooking();
 			return;
+		}
 
 		var lastLookingEntity = Looking;
 
-		Looking = IsValidLookEntity( Using ) ? Using : FindLookable();
-
+		Looking = IsValidLookEntity( CurrentPlayer.Using ) ? CurrentPlayer.Using : FindLookable();
 
 		if ( lastLookingEntity != Looking )
 		{
@@ -45,7 +47,7 @@ public partial class Player : ILook
 		return ent;
 	}
 
-	protected void StopLooking()
+	public void StopLooking()
 	{
 		(Looking as ILook)?.EndLook( CurrentPlayer );
 		Looking = null;
