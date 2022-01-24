@@ -167,8 +167,6 @@ public partial class GameplayState : BaseState
 
 				TeamBalance();
 
-				Game.Current.CleanUp();
-
 				int index = Rand.Int( 1, Team.Red.GetCount() );
 
 				foreach ( var player in Players )
