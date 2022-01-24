@@ -155,41 +155,13 @@ public partial class Game : Sandbox.Game
 		base.DoPlayerSuicide( cl );
 	}
 
-	public void CleanUp()
-	{
-		Sandbox.Internal.Decals.RemoveFromWorld();
-
-		foreach ( var spawnpoint in All.OfType<PlayerSpawnPoint>() )
-			spawnpoint.Occupied = false;
-
-		foreach ( var entity in All.OfType<ModelEntity>() )
-		{
-			if ( entity is BaseProjectile || entity is Grenade )
-				entity.Delete();
-			else if ( entity is Weapon weapon && weapon.IsValid() && weapon.Owner == null )
-				weapon.Delete();
-		}
-
-		ClientCleanUp();
-	}
-
-	[ClientRpc]
-	public void ClientCleanUp()
-	{
-		foreach ( var ent in All.OfType<ModelEntity>() )
-		{
-			if ( ent.IsValid() && ent.IsClientOnly && ent is not BaseViewModel )
-				ent.Delete();
-		}
-	}
-
 	[Event.Entity.PostSpawn]
 	private void EntityPostSpawn()
 	{
-		if ( IsServer )
-			ChangeState( new WaitingForPlayersState() );
-
 		Map = new Map();
+
+		if ( IsServer )
+			ChangeState( new WaitingForPlayersState() );	
 	}
 
 	private void OnStateChanged()

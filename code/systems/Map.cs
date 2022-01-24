@@ -11,9 +11,6 @@ public partial class Map : Entity
 	public Package Info { get; set; }
 	public List<PlayerSpawnPoint> SpawnPoints { get; set; } = new();
 	public List<SpectatePoint> SpectatePoints { get; set; } = new();
-	protected Output RoundStart { get; set; }
-	protected Output RoundEnd { get; set; }
-	protected Output RoundNew { get; set; }
 
 	public Map() { }
 
@@ -28,15 +25,46 @@ public partial class Map : Entity
 	[Event.Entity.PostSpawn]
 	private void EntityPostSpawn()
 	{
-		GetInfo();
-
 		if ( Host.IsServer )
 		{
 			SpawnPoints = Entity.All.OfType<PlayerSpawnPoint>().ToList();
 		}
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
+		_ = GetInfo();
 	}
+
+	[PBEvent.Round.New]
+	public void CleanUp()
+	{
+		if ( Host.IsServer )
+		{
+			Sandbox.Internal.Decals.RemoveFromWorld();
+
+			foreach ( var entity in Entity.All )
+			{
+				if ( entity is BaseProjectile || entity is Grenade )
+					entity.Delete();
+				else if ( entity is Weapon weapon && weapon.IsValid() && weapon.Owner == null )
+					weapon.Delete();
+				else if ( entity is PlayerSpawnPoint spawnPoint )
+					spawnPoint.Occupied = false;
+			}
+		}
+
+		if ( Host.IsClient )
+		{
+			foreach ( var ent in Entity.All.OfType<ModelEntity>() )
+			{
+				if ( ent.IsValid() && ent.IsClientOnly && ent is not BaseViewModel )
+					ent.Delete();
+			}
+		}
+	}
+
+	protected Output RoundStart { get; set; }
+	protected Output RoundEnd { get; set; }
+	protected Output RoundNew { get; set; }
 
 	[PBEvent.Round.Start]
 	private void OnRoundStart()
