@@ -10,7 +10,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 	[Net] public TimeSince TimeSinceStartedBeingDefused { get; set; } = 0f;
 	[Net] public TimeUntil TimeUntilExplode { get; set; }
 	public Bombsite Bombsite { get; set; }
-	public Player Planter { get; set; }	
+	public Player Planter { get; set; }
 	public bool Disabled { get; set; }
 	public Panel LookPanel { get; set; }
 	public RealTimeUntil UntilTickSound { get; set; }
@@ -33,7 +33,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 	{
 		TimeUntilExplode = GameplayState.BombDuration;
 		_gameplayState = Game.Current.State as GameplayState;
-		_gameplayState.Bomb = this;	
+		_gameplayState.Bomb = this;
 
 		if ( _gameplayState.RoundState == RoundState.Play )
 		{
@@ -42,6 +42,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		}
 
 		Event.Run( PBEvent.Round.Bomb.Planted, this );
+		Bombsite.BombPlanted.Fire( this );
 		OnPlanted( Planter );
 	}
 
@@ -61,6 +62,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			Disabled = true;
 
 			Event.Run( PBEvent.Round.Bomb.Defused, this );
+			Bombsite.BombDefused.Fire( this );
 			OnDisabled( Defuser );
 		}
 		else if ( TimeUntilExplode )
@@ -69,7 +71,19 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			Defuser = null;
 
 			Event.Run( PBEvent.Round.Bomb.Explode, this );
+			Bombsite.BombExplode.Fire( this );
 			OnDisabled( Defuser );
+
+			DamageInfo info = new DamageInfo()
+					.WithForce( Vector3.Up * 1000f );
+			info.Damage = 100f;
+			info.Flags = DamageFlags.Blast;
+			var proximity = Physics.GetEntitiesInSphere( Position, 100f );
+
+			foreach ( var entity in proximity )
+			{
+				entity.TakeDamage( info );
+			}
 		}
 	}
 
@@ -135,7 +149,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		if ( Defuser == null && viewer == Local.Pawn )
 		{
 			LookPanel = Local.Hud.AddChild<WeaponLookAt>();
-			(LookPanel as WeaponLookAt).Text.Text = "Press E to defuse";
+			(LookPanel as WeaponLookAt).InputHint.Context.Text = "Hold to defuse";
 			(LookPanel as WeaponLookAt).Icon.SetTexture( "ui/weapons/bomb.png" );
 		}
 		else if ( Defuser == viewer )
@@ -168,7 +182,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 				return;
 
 			LookPanel = Local.Hud.AddChild<WeaponLookAt>();
-			(LookPanel as WeaponLookAt).Text.Text = "Press E to defuse";
+			(LookPanel as WeaponLookAt).InputHint.Context.Text = "Press E to defuse";
 			(LookPanel as WeaponLookAt).Icon.SetTexture( "ui/weapons/bomb.png" );
 		}
 	}
