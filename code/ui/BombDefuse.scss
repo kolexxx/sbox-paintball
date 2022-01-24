@@ -15,12 +15,24 @@ bombdefuse
     flex-direction: column;
     opacity: 1;
 
+    inputhint
+    {
+        align-items: center;
+        justify-content: center;
+        flex-direction: row-reverse;
+
+        .glyph
+        {
+            margin-right: 10px;
+        }
+    }
+
     progressbar
     {
         .inner-panel
         {
             background-color: green;
-            transition: width 0.1s ease-out;
+            transition: width 0.2s ease-out;
             border-radius: 25%;
         }
 
