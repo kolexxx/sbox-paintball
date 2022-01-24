@@ -34,16 +34,16 @@ public partial class Notification : Popup
 	}
 
 	[ClientRpc]
-	public static void Create( string text = "", float lifeTime = 0f )
+	public static void Create( string message = "", float lifeTime = 0f )
 	{
 		if ( s_current != null && !s_current.HasLifetime )
 		{
-			s_current.Message.Text = text;
+			s_current.Message.Text = message;
 			return;
 		}
 
 		s_current?.Delete( true );
-		Local.Hud.AddChild( new Notification( text, lifeTime ) );
+		Local.Hud.AddChild( new Notification( message, lifeTime ) );
 		s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as Notification;
 	}
 
@@ -53,7 +53,14 @@ public partial class Notification : Popup
 		if ( !Host.IsClient )
 			return;
 
-		Create( $"{winner } wins!", GameplayState.EndDuration );
+		var bomb = (Game.Current.State as GameplayState).Bomb;
+
+		string message = $"{winner } wins!";
+
+		if ( winner == Team.Blue && bomb.IsValid() && bomb.Disabled && bomb.Defuser != null )
+			message = "Bomb has been defused!";
+
+		Create( message, GameplayState.EndDuration );
 		Audio.Announce( $"{winner.GetString()}win", Audio.Priority.High );
 	}
 
