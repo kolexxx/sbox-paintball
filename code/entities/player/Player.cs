@@ -33,7 +33,6 @@ public partial class Player : Sandbox.Player
 		LifeState = LifeState.Dead;
 	}
 
-
 	public override void Respawn()
 	{
 		TimeSinceSpawned = 0;
@@ -82,10 +81,17 @@ public partial class Player : Sandbox.Player
 		if ( Input.ActiveChild != null )
 			ActiveChild = Input.ActiveChild;
 
-		TickPlayerChangeSpectateCamera();
-		TickPlayerUse();
+		if ( this.Alive() )
+		{
+			TickPlayerUse();
+			TickPlayerDrop();
+		}
+		else
+		{
+			TickPlayerChangeSpectateCamera();		
+		}
+
 		TickPlayerLook();
-		TickPlayerDrop();
 
 		controller?.Simulate( cl, this, GetActiveAnimator() );
 	}
@@ -121,17 +127,14 @@ public partial class Player : Sandbox.Player
 
 	public override void Spawn()
 	{
-		Transmit = TransmitType.Always;
-		Tags.Add( "player" );
-
 		base.Spawn();
+
+		Tags.Add( "player" );
+		Transmit = TransmitType.Always;
 	}
 
 	private void TickPlayerDrop()
 	{
-		if ( !this.Alive() )
-			return;
-
 		if ( Input.Pressed( InputButton.Drop ) )
 		{
 			var dropped = Inventory.DropActive();

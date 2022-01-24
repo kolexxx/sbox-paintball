@@ -14,9 +14,6 @@ public partial class Player
 
 	protected override void TickPlayerUse()
 	{
-		if ( !this.Alive() )
-			return;
-
 		if ( Input.Pressed( InputButton.Use ) )
 		{
 			Using = FindUsable();
