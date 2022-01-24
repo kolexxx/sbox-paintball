@@ -67,8 +67,8 @@ public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 			Local.Hud.AddClass( player.Team.GetString() );
 		}
 
-		Event.Run( PBEvent.Player.Spectating.Changed, player.CurrentPlayer, player );
 		player.CurrentPlayer = null;
+		player.StopLooking();
 	}
 
 	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
