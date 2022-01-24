@@ -13,6 +13,18 @@ weaponlookat
     border-radius: 25%;
     transition: opacity 0.2s ease-in;
 
+    inputhint
+    {
+        align-items: center;
+        justify-content: center;
+        flex-direction: row-reverse;
+
+        .glyph
+        {
+            margin-right: 10px;
+        }
+    }
+
     .icon
     {
         width: 80px;

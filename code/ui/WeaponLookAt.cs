@@ -1,17 +1,20 @@
-﻿using Sandbox.UI;
+﻿using Sandbox;
+using Sandbox.UI;
 using Sandbox.UI.Construct;
 
 namespace Paintball;
 
 public class WeaponLookAt : Panel
 {
-	public Label Text { get; set; }
+	public InputHint InputHint { get; set; }
 	public Image Icon { get; set; }
 
 	public WeaponLookAt()
 	{
 		StyleSheet.Load( "/ui/WeaponLookAt.scss" );
-		Text = Add.Label( "Press E to pick up ", "text" );
+		InputHint = AddChild<InputHint>();
+		InputHint.SetButton( InputButton.Use );
+		InputHint.Context.Text = "Pick up";
 		Icon = Add.Image( "", "icon" );
 	}
 }
