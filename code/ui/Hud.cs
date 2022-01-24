@@ -21,6 +21,7 @@ public partial class Hud : HudEntity<RootPanel>
 		RootPanel.AddChild<Scoreboard>();            // 5
 		RootPanel.AddChild<TeamIndicator>();         // 6
 		RootPanel.AddChild<TeamSelect>();            // 7
-		RootPanel.AddChild<VoiceList>();             // 8
+		RootPanel.AddChild<ViewerCount>();           // 8
+		RootPanel.AddChild<VoiceList>();             // 9
 	}
 }

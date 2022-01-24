@@ -1,0 +1,20 @@
+﻿viewercount
+{
+    position: absolute;
+    top: 5%;
+    left: 5%;
+    color: white;
+    font-size: 24px;
+    align-items: center;
+    justify-content: center;
+
+    .icon
+    {
+        background-image-tint: green;
+    }
+
+    &.hidden
+    {
+        display: none;
+    }
+}
