@@ -5,6 +5,7 @@ namespace Paintball;
 
 public partial class Player
 {
+	[Net] public int ViewerCount { get; set; }
 	public bool IsSpectator => Camera is ISpectateCamera;
 	public bool IsSpectatingPlayer => _spectatedPlayer.IsValid();
 	public Player CurrentPlayer
@@ -12,13 +13,40 @@ public partial class Player
 		get => _spectatedPlayer ?? this;
 		set
 		{
+			var oldSpectatedPlayer = _spectatedPlayer;
 			_spectatedPlayer = value == this ? null : value;
+
+			if ( IsClient && oldSpectatedPlayer != _spectatedPlayer )
+			{
+				Event.Run( PBEvent.Player.Spectating.Changed, oldSpectatedPlayer, _spectatedPlayer );
+				AdjustViewerCount( _spectatedPlayer?.NetworkIdent ?? 0 );
+			}
 		}
 	}
 
 	private int _index = 0;
 	private Player _spectatedPlayer;
 	private RealTimeSince _timeSincePlayerChanged;
+
+	[ServerCmd]
+	public static void AdjustViewerCount( int networkIdent )
+	{
+		var player = ConsoleSystem.Caller.Pawn as Player;
+
+		if ( !player.IsValid() )
+			return;
+
+		if ( player._spectatedPlayer.IsValid() )
+			player._spectatedPlayer.ViewerCount--;
+
+		if ( networkIdent == 0 )
+			return;
+
+		player._spectatedPlayer = Entity.FindByIndex( networkIdent ) as Player;
+
+		if ( player._spectatedPlayer.IsValid() )
+			player._spectatedPlayer.ViewerCount++;
+	}
 
 	public void TickPlayerChangeSpectateCamera()
 	{
@@ -30,6 +58,7 @@ public partial class Player
 			FreeSpectateCamera => new FirstPersonSpectateCamera(),
 			FirstPersonSpectateCamera => new ThirdPersonSpectateCamera(),
 			ThirdPersonSpectateCamera => new FreeSpectateCamera(),
+			FixedSpectateCamera => new FreeSpectateCamera(),
 			_ => Camera
 		};
 	}
@@ -56,11 +85,9 @@ public partial class Player
 
 		var oldPlayer = CurrentPlayer;
 
-		CurrentPlayer = null;
-
 		var validPlayers =
 			All.OfType<Player>()
-			.Where( x => x.IsValid() && x.Alive() )
+			.Where( x => x.IsValid() && x.Alive() && x != Local.Pawn )
 			.ToList();
 
 		if ( validPlayers.Count > 0 )
@@ -75,12 +102,13 @@ public partial class Player
 
 			CurrentPlayer = validPlayers[_index];
 		}
+		else
+		{
+			CurrentPlayer = null;
+		}
 
 		if ( Camera is ISpectateCamera camera )
-		{
 			camera.OnSpectatedPlayerChanged( oldPlayer, CurrentPlayer );
-			Event.Run( PBEvent.Player.Spectating.Changed, oldPlayer, CurrentPlayer );
-		}
 	}
 
 	[PBEvent.Player.Killed]
