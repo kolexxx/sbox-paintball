@@ -33,10 +33,10 @@ public class SpectatedPlayerInfo : Panel
 	[PBEvent.Player.Spectating.Changed]
 	private static void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
 	{
-		if ( oldPlayer != Local.Pawn )
+		if ( oldPlayer != null )
 			s_current.Delete();
 
-		if ( newPlayer == Local.Pawn )
+		if ( newPlayer == null )
 			return;
 
 		Local.Hud.AddChild( new SpectatedPlayerInfo( newPlayer ) );
