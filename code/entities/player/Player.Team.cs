@@ -22,6 +22,7 @@ public partial class Player : ITeamEntity
 		Client.SetInt( "team", (int)newTeam );
 
 		Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
+
 		ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined Team {newTeam}", $"avatar:{Client.PlayerId}" );
 
 		Game.Current.State.OnPlayerChangedTeam( this, oldTeam, newTeam );
