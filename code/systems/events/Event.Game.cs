@@ -10,8 +10,8 @@ public static partial class PBEvent
 
 		/// <summary>
 		/// Runs when the Game state changes.
-		/// <para>Event is passed the <strong><see cref="PaintBall.BaseState"/></strong> instance of the old state
-		/// and the <strong><see cref="PaintBall.BaseState"/></strong> instance of the new state.</para>
+		/// <para>Event is passed the <strong><see cref="Paintball.BaseState"/></strong> instance of the old state
+		/// and the <strong><see cref="Paintball.BaseState"/></strong> instance of the new state.</para>
 		/// </summary>
 		public class StateChangedAttribute : EventAttribute
 		{

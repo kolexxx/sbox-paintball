@@ -10,7 +10,7 @@ public static partial class PBEvent
 
 		/// <summary>
 		/// Runs when a player dies.
-		/// <para>Event is passed the <strong><see cref="PaintBall.Player"/></strong> 
+		/// <para>Event is passed the <strong><see cref="Paintball.Player"/></strong> 
 		/// instance of the player who died.</para>
 		/// </summary>
 		public class KilledAttribute : EventAttribute
@@ -24,8 +24,8 @@ public static partial class PBEvent
 
 			/// <summary>
 			/// Runs when the current spectated player changes.
-			/// <para>Event is passed the <strong><see cref="PaintBall.Player"/></strong> instance of the old 
-			/// spectated player and the <strong><see cref="PaintBall.Player"/></strong> instance of the new spectated player.</para>
+			/// <para>Event is passed the <strong><see cref="Paintball.Player"/></strong> instance of the old 
+			/// spectated player and the <strong><see cref="Paintball.Player"/></strong> instance of the new spectated player.</para>
 			/// </summary>
 			public class ChangedAttribute : EventAttribute
 			{
@@ -39,8 +39,8 @@ public static partial class PBEvent
 
 			/// <summary>
 			/// Runs when a player changes teams.
-			/// <para>Event is passed the <strong><see cref="PaintBall.Player"/></strong> instance of the player 
-			/// who changed teams and the old <strong><see cref="PaintBall.Team"/></strong>.</para>
+			/// <para>Event is passed the <strong><see cref="Paintball.Player"/></strong> instance of the player 
+			/// who changed teams and the old <strong><see cref="Paintball.Team"/></strong>.</para>
 			/// </summary>
 			public class ChangedAttribute : EventAttribute
 			{

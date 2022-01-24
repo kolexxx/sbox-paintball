@@ -20,7 +20,7 @@ public static partial class PBEvent
 
 		/// <summary>
 		/// Runs when the play duration of the current round has ended.
-		/// <para>Event is passed the <strong><see cref="PaintBall.Team"/></strong> which won the round.</para>
+		/// <para>Event is passed the <strong><see cref="Paintball.Team"/></strong> which won the round.</para>
 		/// </summary>
 		public class EndAttribute : EventAttribute
 		{
@@ -43,7 +43,7 @@ public static partial class PBEvent
 
 			/// <summary>
 			/// Runs when the bomb has been planted.
-			/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
+			/// <para>Event is passed the <strong><see cref="Paintball.PlantedBomb"/></strong> instance 
 			/// of the bomb.</para>
 			/// </summary>
 			public class PlantedAttribute : EventAttribute
@@ -55,8 +55,8 @@ public static partial class PBEvent
 
 			/// <summary>
 			/// Runs when the bomb has exploded.
-			/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
-			/// of the bomb. Gets called before <strong><see cref="PaintBall.PBEvent.Round.EndAttribute"/></strong>
+			/// <para>Event is passed the <strong><see cref="Paintball.PlantedBomb"/></strong> instance 
+			/// of the bomb. Gets called before <strong><see cref="Paintball.PBEvent.Round.EndAttribute"/></strong>
 			/// if the bomb explosion triggered the round to end.</para>
 			/// </summary>
 			public class ExplodeAttribute : EventAttribute
@@ -68,8 +68,8 @@ public static partial class PBEvent
 
 			/// <summary>
 			/// Runs when the bomb has been defused.
-			/// <para>Event is passed the <strong><see cref="PaintBall.PlantedBomb"/></strong> instance 
-			/// of the bomb. Gets called before <strong><see cref="PaintBall.PBEvent.Round.EndAttribute"/></strong>
+			/// <para>Event is passed the <strong><see cref="Paintball.PlantedBomb"/></strong> instance 
+			/// of the bomb. Gets called before <strong><see cref="Paintball.PBEvent.Round.EndAttribute"/></strong>
 			/// if the bomb defuse triggered the round to end.</para>
 			/// </summary>
 			public class DefusedAttribute : EventAttribute
