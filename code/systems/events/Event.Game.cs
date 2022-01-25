@@ -24,5 +24,12 @@ public static partial class PBEvent
 		{
 			public MapInfoFetchedAttribute() : base( MapInfoFetched ) { }
 		}
+
+		public const string MapSettingsLoaded = "pb.game.mapsettingloaded";
+
+		public class MapSettingsLoadedAttribute : EventAttribute
+		{
+			public MapSettingsLoadedAttribute() : base( MapSettingsLoaded ) { }
+		}
 	}
 }
