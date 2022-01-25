@@ -14,10 +14,12 @@
 ]
 
 //
-// Paintball.Map
+// Paintball.MapSettings
 //
-@PointClass base(BaseProperties_kole_paintball) = pb_map : ""
+@PointClass base(BaseProperties_kole_paintball) = pb_map_settings : ""
 [
+	blueteamname(string) : "Blue Team Name" : "Green" : ""
+	redteamname(string) : "Red Team Name" : "Red" : ""
 
 	output RoundStart(void) : ""
 	output RoundEnd(void) : ""
