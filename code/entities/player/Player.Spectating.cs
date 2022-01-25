@@ -37,7 +37,10 @@ public partial class Player
 			return;
 
 		if ( player._spectatedPlayer.IsValid() )
+		{
 			player._spectatedPlayer.ViewerCount--;
+			player._spectatedPlayer = null;
+		}
 
 		if ( networkIdent == 0 )
 			return;
