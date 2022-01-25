@@ -5,7 +5,8 @@ namespace Paintball;
 public partial class Player : Sandbox.Player
 {
 	[Net] public Bombsite Bombsite { get; set; }
-	[Net] public TimeSince TimeSinceSpawned { get; private set; }
+	[Net] public int Money { get; set; } = 1000;
+	[Net] public TimeSince TimeSinceSpawned { get; private set; }	
 	public ProjectileSimulator Projectiles { get; init; }
 	public bool CanPlantBomb => Team == Team.Red && GroundEntity is WorldEntity && Bombsite.IsValid() && Game.Current.State is GameplayState;
 	public bool IsDefusingBomb => Team == Team.Blue && Using is PlantedBomb;
@@ -123,6 +124,7 @@ public partial class Player : Sandbox.Player
 		LastDamageInfo = default;
 		ConsecutiveKills = 0;
 		KillStreak = 0;
+		Money = 1000;
 	}
 
 	public override void Spawn()

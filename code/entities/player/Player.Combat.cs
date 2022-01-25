@@ -85,6 +85,8 @@ public partial class Player
 
 	protected void OnPlayerKill( DamageInfo info )
 	{
+		Money += 300;
+
 		if ( TimeSinceLastKill >= 5f )
 			ConsecutiveKills = 0;
 
