@@ -71,7 +71,7 @@ public partial class Map : Entity
 	}
 }
 
-[Library( "pb_map_settings" )]
+[Library( "pb_map_settings", Title = "Map Settings", Spawnable = true )]
 public partial class MapSettings : Entity
 {
 	[Property] public string BlueTeamName { get; set; } = "Blue";
