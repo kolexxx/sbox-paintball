@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Paintball.UI;
+using Sandbox;
 using Sandbox.UI;
 
 namespace Paintball;
@@ -78,7 +79,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 					.WithForce( Vector3.Up * 1000f );
 			info.Damage = 100f;
 			info.Flags = DamageFlags.Blast;
-			var proximity = Physics.GetEntitiesInSphere( Position, 100f );
+			var proximity = Physics.GetEntitiesInSphere( Position, 500f );
 
 			foreach ( var entity in proximity )
 			{
@@ -104,13 +105,15 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		_gameplayState = Game.Current.State as GameplayState;
 
 		if ( _gameplayState.RoundState == RoundState.Play )
+		{
 			_gameplayState.RoundState = RoundState.Bomb;
+			Notification.Create( "Bomb has been planted!", 3 );
+			Audio.Announce( "bomb_planted", Audio.Priority.Medium );
+		}
 
 		_gameplayState.Bomb = this;
 
 		Event.Run( PBEvent.Round.Bomb.Planted, this );
-		Notification.Create( "Bomb has been planted!", 3 );
-		Audio.Announce( "bomb_planted", Audio.Priority.Medium );
 	}
 
 	[ClientRpc]
@@ -127,7 +130,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 
 	bool IUse.IsUsable( Entity user )
 	{
-		return !Disabled && user is Player player && player.Team == Team.Blue && Defuser == null && user.GroundEntity is WorldEntity;
+		return !Disabled && user is Player player && player.Team == Team.Blue && Defuser == null && user.GroundEntity != null;
 	}
 
 	bool IUse.OnUse( Entity user )
