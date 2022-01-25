@@ -92,7 +92,6 @@ public abstract partial class BaseState : BaseNetworkable
 	{
 		if ( Host.IsServer && StateDuration > 0 )
 		{
-			Game.Current.Map.CleanUp();
 			StateEndTime = Time.Now + StateDuration;
 		}
 	}
