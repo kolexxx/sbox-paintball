@@ -47,9 +47,10 @@ public partial class Map : Entity
 					entity.Delete();
 				else if ( entity is Weapon weapon && weapon.IsValid() && weapon.Owner == null )
 					weapon.Delete();
-				else if ( entity is PlayerSpawnPoint spawnPoint )
-					spawnPoint.Occupied = false;
 			}
+
+			foreach ( var spawnPoint in SpawnPoints )
+				spawnPoint.Occupied = false;
 		}
 
 		if ( Host.IsClient )
