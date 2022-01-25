@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using System;
 
-namespace Paintball;
+namespace Paintball.UI;
 
 /// <summary>
 /// A <strong><see cref="Sandbox.UI.Panel"></see></strong> that will be deleted 

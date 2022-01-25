@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 
-namespace Paintball;
+namespace Paintball.UI;
 
 public class BombDefuse : Panel
 {

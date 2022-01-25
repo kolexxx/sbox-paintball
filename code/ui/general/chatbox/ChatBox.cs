@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.UI;
 
-namespace Paintball;
+namespace Paintball.UI;
 
 public partial class ChatBox : Sandbox.UI.ChatBox
 {

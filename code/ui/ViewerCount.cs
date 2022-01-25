@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace Paintball;
+namespace Paintball.UI;
 
 public class ViewerCount : Panel
 {
@@ -29,7 +29,7 @@ public class ViewerCount : Panel
 		SetClass( "hidden", TeamSelect.Instance.IsVisible || player.ViewerCount <= 0 );
 
 		if ( !IsVisible )
-			return;		
+			return;
 
 		_count.Text = player.ViewerCount.ToString();
 	}

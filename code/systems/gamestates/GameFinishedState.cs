@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Paintball.UI;
+using Sandbox;
 
 namespace Paintball;
 

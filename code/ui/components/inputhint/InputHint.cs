@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 
-namespace Paintball;
+namespace Paintball.UI;
 
 public class InputHint : Panel
 {

@@ -2,7 +2,7 @@
 using Sandbox.UI;
 using System;
 
-namespace Paintball;
+namespace Paintball.UI;
 
 [UseTemplate]
 public partial class TeamSelect : Panel
