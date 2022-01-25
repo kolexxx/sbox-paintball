@@ -18,7 +18,7 @@
 //
 @PointClass base(BaseProperties_kole_paintball) = pb_map_settings : ""
 [
-	blueteamname(string) : "Blue Team Name" : "Green" : ""
+	blueteamname(string) : "Blue Team Name" : "Blue" : ""
 	redteamname(string) : "Red Team Name" : "Red" : ""
 
 	output RoundStart(void) : ""
