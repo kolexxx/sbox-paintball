@@ -22,7 +22,7 @@ public static partial class PBEvent
 
 		/// <summary>
 		/// Runs when a client disconnects.
-		/// <para>Event is passed the <strong><see cref="Sandbox.Client"/></strong> instance of the client who disconnected and
+		/// <para>Event is passed the <strong><see cref="long"/></strong> <strong>PlayerId</strong> of the client who disconnected and
 		/// the <strong><see cref="Sandbox.NetworkDisconnectionReason"/></strong>.</para>
 		/// </summary>
 		public class DisconnectedAttribute : EventAttribute
