@@ -82,6 +82,13 @@ public partial class TeamSelect : Panel
 		_open = false;
 	}
 
+	[PBEvent.Game.MapSettingsLoaded]
+	private void OnMapSettingsLoaded()
+	{
+		Blue.Text = "Join " + Game.Current.Map.Settings.BlueTeamName;
+		Red.Text = "Join " + Game.Current.Map.Settings.RedTeamName;
+	}
+
 	[PBEvent.Game.MapInfoFetched]
 	private void OnMapInfoFetched()
 	{

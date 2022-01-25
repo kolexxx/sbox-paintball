@@ -39,6 +39,19 @@ public static class TeamExtensions
 		}
 	}
 
+	public static string GetName( this Team team )
+	{
+		switch ( team )
+		{
+			case Team.Blue:
+				return Game.Current.Map.Settings.BlueTeamName;
+			case Team.Red:
+				return Game.Current.Map.Settings.RedTeamName;
+			default:
+				return "none";
+		}
+	}
+
 	public static IEnumerable<Player> GetAll( this Team team )
 	{
 		return Entity.All.OfType<Player>().Where( e => e.Team == team );

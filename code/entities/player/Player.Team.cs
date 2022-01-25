@@ -23,7 +23,7 @@ public partial class Player : ITeamEntity
 
 		Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
 
-		ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined Team {newTeam}", $"avatar:{Client.PlayerId}" );
+		ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined {newTeam.GetName()}", $"avatar:{Client.PlayerId}" );
 
 		Game.Current.State.OnPlayerChangedTeam( this, oldTeam, newTeam );
 	}

@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Paintball;
 
-[Library( "pb_map" )]
 public partial class Map : Entity
 {
 	public Package Info { get; set; }
-	public List<PlayerSpawnPoint> SpawnPoints { get; set; } = new();
-	public List<SpectatePoint> SpectatePoints { get; set; } = new();
+	public List<PlayerSpawnPoint> SpawnPoints { get; set; }
+	public List<SpectatePoint> SpectatePoints { get; set; }
+	public MapSettings Settings { get; set; }
 
 	public Map() { }
 
@@ -31,6 +31,13 @@ public partial class Map : Entity
 		}
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
+		Settings = Entity.All.FirstOrDefault( x => x is MapSettings ) as MapSettings;
+
+		if ( !Settings.IsValid() )
+			Settings = new MapSettings();
+
+		Event.Run( PBEvent.Game.MapSettingsLoaded );
+
 		_ = GetInfo();
 	}
 
@@ -62,7 +69,13 @@ public partial class Map : Entity
 			}
 		}
 	}
+}
 
+[Library( "pb_map_settings" )]
+public partial class MapSettings : Entity
+{
+	[Property] public string BlueTeamName { get; set; } = "Blue";
+	[Property] public string RedTeamName { get; set; } = "Red";
 	protected Output RoundStart { get; set; }
 	protected Output RoundEnd { get; set; }
 	protected Output RoundNew { get; set; }

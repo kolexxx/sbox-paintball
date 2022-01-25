@@ -55,7 +55,7 @@ public partial class Notification : Popup
 
 		var bomb = (Game.Current.State as GameplayState).Bomb;
 
-		string message = $"{winner } wins!";
+		string message = $"{winner.GetName() } wins!";
 
 		if ( winner == Team.Blue && bomb.IsValid() && bomb.Disabled && bomb.Defuser != null )
 			message = "Bomb has been defused!";
