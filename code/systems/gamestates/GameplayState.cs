@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Paintball.UI;
+using Sandbox;
 using System;
 using System.Linq;
 
@@ -106,8 +107,6 @@ public partial class GameplayState : BaseState
 	{
 		base.Tick();
 
-		Bomb?.Tick();
-
 		switch ( RoundState )
 		{
 			case RoundState.Freeze:
@@ -129,12 +128,18 @@ public partial class GameplayState : BaseState
 				if ( !Host.IsServer )
 					break;
 
+				if ( Bomb.IsValid() )
+					Bomb.Tick();
+
 				if ( AliveBlue == 0 || Bomb.Disabled )
 					RoundStateFinish();
 
 				break;
 
 			case RoundState.End:
+
+				if ( Host.IsServer && Bomb.IsValid() )
+					Bomb.Tick();
 
 				break;
 		}
