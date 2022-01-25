@@ -42,6 +42,8 @@ public partial class Game : Sandbox.Game
 
 			Hud = new();
 		}
+
+		Map = new Map();
 	}
 
 	[Event.Tick]
@@ -101,8 +103,7 @@ public partial class Game : Sandbox.Game
 			if ( player.Team == Team.None )
 				team = (Team)Rand.Int( 1, 2 );
 
-			var spawnpoints = All
-							 .OfType<PlayerSpawnPoint>()
+			var spawnpoints = Map.SpawnPoints
 							 .Where( e => e.Team == team && !e.Occupied )
 							 .ToList();
 
@@ -159,8 +160,6 @@ public partial class Game : Sandbox.Game
 	[Event.Entity.PostSpawn]
 	private void EntityPostSpawn()
 	{
-		Map = new Map();
-
 		if ( IsServer )
 			ChangeState( new WaitingForPlayersState() );	
 	}
