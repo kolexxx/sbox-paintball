@@ -72,7 +72,7 @@ public class RoundInfo : Panel
 			return;
 
 		Bottom.SetClass( "show", true );
-		Message.Text = $"Playing on Team {team.GetString()}";
+		Message.Text = $"Playing as {team.GetName()}";
 	}
 
 	[PBEvent.Game.StateChanged]

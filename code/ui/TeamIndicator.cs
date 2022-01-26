@@ -22,6 +22,6 @@ public class TeamIndicator : Panel
 
 		SetClass( "hidden", TeamSelect.Instance.IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
 
-		TeamName.Text = player.CurrentPlayer.Team.ToString();
+		TeamName.Text = player.CurrentPlayer.Team.GetName();
 	}
 }
