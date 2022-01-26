@@ -1,6 +1,5 @@
 ﻿using Sandbox;
 using Sandbox.UI;
-using System;
 
 namespace Paintball.UI;
 
@@ -37,22 +36,7 @@ public partial class TeamSelect : Panel
 		if ( !IsVisible )
 			return;
 
-		var player = Local.Pawn;
-		if ( player == null )
-			return;
-
-		var game = Game.Current;
-		if ( game == null )
-			return;
-
-		var state = game.State;
-		if ( state == null )
-			return;
-
-		if ( state.UpdateTimer )
-			Timer.Text = TimeSpan.FromSeconds( state.TimeLeftSeconds ).ToString( @"mm\:ss" );
-		else
-			Timer.Text = "";
+		Timer.Text = RoundInfo.Instance.Timer.Text;
 	}
 
 	public void BecomeSpectator()
