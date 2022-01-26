@@ -17,7 +17,7 @@ public partial class CustomWalkController : WalkController
 
 	public override float GetWishSpeed()
 	{
-		if ( !Game.Current.State.FreezeTime || Pawn.IsPlantingBomb || Pawn.IsDefusingBomb )
+		if ( Pawn.IsFrozen || Pawn.IsPlantingBomb || Pawn.IsDefusingBomb )
 			return 0f;
 
 		var ws = Duck.GetWishSpeed();
@@ -36,7 +36,7 @@ public partial class CustomWalkController : WalkController
 
 	public override void CheckJumpButton()
 	{
-		if ( !Game.Current.State.FreezeTime || Pawn.IsPlantingBomb || Pawn.IsDefusingBomb )
+		if ( Pawn.IsFrozen || Pawn.IsPlantingBomb || Pawn.IsDefusingBomb )
 			return;
 
 		base.CheckJumpButton();
