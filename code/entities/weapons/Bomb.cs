@@ -7,7 +7,6 @@ namespace Paintball;
 public sealed partial class Bomb : Weapon
 {
 	[Net, Predicted] public TimeSince Delay { get; set; } = 2f;
-	[Net, Predicted] public TimeSince TimeSinceStartedPlanting { get; set; }
 	public override bool Automatic => true;
 	public override SlotType Slot => SlotType.Deployable;
 	public override int ClipSize => 1;
@@ -22,7 +21,7 @@ public sealed partial class Bomb : Weapon
 	{
 		base.ActiveStart( entity );
 
-		TimeSinceStartedPlanting = 0;
+		TimeSincePrimaryAttack = 0;
 	}
 
 	public override void ActiveEnd( Entity ent, bool dropped )
@@ -58,7 +57,7 @@ public sealed partial class Bomb : Weapon
 		if ( Owner.IsPlantingBomb )
 			Delay = 0;
 
-		TimeSinceStartedPlanting = 0f;
+		TimeSincePrimaryAttack = 0f;
 		Owner.IsPlantingBomb = false;
 		return false;
 	}
@@ -67,7 +66,7 @@ public sealed partial class Bomb : Weapon
 	{
 		base.AttackPrimary();
 
-		if ( TimeSinceStartedPlanting >= 2f )
+		if ( TimeSincePrimaryAttack >= 2f )
 		{
 			Owner.IsPlantingBomb = false;
 
