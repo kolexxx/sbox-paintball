@@ -39,7 +39,7 @@ public sealed partial class Throwable : Weapon
 
 	public override bool CanPrimaryAttack()
 	{
-		if ( !Game.Current.State.FreezeTime )
+		if ( Owner.IsFrozen )
 			return false;
 
 		if ( Input.Down( InputButton.Attack1 ) )

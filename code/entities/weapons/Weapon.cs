@@ -112,7 +112,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 
 	public override bool CanPrimaryAttack()
 	{
-		if ( !Game.Current.State.FreezeTime )
+		if ( Owner.IsFrozen )
 			return false;
 
 		if ( Automatic == false && !Input.Pressed( InputButton.Attack1 ) )
@@ -129,7 +129,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 
 	public override bool CanSecondaryAttack()
 	{
-		if ( !Game.Current.State.FreezeTime )
+		if ( Owner.IsFrozen )
 			return false;
 
 		if ( !Input.Pressed( InputButton.Attack2 ) )
