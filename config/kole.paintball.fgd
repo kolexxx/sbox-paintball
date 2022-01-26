@@ -14,19 +14,6 @@
 ]
 
 //
-// Paintball.MapSettings
-//
-@PointClass base(BaseProperties_kole_paintball) = pb_map_settings : ""
-[
-	blueteamname(string) : "Blue Team Name" : "Blue" : ""
-	redteamname(string) : "Red Team Name" : "Red" : ""
-
-	output RoundStart(void) : ""
-	output RoundEnd(void) : ""
-	output RoundNew(void) : ""
-]
-
-//
 // Paintball.Bombsite
 //
 @SolidClass base(BaseProperties_kole_paintball) tags( Trigger, Trigger ) 
@@ -84,6 +71,19 @@ metadata
 		1 : "Blue"
 		2 : "Red"
 	]
+]
+
+//
+// Paintball.MapSettings
+//
+@PointClass base(BaseProperties_kole_paintball) = pb_map_settings : ""
+[
+	blueteamname(string) : "Blue Team Name" : "Blue" : ""
+	redteamname(string) : "Red Team Name" : "Red" : ""
+
+	output RoundStart(void) : ""
+	output RoundEnd(void) : ""
+	output RoundNew(void) : ""
 ]
 
 //
