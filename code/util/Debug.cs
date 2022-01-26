@@ -4,8 +4,8 @@ namespace Paintball;
 
 public static class Debug
 {
-	public static void CheckRealms()
+	public static string CheckRealms()
 	{
-		Log.Info( Host.IsServer ? "Server: " : "Client: " );
+		return Host.IsServer ? "Server: " : "Client: " ;
 	}
 }
