@@ -7,9 +7,9 @@ public partial class MapSettings : Entity
 {
 	[Net, Property] public string BlueTeamName { get; set; } = "Blue";
 	[Net, Property] public string RedTeamName { get; set; } = "Red";
-	protected Output RoundStart { get; set; }
-	protected Output RoundEnd { get; set; }
-	protected Output RoundNew { get; set; }
+	protected Output OnRoundStart { get; set; }
+	protected Output OnRoundEnd { get; set; }
+	protected Output OnRoundNew { get; set; }
 
 	public override void Spawn()
 	{
@@ -44,20 +44,20 @@ public partial class MapSettings : Entity
 	}
 
 	[PBEvent.Round.Start]
-	private void OnRoundStart()
+	private void RoundStart()
 	{
-		RoundStart.Fire( this );
+		OnRoundStart.Fire( this );
 	}
 
 	[PBEvent.Round.End]
-	private void OnRoundEnd( Team winner )
+	private void RoundEnd( Team winner )
 	{
-		RoundEnd.Fire( this );
+		OnRoundEnd.Fire( this );
 	}
 
 	[PBEvent.Round.New]
-	private void OnNewRound()
+	private void NewRound()
 	{
-		RoundNew.Fire( this );
+		OnRoundNew.Fire( this );
 	}
 }

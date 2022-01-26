@@ -43,7 +43,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		}
 
 		Event.Run( PBEvent.Round.Bomb.Planted, this );
-		Bombsite.BombPlanted.Fire( this );
+		Bombsite.OnBombPlanted.Fire( this );
 		OnPlanted( Planter );
 	}
 
@@ -63,7 +63,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			Disabled = true;
 
 			Event.Run( PBEvent.Round.Bomb.Defused, this );
-			Bombsite.BombDefused.Fire( this );
+			Bombsite.OnBombDefused.Fire( this );
 			OnDisabled( Defuser );
 		}
 		else if ( TimeUntilExplode )
@@ -72,7 +72,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			Defuser = null;
 
 			Event.Run( PBEvent.Round.Bomb.Explode, this );
-			Bombsite.BombExplode.Fire( this );
+			Bombsite.OnBombExplode.Fire( this );
 			OnDisabled( Defuser );
 
 			DamageInfo info = new DamageInfo()
