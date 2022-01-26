@@ -5,23 +5,20 @@ namespace Paintball;
 
 public abstract partial class BaseState : BaseNetworkable
 {
-	[Net] public TimeUntil FreezeTime { get; protected set; }
-	[Net] public int TimeLeftSeconds { get; set; }
+	[Net] public TimeUntil UntilStateEnds { get; set; }
 	public virtual bool CanPlayerSuicide => false;
 	public virtual int StateDuration => 0;
-	public float StateEndTime { get; set; }
 	public virtual string Name => GetType().Name;
 	public virtual bool UpdateTimer => false;
-	protected RealTimeUntil NextSecondTime { get; set; }
-	protected static List<Player> Players = new();
-
-	public float TimeLeft
+	public int TimeLeftSeconds
 	{
 		get
 		{
-			return StateEndTime - Time.Now;
+			return UntilStateEnds.Relative.CeilToInt();
 		}
 	}
+	protected RealTimeUntil NextSecondTime { get; set; }
+	protected static List<Player> Players = new();
 
 	public BaseState() { }
 
@@ -73,11 +70,7 @@ public abstract partial class BaseState : BaseNetworkable
 		player.Respawn();
 	}
 
-	public virtual void OnSecond()
-	{
-		if ( Host.IsServer )
-			TimeLeftSeconds = TimeLeft.CeilToInt();
-	}
+	public virtual void OnSecond() { }
 
 	public virtual void Tick()
 	{
@@ -92,7 +85,7 @@ public abstract partial class BaseState : BaseNetworkable
 	{
 		if ( Host.IsServer && StateDuration > 0 )
 		{
-			StateEndTime = Time.Now + StateDuration;
+			UntilStateEnds = StateDuration;
 		}
 	}
 

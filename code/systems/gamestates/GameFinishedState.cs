@@ -11,7 +11,7 @@ public partial class GameFinishedState : BaseState
 	{
 		base.OnSecond();
 
-		if ( Host.IsServer && Time.Now >= StateEndTime )
+		if ( Host.IsServer && UntilStateEnds )
 			Game.Current.ChangeState( new WaitingForPlayersState() );
 	}
 
@@ -21,8 +21,6 @@ public partial class GameFinishedState : BaseState
 
 		foreach ( var player in Players )
 			player.Inventory?.DeleteContents();
-
-		FreezeTime = 5f;
 
 		if ( Host.IsClient )
 			Scoreboard.Instance.Show = true;

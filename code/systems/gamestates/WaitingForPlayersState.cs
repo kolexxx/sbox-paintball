@@ -11,7 +11,7 @@ public partial class WaitingForPlayersState : BaseState
 	{
 		base.OnPlayerJoin( player );
 
-		StateEndTime = StateDuration + Time.Now;
+		UntilStateEnds = StateDuration;
 		NextSecondTime = 0f;
 	}
 
@@ -54,12 +54,12 @@ public partial class WaitingForPlayersState : BaseState
 		{
 			if ( Players.Count > 1 )
 			{
-				if ( TimeLeft <= 0 )
+				if ( UntilStateEnds )
 					Game.Current.ChangeState( new GameplayState() );
 			}
 			else
 			{
-				StateEndTime = Time.Now;
+				UntilStateEnds = 0;
 			}
 		}
 	}
@@ -69,7 +69,7 @@ public partial class WaitingForPlayersState : BaseState
 		base.Start();
 
 		if ( Players.Count > 1 )
-			StateEndTime = StateDuration + Time.Now;
+			UntilStateEnds = StateDuration;
 
 		foreach ( var player in Players )
 		{

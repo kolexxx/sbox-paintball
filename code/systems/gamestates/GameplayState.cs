@@ -96,10 +96,8 @@ public partial class GameplayState : BaseState
 	{
 		if ( Host.IsServer )
 		{
-			if ( Time.Now >= StateEndTime )
+			if ( UntilStateEnds )
 				RoundStateFinish();
-
-			TimeLeftSeconds = TimeLeft.CeilToInt();
 		}
 	}
 
@@ -168,7 +166,6 @@ public partial class GameplayState : BaseState
 				Bomb = null;
 
 				_firstBlood = false;
-				FreezeTime = 5f;
 
 				TeamBalance();
 
@@ -192,7 +189,7 @@ public partial class GameplayState : BaseState
 				Event.Run( PBEvent.Round.New );
 				RPC.OnRoundStateChanged( RoundState.Freeze );
 
-				StateEndTime = FreezeDuration + Time.Now;
+				UntilStateEnds = FreezeDuration;
 
 				break;
 
@@ -203,13 +200,13 @@ public partial class GameplayState : BaseState
 				Event.Run( PBEvent.Round.Start );
 				RPC.OnRoundStateChanged( RoundState.Play );
 
-				StateEndTime = PlayDuration + Time.Now;
+				UntilStateEnds = PlayDuration;
 
 				break;
 
 			case RoundState.Bomb:
 
-				StateEndTime = Bomb.TimeUntilExplode + Time.Now;
+				UntilStateEnds = Bomb.TimeUntilExplode;
 
 				break;
 
@@ -218,7 +215,7 @@ public partial class GameplayState : BaseState
 				Event.Run( PBEvent.Round.End, GetWinner() );
 				RPC.OnRoundStateChanged( RoundState.End, GetWinner() );
 
-				StateEndTime = EndDuration + Time.Now;
+				UntilStateEnds = EndDuration;
 
 				break;
 		}
