@@ -54,8 +54,9 @@ public partial class Notification : Popup
 			return;
 
 		var bomb = (Game.Current.State as GameplayState).Bomb;
+		string teamName = winner.GetName();
 
-		string message = $"{winner.GetName() } wins!";
+		string message = $"{teamName} win{(teamName[teamName.Length - 1] == 's' ? '\0' : 's')}!";
 
 		if ( winner == Team.Blue && bomb.IsValid() && bomb.Disabled && bomb.Defuser != null )
 			message = "Bomb has been defused!";
@@ -66,7 +67,7 @@ public partial class Notification : Popup
 
 	// We are creating a notification that will last the entire WaitingForPlayersState
 	[PBEvent.Game.StateChanged]
-	private static void OnStateChanged( BaseState oldState, BaseState newState )
+	private static void OnStateChanged( BaseState _, BaseState newState )
 	{
 		if ( !Host.IsClient || newState is not WaitingForPlayersState )
 			return;
