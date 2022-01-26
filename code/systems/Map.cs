@@ -5,21 +5,23 @@ using System.Threading.Tasks;
 
 namespace Paintball;
 
-public partial class Map : Entity
+public partial class Map
 {
 	public Package Info { get; set; }
 	public List<PlayerSpawnPoint> SpawnPoints { get; set; }
 	public List<SpectatePoint> SpectatePoints { get; set; }
 	public MapSettings Settings { get; set; }
 
-	public Map() { }
+	public Map() { Event.Register( this ); }
+
+	~Map() { Event.Unregister( this ); }
 
 	public async Task GetInfo()
 	{
 		Info = await Package.Fetch( Global.MapName, false );
 
 		if ( Info != null )
-			Event.Run( PBEvent.Game.MapInfoFetched );
+			Event.Run( PBEvent.Game.Map.InfoFetched );
 	}
 
 	[Event.Entity.PostSpawn]
@@ -31,12 +33,9 @@ public partial class Map : Entity
 		}
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
-		Settings = Entity.All.FirstOrDefault( x => x is MapSettings ) as MapSettings;
 
-		if ( !Settings.IsValid() )
+		if ( Settings == null )
 			Settings = new MapSettings();
-
-		Event.Run( PBEvent.Game.MapSettingsLoaded );
 
 		_ = GetInfo();
 	}
@@ -68,33 +67,5 @@ public partial class Map : Entity
 					ent.Delete();
 			}
 		}
-	}
-}
-
-[Library( "pb_map_settings", Title = "Map Settings", Spawnable = true )]
-public partial class MapSettings : Entity
-{
-	[Property] public string BlueTeamName { get; set; } = "Blue";
-	[Property] public string RedTeamName { get; set; } = "Red";
-	protected Output RoundStart { get; set; }
-	protected Output RoundEnd { get; set; }
-	protected Output RoundNew { get; set; }
-
-	[PBEvent.Round.Start]
-	private void OnRoundStart()
-	{
-		RoundStart.Fire( this );
-	}
-
-	[PBEvent.Round.End]
-	private void OnRoundEnd( Team winner )
-	{
-		RoundEnd.Fire( this );
-	}
-
-	[PBEvent.Round.New]
-	private void OnNewRound()
-	{
-		RoundNew.Fire( this );
 	}
 }
