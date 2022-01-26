@@ -57,8 +57,8 @@ public partial class Player : ITeamEntity
 			return;
 		}
 
-		int redCount = Team.Red.GetCount();
 		int blueCount = Team.Blue.GetCount();
+		int redCount = Team.Red.GetCount();
 
 		if ( player.Team == Team.None )
 		{
