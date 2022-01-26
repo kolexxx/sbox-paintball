@@ -18,18 +18,21 @@ public static partial class PBEvent
 			public StateChangedAttribute() : base( StateChanged ) { }
 		}
 
-		public const string MapInfoFetched = "pb.game.mapinfofetched";
-
-		public class MapInfoFetchedAttribute : EventAttribute
+		public static class Map
 		{
-			public MapInfoFetchedAttribute() : base( MapInfoFetched ) { }
-		}
+			public const string InfoFetched = "pb.game.map.infofetched";
 
-		public const string MapSettingsLoaded = "pb.game.mapsettingloaded";
+			public class InfoFetchedAttribute : EventAttribute
+			{
+				public InfoFetchedAttribute() : base( InfoFetched ) { }
+			}
 
-		public class MapSettingsLoadedAttribute : EventAttribute
-		{
-			public MapSettingsLoadedAttribute() : base( MapSettingsLoaded ) { }
+			public const string SettingsLoaded = "pb.game.map.settingsloaded";
+
+			public class SettingsLoadedAttribute : EventAttribute
+			{
+				public SettingsLoadedAttribute() : base( SettingsLoaded ) { }
+			}
 		}
 	}
 }

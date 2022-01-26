@@ -82,14 +82,14 @@ public partial class TeamSelect : Panel
 		_open = false;
 	}
 
-	[PBEvent.Game.MapSettingsLoaded]
+	[PBEvent.Game.Map.SettingsLoaded]
 	private void OnMapSettingsLoaded()
 	{
 		Blue.Text = "Join " + Game.Current.Map.Settings.BlueTeamName;
 		Red.Text = "Join " + Game.Current.Map.Settings.RedTeamName;
 	}
 
-	[PBEvent.Game.MapInfoFetched]
+	[PBEvent.Game.Map.InfoFetched]
 	private void OnMapInfoFetched()
 	{
 		MapImage.SetTexture( Game.Current.Map.Info.Thumb );
