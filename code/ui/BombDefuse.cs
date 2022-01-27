@@ -16,10 +16,10 @@ public class BombDefuse : Panel
 		InputHint.SetButton( InputButton.Use );
 		InputHint.Context.Text = "Hold to defuse";
 		AddChild( new ProgressBar( () =>
-		  {
-			  var bomb = (Game.Current.State as GameplayState).Bomb;
-			  return (float)bomb.TimeSinceStartedBeingDefused.Relative / 5f;
-		  } ) );
+		{
+			var bomb = (Game.Current.State as GameplayState).Bomb;
+			return (float)bomb.TimeSinceStartedBeingDefused.Relative / 5f;
+		} ) );
 
 		ProgressBar = GetChild( ChildrenCount - 1 ) as ProgressBar;
 	}
