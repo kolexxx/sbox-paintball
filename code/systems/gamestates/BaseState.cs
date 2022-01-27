@@ -10,13 +10,7 @@ public abstract partial class BaseState : BaseNetworkable
 	public virtual int StateDuration => 0;
 	public virtual string Name => GetType().Name;
 	public virtual bool UpdateTimer => false;
-	public int TimeLeftSeconds
-	{
-		get
-		{
-			return UntilStateEnds.Relative.CeilToInt();
-		}
-	}
+	public int TimeLeftSeconds => UntilStateEnds.Relative.CeilToInt();
 	protected RealTimeUntil NextSecondTime { get; set; }
 	protected static List<Player> Players = new();
 
@@ -70,7 +64,11 @@ public abstract partial class BaseState : BaseNetworkable
 		player.Respawn();
 	}
 
-	public virtual void OnSecond() { }
+	public virtual void OnSecond()
+	{
+		if ( UntilStateEnds )
+			TimeUp();
+	}
 
 	public virtual void Tick()
 	{
@@ -90,4 +88,6 @@ public abstract partial class BaseState : BaseNetworkable
 	}
 
 	public virtual void Finish() { }
+
+	public virtual void TimeUp() { }
 }

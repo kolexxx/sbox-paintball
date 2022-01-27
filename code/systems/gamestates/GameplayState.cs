@@ -92,18 +92,10 @@ public partial class GameplayState : BaseState
 
 	public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam ) { }
 
-	public override void OnSecond()
-	{
-		if ( Host.IsServer )
-		{
-			if ( UntilStateEnds )
-				RoundStateFinish();
-		}
-	}
-
 	public override void Tick()
 	{
-		base.Tick();
+		if ( UntilStateEnds )
+			TimeUp();
 
 		switch ( RoundState )
 		{
@@ -141,6 +133,14 @@ public partial class GameplayState : BaseState
 
 				break;
 		}
+	}
+
+	public override void TimeUp()
+	{
+		base.TimeUp();
+
+		if ( Host.IsServer )
+			RoundStateFinish();
 	}
 
 	public override void Start()
@@ -219,8 +219,6 @@ public partial class GameplayState : BaseState
 
 				break;
 		}
-
-		// Call OnSecond() as soon as RoundState starts
 	}
 
 	public void RoundStateFinish()
@@ -257,7 +255,7 @@ public partial class GameplayState : BaseState
 				{
 					Bomb?.Delete();
 					Bomb = null;
-					Game.Current.ChangeState( new GameFinishedState() );
+					Game.Current.ChangeState( new MapSelectState() );
 
 					return;
 				}
