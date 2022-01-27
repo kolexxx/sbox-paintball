@@ -1,6 +1,8 @@
 ﻿using Paintball.UI;
 using Sandbox;
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Paintball;
 
@@ -15,16 +17,10 @@ public partial class MapSelectState : BaseState
 	{
 		base.OnPlayerLeave( player );
 
-		VoteCount[PlayerIdVote[player.Client.PlayerId]]--;
+		if ( PlayerIdVote[player.Client.PlayerId] != string.Empty )
+			VoteCount[PlayerIdVote[player.Client.PlayerId]]--;
+
 		PlayerIdVote.Remove( player.Client.PlayerId ); // I don't think this is needed
-	}
-
-	public override void OnSecond()
-	{
-		base.OnSecond();
-
-		if ( Host.IsServer && UntilStateEnds )
-			Game.Current.ChangeState( new WaitingForPlayersState() );
 	}
 
 	public override void Start()
@@ -32,13 +28,23 @@ public partial class MapSelectState : BaseState
 		base.Start();
 
 		if ( !Host.IsServer )
+		{
+			Local.Hud.AddChild<MapSelect>();
+
 			return;
+		}
+
+		MapImages = new Dictionary<string, string>();
+		PlayerIdVote = new Dictionary<long, string>();
+		VoteCount = new Dictionary<string, int>();
 
 		foreach ( var player in Players )
+		{
 			player.Inventory?.DeleteContents();
+			PlayerIdVote.Add( player.Client.PlayerId, string.Empty );
+		}
 
-		VoteCount = new Dictionary<string, int>();
-		PlayerIdVote = new Dictionary<long, string>();
+		_ = Load();
 	}
 
 	public override void TimeUp()
@@ -47,6 +53,13 @@ public partial class MapSelectState : BaseState
 
 		if ( !Host.IsServer )
 			return;
+
+		if ( MapImages.Count == 0 )
+		{
+			Global.ChangeLevel( "kole.pb_snow" );
+
+			return;
+		}
 
 		string mostVotedMap = string.Empty;
 		int count = int.MinValue;
@@ -79,10 +92,47 @@ public partial class MapSelectState : BaseState
 		if ( oldMapVote == map )
 			return;
 
-		if ( oldMapVote != null )
+		if ( oldMapVote != string.Empty )
 			state.VoteCount[oldMapVote]--;
+		else
+			state.UntilStateEnds = Math.Min( state.UntilStateEnds + 1, state.StateDuration );
 
 		state.PlayerIdVote[player.Client.PlayerId] = map;
 		state.VoteCount[map]++;
+	}
+
+	public async Task Load()
+	{
+		List<string> mapNames = await GetMapNames();
+		List<string> mapImages = await GetMapImages( mapNames );
+
+		for ( int i = 0; i < mapNames.Count; ++i )
+		{
+			MapImages[mapNames[i]] = mapImages[i];
+			VoteCount[mapNames[i]] = 0;
+		}
+	}
+
+	private async Task<List<string>> GetMapNames()
+	{
+		Package result = await Package.Fetch( Global.GameName, true );
+		return result.GameConfiguration.MapList;
+	}
+
+	private async Task<List<string>> GetMapImages( List<string> mapNames )
+	{
+		List<string> mapThumbnails = new();
+		for ( int i = 0; i < mapNames.Count; ++i )
+		{
+			Package result = await Package.Fetch( mapNames[i], true );
+			mapThumbnails.Add( result.Thumb );
+		}
+
+		return mapThumbnails;
+	}
+
+	private void OnMapImagesChanged()
+	{
+		MapSelect.Instance?.LoadMaps();
 	}
 }

@@ -1,3 +1,50 @@
-﻿mapselect
+﻿@import "../../Variables.scss";
+
+mapselect
 {
+    position: absolute;
+    background-color: $allPurposeBlack;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+    progressbar
+    {
+        .inner-panel
+        {
+            background-color: green;
+            transition: width 0.2s ease-out;
+            border-radius: 25%;
+        }
+
+        position: absolute;
+        border: 1px solid white;
+        border-radius: 25%;
+        height: 10px;
+        width: 50%;
+        top: 100px;
+    }
+
+    .maps-container
+    {
+        justify-content: space-around;
+        width: 100%;
+        height: 60%;
+        bottom: 0;
+    }
+}
+
+entry
+{
+    width: 256px;
+    height: 256px;
+    background-size: 100%;
+    pointer-events: all;
+
+    &.voted
+    {
+        background-image-tint: green;
+    }
 }
