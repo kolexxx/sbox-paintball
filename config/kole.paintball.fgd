@@ -82,7 +82,7 @@ metadata
 	redteamname(string) : "Red Team Name" : "Red" : ""
 
 	output OnRoundStart(void) : ""
-	output OnRoundEnd(void) : ""
+	output OnRoundEnd(choices) : ""
 	output OnRoundNew(void) : ""
 ]
 
