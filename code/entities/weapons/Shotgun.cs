@@ -7,7 +7,7 @@ namespace Paintball;
 public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 {
 	public override SlotType Slot => SlotType.Primary;
-	public override int BulletsPerFire => 6;
+	public override int BulletsPerFire => 9;
 	public override int ClipSize => 5;
 	public override string CrosshairClass => "shotgun";
 	public override float Gravity => 7f;

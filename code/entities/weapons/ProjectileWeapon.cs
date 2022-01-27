@@ -43,8 +43,10 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 		{
 			Rand.SetSeed( Time.Tick );
 
-			for ( int i = 0; i < BulletsPerFire; i++ )
+			if ( BulletsPerFire == 1 )
 				FireProjectile();
+			else
+				FireProjectilesInPatern();
 		}
 	}
 
@@ -77,5 +79,45 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 		var velocity = forward * Speed;
 
 		projectile.Initialize( position, velocity );
+	}
+
+	protected void FireProjectilesInPatern()
+	{
+		if ( Owner is not Player owner )
+			return;
+
+		for ( float pitch = -1f; pitch <= 1f; pitch += 1f )
+		{
+			for ( float yaw = -1f; yaw <= 1f; yaw += 1f )
+			{
+				var projectile = new T()
+				{
+					Owner = owner,
+					Team = owner.Team,
+					FollowEffect = FollowEffect,
+					HitSound = HitSound,
+					Scale = ProjectileScale,
+					Radius = ProjectileRadius,
+					Gravity = Gravity,
+					Simulator = owner.Projectiles,
+					ModelPath = ProjectileModel,
+					Rotation = owner.EyeRot,
+					Origin = this
+				};
+
+				var angles = owner.EyeRot.Angles();
+				angles.pitch += pitch;
+				angles.yaw += yaw;
+
+				var forward = Rotation.From( angles ).Forward;
+				forward = forward.Normal;
+
+				var position = owner.EyePos;
+
+				var velocity = forward * Speed;
+
+				projectile.Initialize( position, velocity );
+			}
+		}
 	}
 }
