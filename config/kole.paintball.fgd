@@ -76,13 +76,19 @@ metadata
 //
 // Paintball.MapSettings
 //
-@PointClass base(BaseProperties_kole_paintball) = pb_map_settings : ""
+@PointClass base(BaseProperties_kole_paintball) 
+metadata
+{
+	entity_tool_name = "Map Settings"
+	entity_tool_group = "PaintBall"
+}
+= pb_map_settings : ""
 [
 	blueteamname(string) : "Blue Team Name" : "Blue" : ""
 	redteamname(string) : "Red Team Name" : "Red" : ""
 
 	output OnRoundStart(void) : ""
-	output OnRoundEnd(void) : ""
+	output OnRoundEnd(integer) : ""
 	output OnRoundNew(void) : ""
 ]
 

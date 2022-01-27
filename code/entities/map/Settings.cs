@@ -3,12 +3,13 @@
 namespace Paintball;
 
 [Library( "pb_map_settings", Title = "Map Settings", Spawnable = true )]
+[Hammer.EntityTool( "Map Settings", "PaintBall" )]
 public partial class MapSettings : Entity
 {
 	[Net, Property] public string BlueTeamName { get; set; } = "Blue";
 	[Net, Property] public string RedTeamName { get; set; } = "Red";
 	protected Output OnRoundStart { get; set; }
-	protected Output<Team> OnRoundEnd { get; set; }
+	protected Output<int> OnRoundEnd { get; set; }
 	protected Output OnRoundNew { get; set; }
 
 	public override void Spawn()
@@ -52,7 +53,7 @@ public partial class MapSettings : Entity
 	[PBEvent.Round.End]
 	private void RoundEnd( Team winner )
 	{
-		OnRoundEnd.Fire( this, winner );
+		OnRoundEnd.Fire( this, (int)winner );
 	}
 
 	[PBEvent.Round.New]
