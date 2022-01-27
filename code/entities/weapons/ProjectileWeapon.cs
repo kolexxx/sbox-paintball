@@ -33,7 +33,6 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 		}
 
 		AmmoClip--;
-		TimeSincePrimaryAttack = 0;
 
 		Owner.SetAnimBool( "b_attack", true );
 
