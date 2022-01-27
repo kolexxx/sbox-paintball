@@ -8,7 +8,7 @@ public partial class Player : Sandbox.Player
 	[Net] public int Money { get; set; } = 1000;
 	[Net] public TimeSince TimeSinceSpawned { get; private set; }
 	public ProjectileSimulator Projectiles { get; init; }
-	public bool IsFrozen => Game.Current.State is GameFinishedState || (Game.Current.State is GameplayState state && state.RoundState == RoundState.Freeze && !state.UntilStateEnds);
+	public bool IsFrozen => Game.Current.State is MapSelectState || (Game.Current.State is GameplayState state && state.RoundState == RoundState.Freeze && !state.UntilStateEnds);
 	public bool CanPlantBomb => Team == Team.Red && GroundEntity is WorldEntity && Bombsite.IsValid() && Game.Current.State is GameplayState;
 	public bool IsDefusingBomb => Team == Team.Blue && Using is PlantedBomb;
 	public bool IsPlantingBomb { get; set; }
