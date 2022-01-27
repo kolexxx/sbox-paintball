@@ -106,7 +106,7 @@ public class InventoryBar : Panel
 		public InventoryIcon( int i, Panel parent )
 		{
 			Parent = parent;
-			Icon = Add.Image( "", "slot-icon" );
+			Icon = Add.Image( string.Empty, "slot-icon" );
 
 			InputHint = AddChild<InputHint>();
 

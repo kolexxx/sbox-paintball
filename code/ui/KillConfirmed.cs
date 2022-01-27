@@ -24,9 +24,9 @@ public class KillConfirmed : Popup
 
 		StyleSheet.Load( "/ui/KillConfirmed.scss" );
 
-		Distance = Add.Label( "", "distance" );
-		Icon = Add.Image( "", "icon" );
-		Name = Add.Label( "", "name" );
+		Distance = Add.Label( string.Empty, "distance" );
+		Icon = Add.Image( string.Empty, "icon" );
+		Name = Add.Label( string.Empty, "name" );
 		_head = Add.Image( "ui/terry/head.png", "terry" );
 		_chest = Add.Image( "ui/terry/chest.png", "terry" );
 		_stomach = Add.Image( "ui/terry/stomach.png", "terry" );
@@ -48,7 +48,7 @@ public class KillConfirmed : Popup
 
 		Local.Hud.AddChild( new KillConfirmed( 5f ) );
 		s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as KillConfirmed;
-		s_current.Name.Text = s_current.Name.Text = $"You killed {player.Client.Name}"; ;
+		s_current.Name.Text = s_current.Name.Text = $"You killed {player.Client.Name}";
 		s_current.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
 		s_current.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastDamageInfo.HitboxIndex ) );
 

@@ -13,7 +13,7 @@ public class Ammo : Panel
 	public Ammo()
 	{
 		AmmoIcon = Add.Image( "ui/ammo.png", "icon" );
-		Reserve = Add.Label( "100" );
+		Reserve = Add.Label( string.Empty );
 
 		AddChild( new ProgressBar( () =>
 		 {

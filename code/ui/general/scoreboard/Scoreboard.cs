@@ -24,7 +24,7 @@ public class Scoreboard : Panel
 		_sections[2] = Add.Panel( "red" );
 		_header = Add.Panel( "header" );
 		_header.Add.Label( "Name" );
-		_header.Add.Label( "" );
+		_header.Add.Label( string.Empty );
 		_header.Add.Label( "Kills" );
 		_header.Add.Label( "Deaths" );
 		_header.Add.Label( "Ping" );
@@ -142,7 +142,7 @@ public class Scoreboard : Panel
 		public Entry()
 		{
 			Name = Add.Label( "Name", "name" );
-			Alive = Add.Label( "", "alive" );
+			Alive = Add.Label( string.Empty, "alive" );
 			Kills = Add.Label( "0", "kills" );
 			Deaths = Add.Label( "0", "deaths" );
 			Ping = Add.Label( "0", "ping" );

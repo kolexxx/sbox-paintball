@@ -68,9 +68,9 @@ public sealed class KillFeed : Panel
 
 		public Entry( float lifeTime ) : base( lifeTime )
 		{
-			Left = Add.Label( "", "left" );
-			Method = Add.Image( "", "method" );
-			Right = Add.Label( "", "right" );
+			Left = Add.Label( string.Empty, "left" );
+			Method = Add.Image( string.Empty, "method" );
+			Right = Add.Label( string.Empty, "right" );
 		}
 	}
 }

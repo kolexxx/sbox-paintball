@@ -15,6 +15,6 @@ public class WeaponLookAt : Panel
 		InputHint = AddChild<InputHint>();
 		InputHint.SetButton( InputButton.Use );
 		InputHint.Context.Text = "Pick up";
-		Icon = Add.Image( "", "icon" );
+		Icon = Add.Image( string.Empty, "icon" );
 	}
 }
