@@ -94,6 +94,9 @@ public partial class GameplayState : BaseState
 
 	public override void Tick()
 	{
+		if ( Host.IsServer && Bomb.IsValid() )
+			Bomb.Tick();
+
 		if ( UntilStateEnds )
 			TimeUp();
 
@@ -118,18 +121,12 @@ public partial class GameplayState : BaseState
 				if ( !Host.IsServer )
 					break;
 
-				if ( Bomb.IsValid() )
-					Bomb.Tick();
-
 				if ( AliveBlue == 0 || Bomb.Disabled )
 					RoundStateFinish();
 
 				break;
 
 			case RoundState.End:
-
-				if ( Host.IsServer && Bomb.IsValid() )
-					Bomb.Tick();
 
 				break;
 		}
@@ -292,6 +289,7 @@ public partial class GameplayState : BaseState
 	{
 		if ( Bomb.IsValid() && Bomb.Disabled )
 		{
+			Log.Info( Bomb.Defuser );
 			if ( Bomb.Defuser != null )
 				return Team.Blue;
 			else
