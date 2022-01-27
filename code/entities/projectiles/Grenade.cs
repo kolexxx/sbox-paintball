@@ -1,6 +1,5 @@
 ﻿using Hammer;
 using Sandbox;
-using System;
 
 namespace Paintball;
 
