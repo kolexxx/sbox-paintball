@@ -4,11 +4,11 @@ using Sandbox;
 namespace Paintball;
 
 [Skip]
-public partial class BaseProjectile : ModelEntity, ITeamEntity
+public partial class BaseProjectile : Entity, ITeamEntity
 {
 	public string FollowEffect => $"particles/{(Owner as Player).Team.GetString()}_glow.vpcf";
 	public string HitSound => "impact";
-	public string ModelPath => $"models/{(Owner as Player).Team.GetString()}_ball/ball.vmdl";
+	public string ModelPath => "models/paintball/paintball.vmdl";
 	public string TrailEffect { get; set; } = "";
 	public bool IsServerOnly { get; set; }
 	public string Attachment { get; set; } = null;
@@ -43,7 +43,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 		}
 
 		StartPosition = start;
-		PhysicsEnabled = false;
+		//PhysicsEnabled = false;
 		EnableDrawing = false;
 		Velocity = velocity;
 		Position = start;
@@ -92,7 +92,10 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 			Follower = Particles.Create( FollowEffect, this );
 
 		if ( !string.IsNullOrEmpty( ModelPath ) )
+		{
 			ModelEntity = SceneObject.CreateModel( ModelPath );
+			ModelEntity.SetMaterialOverride( Material.Load($"materials/{Team.GetString()}_surface.vmat") );
+		}
 	}
 
 	public virtual void Simulate()
