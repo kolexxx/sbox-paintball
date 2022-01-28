@@ -9,7 +9,7 @@ public partial class MapSettings : Entity
 	[Net, Property] public string BlueTeamName { get; set; } = "Blue";
 	[Net, Property] public string RedTeamName { get; set; } = "Red";
 	protected Output OnRoundStart { get; set; }
-	protected Output OnRoundEnd { get; set; }
+	protected Output<Team> OnRoundEnd { get; set; }
 	protected Output OnRoundNew { get; set; }
 	protected Output OnBlueWin { get; set; }
 	protected Output OnRedWin { get; set; }
@@ -55,7 +55,7 @@ public partial class MapSettings : Entity
 	[PBEvent.Round.End]
 	private void RoundEnd( Team winner )
 	{
-		OnRoundEnd.Fire( this );
+		OnRoundEnd.Fire( this, winner );
 
 		if ( winner == Team.Blue )
 			OnBlueWin.Fire( this );
