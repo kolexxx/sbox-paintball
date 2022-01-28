@@ -2,12 +2,17 @@
 
 namespace Paintball;
 
-[Library( "pb_map_settings", Title = "Map Settings", Spawnable = true )]
-[Hammer.EntityTool( "Map Settings", "PaintBall" )]
-public partial class MapSettings : Entity
+[Library( "pb_settings", Title = "Settings", Spawnable = true )]
+[Hammer.EntityTool( "Game and Map settings", "PaintBall" )]
+public partial class Settings : Entity
 {
 	[Net, Property] public string BlueTeamName { get; set; } = "Blue";
 	[Net, Property] public string RedTeamName { get; set; } = "Red";
+	[Property] public int FreezeDuration { get; set; } = 5;
+	[Property] public int PlayDuration { get; set; } = 60;
+	[Property] public int EndDuration { get; set; } = 5;
+	[Property] public int BombDuration { get; set; } = 30;
+	[Property] public int RoundLimit { get; set; } = 12;
 	protected Output OnRoundStart { get; set; }
 	protected Output<Team> OnRoundEnd { get; set; }
 	protected Output OnRoundNew { get; set; }
@@ -16,9 +21,9 @@ public partial class MapSettings : Entity
 
 	public override void Spawn()
 	{
-		if ( Game.Current.Map.Settings.IsValid() )
+		if ( Game.Current.Settings.IsValid() )
 		{
-			Log.Warning( "You have several Map Settings. This is not allowed!" );
+			Log.Warning( "You have several Settings entities. This is not allowed!" );
 			Delete();
 
 			return;
@@ -26,25 +31,25 @@ public partial class MapSettings : Entity
 
 		base.Spawn();
 
-		Game.Current.Map.Settings = this;
+		Game.Current.Settings = this;
 		Transmit = TransmitType.Always;
 
-		Event.Run( PBEvent.Game.Map.SettingsLoaded );
+		Event.Run( PBEvent.Game.SettingsLoaded );
 	}
 
 	public override void ClientSpawn()
 	{
 		if ( IsClientOnly )
 		{
-			Log.Warning( "Can't create Map Settings on the client!" );
+			Log.Warning( "Can't create Settings entity on the client!" );
 			Delete();
 			return;
 		}
 
 		base.ClientSpawn();
 
-		Game.Current.Map.Settings = this;
-		Event.Run( PBEvent.Game.Map.SettingsLoaded );
+		Game.Current.Settings = this;
+		Event.Run( PBEvent.Game.SettingsLoaded );
 	}
 
 	[PBEvent.Round.Start]
