@@ -42,7 +42,7 @@ public partial class Grenade : ModelEntity, ITeamEntity
 		if ( Owner is not Player owner )
 			return;
 
-		for ( float pitch = 0; pitch >= -45; pitch -= 15)
+		for ( float pitch = 0; pitch >= -30; pitch -= 15 )
 		{
 			for ( float yaw = 0; yaw <= 360; yaw += 360 / ProjectilesPer360 )
 			{
@@ -52,12 +52,11 @@ public partial class Grenade : ModelEntity, ITeamEntity
 				{
 					Owner = owner,
 					Team = Team,
-					FollowEffect = $"particles/{owner.Team.GetString()}_glow.vpcf",
-					HitSound = "impact",
+					// FollowEffect = $"particles/{owner.Team.GetString()}_glow.vpcf",
+					// HitSound = "impact",
 					Scale = 0.25f,
-					Gravity = 10f,
-					ModelPath = $"models/{owner.Team.GetString()}_ball/ball.vmdl",
-					IsServerOnly = true,
+					Gravity = -pitch,
+					// ModelPath = $"models/{owner.Team.GetString()}_ball/ball.vmdl",
 					Origin = Origin
 				};
 
