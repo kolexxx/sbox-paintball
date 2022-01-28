@@ -74,18 +74,23 @@ metadata
 ]
 
 //
-// Paintball.MapSettings
+// Paintball.Settings
 //
 @PointClass base(BaseProperties_kole_paintball) 
 metadata
 {
-	entity_tool_name = "Map Settings"
+	entity_tool_name = "Game and Map settings"
 	entity_tool_group = "PaintBall"
 }
-= pb_map_settings : ""
+= pb_settings : ""
 [
 	blueteamname(string) : "Blue Team Name" : "Blue" : ""
 	redteamname(string) : "Red Team Name" : "Red" : ""
+	freezeduration(integer) : "Freeze Duration" : 5 : ""
+	playduration(integer) : "Play Duration" : 60 : ""
+	endduration(integer) : "End Duration" : 5 : ""
+	bombduration(integer) : "Bomb Duration" : 30 : ""
+	roundlimit(integer) : "Round Limit" : 12 : ""
 
 	output OnRoundStart(void) : ""
 	output OnRoundEnd(void) : ""
