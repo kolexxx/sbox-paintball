@@ -44,7 +44,7 @@ public sealed class KillFeed : Panel
 		e.Right.Text = player.Client.Name;
 		e.Right.SetClass( player.Team.GetString(), true );
 
-		e.Method.SetTexture( (player.LastDamageInfo.Weapon as Weapon)?.Icon );
+		e.Method.SetTexture( player.LastWeaponIcon );
 	}
 
 	[PBEvent.Round.New]

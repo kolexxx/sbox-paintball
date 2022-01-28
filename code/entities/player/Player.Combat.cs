@@ -45,6 +45,7 @@ public partial class Player
 	public int ConsecutiveKills { get; private set; }
 	public int KillStreak { get; set; }
 	public DamageInfo LastDamageInfo { get; private set; }
+	public string LastWeaponIcon { get; set; }
 	public TimeSince TimeSinceLastKill { get; private set; }
 	private static readonly string[] _consecutiveKillSounds = { "double_kill", "multi_kill", "ultra_kill", "monster_kill" };
 
@@ -78,7 +79,8 @@ public partial class Player
 	public override void TakeDamage( DamageInfo info )
 	{
 		LastDamageInfo = info;
-		GetDamageInfo( To.Everyone, info.Attacker, info.Weapon, info.HitboxIndex, info.Position, info.Damage );
+
+		GetDamageInfo( To.Everyone, info.Attacker, (info.Weapon as Weapon)?.Icon, info.HitboxIndex, info.Position, info.Damage );
 
 		base.TakeDamage( info );
 	}
@@ -128,16 +130,16 @@ public partial class Player
 	}
 
 	[ClientRpc]
-	public void GetDamageInfo( Entity attacker, Entity weapon, int hitboxIndex, Vector3 position, float damage )
+	public void GetDamageInfo( Entity attacker, string weapon, int hitboxIndex, Vector3 position, float damage )
 	{
 		var info = new DamageInfo()
 			.WithAttacker( attacker )
-			.WithWeapon( weapon )
 			.WithHitbox( hitboxIndex )
 			.WithPosition( position );
 
 		info.Damage = damage;
 		LastDamageInfo = info;
 		LastAttacker = info.Attacker;
+		LastWeaponIcon = weapon;
 	}
 }
