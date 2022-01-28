@@ -61,7 +61,7 @@ public partial class Notification : Popup
 		if ( winner == Team.Blue && bomb.IsValid() && bomb.Disabled && bomb.Defuser != null )
 			message = "Bomb has been defused!";
 
-		Create( message, GameplayState.EndDuration );
+		Local.Hud.AddChild( new Notification( message, () => Game.Current.State is not GameplayState state || state.RoundState != RoundState.End ) );
 		Audio.Announce( $"{winner.GetString()}win", Audio.Priority.High );
 	}
 
