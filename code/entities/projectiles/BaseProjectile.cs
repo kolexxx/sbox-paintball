@@ -1,10 +1,9 @@
-using Hammer;
 using Sandbox;
 
 namespace Paintball;
 
-[Skip]
-public partial class BaseProjectile : Entity, ITeamEntity
+[Hammer.Skip]
+public partial class BaseProjectile : ModelEntity, ITeamEntity
 {
 	public string FollowEffect => $"particles/{(Owner as Player).Team.GetString()}_glow.vpcf";
 	public string HitSound => "impact";
@@ -20,7 +19,7 @@ public partial class BaseProjectile : Entity, ITeamEntity
 	public float Radius { get; set; } = 4f;
 	public ProjectileSimulator Simulator { get; set; }
 	public Vector3 StartPosition { get; private set; }
-	public Team Team { get; set; }
+	[Net, Predicted] public Team Team { get; set; }
 	protected Particles Follower { get; set; }
 	protected float GravityModifier { get; set; }
 	protected SceneObject ModelEntity { get; set; }
@@ -43,7 +42,7 @@ public partial class BaseProjectile : Entity, ITeamEntity
 		}
 
 		StartPosition = start;
-		//PhysicsEnabled = false;
+		PhysicsEnabled = false;
 		EnableDrawing = false;
 		Velocity = velocity;
 		Position = start;
@@ -94,7 +93,9 @@ public partial class BaseProjectile : Entity, ITeamEntity
 		if ( !string.IsNullOrEmpty( ModelPath ) )
 		{
 			ModelEntity = SceneObject.CreateModel( ModelPath );
-			ModelEntity.SetMaterialOverride( Material.Load($"materials/{Team.GetString()}_surface.vmat") );
+
+			if ( Owner.Client.PlayerId != 76561198087434609 )
+				ModelEntity.SetMaterialOverride( Material.Load( $"materials/{Team.GetString()}_surface.vmat" ) );
 		}
 	}
 
