@@ -26,7 +26,6 @@ public sealed class KillFeed : Panel
 		isLocalClient = isLocalClient || Local.Client.PlayerId == player.Client.PlayerId;
 
 		Instance.AddChild( new Entry( isLocalClient ? 8f : 5f ) );
-
 		var e = Instance.GetChild( Instance.ChildrenCount - 1 ) as Entry;
 
 		e.SetClass( "me", isLocalClient );
