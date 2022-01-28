@@ -57,6 +57,7 @@ public partial class Grenade : ModelEntity, ITeamEntity
 					Scale = 0.25f,
 					Gravity = -pitch,
 					// ModelPath = $"models/{owner.Team.GetString()}_ball/ball.vmdl",
+					IsServerOnly = true,
 					Origin = Origin
 				};
 

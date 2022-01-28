@@ -10,7 +10,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 	public string HitSound => "impact";
 	public string ModelPath => $"models/{(Owner as Player).Team.GetString()}_ball/ball.vmdl";
 	public string TrailEffect { get; set; } = "";
-	public bool IsServerOnly => Origin is not ProjectileWeapon<BaseProjectile>;
+	public bool IsServerOnly { get; set; }
 	public string Attachment { get; set; } = null;
 	public RealTimeUntil CanHitTime { get; set; } = 0.1f;
 	public RealTimeUntil DestroyTime { get; set; }
