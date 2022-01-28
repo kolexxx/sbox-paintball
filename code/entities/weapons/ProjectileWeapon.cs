@@ -59,13 +59,13 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 		{
 			Owner = owner,
 			Team = owner.Team,
-			FollowEffect = FollowEffect,
-			HitSound = HitSound,
+			// FollowEffect = FollowEffect,
+			// HitSound = HitSound,
 			Scale = ProjectileScale,
 			Radius = ProjectileRadius,
 			Gravity = Gravity,
 			Simulator = owner.Projectiles,
-			ModelPath = ProjectileModel,
+			// ModelPath = ProjectileModel,
 			Rotation = owner.EyeRot,
 			Origin = this
 		};
@@ -94,13 +94,13 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 				{
 					Owner = owner,
 					Team = owner.Team,
-					FollowEffect = FollowEffect,
-					HitSound = HitSound,
+					// FollowEffect = FollowEffect,
+					// HitSound = HitSound,
 					Scale = ProjectileScale,
 					Radius = ProjectileRadius,
 					Gravity = Gravity,
 					Simulator = owner.Projectiles,
-					ModelPath = ProjectileModel,
+					// ModelPath = ProjectileModel,
 					Rotation = owner.EyeRot,
 					Origin = this
 				};
