@@ -17,9 +17,7 @@ public partial class MapSelectState : BaseState
 	{
 		base.OnPlayerLeave( player );
 
-		if ( PlayerIdVote[player.Client.PlayerId] != string.Empty )
-			VoteCount[PlayerIdVote[player.Client.PlayerId]]--;
-
+		VoteCount[PlayerIdVote[player.Client.PlayerId]]--;
 		PlayerIdVote.Remove( player.Client.PlayerId ); // I don't think this is needed
 	}
 
@@ -37,6 +35,7 @@ public partial class MapSelectState : BaseState
 		MapImages = new Dictionary<string, string>();
 		PlayerIdVote = new Dictionary<long, string>();
 		VoteCount = new Dictionary<string, int>();
+		VoteCount.Add( string.Empty, 0 );
 
 		foreach ( var player in Players )
 		{
@@ -54,7 +53,7 @@ public partial class MapSelectState : BaseState
 		if ( !Host.IsServer )
 			return;
 
-		if ( MapImages.Count == 0 )
+		if ( MapImages.Count == 1 )
 		{
 			Global.ChangeLevel( "kole.pb_snow" );
 
