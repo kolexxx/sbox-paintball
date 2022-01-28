@@ -9,7 +9,7 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 	public virtual string FollowEffect => $"particles/{Owner.Team.GetString()}_glow.vpcf";
 	public virtual float Gravity => 0f;
 	public virtual string HitSound => "impact";
-	public virtual string ProjectileModel => $"models/{Owner.Team.GetString()}_ball/ball.vmdl";
+	public virtual string ProjectileModel => $"models/paintball/paintball.vmdl";
 	public virtual float ProjectileRadius => 3f;
 	public virtual float ProjectileScale => 0.25f;
 	public virtual float Speed => 2000f;
