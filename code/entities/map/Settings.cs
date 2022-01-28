@@ -20,6 +20,7 @@ public partial class MapSettings : Entity
 		{
 			Log.Warning( "You have several Map Settings. This is not allowed!" );
 			Delete();
+
 			return;
 		}
 
