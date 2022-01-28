@@ -16,6 +16,7 @@ public partial class Game : Sandbox.Game
 	}
 
 	public Map Map { get; set; }
+	public Settings Settings { get; set; }
 
 	[Net, Change( nameof( OnStateChanged ) )]
 	public BaseState State { get; private set; }
@@ -161,7 +162,10 @@ public partial class Game : Sandbox.Game
 	private void EntityPostSpawn()
 	{
 		if ( IsServer )
-			ChangeState( new WaitingForPlayersState() );	
+			ChangeState( new WaitingForPlayersState() );
+
+		if ( Settings == null )
+			Settings = new Settings();
 	}
 
 	private void OnStateChanged()

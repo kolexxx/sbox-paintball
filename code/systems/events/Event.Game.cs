@@ -27,12 +27,14 @@ public static partial class PBEvent
 				public InfoFetchedAttribute() : base( InfoFetched ) { }
 			}
 
-			public const string SettingsLoaded = "pb.game.map.settingsloaded";
+			
+		}
 
-			public class SettingsLoadedAttribute : EventAttribute
-			{
-				public SettingsLoadedAttribute() : base( SettingsLoaded ) { }
-			}
+		public const string SettingsLoaded = "pb.game.settingsloaded";
+
+		public class SettingsLoadedAttribute : EventAttribute
+		{
+			public SettingsLoadedAttribute() : base( SettingsLoaded ) { }
 		}
 	}
 }

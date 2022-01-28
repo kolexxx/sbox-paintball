@@ -44,9 +44,9 @@ public static class TeamExtensions
 		switch ( team )
 		{
 			case Team.Blue:
-				return Game.Current.Map.Settings.BlueTeamName;
+				return Game.Current.Settings.BlueTeamName;
 			case Team.Red:
-				return Game.Current.Map.Settings.RedTeamName;
+				return Game.Current.Settings.RedTeamName;
 			default:
 				return "none";
 		}

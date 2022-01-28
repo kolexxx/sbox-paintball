@@ -10,7 +10,6 @@ public partial class Map
 	public Package Info { get; set; }
 	public List<PlayerSpawnPoint> SpawnPoints { get; set; }
 	public List<SpectatePoint> SpectatePoints { get; set; }
-	public MapSettings Settings { get; set; }
 
 	public Map() { Event.Register( this ); }
 
@@ -33,9 +32,6 @@ public partial class Map
 		}
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
-
-		if ( Settings == null )
-			Settings = new MapSettings();
 
 		_ = GetInfo();
 	}
