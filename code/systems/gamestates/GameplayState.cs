@@ -289,7 +289,6 @@ public partial class GameplayState : BaseState
 	{
 		if ( Bomb.IsValid() && Bomb.Disabled )
 		{
-			Log.Info( Bomb.Defuser );
 			if ( Bomb.Defuser != null )
 				return Team.Blue;
 			else
