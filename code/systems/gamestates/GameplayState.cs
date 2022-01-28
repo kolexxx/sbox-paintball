@@ -28,17 +28,6 @@ public enum RoundState : byte
 
 public partial class GameplayState : BaseState
 {
-	[ServerVar( "pb_freeze_duration", Help = "The duration of the freeze period." )]
-	public static int FreezeDuration { get; set; } = 5;
-	[ServerVar( "pb_play_duration", Help = "The duration of the play period." )]
-	public static int PlayDuration { get; set; } = 60;
-	[ServerVar( "pb_end_duration", Help = "The duration of the end period." )]
-	public static int EndDuration { get; set; } = 5;
-	[ServerVar( "pb_bomb_duration", Help = "The time needed for the bomb to explode." )]
-	public static int BombDuration { get; set; } = 30;
-	[ServerVar( "pb_round_limit", Help = "The amount of rounds." )]
-	public static int RoundLimit { get; set; } = 12;
-
 	[Net, Change] public int AliveBlue { get; private set; } = 0;
 	[Net, Change] public int AliveRed { get; private set; } = 0;
 	[Net] public int BlueScore { get; private set; } = 0;
@@ -181,12 +170,12 @@ public partial class GameplayState : BaseState
 				}
 
 				if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
-					Notification.Create( To.Everyone, "Matchpoint!", FreezeDuration );
+					Notification.Create( To.Everyone, "Matchpoint!", Game.Current.Settings.FreezeDuration );
 
 				Event.Run( PBEvent.Round.New );
 				RPC.OnRoundStateChanged( RoundState.Freeze );
 
-				UntilStateEnds = FreezeDuration;
+				UntilStateEnds = Game.Current.Settings.FreezeDuration;
 
 				break;
 
@@ -197,7 +186,7 @@ public partial class GameplayState : BaseState
 				Event.Run( PBEvent.Round.Start );
 				RPC.OnRoundStateChanged( RoundState.Play );
 
-				UntilStateEnds = PlayDuration;
+				UntilStateEnds = Game.Current.Settings.PlayDuration;
 
 				break;
 
@@ -212,7 +201,7 @@ public partial class GameplayState : BaseState
 				Event.Run( PBEvent.Round.End, GetWinner() );
 				RPC.OnRoundStateChanged( RoundState.End, GetWinner() );
 
-				UntilStateEnds = EndDuration;
+				UntilStateEnds = Game.Current.Settings.EndDuration;
 
 				break;
 		}
@@ -248,7 +237,7 @@ public partial class GameplayState : BaseState
 
 				_round++;
 
-				if ( BlueScore == _toWinScore || RedScore == _toWinScore || _round >= RoundLimit )
+				if ( BlueScore == _toWinScore || RedScore == _toWinScore || _round >= Game.Current.Settings.RoundLimit )
 				{
 					Bomb?.Delete();
 					Bomb = null;
