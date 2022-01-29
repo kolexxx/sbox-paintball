@@ -39,7 +39,7 @@ public partial class Game : Sandbox.Game
 
 		if ( IsServer )
 		{
-			PrecacheAssets();
+			// PrecacheAssets();
 
 			Hud = new();
 		}
@@ -184,12 +184,13 @@ public partial class Game : Sandbox.Game
 
 	private void PrecacheAssets()
 	{
+		/*
 		var assets = FileSystem.Mounted.ReadJsonOrDefault<List<string>>( "paintball.assets.json" );
-
 		foreach ( var asset in assets )
 		{
 			Log.Info( $"Precaching: {asset}" );
 			Precache.Add( asset );
 		}
+		*/
 	}
 }
