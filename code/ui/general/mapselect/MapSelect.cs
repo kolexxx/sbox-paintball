@@ -2,21 +2,35 @@
 using Sandbox.UI;
 using Sandbox.UI.Construct;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Paintball.UI;
 
 public class MapSelect : Panel
 {
 	public static MapSelect Instance;
+	private Label _header;
 	private ProgressBar _progressBar;
 	private readonly List<Entry> _entries = new();
 	private Panel _mapList;
 
 	public MapSelect()
 	{
+		var panels = Local.Hud.Children.ToList();
+
+		for ( int i = 0; i < Local.Hud.ChildrenCount; i++ )
+		{
+			var panel = panels[i];
+
+			if ( panel is not ChatBox || panel is not VoiceList || panel != this )
+				panel.Delete( true );
+		}
+		
 		Instance = this;
 
 		StyleSheet.Load( "/ui/general/mapselect/MapSelect.scss" );
+
+		_header = Add.Label( "Vote for the next map", "header" );
 
 		AddChild( new ProgressBar( () =>
 		{
