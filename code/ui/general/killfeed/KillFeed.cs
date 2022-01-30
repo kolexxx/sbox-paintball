@@ -33,16 +33,16 @@ public sealed class KillFeed : Panel
 		if ( attacker is Player )
 		{
 			e.Left.Text = attacker.Client?.Name ?? attacker.Name;
-			e.Left.SetClass( (attacker as Player)?.Team.GetString(), true );
+			e.Left.SetClass( (attacker as Player)?.Team.GetTag(), true );
 		}
 		else
 		{
 			e.Left.Text = player.Client.Name;
-			e.Left.SetClass( player.Team.GetString(), true );
+			e.Left.SetClass( player.Team.GetTag(), true );
 		}
 
 		e.Right.Text = player.Client.Name;
-		e.Right.SetClass( player.Team.GetString(), true );
+		e.Right.SetClass( player.Team.GetTag(), true );
 
 		e.Method.SetTexture( player.LastWeaponIcon );
 	}

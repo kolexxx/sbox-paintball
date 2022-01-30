@@ -6,7 +6,7 @@ namespace Paintball;
 public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProjectile, new()
 {
 	public virtual int BulletsPerFire => 1;
-	public virtual string FollowEffect => $"particles/{Owner.Team.GetString()}_glow.vpcf";
+	public virtual string FollowEffect => $"particles/{Owner.Team.GetTag()}_glow.vpcf";
 	public virtual float Gravity => 0f;
 	public virtual string HitSound => "impact";
 	public virtual string ProjectileModel => $"models/paintball/paintball.vmdl";

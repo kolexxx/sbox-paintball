@@ -6,7 +6,6 @@ namespace Paintball;
 public partial class Knife : Weapon
 {
 	public override bool Automatic => true;
-	public override SlotType Slot => SlotType.Melee;
 	public override int ClipSize => 1;
 	public override bool Droppable => false;
 	public override string Icon => "ui/weapons/knife.png";
@@ -14,6 +13,7 @@ public partial class Knife : Weapon
 	public override string ModelPath => "models/rust_boneknife/rust_boneknife.vmdl";
 	public override float PrimaryRate => 1.5f;
 	public override float SecondaryRate => 0.75f;
+	public override SlotType Slot => SlotType.Melee;
 	public override string ViewModelPath => "models/rust_boneknife/v_rust_boneknife.vmdl";
 	public override bool UnlimitedAmmo => true;
 
@@ -54,15 +54,15 @@ public partial class Knife : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		(Owner as AnimEntity).SetAnimBool( "b_attack", true );
+		Owner.SetAnimBool( "b_attack", true );
 		ShootEffects();
 
 		var endPos = Owner.EyePos + Owner.EyeRot.Forward * range;
 
 		var trace = Trace.Ray( Owner.EyePos, endPos )
 			.UseHitboxes( true )
+			.WithoutTags( Owner.Team.GetTag() )
 			.Ignore( this )
-			.Ignore( Owner )
 			.Radius( radius )
 			.Run();
 
@@ -73,12 +73,6 @@ public partial class Knife : Weapon
 
 		if ( !IsServer )
 			return;
-
-		if ( trace.Entity is Player player && Owner is Player owner )
-		{
-			if ( player.Team == owner.Team )
-				return;
-		}
 
 		using ( Prediction.Off() )
 		{

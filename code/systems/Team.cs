@@ -26,7 +26,7 @@ public static class TeamExtensions
 		}
 	}
 
-	public static string GetString( this Team team )
+	public static string GetTag( this Team team )
 	{
 		switch ( team )
 		{

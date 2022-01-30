@@ -19,8 +19,8 @@ public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 
 		if ( Host.IsClient && player.CurrentPlayer.IsValid() )
 		{
-			Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetString() );
-			Local.Hud.AddClass( player.Team.GetString() );
+			Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetTag() );
+			Local.Hud.AddClass( player.Team.GetTag() );
 		}
 
 		player.CurrentPlayer = null;
@@ -32,8 +32,8 @@ public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 		if ( oldPlayer.ActiveChild is Weapon oldWeapon && oldWeapon.ViewModelEntity != null )
 			oldWeapon.ViewModelEntity.EnableDrawing = false;
 
-		Local.Hud.RemoveClass( oldPlayer.Team.GetString() );
-		Local.Hud.AddClass( newPlayer.Team.GetString() );
+		Local.Hud.RemoveClass( oldPlayer.Team.GetTag() );
+		Local.Hud.AddClass( newPlayer.Team.GetTag() );
 
 		if ( newPlayer.ActiveChild is Weapon newWeapon && newWeapon.ViewModelEntity != null )
 			newWeapon.ViewModelEntity.EnableDrawing = true;

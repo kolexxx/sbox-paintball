@@ -14,10 +14,10 @@ public partial class Player : ITeamEntity
 		TakeDamage( DamageInfo.Generic( float.MaxValue ) );
 
 		Team oldTeam = Team;
-		Tags.Remove( $"{oldTeam.GetString()}" );
+		Tags.Remove( $"{oldTeam.GetTag()}" );
 
 		Team = newTeam;
-		Tags.Add( $"{newTeam.GetString()}" );
+		Tags.Add( $"{newTeam.GetTag()}" );
 
 		Client.SetInt( "team", (int)newTeam );
 
@@ -35,8 +35,8 @@ public partial class Player : ITeamEntity
 	{
 		if ( IsLocalPawn && !IsSpectatingPlayer )
 		{
-			Local.Hud.RemoveClass( oldTeam.GetString() );
-			Local.Hud.AddClass( newTeam.GetString() );
+			Local.Hud.RemoveClass( oldTeam.GetTag() );
+			Local.Hud.AddClass( newTeam.GetTag() );
 		}
 
 		Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );

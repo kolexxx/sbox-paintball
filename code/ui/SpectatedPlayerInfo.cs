@@ -17,7 +17,7 @@ public class SpectatedPlayerInfo : Panel
 	{
 		TargetPlayer = player;
 
-		SetClass( TargetPlayer.Team.GetString(), true );
+		SetClass( TargetPlayer.Team.GetTag(), true );
 
 		Avatar.SetTexture( $"avatar:{TargetPlayer.Client.PlayerId}" );
 		Name.Text = TargetPlayer.Client.Name;

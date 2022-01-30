@@ -63,8 +63,8 @@ public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 
 		if ( Host.IsClient && player.CurrentPlayer.IsValid() )
 		{
-			Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetString() );
-			Local.Hud.AddClass( player.Team.GetString() );
+			Local.Hud.RemoveClass( player.CurrentPlayer.Team.GetTag() );
+			Local.Hud.AddClass( player.Team.GetTag() );
 		}
 
 		player.CurrentPlayer = null;
@@ -73,7 +73,7 @@ public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 
 	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
 	{
-		Local.Hud.RemoveClass( oldPlayer.Team.GetString() );
-		Local.Hud.AddClass( newPlayer.Team.GetString() );
+		Local.Hud.RemoveClass( oldPlayer.Team.GetTag() );
+		Local.Hud.AddClass( newPlayer.Team.GetTag() );
 	}
 }

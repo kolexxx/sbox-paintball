@@ -5,7 +5,8 @@ namespace Paintball;
 [Hammer.Skip]
 public partial class BaseProjectile : ModelEntity, ITeamEntity
 {
-	public string FollowEffect => $"particles/{(Owner as Player).Team.GetString()}_glow.vpcf";
+	[Net, Predicted] public Team Team { get; set; }
+	public string FollowEffect => $"particles/{Team.GetTag()}_glow.vpcf";
 	public string HitSound => "impact";
 	public string ModelPath => "models/paintball/paintball.vmdl";
 	public string TrailEffect { get; set; } = "";
@@ -19,7 +20,6 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 	public float Radius { get; set; } = 4f;
 	public ProjectileSimulator Simulator { get; set; }
 	public Vector3 StartPosition { get; private set; }
-	[Net, Predicted] public Team Team { get; set; }
 	protected Particles Follower { get; set; }
 	protected float GravityModifier { get; set; }
 	protected SceneObject ModelEntity { get; set; }
@@ -95,7 +95,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 			ModelEntity = SceneObject.CreateModel( ModelPath );
 
 			if ( Owner.Client.PlayerId != 76561198087434609 )
-				ModelEntity.SetMaterialOverride( Material.Load( $"materials/{Team.GetString()}_surface.vmat" ) );
+				ModelEntity.SetMaterialOverride( Material.Load( $"materials/{Team.GetTag()}_surface.vmat" ) );
 		}
 	}
 
@@ -110,7 +110,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 		var trace = Trace.Ray( Position, newPosition )
 			.UseHitboxes()
 			.Size( Radius )
-			.WithoutTags( Team.GetString(), "projectile" )
+			.WithoutTags( Team.GetTag(), "projectile" )
 			.Run();
 
 		Position = trace.EndPos;
@@ -125,7 +125,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 		{
 			if ( IsServer && !string.IsNullOrEmpty( HitSound ) )
 			{
-				CreateDecal( $"decals/{Team.GetString()}.decal", ref trace );
+				CreateDecal( $"decals/{Team.GetTag()}.decal", ref trace );
 				Audio.Play( HitSound, Position );
 
 				OnHit( ref trace );
@@ -162,7 +162,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 
 		var info = new DamageInfo()
 			.WithAttacker( Owner )
-			.WithWeapon( Origin as Weapon )
+			.WithWeapon( Origin )
 			.WithPosition( StartPosition )
 			.WithForce( Velocity * 0.1f )
 			.UsingTraceResult( trace );
