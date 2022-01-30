@@ -9,13 +9,13 @@ public sealed partial class Bomb : Weapon
 	[Net, Predicted] public TimeSince Delay { get; set; } = 2f;
 	[Net] public TimeSince TimeSinceStartedPlanting { get; set; } = 0f;
 	public override bool Automatic => true;
-	public override SlotType Slot => SlotType.Deployable;
 	public override int ClipSize => 1;
 	public override Team ExclusiveFor => Team.Red;
 	public override string FireSound => "";
 	public override string Icon => "ui/weapons/bomb.png";
 	public override float PrimaryRate => 0;
 	public override float ReloadTime => 2.0f;
+	public override SlotType Slot => SlotType.Deployable;
 	public override string ViewModelPath => "weapons/rust_shotgun/v_rust_shotgun.vmdl";
 
 	public override void ActiveStart( Entity entity )

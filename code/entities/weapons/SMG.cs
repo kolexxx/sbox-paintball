@@ -7,13 +7,13 @@ namespace Paintball;
 public partial class SMG : ProjectileWeapon<BaseProjectile>
 {
 	public override bool Automatic => true;
-	public override SlotType Slot => SlotType.Primary;
 	public override int ClipSize => 30;
 	public override float Gravity => 7f;
 	public override string Icon => "ui/weapons/smg.png";
 	public override float MovementSpeedMultiplier => 0.85f;
 	public override float PrimaryRate => 8f;
 	public override float ReloadTime => 3f;
+	public override SlotType Slot => SlotType.Primary;
 	public override float Speed => 2500f;
 	public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
 

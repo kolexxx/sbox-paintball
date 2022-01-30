@@ -6,7 +6,6 @@ namespace Paintball;
 [Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
 public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 {
-	public override SlotType Slot => SlotType.Primary;
 	public override int BulletsPerFire => 9;
 	public override int ClipSize => 5;
 	public override string CrosshairClass => "shotgun";
@@ -15,6 +14,7 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 	public override float MovementSpeedMultiplier => 0.85f;
 	public override float PrimaryRate => 1f;
 	public override float ReloadTime => 0.7f;
+	public override SlotType Slot => SlotType.Primary;
 	public override float Speed => 3000f;
 	public override float Spread => 0.05f;
 	public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";

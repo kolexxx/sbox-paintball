@@ -6,12 +6,12 @@ namespace Paintball;
 [Hammer.EditorModel( "weapons/rust_pistol/rust_pistol.vmdl" )]
 public partial class Pistol : ProjectileWeapon<BouncyProjectile>
 {
-	public override SlotType Slot => SlotType.Secondary;
 	public override int ClipSize => 10;
 	public override float Gravity => 10f;
 	public override float MovementSpeedMultiplier => 0.9f;
 	public override float PrimaryRate => 15f;
 	public override float ReloadTime => 2.0f;
+	public override SlotType Slot => SlotType.Secondary;
 	public override float Speed => 1500f;
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 

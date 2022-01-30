@@ -6,12 +6,12 @@ namespace Paintball;
 [Hammer.EditorModel( "models/grenade/grenade.vmdl" )]
 public sealed partial class Throwable : Weapon
 {
-	public override SlotType Slot => SlotType.Utility;
 	public override int ClipSize => 1;
 	public override string FireSound => "";
 	public override string Icon => "ui/weapons/grenade.png";
 	public override float PrimaryRate => 15f;
 	public override float ReloadTime => 2.0f;
+	public override SlotType Slot => SlotType.Utility;
 	public override string ViewModelPath => "models/grenade/v_grenade.vmdl";
 	private bool _isHoldingDownAttack = false;
 
