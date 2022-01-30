@@ -30,8 +30,8 @@ public partial class GameplayState : BaseState
 {
 	[Net, Change] public int AliveBlue { get; private set; } = 0;
 	[Net, Change] public int AliveRed { get; private set; } = 0;
-	[Net] public int BlueScore { get; private set; } = 0;
-	[Net] public int RedScore { get; private set; } = 0;
+	[Net, Change] public int BlueScore { get; private set; } = 0;
+	[Net, Change] public int RedScore { get; private set; } = 0;
 	public PlantedBomb Bomb { get; set; }
 	public RoundState RoundState { get; set; }
 	public override bool UpdateTimer => RoundState != RoundState.End;
@@ -52,22 +52,27 @@ public partial class GameplayState : BaseState
 
 	public override void OnPlayerSpawned( Player player )
 	{
+		base.OnPlayerSpawned( player );
+
 		Host.AssertServer();
 
 		AdjustTeam( player.Team, 1 );
 
-		player.Inventory.Add( Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun(), true );
-		player.Inventory.Add( new Pistol() );
-		player.Inventory.Add( new Knife() );
-
 		if ( Rand.Int( 1, 3 ) == 1 )
 			player.Inventory.Add( new Throwable() );
 
-		base.OnPlayerSpawned( player );
+		if ( player.Alive() )
+			return;
+
+		player.Inventory.Add( Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun(), true );
+		player.Inventory.Add( new Pistol() );
+		player.Inventory.Add( new Knife() );
 	}
 
 	public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
 	{
+		base.OnPlayerKilled( player, attacker, info );
+
 		AdjustTeam( player.Team, -1 );
 
 		if ( !_firstBlood && attacker is Player )
@@ -150,9 +155,9 @@ public partial class GameplayState : BaseState
 
 				Bomb?.Delete();
 				Bomb = null;
-
 				_firstBlood = false;
 
+				Game.Current.Map.CleanUp();
 				TeamBalance();
 
 				int index = Rand.Int( 1, Team.Red.GetCount() );
@@ -162,9 +167,9 @@ public partial class GameplayState : BaseState
 					if ( !player.IsValid() || player.Team == Team.None )
 						continue;
 
-					player.Inventory.DeleteContents();
-
+					//player.Inventory.DeleteContents();
 					player.Respawn();
+
 					if ( player.Team == Team.Red && --index == 0 )
 						player.Inventory.Add( new Bomb() );
 				}
@@ -317,6 +322,7 @@ public partial class GameplayState : BaseState
 		}
 	}
 
+	#region callbacks;
 	private void OnAliveBlueChanged()
 	{
 		RoundInfo.Instance.AliveBlue.Text = AliveBlue.ToString();
@@ -326,4 +332,15 @@ public partial class GameplayState : BaseState
 	{
 		RoundInfo.Instance.AliveRed.Text = AliveRed.ToString();
 	}
+
+	private void OnBlueScoreChanged()
+	{
+		RoundInfo.Instance.BlueScore.Text = BlueScore.ToString();
+	}
+
+	private void OnRedScoreChanged()
+	{
+		RoundInfo.Instance.RedScore.Text = RedScore.ToString();
+	}
+	#endregion
 }

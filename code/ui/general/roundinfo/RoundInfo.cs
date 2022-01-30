@@ -54,15 +54,6 @@ public class RoundInfo : Panel
 		Bottom.SetClass( "show", false );
 	}
 
-	[PBEvent.Round.End]
-	private void OnRoundEnd( Team winner )
-	{
-		var gameplayState = Game.Current.State as GameplayState;
-
-		BlueScore.Text = gameplayState.BlueScore.ToString();
-		RedScore.Text = gameplayState.RedScore.ToString();
-	}
-
 	[PBEvent.Round.New]
 	private void OnNewRound()
 	{
