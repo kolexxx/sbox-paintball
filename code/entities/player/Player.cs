@@ -5,7 +5,6 @@ namespace Paintball;
 public partial class Player : Sandbox.Player
 {
 	[Net] public Bombsite Bombsite { get; set; }
-	[Net] public int Money { get; set; } = 1000;
 	[Net] public TimeSince TimeSinceSpawned { get; private set; }
 	public ProjectileSimulator Projectiles { get; init; }
 	public bool IsFrozen => Game.Current.State is MapSelectState || (Game.Current.State is GameplayState state && state.RoundState == RoundState.Freeze && !state.UntilStateEnds);
@@ -32,7 +31,7 @@ public partial class Player : Sandbox.Player
 		EnableTouch = true;
 		EnableShadowInFirstPerson = true;
 
-		LifeState = LifeState.Dead;
+		LifeState = LifeState.Respawnable;
 	}
 
 	public override void Respawn()
@@ -55,21 +54,20 @@ public partial class Player : Sandbox.Player
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
-
-		TimeSinceSpawned = 0f;
+		
 		RenderColor = Team.GetColor();
-		Transmit = TransmitType.Always;
+		Transmit = TransmitType.Always;	
+
+		Game.Current.State.OnPlayerSpawned( this );
 
 		LifeState = LifeState.Alive;
 		Health = 100;
 		Velocity = Vector3.Zero;
 		WaterLevel.Clear();
+		TimeSinceSpawned = 0f;
 
 		CreateHull();
-
 		ResetInterpolation();
-
-		Game.Current.State.OnPlayerSpawned( this );
 	}
 
 	public override void Simulate( Client cl )
@@ -110,8 +108,7 @@ public partial class Player : Sandbox.Player
 			return;
 		}
 
-		if ( Inventory.Add( other, Inventory.Active == null ) )
-			Audio.Play( "pickup_weapon", other.Position );
+		Inventory.Pickup( other );		
 	}
 
 	public void Reset()
@@ -126,6 +123,7 @@ public partial class Player : Sandbox.Player
 		ConsecutiveKills = 0;
 		KillStreak = 0;
 		Money = 1000;
+		LifeState = LifeState.Respawnable;
 	}
 
 	public override void Spawn()
@@ -134,6 +132,13 @@ public partial class Player : Sandbox.Player
 
 		Tags.Add( "player" );
 		Transmit = TransmitType.Always;
+	}
+
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+
+		CreateHull();
 	}
 
 	private void TickPlayerDrop()

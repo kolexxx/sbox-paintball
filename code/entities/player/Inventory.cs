@@ -15,6 +15,8 @@ public class Inventory : BaseInventory
 
 	public override bool Add( Entity entity, bool makeActive = false )
 	{
+		entity.Position = Owner.EyePos;
+
 		if ( entity is not Weapon weapon )
 			return false;
 
@@ -25,6 +27,21 @@ public class Inventory : BaseInventory
 			return false;
 
 		return base.Add( entity, makeActive );
+	}
+
+	public override void Pickup( Entity entity )
+	{
+		if ( entity is not Weapon weapon )
+			return;
+
+		if ( weapon.ExclusiveFor != Team.None && weapon.ExclusiveFor != Owner.Team )
+			return;
+
+		if ( List.Any( x => (x as Weapon).Slot == weapon.Slot ) )
+			return;
+
+		if ( base.Add( entity, Active == null ) )
+			Audio.Play( "pickup_weapon", Owner.Position );
 	}
 
 	public override Entity DropActive()
