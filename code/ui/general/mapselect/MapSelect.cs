@@ -25,7 +25,7 @@ public class MapSelect : Panel
 			if ( panel is not ChatBox || panel is not VoiceList || panel != this )
 				panel.Delete( true );
 		}
-		
+
 		Instance = this;
 
 		StyleSheet.Load( "/ui/general/mapselect/MapSelect.scss" );

@@ -48,6 +48,7 @@ public class KillConfirmed : Popup
 
 		Local.Hud.AddChild( new KillConfirmed( 5f ) );
 		s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as KillConfirmed;
+
 		s_current.Name.Text = s_current.Name.Text = $"You killed {player.Client.Name}";
 		s_current.Icon.SetTexture( $"avatar:{player.Client.PlayerId}" );
 		s_current.SetHit( (HitboxGroup)player.GetHitboxGroup( player.LastDamageInfo.HitboxIndex ) );

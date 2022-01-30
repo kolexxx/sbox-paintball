@@ -26,8 +26,6 @@ public static partial class PBEvent
 			{
 				public InfoFetchedAttribute() : base( InfoFetched ) { }
 			}
-
-			
 		}
 
 		public const string SettingsLoaded = "pb.game.settingsloaded";
