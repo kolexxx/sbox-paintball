@@ -14,14 +14,14 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 	public Player Planter { get; set; }
 	public bool Disabled { get; set; }
 	public Panel LookPanel { get; set; }
-	public RealTimeUntil UntilTickSound { get; set; }
+	public TimeUntil UntilTickSound { get; set; }
 	private GameplayState _gameplayState;
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
-		SetModel( $"models/red_ball/ball.vmdl" );
+		SetModel( $"models/paintball/paintball.vmdl" );
 
 		PhysicsEnabled = false;
 		UsePhysicsCollision = true;
@@ -103,6 +103,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 	{
 		Planter = planter;
 		_gameplayState = Game.Current.State as GameplayState;
+		UntilTickSound = _gameplayState.UntilStateEnds.Relative % 1;
 
 		if ( _gameplayState.RoundState == RoundState.Play )
 		{
