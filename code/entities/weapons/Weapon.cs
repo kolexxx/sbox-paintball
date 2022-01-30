@@ -23,7 +23,6 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	[Net, Predicted] public TimeSince TimeSinceDeployed { get; protected set; }
 	[Net, Predicted] public TimeSince TimeSinceReload { get; protected set; }
 	public virtual bool Automatic => false;
-	public virtual SlotType Slot => SlotType.Primary;
 	public virtual int ClipSize => 20;
 	public virtual string CrosshairClass => "standard";
 	public virtual bool Droppable => true;
@@ -37,6 +36,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	public PickupTrigger PickupTrigger { get; protected set; }
 	public Entity PreviousOwner { get; private set; }
 	public virtual float ReloadTime => 5f;
+	public virtual SlotType Slot => SlotType.Primary;
 	public virtual float Spread => 0f;
 	public TimeSince TimeSinceDropped { get; private set; }
 	public virtual bool UnlimitedAmmo => false;
@@ -228,10 +228,50 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		Delete();
 	}
 
-	[ClientRpc]
-	protected virtual void ReloadEffects()
+	public void DealDamage( Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox )
 	{
-		ViewModelEntity?.SetAnimBool( "reload", true );
+		var info = new DamageInfo()
+			.WithAttacker( attacker )
+			.WithWeapon( this )
+			.WithPosition( position )
+			.WithForce( force )
+			.WithHitbox( hitbox );
+
+		info.Damage = float.MaxValue;
+
+		entity.TakeDamage( info );
+	}
+
+	protected int TakeAmmo( int ammo )
+	{
+		if ( UnlimitedAmmo )
+			return ammo;
+
+		int available = Math.Min( ReserveAmmo, ammo );
+		ReserveAmmo -= available;
+
+		return available;
+	}
+
+	public void Reset()
+	{
+		AmmoClip = ClipSize;
+		ReserveAmmo = 2 * ClipSize;
+		TimeSinceDeployed = 0;
+		TimeSincePrimaryAttack = 0;
+		TimeSinceDropped = 0;
+		TimeSinceReload = 0;
+		TimeSinceSecondaryAttack = 0;
+		IsReloading = false;
+
+		ClientReset();
+	}
+
+	#region rpc
+	[ClientRpc]
+	protected void ClientReset()
+	{
+		SetAnimBool( "idle", true );
 	}
 
 	[ClientRpc]
@@ -248,7 +288,6 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		ViewModelEntity?.SetAnimBool( "deploy", true );
 	}
 
-
 	[ClientRpc]
 	protected void OnActiveEndClient()
 	{
@@ -257,6 +296,12 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 
 		DestroyHudElements();
 		DestroyViewModel();
+	}
+
+	[ClientRpc]
+	protected virtual void ReloadEffects()
+	{
+		ViewModelEntity?.SetAnimBool( "reload", true );
 	}
 
 	[ClientRpc]
@@ -278,31 +323,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	{
 		ViewModelEntity?.SetAnimBool( "reload", true );
 	}
-
-	public void DealDamage( Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox )
-	{
-		var info = new DamageInfo()
-			.WithAttacker( attacker )
-			.WithWeapon( this )
-			.WithPosition( position )
-			.WithForce( force )
-			.WithHitbox( hitbox );
-
-		info.Damage = float.MaxValue;
-
-		entity.TakeDamage( info );
-	}
-
-	protected virtual int TakeAmmo( int ammo )
-	{
-		if ( UnlimitedAmmo )
-			return ammo;
-
-		int available = Math.Min( ReserveAmmo, ammo );
-		ReserveAmmo -= available;
-
-		return available;
-	}
+	#endregion
 
 	bool IUse.OnUse( Entity user )
 	{

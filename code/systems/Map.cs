@@ -36,7 +36,6 @@ public partial class Map
 		_ = GetInfo();
 	}
 
-	[PBEvent.Round.New]
 	public void CleanUp()
 	{
 		if ( Host.IsServer )
@@ -47,8 +46,13 @@ public partial class Map
 			{
 				if ( entity is BaseProjectile || entity is Grenade )
 					entity.Delete();
-				else if ( entity is Weapon weapon && weapon.IsValid() && weapon.Owner == null )
-					weapon.Delete();
+				else if ( entity is Weapon weapon && weapon.IsValid() )
+				{
+					if ( weapon.Owner == null || weapon is Bomb )
+						weapon.Delete();
+					else
+						weapon.Reset();
+				}
 			}
 
 			foreach ( var spawnPoint in SpawnPoints )
