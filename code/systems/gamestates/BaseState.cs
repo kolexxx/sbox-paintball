@@ -82,9 +82,7 @@ public abstract partial class BaseState : BaseNetworkable
 	public virtual void Start()
 	{
 		if ( Host.IsServer && StateDuration > 0 )
-		{
 			UntilStateEnds = StateDuration;
-		}
 	}
 
 	public virtual void Finish() { }
