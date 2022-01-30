@@ -35,8 +35,6 @@ public partial class WaitingForPlayersState : BaseState
 
 	public override void OnSecond()
 	{
-		base.OnSecond();
-
 		if ( Host.IsServer )
 		{
 			if ( Players.Count > 1 )
@@ -44,24 +42,16 @@ public partial class WaitingForPlayersState : BaseState
 			else
 				Notification.Create( "Waiting for players..." );
 		}
+
+		base.OnSecond();
 	}
 
 	public override void Tick()
 	{
 		base.Tick();
 
-		if ( Host.IsServer )
-		{
-			if ( Players.Count > 1 )
-			{
-				if ( UntilStateEnds )
-					Game.Current.ChangeState( new GameplayState() );
-			}
-			else
-			{
-				UntilStateEnds = 0;
-			}
-		}
+		if ( Host.IsServer && Players.Count == 1 )		
+			UntilStateEnds = StateDuration;	
 	}
 
 	public override void Start()
@@ -80,5 +70,12 @@ public partial class WaitingForPlayersState : BaseState
 
 			player.Respawn();
 		}
+	}
+
+	public override void TimeUp()
+	{
+		base.TimeUp();
+
+		Game.Current.ChangeState( new GameplayState() );
 	}
 }
