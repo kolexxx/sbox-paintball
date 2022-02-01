@@ -21,14 +21,13 @@ public partial class Player : ITeamEntity
 
 		Client.SetInt( "team", (int)newTeam );
 
-		Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
-
 		if ( newTeam != Team.None )
 			ChatBox.AddInformation( To.Everyone, $"{Client.Name} has joined {newTeam.GetName()}", $"avatar:{Client.PlayerId}" );
 		else
 			ChatBox.AddInformation( To.Everyone, $"{Client.Name} has started spectating" );
 
 		Game.Current.State.OnPlayerChangedTeam( this, oldTeam, newTeam );
+		Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
 	}
 
 	public void OnTeamChanged( Team oldTeam, Team newTeam )
@@ -62,20 +61,11 @@ public partial class Player : ITeamEntity
 
 		int blueCount = Team.Blue.GetCount();
 		int redCount = Team.Red.GetCount();
+		int adjust = player.Team == Team.None ? 1 : 0;
 
-		if ( player.Team == Team.None )
-		{
-			if ( team == Team.Blue && (blueCount <= redCount) )
-				player.SetTeam( team );
-			else if ( team == Team.Red && (redCount <= blueCount) )
-				player.SetTeam( team );
-		}
-		else
-		{
-			if ( team == Team.Blue && (blueCount < redCount) )
-				player.SetTeam( team );
-			else if ( team == Team.Red && (redCount < blueCount) )
-				player.SetTeam( team );
-		}
+		if ( team == Team.Blue && (blueCount < redCount + adjust) )
+			player.SetTeam( team );
+		else if ( team == Team.Red && (redCount < blueCount + adjust) )
+			player.SetTeam( team );
 	}
 }
