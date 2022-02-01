@@ -71,7 +71,6 @@ public partial class Player
 			killer?.OnPlayerKill( LastDamageInfo );
 
 		Game.Current.State?.OnPlayerKilled( this, attacker, LastDamageInfo );
-
 		Event.Run( PBEvent.Player.Killed, this );
 		RPC.OnPlayerKilled( this );
 	}

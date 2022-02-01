@@ -81,7 +81,8 @@ public partial class Player
 		}
 
 		// Still no good? Bail.
-		if ( !IsValidUseEntity( ent ) ) return null;
+		if ( !IsValidUseEntity( ent ) )
+			return null;
 
 		return ent;
 	}
