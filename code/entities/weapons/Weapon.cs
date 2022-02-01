@@ -335,7 +335,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 
 	bool IUse.IsUsable( Entity user )
 	{
-		return Owner == null && user is Player;
+		return Owner == null && user is Player player && (ExclusiveFor == Team.None || player.Team == ExclusiveFor);
 	}
 
 	bool ILook.IsLookable( Entity viewer )
