@@ -32,6 +32,7 @@ public partial class GameplayState : BaseState
 	[Net, Change] public int AliveRed { get; private set; } = 0;
 	[Net, Change] public int BlueScore { get; private set; } = 0;
 	[Net, Change] public int RedScore { get; private set; } = 0;
+	[Net] public TimeUntil BuyTimeExpire { get; private set; } = 0;
 	public PlantedBomb Bomb { get; set; }
 	public RoundState RoundState { get; set; }
 	public override bool UpdateTimer => RoundState != RoundState.End;
@@ -44,10 +45,7 @@ public partial class GameplayState : BaseState
 		base.OnPlayerLeave( player );
 
 		if ( player.Alive() )
-		{
-			AdjustTeam( player.Team, -1 );
-			player.Inventory.DropBomb();
-		}
+			player.OnKilled();
 	}
 
 	public override void OnPlayerSpawned( Player player )
@@ -58,15 +56,10 @@ public partial class GameplayState : BaseState
 
 		AdjustTeam( player.Team, 1 );
 
-		if ( Rand.Int( 1, 3 ) == 1 )
-			player.Inventory.Add( new Throwable() );
-
-		if ( player.Alive() )
-			return;
-
-		player.Inventory.Add( Rand.Int( 1, 2 ) == 1 ? new SMG() : new Shotgun(), true );
-		player.Inventory.Add( new Pistol() );
-		player.Inventory.Add( new Knife() );
+		if ( player.Inventory.HasFreeSlot( SlotType.Secondary ) )
+			player.Inventory.Add( new Pistol() );
+		if ( player.Inventory.HasFreeSlot( SlotType.Melee ) )
+			player.Inventory.Add( new Knife() );
 	}
 
 	public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
@@ -167,7 +160,6 @@ public partial class GameplayState : BaseState
 					if ( !player.IsValid() || player.Team == Team.None )
 						continue;
 
-					//player.Inventory.DeleteContents();
 					player.Respawn();
 
 					if ( player.Team == Team.Red && --index == 0 )
@@ -181,6 +173,7 @@ public partial class GameplayState : BaseState
 				RPC.OnRoundStateChanged( RoundState.Freeze );
 
 				UntilStateEnds = Game.Current.Settings.FreezeDuration;
+				BuyTimeExpire = 10;
 
 				break;
 
@@ -268,15 +261,9 @@ public partial class GameplayState : BaseState
 			return;
 
 		if ( team == Team.Blue )
-		{
 			AliveBlue += num;
-			AliveBlue = Math.Max( AliveBlue, 0 );
-		}
 		else
-		{
 			AliveRed += num;
-			AliveRed = Math.Max( AliveRed, 0 );
-		}
 	}
 
 	private Team GetWinner()
@@ -303,7 +290,7 @@ public partial class GameplayState : BaseState
 		var teamBlue = Team.Blue.GetAll();
 		var teamRed = Team.Red.GetAll();
 
-		int diff = Math.Abs( teamBlue.Count() - teamRed.Count() ) / 2;
+		int diff = Math.Abs( teamBlue.Count() - teamRed.Count() ) >> 1;
 
 		if ( diff <= 0 )
 			return;
