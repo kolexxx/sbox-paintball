@@ -5,6 +5,8 @@ namespace Paintball;
 
 public class Inventory : BaseInventory
 {
+	public readonly int[] SlotCapacity = new int[] { 1, 1, 1, 3, 3 };
+
 	public Inventory( Player player ) : base( player ) { }
 
 	public new Player Owner
@@ -20,10 +22,10 @@ public class Inventory : BaseInventory
 		if ( entity is not Weapon weapon )
 			return false;
 
-		if ( weapon.ExclusiveFor != Team.None && weapon.ExclusiveFor != Owner.Team )
+		if ( weapon.Config.ExclusiveFor != Team.None && weapon.Config.ExclusiveFor != Owner.Team )
 			return false;
 
-		if ( List.Any( x => (x as Weapon).Slot == weapon.Slot ) )
+		if ( !HasFreeSlot( weapon.Config.Slot ) )
 			return false;
 
 		return base.Add( entity, makeActive );
@@ -34,10 +36,10 @@ public class Inventory : BaseInventory
 		if ( entity is not Weapon weapon )
 			return;
 
-		if ( weapon.ExclusiveFor != Team.None && weapon.ExclusiveFor != Owner.Team )
+		if ( weapon.Config.ExclusiveFor != Team.None && weapon.Config.ExclusiveFor != Owner.Team )
 			return;
 
-		if ( List.Any( x => (x as Weapon).Slot == weapon.Slot ) )
+		if ( !HasFreeSlot(weapon.Config.Slot ) )
 			return;
 
 		if ( base.Add( entity, Active == null ) )
@@ -56,13 +58,20 @@ public class Inventory : BaseInventory
 
 	public Weapon Swap( Weapon weapon )
 	{
-		var ent = List.Find( x => (x as Weapon).Slot == weapon.Slot );
+		var ent = List.Find( x => (x as Weapon).Config.Slot == weapon.Config.Slot );
 		bool wasActive = ent?.IsActiveChild() ?? false;
 
 		Drop( ent );
 		Add( weapon, wasActive );
 
 		return ent as Weapon;
+	}
+
+	public bool HasFreeSlot(SlotType slot )
+	{
+		int count = List.Where( x => (x as Weapon).Config.Slot == slot ).Count();
+
+		return count < SlotCapacity[(int)slot];
 	}
 
 	public Bomb DropBomb()
