@@ -17,7 +17,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 	public float Gravity { get; set; } = 0f;
 	public virtual float LifeTime => 10f;
 	public Entity Origin { get; set; }
-	public float Radius { get; set; } = 4f;
+	public float Radius { get; set; } = 3f;
 	public ProjectileSimulator Simulator { get; set; }
 	public Vector3 StartPosition { get; private set; }
 	protected Particles Follower { get; set; }
@@ -93,9 +93,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 		if ( !string.IsNullOrEmpty( ModelPath ) )
 		{
 			ModelEntity = SceneObject.CreateModel( ModelPath );
-
-			if ( Owner.Client.PlayerId != 76561198087434609 )
-				ModelEntity.SetMaterialOverride( Material.Load( $"materials/{Team.GetTag()}_surface.vmat" ) );
+			ModelEntity.SetMaterialOverride( Material.Load( $"materials/{Team.GetTag()}_surface.vmat" ) );
 		}
 	}
 

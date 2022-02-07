@@ -7,14 +7,17 @@ partial class Player
 	[ClientRpc]
 	private void BecomeRagdollOnClient( Vector3 force, int forceBone )
 	{
-		var ent = new ModelEntity();
-		ent.Position = Position;
-		ent.Rotation = Rotation;
-		ent.Scale = Scale;
-		ent.MoveType = MoveType.Physics;
-		ent.UsePhysicsCollision = true;
-		ent.EnableAllCollisions = true;
-		ent.CollisionGroup = CollisionGroup.Debris;
+		var ent = new ModelEntity
+		{
+			Position = Position,
+			Rotation = Rotation,
+			Scale = Scale,
+			MoveType = MoveType.Physics,
+			UsePhysicsCollision = true,
+			EnableAllCollisions = true,
+			CollisionGroup = CollisionGroup.Debris
+		};
+
 		ent.SetModel( GetModelName() );
 		ent.CopyBonesFrom( this );
 		ent.CopyBodyGroups( this );
@@ -23,13 +26,10 @@ partial class Player
 		ent.EnableHitboxes = true;
 		ent.SurroundingBoundsMode = SurroundingBoundsType.Physics;
 		ent.RenderColor = Color.Gray;
-
 		ent.SetInteractsAs( CollisionLayer.Debris );
 		ent.SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
 		ent.SetInteractsExclude( CollisionLayer.Player | CollisionLayer.Debris );
-
 		ent.SetRagdollVelocityFrom( this );
-
 		ent.PhysicsGroup.AddVelocity( force );
 
 		if ( forceBone >= 0 )

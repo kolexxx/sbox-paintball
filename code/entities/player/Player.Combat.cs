@@ -45,7 +45,7 @@ public partial class Player
 	public int ConsecutiveKills { get; private set; }
 	public int KillStreak { get; set; }
 	public DamageInfo LastDamageInfo { get; private set; }
-	public string LastWeaponIcon { get; set; }
+	public ItemConfig LastWeaponConfig { get; set; }
 	public TimeSince TimeSinceLastKill { get; private set; }
 	private static readonly string[] _consecutiveKillSounds = { "double_kill", "multi_kill", "ultra_kill", "monster_kill" };
 
@@ -79,18 +79,17 @@ public partial class Player
 	{
 		LastDamageInfo = info;
 
-		GetDamageInfo( To.Everyone, info.Attacker, (info.Weapon as Weapon)?.Icon, info.HitboxIndex, info.Position, info.Damage );
+		GetDamageInfo( To.Everyone, info.Attacker, (info.Weapon as Weapon)?.Config.Name, info.HitboxIndex, info.Position, info.Damage );
 
 		base.TakeDamage( info );
 	}
 
 	protected void OnPlayerKill( DamageInfo info )
 	{
-		Money += 300;
-
 		if ( TimeSinceLastKill >= 5f )
 			ConsecutiveKills = 0;
 
+		Money += 1000;
 		ConsecutiveKills++;
 		KillStreak++;
 		TimeSinceLastKill = 0f;
@@ -120,7 +119,7 @@ public partial class Player
 	{
 		var best = Children.Select( x => x as Weapon )
 		.Where( x => x.IsValid() )
-		.OrderBy( x => x.Slot )
+		.OrderBy( x => x.Config.Slot )
 		.FirstOrDefault();
 
 		if ( best == null ) return;
@@ -139,6 +138,7 @@ public partial class Player
 		info.Damage = damage;
 		LastDamageInfo = info;
 		LastAttacker = info.Attacker;
-		LastWeaponIcon = weapon;
+		if ( !string.IsNullOrEmpty( weapon ) )
+			LastWeaponConfig = ItemConfig.All[weapon];
 	}
 }

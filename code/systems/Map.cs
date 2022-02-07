@@ -27,9 +27,7 @@ public partial class Map
 	private void EntityPostSpawn()
 	{
 		if ( Host.IsServer )
-		{
-			SpawnPoints = Entity.All.OfType<PlayerSpawnPoint>().ToList();
-		}
+			SpawnPoints = Entity.All.OfType<PlayerSpawnPoint>().ToList();	
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
 

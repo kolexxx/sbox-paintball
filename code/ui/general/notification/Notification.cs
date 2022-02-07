@@ -44,7 +44,6 @@ public partial class Notification : Popup
 
 		s_current?.Delete( true );
 		Local.Hud.AddChild( new Notification( message, lifeTime ) );
-		s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as Notification;
 	}
 
 	[PBEvent.Round.End]
@@ -74,7 +73,6 @@ public partial class Notification : Popup
 
 		s_current?.Delete( true );
 		Local.Hud.AddChild( new Notification( "Waiting for players...", () => Game.Current.State is not WaitingForPlayersState ) );
-		s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as Notification;
 	}
 
 	public override void OnDeleted()

@@ -26,7 +26,7 @@ public sealed class KillFeed : Panel
 		isLocalClient = isLocalClient || Local.Client.PlayerId == player.Client.PlayerId;
 
 		Instance.AddChild( new Entry( isLocalClient ? 8f : 5f ) );
-		var e = Instance.GetChild( Instance.ChildrenCount - 1 ) as Entry;
+		var e = this.LastChild() as Entry;
 
 		e.SetClass( "me", isLocalClient );
 
@@ -44,7 +44,7 @@ public sealed class KillFeed : Panel
 		e.Right.Text = player.Client.Name;
 		e.Right.SetClass( player.Team.GetTag(), true );
 
-		e.Method.SetTexture( player.LastWeaponIcon );
+		e.Method.SetTexture( player.LastWeaponConfig.Icon );
 	}
 
 	[PBEvent.Round.New]

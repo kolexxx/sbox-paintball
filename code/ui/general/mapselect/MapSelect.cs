@@ -39,7 +39,7 @@ public class MapSelect : Panel
 			return state.UntilStateEnds.Relative / state.StateDuration;
 		} ) );
 
-		_progressBar = GetChild( 0 ) as ProgressBar;
+		_progressBar = this.LastChild() as ProgressBar;
 		_mapList = Add.Panel( "map-list" );
 	}
 

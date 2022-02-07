@@ -29,7 +29,7 @@ public partial class Player : ILook
 		if ( Looking == null )
 			return;
 
-		if ( !(Looking as ILook).IsLookable( CurrentPlayer ) )	
+		if ( !(Looking as ILook).IsLookable( CurrentPlayer ) )
 			StopLooking();
 	}
 
