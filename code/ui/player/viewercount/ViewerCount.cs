@@ -11,7 +11,7 @@ public class ViewerCount : Panel
 
 	public ViewerCount()
 	{
-		StyleSheet.Load( "/ui/ViewerCount.scss" );
+		StyleSheet.Load( "/ui/player/viewercount/ViewerCount.scss" );
 
 		_icon = Add.Image( "ui/eye.png", "icon" );
 		_count = Add.Label( "0", "count" );

@@ -10,6 +10,8 @@ public class TeamIndicator : Panel
 
 	public TeamIndicator()
 	{
+		StyleSheet.Load( "/ui/player/teamindicator/TeamIndicator.scss" );
+
 		TeamName = Add.Label( "None" );
 	}
 

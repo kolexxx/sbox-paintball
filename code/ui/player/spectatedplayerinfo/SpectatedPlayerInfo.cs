@@ -40,6 +40,6 @@ public class SpectatedPlayerInfo : Panel
 			return;
 
 		Local.Hud.AddChild( new SpectatedPlayerInfo( newPlayer ) );
-		s_current = Local.Hud.GetChild( Local.Hud.ChildrenCount - 1 ) as SpectatedPlayerInfo;
+		s_current = Local.Hud.LastChild() as SpectatedPlayerInfo;
 	}
 }

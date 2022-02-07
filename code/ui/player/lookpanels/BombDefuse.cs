@@ -10,7 +10,7 @@ public class BombDefuse : Panel
 
 	public BombDefuse()
 	{
-		StyleSheet.Load( "/ui/lookpanels/BombDefuse.scss" );
+		StyleSheet.Load( "/ui/player/lookpanels/BombDefuse.scss" );
 
 		InputHint = AddChild<InputHint>();
 		InputHint.SetButton( InputButton.Use );
@@ -22,6 +22,6 @@ public class BombDefuse : Panel
 			return (float)bomb.TimeSinceStartedBeingDefused.Relative / 5f;
 		} ) );
 
-		ProgressBar = GetChild( ChildrenCount - 1 ) as ProgressBar;
+		ProgressBar = this.LastChild() as ProgressBar;
 	}
 }

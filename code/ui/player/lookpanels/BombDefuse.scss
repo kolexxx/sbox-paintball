@@ -1,6 +1,6 @@
-﻿@import "../Variables.scss";
+﻿@import "../../Variables.scss";
 
-weaponlookat
+bombdefuse
 {
     align-items: center;
     justify-content: center;
@@ -12,6 +12,8 @@ weaponlookat
     bottom: 400px;
     border-radius: 25%;
     transition: opacity 0.2s ease-in;
+    flex-direction: column;
+    opacity: 1;
 
     inputhint
     {
@@ -25,12 +27,19 @@ weaponlookat
         }
     }
 
-    .icon
+    progressbar
     {
-        width: 80px;
-        height: 80px;
-        background-size: 100%;
-        background-image-tint: white;
+        .inner-panel
+        {
+            background-color: green;
+            transition: width 0.2s ease-out;
+            border-radius: 25%;
+        }
+
+        border: 1px solid white;
+        border-radius: 25%;
+        height: 10px;
+        width: 90%;
     }
 
     &:intro

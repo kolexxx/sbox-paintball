@@ -1,0 +1,37 @@
+﻿@import "../../Variables.scss";
+
+teamindicator
+{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    font-size: 50px;
+    color: $defaultColor;
+    background-image: linear-gradient(to right, rgba(0 0 0 0.7 ), rgba(0 0 0 0.4) 80%, rgba(0 0 0 0 ));
+    height: 50px;
+    min-width: 200px;
+    justify-content: center;
+    align-items: center;
+
+    &.hidden
+    {
+        display: none;
+    }
+}
+
+.blue
+{
+    teamindicator
+    {
+        color: $blue;
+    }
+}
+
+
+.red
+{
+    teamindicator
+    {
+        color: $red;
+    }
+}

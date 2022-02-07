@@ -1,0 +1,217 @@
+BuyMenu
+{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #222222f3;
+    z-index: 5;
+    transform: scale(1.01);
+    opacity: 0;
+    transition: all .1s ease;
+    flex-direction: column;
+
+    &.visible
+    {
+        transform: scale(1);
+        opacity: 1;
+        pointer-events: all;
+        backdrop-filter: blur(30px) grayscale(.6);
+    }
+
+    .container
+    {
+        height: 100%;
+        align-items: center;
+        flex-direction: column;
+
+        .title
+        {
+            font-family: Stratum2 Bold;
+            color: #fff;
+            font-size: 32px;
+            padding: 60px 0 30px;
+        }
+
+        .wheel_container
+        {
+            width: 100%;
+            flex-direction: row;
+            justify-content: center;
+
+            .wheel
+            {
+                width: 600px;
+                height: 600px;
+                transition: opacity .2s ease;
+                transform-origin: center;
+                position: absolute;
+
+                .label
+                {
+                    color: #666;
+                    font-family: Noto Sans Bold;
+                    position: absolute;
+                    z-index: 2;
+                    margin-top: -8px;
+                }
+
+                .groupname
+                {
+                    position: absolute;
+                    width: 200px;
+                    font-family: Stratum2 Bold;
+                    color: #fff;
+                    margin-left: -100px;
+                    height: 30px;
+                    margin-top: -15px;
+                    align-items: center;
+                    text-align: center;
+                    font-size: 24px;
+                    text-transform: uppercase;
+                }
+
+                .item
+                {
+                    position: absolute;
+                    width: 120px;
+                    height: 120px;
+                    margin-left: -60px;
+                    margin-top: -60px;
+                    z-index: 3;
+                    flex-direction: column;
+
+                    .itemname
+                    {
+                        font-family: Stratum2 Regular;
+                        font-size: 18px;
+                        width: 100%;
+                        text-align: center;
+                        position: relative;
+                        flex-shrink: 0;
+                    }
+
+                    .itemicon
+                    {
+                        width: 100%;
+                        height: 100%;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        background-size: contain;
+                        background-image-tint: #999;
+                    }
+
+                    .itemprice
+                    {
+                        font-family: Stratum2 Bold;
+                        font-size: 18px;
+                        width: 100%;
+                        text-align: center;
+                        position: relative;
+                        flex-shrink: 0;
+                        color: #72bd72;
+
+                        &.locked
+                        {
+                            color: #c00707;
+                        }
+                    }
+                }
+
+                &:intro
+                {
+                    opacity: 0;
+                }
+
+                &:outro
+                {
+                    opacity: 0;
+                }
+
+                .icon
+                {
+                    width: 90px;
+                    height: 90px;
+                    left: 50%;
+                    top: 50%;
+                    margin-left: -45px;
+                    margin-top: -45px;
+                    background-size: contain;
+                    position: absolute;
+                }
+
+                .wedge
+                {
+                    position: absolute;
+                    width: 300px;
+                    height: 300px;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    transform-origin: bottom right;
+                    left: 50%;
+                    top: 50%;
+
+                    &.90
+                    {
+                        background-image: url(/ui/buymenu/wedge_select_90.png);
+
+                        &.hover
+                        {
+                            background-image: url(/ui/buymenu/wedge_select_90_hover.png);
+                        }
+                    }
+
+                    &.60
+                    {
+                        background-image: url(/ui/buymenu/wedge_select_60.png);
+
+                        &.hover
+                        {
+                            background-image: url(/ui/buymenu/wedge_select_60_hover.png);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .footer
+    {
+        flex-shrink: 0;
+        background-color: #0007;
+        backdrop-filter: blur(10px);
+        border-top: 1px solid #333;
+
+        .col
+        {
+            padding: 30px 60px;
+            height: 100%;
+            width: 100%;
+
+            &.right
+            {
+                flex-direction: row-reverse;
+            }
+
+            .button
+            {
+                font-family: Stratum2 Bold;
+                color: #fff;
+                font-size: 18px;
+                padding: 10px 20px;
+                background-color: #ffffff00;
+                transition: background-color .1s ease;
+                cursor: pointer;
+
+                &:hover
+                {
+                    background-color: #ffffff06;
+                }
+
+                &:active
+                {
+                    background-color: #ffffff02;
+                }
+            }
+        }
+    }
+}

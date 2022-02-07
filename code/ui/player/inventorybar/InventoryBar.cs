@@ -16,7 +16,7 @@ public class InventoryBar : Panel
 	{
 		Instance = this;
 
-		StyleSheet.Load( "/ui/InventoryBar.scss" );
+		StyleSheet.Load( "/ui/player/inventorybar/InventoryBar.scss" );
 
 		for ( int i = 0; i < 5; i++ )
 			_slots[i] = new InventoryIcon( i + 1, this );
@@ -35,7 +35,7 @@ public class InventoryBar : Panel
 			_weapons[i] = null;
 
 		foreach ( var weapon in player.CurrentPlayer.Children.OfType<Weapon>() )
-			_weapons[(int)weapon.Slot] = weapon;
+			_weapons[(int)weapon.Config.Slot] = weapon;
 
 		for ( int i = 0; i < 5; i++ )
 		{
@@ -143,7 +143,7 @@ public class InventoryBar : Panel
 		public void UpdateWeapon( Weapon weapon )
 		{
 			TargetWeapon = weapon;
-			Icon.SetTexture( weapon?.Icon );
+			Icon.SetTexture( weapon?.Config.Icon );
 
 			if ( weapon.IsActiveChild() && !HasClass( "active" ) )
 				Instance._close = 3f;

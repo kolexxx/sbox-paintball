@@ -11,7 +11,7 @@ public class WeaponLookAt : Panel
 
 	public WeaponLookAt()
 	{
-		StyleSheet.Load( "/ui/lookpanels/WeaponLookAt.scss" );
+		StyleSheet.Load( "/ui/player/lookpanels/WeaponLookAt.scss" );
 
 		InputHint = AddChild<InputHint>();
 		InputHint.SetButton( InputButton.Use );
