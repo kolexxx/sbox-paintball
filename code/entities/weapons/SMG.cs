@@ -10,7 +10,6 @@ public partial class SMG : ProjectileWeapon<BaseProjectile>
 {
 	public override bool Automatic => true;
 	public override int ClipSize => 30;
-	public override ItemConfig Config { get; set; }
 	public override float MovementSpeedMultiplier => 0.85f;
 	public override float PrimaryRate => 8f;
 	public override float ProjectileGravity => 7f;

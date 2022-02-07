@@ -28,7 +28,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	public virtual float Spread => 0f;
 	public TimeSince TimeSinceDropped { get; private set; }
 	public virtual bool UnlimitedAmmo => false;
-	public abstract ItemConfig Config { get; set; }
+	public ItemConfig Config { get; set; }
 
 	public new Player Owner
 	{

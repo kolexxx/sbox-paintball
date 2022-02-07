@@ -10,7 +10,6 @@ public sealed partial class Bomb : Weapon
 {
 	[Net, Predicted] public TimeSince Delay { get; set; } = 2f;
 	[Net] public TimeSince TimeSinceStartedPlanting { get; set; } = 0f;
-	public override ItemConfig Config { get; set; } 
 	public override bool Automatic => true;
 	public override int ClipSize => 1;
 	public override string FireSound => "";

@@ -10,7 +10,6 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 {
 	public override int BulletsPerFire => 9;
 	public override int ClipSize => 5;
-	public override ItemConfig Config { get; set; }
 	public override string CrosshairClass => "shotgun";
 	public override float MovementSpeedMultiplier => 0.85f;
 	public override float PrimaryRate => 1f;

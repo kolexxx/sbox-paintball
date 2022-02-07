@@ -9,7 +9,6 @@ namespace Paintball;
 public partial class Pistol : ProjectileWeapon<BouncyProjectile>
 {
 	public override int ClipSize => 10;
-	public override ItemConfig Config { get; set; }
 	public override float MovementSpeedMultiplier => 0.9f;
 	public override float PrimaryRate => 15f;
 	public override float ProjectileGravity => 10f;

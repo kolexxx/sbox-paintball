@@ -9,7 +9,6 @@ public partial class Knife : Weapon
 {
 	public override bool Automatic => true;
 	public override int ClipSize => 0;
-	public override ItemConfig Config { get; set; }
 	public override bool Droppable => false;
 	public override bool IsMelee => true;
 	public override string ModelPath => "models/rust_boneknife/rust_boneknife.vmdl";

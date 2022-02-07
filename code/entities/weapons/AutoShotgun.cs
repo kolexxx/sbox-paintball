@@ -11,7 +11,6 @@ public class AutoShotgun : ProjectileWeapon<BaseProjectile>
 	public override bool Automatic => true;
 	public override int BulletsPerFire => 3;
 	public override int ClipSize => 5;
-	public override ItemConfig Config { get; set; }
 	public override float MovementSpeedMultiplier => 0.85f;
 	public override float PrimaryRate => 3f;
 	public override float ProjectileGravity => 7f;

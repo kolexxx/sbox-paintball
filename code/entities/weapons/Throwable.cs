@@ -9,7 +9,6 @@ namespace Paintball;
 public sealed partial class Throwable : Weapon
 {
 	public override int ClipSize => 1;
-	public override ItemConfig Config { get; set; } = ItemConfig.All["pb_spike"];
 	public override string FireSound => "";
 	public override float PrimaryRate => 15f;
 	public override float ReloadTime => 2.0f;
