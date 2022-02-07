@@ -8,8 +8,8 @@ public partial class Player : Sandbox.Player
 	[Net] public TimeSince TimeSinceSpawned { get; private set; }
 	public ProjectileSimulator Projectiles { get; init; }
 	public bool IsFrozen => Game.Current.State is MapSelectState || (Game.Current.State is GameplayState state && state.RoundState == RoundState.Freeze && !state.UntilStateEnds);
-	public bool CanPlantBomb => Team == Team.Red && GroundEntity is WorldEntity && Bombsite.IsValid() && Game.Current.State is GameplayState;
-	public bool IsDefusingBomb => Team == Team.Blue && Using is PlantedBomb;
+	public bool CanPlantBomb => GroundEntity is WorldEntity && Bombsite != null && Game.Current.State is GameplayState;
+	public bool IsDefusingBomb => Using is PlantedBomb;
 	public bool IsPlantingBomb { get; set; }
 
 	public new Inventory Inventory
@@ -54,9 +54,9 @@ public partial class Player : Sandbox.Player
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
-		
+
 		RenderColor = Team.GetColor();
-		Transmit = TransmitType.Always;	
+		Transmit = TransmitType.Always;
 
 		Game.Current.State.OnPlayerSpawned( this );
 
@@ -66,6 +66,7 @@ public partial class Player : Sandbox.Player
 		WaterLevel.Clear();
 		TimeSinceSpawned = 0f;
 
+		SwitchToBestWeapon();
 		CreateHull();
 		ResetInterpolation();
 	}
@@ -108,7 +109,7 @@ public partial class Player : Sandbox.Player
 			return;
 		}
 
-		Inventory.Pickup( other );		
+		Inventory.Pickup( other );
 	}
 
 	public void Reset()
