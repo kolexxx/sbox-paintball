@@ -34,6 +34,7 @@ public partial class GameplayState : BaseState
 	[Net, Change] public int RedScore { get; private set; } = 0;
 	[Net] public TimeUntil BuyTimeExpire { get; private set; } = 0;
 	public PlantedBomb Bomb { get; set; }
+	public override bool CanBuy => !BuyTimeExpire;
 	public RoundState RoundState { get; set; }
 	public override bool UpdateTimer => RoundState != RoundState.End;
 	private bool _firstBlood = false;

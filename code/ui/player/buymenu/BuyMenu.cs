@@ -14,11 +14,14 @@ public class BuyMenu : Panel
 	Panel WheelContainer { get; set; }
 	public BuyMenuWheel Wheel { get; set; }
 	public TimeSince TimeSinceInteraction { get; set; }
+	public static BuyMenu Instance;
 
 	Label BuyTimeLabel { get; set; }
 
 	public BuyMenu()
 	{
+		Instance = this;
+
 		StyleSheet.Load( "/ui/player/buymenu/BuyMenu.scss" );
 
 		//
@@ -48,33 +51,34 @@ public class BuyMenu : Panel
 
 	public override void Tick()
 	{
-		if ( Local.Pawn is Player player )
+		if ( Local.Pawn is not Player player )
+			return;
+
+		bool canBuy = Game.Current.State.CanBuy;
+
+		if ( TimeSinceInteraction > 0.1f )
 		{
-			if ( Game.Current.State is not GameplayState state )
-				return;
-
-			bool canBuy = !state.BuyTimeExpire;
-
-			if ( TimeSinceInteraction > 0.1f )
+			if ( Input.Pressed( InputButton.View ) )
 			{
-				if ( Input.Pressed( InputButton.View ) )
+				if ( !IsVisible && !canBuy )
 				{
-					if ( !IsVisible && !canBuy )
-					{
-						return;
-					}
-					TimeSinceInteraction = 0;
-					Toggle();
+					return;
 				}
-
-
-				if ( !IsVisible ) return;
-
-				BuyTimeLabel.Text = "Buy Time Remaining: " + TimeSpan.FromSeconds( state.BuyTimeExpire ).ToString( @"mm\:ss" ); ;
-
-				if ( !canBuy ) Hide();
+				TimeSinceInteraction = 0;
+				Toggle();
 			}
+
+
+			if ( !IsVisible ) return;
+
+			if ( Game.Current.State is GameplayState state )
+				BuyTimeLabel.Text = "Buy Time Remaining: " + TimeSpan.FromSeconds( state.BuyTimeExpire ).ToString( @"mm\:ss" );
+			else
+				BuyTimeLabel.Text = string.Empty;
+
+			if ( !canBuy ) Hide();
 		}
+
 	}
 
 	public void Toggle()
@@ -263,7 +267,7 @@ public class BuyMenuWheel : Panel
 
 	public virtual void HandleRightClick()
 	{
-		Log.Info( "Right Click" );
+
 	}
 }
 
@@ -313,6 +317,7 @@ public class BuyMenuWheelGroups : BuyMenuWheel
 		{
 			Parent = Parent
 		};
+
 		Delete();
 	}
 }
@@ -344,7 +349,7 @@ public class BuyMenuWheelItems : BuyMenuWheel
 
 			var name = Group.Weapons[index];
 
-			if ( !ItemConfig.All.TryGetValue(name, out var config ))
+			if ( !ItemConfig.All.TryGetValue( name, out var config ) )
 				return;
 
 			var pos = GetSliceContentPosition( index, 180 );

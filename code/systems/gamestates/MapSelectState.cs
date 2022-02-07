@@ -8,10 +8,11 @@ namespace Paintball;
 
 public partial class MapSelectState : BaseState
 {
-	public override int StateDuration => 15;
 	[Net, Change] public IDictionary<string, string> MapImages { get; set; }
 	[Net] public IDictionary<long, string> PlayerIdVote { get; set; }
 	[Net] public IDictionary<string, int> VoteCount { get; set; }
+	public override bool CanBuy => false;
+	public override int StateDuration => 15;
 
 	public override void OnPlayerLeave( Player player )
 	{

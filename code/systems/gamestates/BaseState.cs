@@ -6,6 +6,7 @@ namespace Paintball;
 public abstract partial class BaseState : BaseNetworkable
 {
 	[Net] public TimeUntil UntilStateEnds { get; set; }
+	public virtual bool CanBuy => true;
 	public virtual bool CanPlayerSuicide => false;
 	public virtual int StateDuration => 0;
 	public virtual string Name => GetType().Name;
