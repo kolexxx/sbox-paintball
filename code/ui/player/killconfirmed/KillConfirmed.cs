@@ -32,7 +32,7 @@ public class KillConfirmed : Popup
 		RightLeg.SetTexture( "ui/terry/rightleg.png" );
 		#endregion
 
-		Name.Text = s_current.Name.Text = $"You killed {player.Client.Name}";
+		Name.Text = s_current.Name.Text = player.Client.Name;
 		Avatar.SetTexture( $"avatar:{player.Client.PlayerId}" );
 
 		(GetType()
@@ -43,10 +43,10 @@ public class KillConfirmed : Popup
 		if ( player.LastDamageInfo.Weapon is not Knife )
 		{
 			int distance = (Vector3.DistanceBetween( player.LastDamageInfo.Position, player.Position ) / 12f / 3.2808399f).CeilToInt();
-			Distance.Text = $"Distance: {distance}m";
 		}
 
 		BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
+		SetClass( player.Team.GetTag(), true );
 	}
 
 	[PBEvent.Player.Killed]

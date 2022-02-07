@@ -3,34 +3,34 @@
 killconfirmed
 {
     position: absolute;
-
-    &.hidden
-    {
-        display: none;
-    }
-
     height: 150px;
     width: 300px;
     bottom: 100px;
     background-color: black;
-    transition: opacity 0.2s ease-in;
+    transition: opacity 0.6s ease-out;
+    transition: all 0.4s ease-out;
     color: white;
-    border-radius: 10%;
-    border: 1px solid grey;
+    border-radius: 5%;
     background-color: $allPurposeBlack;
     opacity: 1;
     padding: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    transform: scale(1);
 
     label
     {
         text-align: center;
-        position: absolute;
         text-transform: uppercase;
+        font-weight: bold;
+        margin-left: 5%;
 
         &.name
         {
-            left: 20px;
-            top: 20px;
+            position: absolute;
+            top: 70%;
+            width: 150px;
+            font-size: 30px;
         }
 
         &.distance
@@ -46,18 +46,16 @@ killconfirmed
         width: 64px;
         height: 64px;
         background-size: 100%;
-        border-radius: 10%;
         min-height: 32px;
-        border-radius: 10%;
-        position: absolute;
 
         &.terry
         {
-            right: 20px;
+            position: absolute;
+            right: 0;
             background-size: 100%;
             width: 128px;
             height: 128px;
-            bottom: 10px;
+            bottom: 5px;
 
             &.hit
             {
@@ -67,8 +65,9 @@ killconfirmed
 
         &.avatar
         {
-            left: 40px;
-            bottom: 40px;
+            left: 0;
+            top: 0;
+            border-radius: 50%;
         }
     }
 
@@ -76,10 +75,49 @@ killconfirmed
     &:intro
     {
         opacity: 0;
+        transform: scale(0);
     }
 
     &:outro
     {
         opacity: 0;
+        transform: scale(0);
+    }
+
+    &.blue
+    {
+        background-color: $darkBlue;
+        border: 5px solid $darkerBlue;
+
+        .avatar
+        {
+            border: 3px solid $darkerBlue;
+        }
+
+        .name
+        {
+            border-bottom: 2px solid $darkerBlue;
+        }
+    }
+
+    &.red
+    {
+        background-color: $darkRed;
+        border: 5px solid $darkerRed;
+
+        .avatar
+        {
+            border: 3px solid $darkerRed;
+        }
+
+        .name
+        {
+            border-bottom: 2px solid $darkerRed;
+        }
+    }
+
+    &.hidden
+    {
+        display: none;
     }
 }
