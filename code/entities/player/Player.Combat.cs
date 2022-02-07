@@ -138,6 +138,7 @@ public partial class Player
 		info.Damage = damage;
 		LastDamageInfo = info;
 		LastAttacker = info.Attacker;
+
 		if ( !string.IsNullOrEmpty( weapon ) )
 			LastWeaponConfig = ItemConfig.All[weapon];
 	}
