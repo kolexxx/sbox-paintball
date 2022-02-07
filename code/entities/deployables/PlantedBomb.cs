@@ -96,6 +96,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		Planter = planter;
 		_gameplayState = Game.Current.State as GameplayState;
 		UntilTickSound = _gameplayState.UntilStateEnds.Relative % 1;
+		Sound.FromEntity( "bomb_plant", this );
 
 		if ( _gameplayState.RoundState == RoundState.Play )
 		{
@@ -161,6 +162,9 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 
 	private void OnDefuserChanged( Player oldDefuser, Player newDefuser )
 	{
+		if ( !Disabled && newDefuser != null )
+			Sound.FromEntity( "bomb_disarm", this );
+
 		if ( (Local.Pawn as Player).Looking != this )
 			return;
 
