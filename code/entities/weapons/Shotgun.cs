@@ -2,20 +2,21 @@
 
 namespace Paintball;
 
-[Library( "pb_shotgun", Title = "Shotgun", Spawnable = true )]
+[Item( SlotType.Primary )]
+[Buyable( Price = 1000 )]
+[Library( "pb_shotgun", Title = "Shotgun", Icon = "ui/weapons/shotgun.png", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
 public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 {
 	public override int BulletsPerFire => 9;
 	public override int ClipSize => 5;
+	public override ItemConfig Config { get; set; }
 	public override string CrosshairClass => "shotgun";
-	public override float Gravity => 7f;
-	public override string Icon => "ui/weapons/shotgun.png";
 	public override float MovementSpeedMultiplier => 0.85f;
 	public override float PrimaryRate => 1f;
+	public override float ProjectileGravity => 7f;
+	public override float ProjectileSpeed => 3000f;
 	public override float ReloadTime => 0.7f;
-	public override SlotType Slot => SlotType.Primary;
-	public override float Speed => 3000f;
 	public override float Spread => 0.05f;
 	public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
 	private bool _attackedDuringReload = false;
@@ -25,7 +26,7 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 		base.Spawn();
 
 		AmmoClip = ClipSize;
-		ReserveAmmo = 10;
+		ReserveAmmo = 2 * ClipSize;
 
 		SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );
 	}

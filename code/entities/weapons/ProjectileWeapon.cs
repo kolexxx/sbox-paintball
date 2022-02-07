@@ -7,12 +7,12 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 {
 	public virtual int BulletsPerFire => 1;
 	public virtual string FollowEffect => $"particles/{Owner.Team.GetTag()}_glow.vpcf";
-	public virtual float Gravity => 0f;
 	public virtual string HitSound => "impact";
 	public virtual string ProjectileModel => $"models/paintball/paintball.vmdl";
+	public virtual float ProjectileGravity => 0f;
 	public virtual float ProjectileRadius => 3f;
 	public virtual float ProjectileScale => 0.25f;
-	public virtual float Speed => 2000f;
+	public virtual float ProjectileSpeed => 2000f;
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	public override void AttackPrimary()
@@ -63,7 +63,7 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 			// HitSound = HitSound,
 			Scale = ProjectileScale,
 			Radius = ProjectileRadius,
-			Gravity = Gravity,
+			Gravity = ProjectileGravity,
 			Simulator = owner.Projectiles,
 			// ModelPath = ProjectileModel,
 			Rotation = owner.EyeRot,
@@ -76,7 +76,7 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 
 		var position = owner.EyePos;
 
-		var velocity = forward * Speed;
+		var velocity = forward * ProjectileSpeed;
 
 		projectile.Initialize( position, velocity );
 	}
@@ -98,7 +98,7 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 					// HitSound = HitSound,
 					Scale = ProjectileScale,
 					Radius = ProjectileRadius,
-					Gravity = Gravity,
+					Gravity = ProjectileGravity,
 					Simulator = owner.Projectiles,
 					// ModelPath = ProjectileModel,
 					Rotation = owner.EyeRot,
@@ -114,7 +114,7 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 
 				var position = owner.EyePos;
 
-				var velocity = forward * Speed;
+				var velocity = forward * ProjectileSpeed;
 
 				projectile.Initialize( position, velocity );
 			}

@@ -5,15 +5,6 @@ using System;
 
 namespace Paintball;
 
-public enum SlotType : byte
-{
-	Primary = 0,
-	Secondary = 1,
-	Melee = 2,
-	Utility = 3,
-	Deployable = 4,
-}
-
 [Hammer.Skip]
 public abstract partial class Weapon : BaseWeapon, IUse, ILook
 {
@@ -26,9 +17,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	public virtual int ClipSize => 20;
 	public virtual string CrosshairClass => "standard";
 	public virtual bool Droppable => true;
-	public virtual Team ExclusiveFor => Team.None;
 	public virtual string FireSound => "pbg";
-	public virtual string Icon => "ui/weapons/pistol.png";
 	public virtual bool IsMelee => false;
 	public Panel LookPanel { get; set; }
 	public virtual string ModelPath => "";
@@ -36,10 +25,10 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	public PickupTrigger PickupTrigger { get; protected set; }
 	public Entity PreviousOwner { get; private set; }
 	public virtual float ReloadTime => 5f;
-	public virtual SlotType Slot => SlotType.Primary;
 	public virtual float Spread => 0f;
 	public TimeSince TimeSinceDropped { get; private set; }
 	public virtual bool UnlimitedAmmo => false;
+	public abstract ItemConfig Config { get; set; }
 
 	public new Player Owner
 	{
@@ -60,11 +49,14 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		};
 
 		PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
+		Config = ItemConfig.All[ClassInfo?.Name];
 	}
 
 	public override void ClientSpawn()
 	{
 		base.ClientSpawn();
+
+		Config = ItemConfig.All[ClassInfo?.Name];
 
 		if ( Local.Pawn is not Player player )
 			return;
@@ -335,12 +327,12 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 
 	bool IUse.IsUsable( Entity user )
 	{
-		return Owner == null && user is Player player && (ExclusiveFor == Team.None || player.Team == ExclusiveFor);
+		return Owner == null && user is Player player && (Config.ExclusiveFor == Team.None || player.Team == Config.ExclusiveFor);
 	}
 
 	bool ILook.IsLookable( Entity viewer )
 	{
-		return viewer is Player player && (ExclusiveFor == Team.None || player.Team == ExclusiveFor);
+		return viewer is Player player && (Config.ExclusiveFor == Team.None || player.Team == Config.ExclusiveFor);
 	}
 
 	void ILook.StartLook( Entity viewer )
@@ -349,7 +341,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 			return;
 
 		LookPanel = Local.Hud.AddChild<WeaponLookAt>();
-		(LookPanel as WeaponLookAt).Icon.SetTexture( Icon );
+		(LookPanel as WeaponLookAt).Icon.SetTexture( Config.Icon );
 	}
 
 	void ILook.EndLook( Entity viewer )

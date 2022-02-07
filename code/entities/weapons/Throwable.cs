@@ -2,25 +2,18 @@
 
 namespace Paintball;
 
-[Library( "pb_spike", Title = "Spike", Spawnable = true )]
+[Item( SlotType.Utility )]
+[Buyable( Price = 1000 )]
+[Library( "pb_spike", Title = "Spike", Icon = "ui/weapons/grenade.png", Spawnable = true )]
 [Hammer.EditorModel( "models/grenade/grenade.vmdl" )]
 public sealed partial class Throwable : Weapon
 {
 	public override int ClipSize => 1;
+	public override ItemConfig Config { get; set; } = ItemConfig.All["pb_spike"];
 	public override string FireSound => "";
-	public override string Icon => "ui/weapons/grenade.png";
 	public override float PrimaryRate => 15f;
 	public override float ReloadTime => 2.0f;
-	public override SlotType Slot => SlotType.Utility;
 	public override string ViewModelPath => "models/grenade/v_grenade.vmdl";
-	private bool _isHoldingDownAttack = false;
-
-	public override void ActiveStart( Entity entity )
-	{
-		base.ActiveStart( entity );
-
-		_isHoldingDownAttack = false;
-	}
 
 	public override void Spawn()
 	{
@@ -39,22 +32,10 @@ public sealed partial class Throwable : Weapon
 
 	public override bool CanPrimaryAttack()
 	{
-		if ( Owner.IsFrozen )
+		if ( Owner.IsFrozen || !Input.Released( InputButton.Attack1 ) )
 			return false;
 
-		if ( Input.Down( InputButton.Attack1 ) )
-		{
-			_isHoldingDownAttack = true;
-
-			return false;
-		}
-		else if ( !Input.Down( InputButton.Attack1 ) && _isHoldingDownAttack )
-		{
-			return true;
-		}
-
-		_isHoldingDownAttack = false;
-		return false;
+		return true;
 	}
 
 	public override void AttackPrimary()
@@ -64,6 +45,8 @@ public sealed partial class Throwable : Weapon
 		TimeSincePrimaryAttack = 0;
 
 		var trace = Trace.Ray( Owner.EyePos, (Owner.EyeRot.Forward * 40) ).Run();
+
+		Owner.SwitchToBestWeapon();
 
 		if ( !IsServer )
 			return;
@@ -76,8 +59,8 @@ public sealed partial class Throwable : Weapon
 			ent.Velocity = Owner.EyeRot.Forward * 1000 + Vector3.Up * 100;
 			ent.Owner = Owner;
 			ent.Origin = this;
-			ent.Team = (Owner as Player).Team;
-			(Owner as Player).SwitchToBestWeapon();
+			ent.Team = Owner.Team;
+
 			Delete();
 		}
 	}

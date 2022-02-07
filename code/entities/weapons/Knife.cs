@@ -2,18 +2,19 @@
 
 namespace Paintball;
 
+[Item( SlotType.Melee )]
+[Library( "pb_knife", Title = "Knife", Icon = "ui/weapons/knife.png", Spawnable = false )]
 [Hammer.Skip]
 public partial class Knife : Weapon
 {
 	public override bool Automatic => true;
-	public override int ClipSize => 1;
+	public override int ClipSize => 0;
+	public override ItemConfig Config { get; set; }
 	public override bool Droppable => false;
-	public override string Icon => "ui/weapons/knife.png";
 	public override bool IsMelee => true;
 	public override string ModelPath => "models/rust_boneknife/rust_boneknife.vmdl";
 	public override float PrimaryRate => 1.5f;
 	public override float SecondaryRate => 0.75f;
-	public override SlotType Slot => SlotType.Melee;
 	public override string ViewModelPath => "models/rust_boneknife/v_rust_boneknife.vmdl";
 	public override bool UnlimitedAmmo => true;
 

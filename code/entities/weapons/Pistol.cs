@@ -2,17 +2,19 @@
 
 namespace Paintball;
 
-[Library( "pb_pistol", Title = "Pistol", Spawnable = true )]
+[Item( SlotType.Secondary )]
+[Buyable( Price = 100 )]
+[Library( "pb_pistol", Title = "Pistol", Icon = "ui/weapons/pistol.png", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_pistol/rust_pistol.vmdl" )]
 public partial class Pistol : ProjectileWeapon<BouncyProjectile>
 {
 	public override int ClipSize => 10;
-	public override float Gravity => 10f;
+	public override ItemConfig Config { get; set; }
 	public override float MovementSpeedMultiplier => 0.9f;
 	public override float PrimaryRate => 15f;
+	public override float ProjectileGravity => 10f;
+	public override float ProjectileSpeed => 1500f;
 	public override float ReloadTime => 2.0f;
-	public override SlotType Slot => SlotType.Secondary;
-	public override float Speed => 1500f;
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	public override void Spawn()
@@ -20,7 +22,7 @@ public partial class Pistol : ProjectileWeapon<BouncyProjectile>
 		base.Spawn();
 
 		AmmoClip = ClipSize;
-		ReserveAmmo = 20;
+		ReserveAmmo = 2 * ClipSize;
 
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 	}
