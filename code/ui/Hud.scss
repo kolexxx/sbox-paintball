@@ -7,98 +7,13 @@ rootpanel
     background-color: rgba(0 0 0 0);
     transition: background-color 0.2s ease-in;
     transform-origin: 50% 50%;
-    font-family: Roboto;
+    font-family: Stratum2 Bold;
     align-items: center;
     justify-content: center;
 
     &.devcamera
     {
         display: none;
-    }
-}
-
-ammo
-{
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-size: 40px;
-    color: white;
-    height: 50px;
-    min-width: 200px;
-    align-items: center;
-    background-image: linear-gradient(to left, rgba(0 0 0 1 ), rgba(0 0 0 0.6) 80%, rgba(0 0 0 0));
-    flex-direction: row-reverse;
-    padding-right: 20px;
-
-    label
-    {
-        margin-left: 10px;
-        text-align: left;
-    }
-
-    image
-    {
-        background-size: 100%;
-        background-image-tint: #ff0;
-        width: 30px;
-        height: 30px;
-        margin-left: 10px;
-    }
-
-    &.hidden
-    {
-        display: none;
-    }
-
-    progressbar
-    {
-        width: 100px;
-        height: 10px;
-        transform: scale(-1);
-
-        .inner-panel
-        {
-            transition: width 0.05s ease-out;
-            background-color: #ff0;
-            border-radius: 25%;
-        }
-    }
-}
-
-teamindicator
-{
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    font-size: 50px;
-    color: $defaultColor;
-    background-image: linear-gradient(to right, rgba(0 0 0 0.7 ), rgba(0 0 0 0.4) 80%, rgba(0 0 0 0 ));
-    height: 50px;
-    min-width: 200px;
-    justify-content: center;
-    align-items: center;
-
-    &.hidden
-    {
-        display: none;
-    }
-}
-
-.blue
-{
-    teamindicator
-    {
-        color: $blue;
-    }
-}
-
-
-.red
-{
-    teamindicator
-    {
-        color: $red;
     }
 }
 
