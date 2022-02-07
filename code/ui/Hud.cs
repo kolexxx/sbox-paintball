@@ -23,5 +23,7 @@ public partial class Hud : HudEntity<RootPanel>
 		RootPanel.AddChild<TeamSelect>();            // 7
 		RootPanel.AddChild<ViewerCount>();           // 8
 		RootPanel.AddChild<VoiceList>();             // 9
+		RootPanel.AddChild<BuyMenu>();
+		RootPanel.AddChild<Money>();
 	}
 }
