@@ -11,6 +11,7 @@ roundinfo
     opacity: 1;
     transition: all 0.05s ease-out;
     top: 0;
+    font-family: Roboto;
 
     panel
     {
@@ -73,7 +74,8 @@ roundinfo
         margin: 0px 2px 0px 0px;
         background-color: $blue;
         width: 60px;
-        text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+        //text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+        font-weight: 500;
     }
 
     .right
@@ -81,7 +83,8 @@ roundinfo
         margin: 0px 0px 0px 2px;
         background-color: $red;
         width: 60px;
-        text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+        font-weight: 500;
+        //text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
     }
 
     &.hidden
@@ -97,13 +100,13 @@ roundinfo
         flex-wrap: wrap;
         width: 90px;
         justify-content: space-between;
-
+        margin-top: -1px;
         panel
         {
             background-color: $allPurposeBlack;
             height: 49%;
             font-size: 21px;
-            backdrop-filter: blur(5px);
+            //backdrop-filter: blur(5px);
         }
 
         .timer
