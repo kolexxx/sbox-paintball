@@ -115,9 +115,9 @@ metadata
 ]
 
 //
-// Paintball.Bomb
+// Paintball.AutoShotgun
 //
-@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_shotgun/rust_shotgun.vmdl" ) = pb_bomb : "A bomb that can be planted on a bombsite."
+@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_autoshotgun : ""
 [
 	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
 
