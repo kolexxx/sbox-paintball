@@ -9,10 +9,9 @@ namespace Paintball;
 [Library( "paintball", Title = "PaintBall" )]
 public partial class Game : Sandbox.Game
 {
-	public Hud Hud { get; set; }
 	public new static Game Current
 	{
-		get; protected set;
+		get; private set;
 	}
 
 	public Map Map { get; set; }
@@ -41,7 +40,7 @@ public partial class Game : Sandbox.Game
 		{
 			// PrecacheAssets();
 
-			Hud = new();
+			_ = new Hud();
 		}
 
 		Map = new Map();
@@ -166,6 +165,12 @@ public partial class Game : Sandbox.Game
 
 		if ( Settings == null )
 			Settings = new Settings();
+
+		foreach ( var type in Library.GetAll<Weapon>() )
+		{
+			if ( !type.IsAbstract )
+				_ = new ItemConfig( type );
+		}
 	}
 
 	private void OnStateChanged()
