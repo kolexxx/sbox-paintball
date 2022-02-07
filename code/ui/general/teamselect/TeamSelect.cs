@@ -9,6 +9,7 @@ public partial class TeamSelect : Panel
 	public static TeamSelect Instance;
 	public Button Blue { get; set; }
 	public Button Red { get; set; }
+	public Button Spectator { get; set; }
 	public Label Timer { get; set; }
 	public Label ServerInfo { get; set; }
 	public Image MapImage { get; set; }
