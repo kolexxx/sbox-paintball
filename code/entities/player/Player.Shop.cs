@@ -5,19 +5,17 @@ namespace Paintball;
 public partial class Player
 {
 	[Net] public int Money { get; set; } = 1000;
+	public bool IsInBuyZone { get; set; } = true;
 
 	[ServerCmd]
 	public static void RequestItem( string libraryName )
 	{
-		if ( Game.Current.State is not GameplayState state )
-			return;
-
-		if ( state.RoundState != RoundState.Freeze || string.IsNullOrEmpty( libraryName ) )
+		if ( string.IsNullOrEmpty( libraryName ) )
 			return;
 
 		var player = ConsoleSystem.Caller.Pawn as Player;
 
-		if ( !player.IsValid() )
+		if ( !player.IsValid() || !(player.IsInBuyZone && Game.Current.State.CanBuy) )
 			return;
 
 		var config = ItemConfig.All[libraryName];
