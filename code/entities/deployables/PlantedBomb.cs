@@ -42,6 +42,8 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			_gameplayState.RoundStateStart();
 		}
 
+		Planter.Money += 1000;
+
 		Event.Run( PBEvent.Round.Bomb.Planted, this );
 		Bombsite.OnBombPlanted.Fire( this );
 		OnPlanted( Planter );
@@ -61,6 +63,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		if ( TimeSinceStartedBeingDefused >= 5f )
 		{
 			Disabled = true;
+			Defuser.Money += 1000;
 
 			Event.Run( PBEvent.Round.Bomb.Defused, this );
 			Bombsite.OnBombDefused.Fire( this );
@@ -74,17 +77,6 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			Event.Run( PBEvent.Round.Bomb.Explode, this );
 			Bombsite.OnBombExplode.Fire( this );
 			OnDisabled( Defuser );
-
-			DamageInfo info = new DamageInfo()
-					.WithForce( Vector3.Up * 1000f );
-			info.Damage = 100f;
-			info.Flags = DamageFlags.Blast;
-			var proximity = Physics.GetEntitiesInSphere( Position, 500f );
-
-			foreach ( var entity in proximity )
-			{
-				entity.TakeDamage( info );
-			}
 		}
 	}
 
