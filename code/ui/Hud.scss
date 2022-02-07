@@ -7,37 +7,11 @@ rootpanel
     background-color: rgba(0 0 0 0);
     transition: background-color 0.2s ease-in;
     transform-origin: 50% 50%;
-    font-family: Stratum2 Bold;
+    font-family: Roboto;
     align-items: center;
     justify-content: center;
 
     &.devcamera
-    {
-        display: none;
-    }
-}
-
-spectatorcontrols
-{
-    color: white;
-    font-size: 20px;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    background-color: $allPurposeBlack;
-    backdrop-filter: blur(5px);
-    position: absolute;
-    padding: 5px;
-    top: 50px;
-    left: 100px;
-    border-radius: 5%;
-
-    label
-    {
-        margin: 5px;
-    }
-
-    &.hidden
     {
         display: none;
     }
