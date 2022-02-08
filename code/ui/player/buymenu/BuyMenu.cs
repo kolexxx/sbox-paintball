@@ -51,7 +51,7 @@ public class BuyMenu : Panel
 
 	public override void Tick()
 	{
-		if ( Local.Pawn is not Player player )
+		if ( Local.Pawn is not Player player || !player.Alive() )
 			return;
 
 		bool canBuy = Game.Current.State.CanBuy;
@@ -91,13 +91,21 @@ public class BuyMenu : Panel
 	{
 		if ( !HasClass( "visible" ) ) return;
 
-		SetClass( "visible", false );
-		Sound.FromScreen( "ui.radial_menu_buy.close" );
+		bool canBuy = Game.Current.State.CanBuy;
+		if ( Wheel is BuyMenuWheelGroups || !canBuy )
+		{
+			SetClass( "visible", false );
+			Sound.FromScreen( "ui.radial_menu_buy.close" );
 
-		if ( Wheel != null )
+			Wheel.Delete( true );
+			Wheel = null;
+		}
+		else if ( Wheel is BuyMenuWheelItems )
 		{
 			Wheel.Delete( true );
 			Wheel = null;
+
+			WheelContainer.AddChild<BuyMenuWheelGroups>();
 		}
 	}
 
@@ -291,7 +299,7 @@ public class BuyMenuWheelGroups : BuyMenuWheel
 	{
 			new GroupDefinition("Pistol", 4, new string[]{ "pb_pistol", string.Empty, string.Empty, string.Empty, string.Empty }),
 			new GroupDefinition("Heavy", 4, new string[]{ "pb_shotgun", "pb_autoshotgun", string.Empty, string.Empty, string.Empty }),
-			new GroupDefinition("SMG", 4, new string[]{ "pb_smg", string.Empty, string.Empty, string.Empty, string.Empty }),
+			new GroupDefinition("SMG", 4, new string[]{ "pb_smg", "pb_havoc", string.Empty, string.Empty, string.Empty }),
 			new GroupDefinition("Rifle", 4, new string[]{ string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty }),
 			new GroupDefinition("Equipment", 4, new string[]{ string.Empty, string.Empty, string.Empty, string.Empty }),
 			new GroupDefinition("Grenade", 4, new string[]{ "pb_spike", string.Empty, string.Empty, string.Empty, string.Empty, string.Empty }),
