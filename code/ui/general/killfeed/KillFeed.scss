@@ -33,6 +33,7 @@ entry
 
     &:intro
     {
+        opacity: 0;
     }
 
     &:outro
@@ -66,7 +67,7 @@ entry
     {
         width: 100px;
         height: 100px;
-        background-size: 100%;
+        background-size: cover;
         background-image-tint: white;
     }
 
