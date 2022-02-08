@@ -16,7 +16,6 @@ killconfirmed
     padding: 10px;
     flex-wrap: wrap;
     align-items: center;
-    transform: scale(1);
 
     label
     {
@@ -75,13 +74,11 @@ killconfirmed
     &:intro
     {
         opacity: 0;
-        transform: scale(0);
     }
 
     &:outro
     {
         opacity: 0;
-        transform: scale(0);
     }
 
     &.blue
