@@ -65,7 +65,7 @@ public class KillConfirmed : Popup
 	[PBEvent.Round.New]
 	private void OnNewRound()
 	{
-		Delete();
+		Delete( true );
 	}
 
 	[PBEvent.Player.Spectating.Changed]
