@@ -1,8 +1,11 @@
 ﻿viewercount
 {
     position: absolute;
-    top: 5%;
-    left: 5%;
+    top: 0;
+    left: 1%;
+    width: 80px;
+    height: 60px;
+    padding-top: 2px;
     color: white;
     font-size: 24px;
     align-items: center;
@@ -11,6 +14,12 @@
     .icon
     {
         background-image-tint: green;
+    }
+
+    label
+    {
+        margin-left: 10%;
+        font-weight: bold;
     }
 
     &.hidden
