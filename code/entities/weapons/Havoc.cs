@@ -9,7 +9,7 @@ namespace Paintball;
 public partial class Havoc : ProjectileWeapon<BouncyProjectile>
 {
 	public override bool Automatic => true;
-	public override int ClipSize => 30;
+	public override int ClipSize => 15;
 	public override float MovementSpeedMultiplier => 0.85f;
 	public override float PrimaryRate => 6f;
 	public override float ProjectileGravity => 4f;
