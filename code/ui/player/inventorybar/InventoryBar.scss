@@ -50,7 +50,7 @@ inventoryicon
         right: 0;
         width: 200px;
         height: 200px;
-        background-size: 100%;
+        background-size: contain;
         transform: scaleX(-1);
         background-image-tint: slategray;
     }
