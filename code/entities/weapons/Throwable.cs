@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-[Item( SlotType.Utility )]
+[Config( SlotType.Utility )]
 [Buyable( Price = 1000 )]
 [Library( "pb_spike", Title = "Spike", Icon = "ui/weapons/grenade.png", Spawnable = true )]
 [Hammer.EditorModel( "models/grenade/grenade.vmdl" )]

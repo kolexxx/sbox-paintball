@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-[Item( SlotType.Deployable, Team.Red )]
+[Config( SlotType.Deployable, Team.Red )]
 [Library( "pb_bomb", Title = "Bomb", Description = "A bomb that can be planted on a bombsite.", Icon = "ui/weapons/bomb.png", Spawnable = false )]
 [Hammer.EditorModel( "weapons/rust_shotgun/rust_shotgun.vmdl" )]
 [Hammer.Skip]

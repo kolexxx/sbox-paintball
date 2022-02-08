@@ -5,12 +5,12 @@ using System.Collections.Generic;
 namespace Paintball;
 
 [AttributeUsage( AttributeTargets.Class, Inherited = false )]
-public class ItemAttribute : Attribute
+public class ConfigAttribute : Attribute
 {
 	public SlotType Slot;
 	public Team ExclusiveFor;
 
-	public ItemAttribute( SlotType slot = 0, Team exclusiveFor = 0 ) : base()
+	public ConfigAttribute( SlotType slot = 0, Team exclusiveFor = 0 ) : base()
 	{
 		Slot = slot;
 		ExclusiveFor = exclusiveFor;
@@ -42,7 +42,7 @@ public class ItemConfig
 				Name = libraryAttribute.Name;
 				Title = libraryAttribute.Title;
 			}
-			else if ( attribute is ItemAttribute itemAttribute )
+			else if ( attribute is ConfigAttribute itemAttribute )
 			{
 				ExclusiveFor = itemAttribute.ExclusiveFor;
 				Slot = itemAttribute.Slot;

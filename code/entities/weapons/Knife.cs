@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-[Item( SlotType.Melee )]
+[Config( SlotType.Melee )]
 [Library( "pb_knife", Title = "Knife", Icon = "ui/weapons/knife.png", Spawnable = false )]
 [Hammer.Skip]
 public partial class Knife : Weapon

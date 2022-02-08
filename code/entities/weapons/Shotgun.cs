@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-[Item( SlotType.Primary )]
+[Config( SlotType.Primary )]
 [Buyable( Price = 1000 )]
 [Library( "pb_shotgun", Title = "Shotgun", Icon = "ui/weapons/shotgun.png", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
