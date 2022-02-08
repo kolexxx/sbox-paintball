@@ -167,6 +167,16 @@ metadata
 ]
 
 //
+// Paintball.Havoc
+//
+@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_havoc : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
 // Paintball.Pistol
 //
 @PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_pistol/rust_pistol.vmdl" ) = pb_pistol : ""
