@@ -72,7 +72,9 @@ roundinfo
     .left
     {
         margin: 0px 2px 0px 0px;
-        background-color: $blue;
+        background-color: $darkBlue;
+        border: 3px solid $darkerBlue;
+        border-radius: 5%;
         width: 60px;
         //text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
         font-weight: 500;
@@ -81,7 +83,9 @@ roundinfo
     .right
     {
         margin: 0px 0px 0px 2px;
-        background-color: $red;
+        background-color: $darkRed;
+        border-radius: 5%;
+        border: 3px solid $darkerRed;
         width: 60px;
         font-weight: 500;
         //text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
@@ -101,11 +105,13 @@ roundinfo
         width: 90px;
         justify-content: space-between;
         margin-top: -1px;
+
         panel
         {
             background-color: $allPurposeBlack;
             height: 49%;
             font-size: 21px;
+            border-radius: 5%;
             //backdrop-filter: blur(5px);
         }
 
