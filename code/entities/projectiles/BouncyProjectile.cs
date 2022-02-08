@@ -15,7 +15,7 @@ public sealed partial class BouncyProjectile : BaseProjectile
 		{
 			if ( trace.Entity is not WorldEntity )
 				return true;
-			else if ( trace.Normal.z <= 1f && trace.Normal.z >= Math.PI / 4 )
+			else if ( trace.Normal.z <= 1f && trace.Normal.z >= 0.70710678118f )
 				return true;
 
 			var reflect = Vector3.Reflect( Velocity.Normal, trace.Normal );
