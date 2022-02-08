@@ -33,13 +33,28 @@ public class SpectatedPlayerInfo : Panel
 	[PBEvent.Player.Spectating.Changed]
 	private static void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
 	{
-		if ( oldPlayer != null )
-			s_current.Delete();
+		if ( oldPlayer == null )
+		{
+			Local.Hud.AddChild( new SpectatedPlayerInfo( newPlayer ) );
+			s_current = Local.Hud.LastChild() as SpectatedPlayerInfo;
+
+			return;
+		}
 
 		if ( newPlayer == null )
-			return;
+			s_current.Delete();
+		else
+			s_current.UpdatePlayer( newPlayer );
+	}
 
-		Local.Hud.AddChild( new SpectatedPlayerInfo( newPlayer ) );
-		s_current = Local.Hud.LastChild() as SpectatedPlayerInfo;
+	private void UpdatePlayer( Player player )
+	{
+		SetClass( TargetPlayer.Team.GetTag(), false );
+		TargetPlayer = player;
+
+		SetClass( TargetPlayer.Team.GetTag(), true );
+
+		Avatar.SetTexture( $"avatar:{TargetPlayer.Client.PlayerId}" );
+		Name.Text = TargetPlayer.Client.Name;
 	}
 }
