@@ -1,11 +1,53 @@
 ﻿money
 {
-    color: green;
+    color: lawngreen;
     font-size: 34px;
     position: absolute;
     text-align: center;
-    left: 100px;
+    align-items: flex-end;
+    justify-content: center;
+    padding-right: 20%;
+    left: 0px;
     top: 300px;
-    width: 100px;
-    height: 100px;
+    min-width: 200px;
+    height: 40px;
+    background-image: linear-gradient(to right, rgba(0 0 0 0.7 ), rgba(0 0 0 0.4) 80%, rgba(0 0 0 0 ));
+
+    &.hidden
+    {
+        display: none;
+    }
+
+    label
+    {
+        background-size: contain;
+        position: absolute;
+
+        &.difference
+        {
+            transition: top 0.6s ease-out;
+            top: 0;
+
+            &.plus
+            {
+                color: darkseagreen;
+            }
+
+            &.minus
+            {
+                color: indianred;
+            }
+
+            &.show
+            {
+                top: 50px;
+            }
+
+            &.hide
+            {
+                display: none;
+                top: 0;
+            }
+        }
+    }
 }
