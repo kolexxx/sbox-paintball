@@ -6,24 +6,42 @@ namespace Paintball.UI;
 
 public class TeamIndicator : Panel
 {
-	public Label TeamName;
+	private Label _teamName;
 
 	public TeamIndicator()
 	{
 		StyleSheet.Load( "/ui/player/teamindicator/TeamIndicator.scss" );
 
-		TeamName = Add.Label( "None" );
+		_teamName = Add.Label( "None" );
+
+		BindClass( "hidden", () =>
+		{
+			var player = Local.Pawn as Player;
+
+			if ( TeamSelect.Instance.IsVisible )
+				return true;
+
+			if ( player.IsSpectator && !player.IsSpectatingPlayer )
+				return true;
+
+			return false;
+		} );
 	}
 
-	public override void Tick()
+	[PBEvent.Player.Spectating.Changed]
+	private void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
 	{
-		base.Tick();
+		var player = Local.Pawn as Player;
 
-		if ( Local.Pawn is not Player player )
+		_teamName.Text = player.CurrentPlayer.Team.GetName();
+	}
+
+	[PBEvent.Player.Team.Changed]
+	private void OnPlayerTeamChanged( Player player, Team oldTeam )
+	{
+		if ( player != (Local.Pawn as Player).CurrentPlayer )
 			return;
 
-		SetClass( "hidden", TeamSelect.Instance.IsVisible || (player.IsSpectator && !player.IsSpectatingPlayer) );
-
-		TeamName.Text = player.CurrentPlayer.Team.GetName();
+		_teamName.Text = player.Team.GetName();
 	}
 }
