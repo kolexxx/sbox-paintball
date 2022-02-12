@@ -13,8 +13,8 @@ public class BuyMenu : Panel
 {
 	Panel WheelContainer { get; set; }
 	public BuyMenuWheel Wheel { get; set; }
-	public TimeSince TimeSinceInteraction { get; set; }
 	public static BuyMenu Instance;
+	private TimeSince _timeSinceInteraction;
 
 	Label BuyTimeLabel { get; set; }
 
@@ -56,7 +56,7 @@ public class BuyMenu : Panel
 
 		bool canBuy = player.IsInBuyZone && Game.Current.State.CanBuy;
 
-		if ( TimeSinceInteraction > 0.1f )
+		if ( _timeSinceInteraction > 0.1f )
 		{
 			if ( Input.Pressed( InputButton.View ) )
 			{
@@ -64,7 +64,7 @@ public class BuyMenu : Panel
 				{
 					return;
 				}
-				TimeSinceInteraction = 0;
+				_timeSinceInteraction = 0;
 				Toggle();
 			}
 
@@ -91,6 +91,7 @@ public class BuyMenu : Panel
 	{
 		if ( !HasClass( "visible" ) ) return;
 
+		var player = Local.Pawn as Player;
 		bool canBuy = player.IsInBuyZone && Game.Current.State.CanBuy;
 		if ( Wheel is BuyMenuWheelGroups || !canBuy )
 		{
