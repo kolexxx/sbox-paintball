@@ -31,6 +31,9 @@ public class InventoryBar : Panel
 		if ( Local.Pawn is not Player player )
 			return;
 
+		if ( !player.Alive() && !player.IsSpectatingPlayer )
+			return;
+
 		for ( int i = 0; i < 5; i++ )
 			_weapons[i] = null;
 
