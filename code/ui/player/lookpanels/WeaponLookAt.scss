@@ -9,6 +9,7 @@ weaponlookat
     width: 200px;
     height: 100px;
     background-color: $allPurposeBlack;
+    border: 3px solid $blackBorder;
     bottom: 400px;
     border-radius: 25%;
     transition: opacity 0.2s ease-in;

@@ -26,7 +26,7 @@ BuyMenu
 
         .title
         {
-            font-family: Stratum2 Bold;
+            font-family: Roboto Bold;
             color: #fff;
             font-size: 32px;
             padding: 60px 0 30px;
@@ -59,7 +59,7 @@ BuyMenu
                 {
                     position: absolute;
                     width: 200px;
-                    font-family: Stratum2 Bold;
+                    font-family: Roboto Bold;
                     color: #fff;
                     margin-left: -100px;
                     height: 30px;
@@ -82,7 +82,7 @@ BuyMenu
 
                     .itemname
                     {
-                        font-family: Stratum2 Regular;
+                        font-family: Roboto Regular;
                         font-size: 18px;
                         width: 100%;
                         text-align: center;
@@ -98,12 +98,11 @@ BuyMenu
                         background-position: center;
                         background-size: cover;
                         background-image-tint: #999;
-                        
                     }
 
                     .itemprice
                     {
-                        font-family: Stratum2 Bold;
+                        font-family: Roboto Bold;
                         font-size: 18px;
                         width: 100%;
                         text-align: center;
@@ -195,7 +194,7 @@ BuyMenu
 
             .button
             {
-                font-family: Stratum2 Bold;
+                font-family: Roboto Bold;
                 color: #fff;
                 font-size: 18px;
                 padding: 10px 20px;

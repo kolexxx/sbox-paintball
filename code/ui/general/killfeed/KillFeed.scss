@@ -17,6 +17,7 @@ killfeed
 entry
 {
     background-color: $allPurposeBlack;
+    border: 2px solid #1a1a1a;
     margin-bottom: 5px;
     color: white;
     flex-shrink: 0;
@@ -25,7 +26,6 @@ entry
     height: 32px;
     position: relative;
     align-items: center;
-    backdrop-filter: blur(10px);
     border-radius: 5%;
     transition: transform .30s linear;
     transition: margin .30s linear;
@@ -74,12 +74,13 @@ entry
 
     &.me
     {
-        background-color: $transparentWhite;
+        background-color: $allPurposeWhite;
         color: black;
+        border: 2px solid $allPurposeGray;
 
         .method
         {
-            background-image-tint: black;
+            background-image-tint: $allPurposeBlack;
         }
     }
 
