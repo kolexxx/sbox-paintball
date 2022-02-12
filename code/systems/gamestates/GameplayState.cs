@@ -162,7 +162,7 @@ public partial class GameplayState : BaseState
 				RPC.OnRoundStateChanged( RoundState.Freeze );
 
 				UntilStateEnds = Game.Current.Settings.FreezeDuration;
-				BuyTimeExpire = 10;
+				BuyTimeExpire = Game.Current.Settings.FreezeDuration + 10;
 
 				break;
 
