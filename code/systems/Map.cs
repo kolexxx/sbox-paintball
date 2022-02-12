@@ -27,7 +27,7 @@ public partial class Map
 	private void EntityPostSpawn()
 	{
 		if ( Host.IsServer )
-			SpawnPoints = Entity.All.OfType<PlayerSpawnPoint>().ToList();	
+			SpawnPoints = Entity.All.OfType<PlayerSpawnPoint>().ToList();
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
 
@@ -56,8 +56,7 @@ public partial class Map
 			foreach ( var spawnPoint in SpawnPoints )
 				spawnPoint.Occupied = false;
 		}
-
-		if ( Host.IsClient )
+		else if ( Host.IsClient )
 		{
 			foreach ( var ent in Entity.All.OfType<ModelEntity>() )
 			{
