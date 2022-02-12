@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Paintball;
 
 [AttributeUsage( AttributeTargets.Class, Inherited = false )]
-public class ConfigAttribute : Attribute
+public sealed class ConfigAttribute : Attribute
 {
 	public SlotType Slot;
 	public Team ExclusiveFor;
@@ -17,7 +17,7 @@ public class ConfigAttribute : Attribute
 	}
 }
 
-public class ItemConfig
+public sealed class ItemConfig
 {
 	// Heavily accessed.
 	public readonly Team ExclusiveFor;

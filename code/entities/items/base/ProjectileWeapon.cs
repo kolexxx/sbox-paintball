@@ -13,6 +13,7 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 	public virtual float ProjectileRadius => 3f;
 	public virtual float ProjectileScale => 0.25f;
 	public virtual float ProjectileSpeed => 2000f;
+	public virtual float Spread => 0f;
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	public override void AttackPrimary()
@@ -66,15 +67,15 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 			Gravity = ProjectileGravity,
 			Simulator = owner.Projectiles,
 			// ModelPath = ProjectileModel,
-			Rotation = owner.EyeRot,
+			Rotation = owner.EyeRotation,
 			Origin = this
 		};
 
-		var forward = owner.EyeRot.Forward;
+		var forward = owner.EyeRotation.Forward;
 		forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * Spread * 0.25f;
 		forward = forward.Normal;
 
-		var position = owner.EyePos;
+		var position = owner.EyePosition;
 
 		var velocity = forward * ProjectileSpeed;
 
@@ -101,18 +102,18 @@ public abstract partial class ProjectileWeapon<T> : Weapon where T : BaseProject
 					Gravity = ProjectileGravity,
 					Simulator = owner.Projectiles,
 					// ModelPath = ProjectileModel,
-					Rotation = owner.EyeRot,
+					Rotation = owner.EyeRotation,
 					Origin = this
 				};
 
-				var angles = owner.EyeRot.Angles();
+				var angles = owner.EyeRotation.Angles();
 				angles.pitch += pitch;
 				angles.yaw += yaw;
 
 				var forward = Rotation.From( angles ).Forward;
 				forward = forward.Normal;
 
-				var position = owner.EyePos;
+				var position = owner.EyePosition;
 
 				var velocity = forward * ProjectileSpeed;
 

@@ -73,7 +73,7 @@ public sealed partial class Bomb : Weapon
 		{
 			Owner.IsPlantingBomb = false;
 
-			var trace = Trace.Ray( Owner.Position, Owner.Position + Vector3.Down * 64 )
+			var trace = Trace.Ray( Owner.Position, Owner.Position + Vector3.Down * 128 )
 				.WorldOnly()
 				.Run();
 
@@ -81,11 +81,13 @@ public sealed partial class Bomb : Weapon
 
 			if ( IsServer )
 			{
-				var bomb = new PlantedBomb();
-				bomb.Position = trace.EndPos;
-				bomb.Rotation = Owner.Rotation;
-				bomb.Planter = Owner;
-				bomb.Bombsite = Owner.Bombsite;
+				var bomb = new PlantedBomb
+				{
+					Position = trace.EndPos,
+					Rotation = Owner.Rotation,
+					Planter = Owner,
+					Bombsite = Owner.Bombsite
+				};
 
 				bomb.Initialize();
 

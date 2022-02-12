@@ -43,7 +43,7 @@ public sealed partial class Throwable : Weapon
 
 		TimeSincePrimaryAttack = 0;
 
-		var trace = Trace.Ray( Owner.EyePos, (Owner.EyeRot.Forward * 40) ).Run();
+		var trace = Trace.Ray( Owner.EyePosition, (Owner.EyeRotation.Forward * 40) ).Run();
 
 		Owner.SwitchToBestWeapon();
 
@@ -52,13 +52,15 @@ public sealed partial class Throwable : Weapon
 
 		using ( Prediction.Off() )
 		{
-			var ent = new Grenade();
-			ent.Rotation = Owner.EyeRot;
-			ent.Position = trace.EndPos;
-			ent.Velocity = Owner.EyeRot.Forward * 1000 + Vector3.Up * 100;
-			ent.Owner = Owner;
-			ent.Origin = this;
-			ent.Team = Owner.Team;
+			var ent = new Grenade
+			{
+				Rotation = Owner.EyeRotation,
+				Position = trace.EndPos,
+				Velocity = Owner.EyeRotation.Forward * 1000 + Vector3.Up * 100,
+				Owner = Owner,
+				Origin = this,
+				Team = Owner.Team
+			};
 
 			Delete();
 		}

@@ -57,9 +57,9 @@ public partial class Knife : Weapon
 		Owner.SetAnimBool( "b_attack", true );
 		ShootEffects();
 
-		var endPos = Owner.EyePos + Owner.EyeRot.Forward * range;
+		var endPos = Owner.EyePosition + Owner.EyeRotation.Forward * range;
 
-		var trace = Trace.Ray( Owner.EyePos, endPos )
+		var trace = Trace.Ray( Owner.EyePosition, endPos )
 			.UseHitboxes( true )
 			.WithoutTags( Owner.Team.GetTag() )
 			.Ignore( this )

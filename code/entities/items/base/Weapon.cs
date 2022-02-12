@@ -25,7 +25,6 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	public PickupTrigger PickupTrigger { get; protected set; }
 	public Entity PreviousOwner { get; private set; }
 	public virtual float ReloadTime => 5f;
-	public virtual float Spread => 0f;
 	public TimeSince TimeSinceDropped { get; private set; }
 	public virtual bool UnlimitedAmmo => false;
 	public ItemConfig Config { get; set; }
@@ -134,6 +133,20 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		return TimeSinceSecondaryAttack > (1 / rate);
 	}
 
+	public override bool CanCarry( Entity carrier )
+	{
+		if ( Owner != null || carrier is not Player player )
+			return false;
+
+		if ( Config.ExclusiveFor != Team.None && player.Team != Config.ExclusiveFor )
+			return false;
+
+		if ( !player.Inventory.HasFreeSlot( Config.Slot ) )
+			return false;
+
+		return true;
+	}
+
 	public override void Reload()
 	{
 		if ( IsReloading )
@@ -218,20 +231,6 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	{
 		PhysicsGroup?.Wake();
 		Delete();
-	}
-
-	public void DealDamage( Entity entity, Entity attacker, Vector3 position, Vector3 force, int hitbox )
-	{
-		var info = new DamageInfo()
-			.WithAttacker( attacker )
-			.WithWeapon( this )
-			.WithPosition( position )
-			.WithForce( force )
-			.WithHitbox( hitbox );
-
-		info.Damage = float.MaxValue;
-
-		entity.TakeDamage( info );
 	}
 
 	protected int TakeAmmo( int ammo )
@@ -327,12 +326,18 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 
 	bool IUse.IsUsable( Entity user )
 	{
-		return Owner == null && user is Player player && (Config.ExclusiveFor == Team.None || player.Team == Config.ExclusiveFor);
+		if ( Owner != null || user is not Player player )
+			return false;
+
+		if ( Config.ExclusiveFor != Team.None && player.Team != Config.ExclusiveFor )
+			return false;
+
+		return true;
 	}
 
 	bool ILook.IsLookable( Entity viewer )
 	{
-		return viewer is Player player && (Config.ExclusiveFor == Team.None || player.Team == Config.ExclusiveFor);
+		return (this as IUse).IsUsable( viewer );
 	}
 
 	void ILook.StartLook( Entity viewer )
