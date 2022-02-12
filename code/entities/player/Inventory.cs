@@ -17,31 +17,13 @@ public class Inventory : BaseInventory
 
 	public override bool Add( Entity entity, bool makeActive = false )
 	{
-		entity.Position = Owner.EyePos;
-
-		if ( entity is not Weapon weapon )
-			return false;
-
-		if ( weapon.Config.ExclusiveFor != Team.None && weapon.Config.ExclusiveFor != Owner.Team )
-			return false;
-
-		if ( !HasFreeSlot( weapon.Config.Slot ) )
-			return false;
+		entity.Position = Owner.EyePosition;
 
 		return base.Add( entity, makeActive );
 	}
 
 	public override void Pickup( Entity entity )
 	{
-		if ( entity is not Weapon weapon )
-			return;
-
-		if ( weapon.Config.ExclusiveFor != Team.None && weapon.Config.ExclusiveFor != Owner.Team )
-			return;
-
-		if ( !HasFreeSlot(weapon.Config.Slot ) )
-			return;
-
 		if ( base.Add( entity, Active == null ) )
 			Audio.Play( "pickup_weapon", Owner.Position );
 	}
