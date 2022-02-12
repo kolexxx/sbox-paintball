@@ -6,32 +6,25 @@ namespace Paintball.UI;
 
 public class ViewerCount : Panel
 {
+	public static ViewerCount Instance;
 	private Image _icon;
 	private Label _count;
 
 	public ViewerCount()
 	{
+		Instance = this;
+
 		StyleSheet.Load( "/ui/player/viewercount/ViewerCount.scss" );
 
 		_icon = Add.Image( "ui/eye.png", "icon" );
 		_count = Add.Label( "0", "count" );
+
+		BindClass( "hidden", () => TeamSelect.Instance.IsVisible || (Local.Pawn as Player).CurrentPlayer.ViewerCount <= 0 );
 	}
 
-	public override void Tick()
+	public void Update( int newValue )
 	{
-		base.Tick();
-
-		var player = (Local.Pawn as Player).CurrentPlayer;
-
-		if ( player == null )
-			return;
-
-		SetClass( "hidden", TeamSelect.Instance.IsVisible || player.ViewerCount <= 0 );
-
-		if ( !IsVisible )
-			return;
-
-		_count.Text = player.ViewerCount.ToString();
+		_count.Text = newValue.ToString();
 	}
 }
 

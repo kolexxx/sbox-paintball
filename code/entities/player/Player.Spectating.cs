@@ -5,7 +5,7 @@ namespace Paintball;
 
 public partial class Player
 {
-	[Net] public int ViewerCount { get; set; }
+	[Net, Change] public int ViewerCount { get; set; }
 	public bool IsSpectator => Camera is ISpectateCamera;
 	public bool IsSpectatingPlayer => _spectatedPlayer.IsValid();
 	public Player CurrentPlayer
@@ -23,7 +23,6 @@ public partial class Player
 			}
 		}
 	}
-
 	private int _index = 0;
 	private Player _spectatedPlayer;
 	private RealTimeSince _timeSincePlayerChanged;
@@ -122,5 +121,13 @@ public partial class Player
 
 		if ( IsSpectatingPlayer && player == CurrentPlayer )
 			UpdateSpectatingPlayer( 1 );
+	}
+
+	private void OnViewerCountChanged(int oldValue, int newValue)
+	{
+		if ( this != (Local.Pawn as Player).CurrentPlayer )
+			return;
+
+		UI.ViewerCount.Instance.Update( newValue );
 	}
 }
