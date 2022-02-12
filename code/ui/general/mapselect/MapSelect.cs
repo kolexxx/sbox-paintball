@@ -18,11 +18,11 @@ public class MapSelect : Panel
 	{
 		var panels = Local.Hud.Children.ToList();
 
-		for ( int i = 0; i < Local.Hud.ChildrenCount; i++ )
+		for ( int i = 0; i < panels.Count; i++ )
 		{
 			var panel = panels[i];
 
-			if ( panel is not ChatBox || panel is not VoiceList || panel != this )
+			if ( panel is not ChatBox && panel is not VoiceList && panel != this )
 				panel.Delete( true );
 		}
 
