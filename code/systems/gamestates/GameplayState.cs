@@ -28,25 +28,20 @@ public enum RoundState : byte
 
 public partial class GameplayState : BaseState
 {
-	[Net, Change] public int AliveBlue { get; private set; } = 0;
-	[Net, Change] public int AliveRed { get; private set; } = 0;
-	[Net, Change] public int BlueScore { get; private set; } = 0;
-	[Net, Change] public int RedScore { get; private set; } = 0;
 	[Net] public TimeUntil BuyTimeExpire { get; private set; } = 0;
 	public PlantedBomb Bomb { get; set; }
 	public override bool CanBuy => !BuyTimeExpire;
 	public RoundState RoundState { get; set; }
 	public override bool UpdateTimer => RoundState != RoundState.End;
 	private bool _firstBlood = false;
-	private int _toWinScore => 7;
+	private int _toWinScore => 9;
 	private int _round = 0;
 
 	public override void OnPlayerLeave( Player player )
 	{
 		base.OnPlayerLeave( player );
 
-		if ( player.Alive() )
-			player.OnKilled();
+		player.Inventory.DropBomb();
 	}
 
 	public override void OnPlayerSpawned( Player player )
@@ -54,8 +49,6 @@ public partial class GameplayState : BaseState
 		base.OnPlayerSpawned( player );
 
 		Host.AssertServer();
-
-		AdjustTeam( player.Team, 1 );
 
 		if ( player.Inventory.HasFreeSlot( SlotType.Secondary ) )
 			player.Inventory.Add( new Pistol() );
@@ -66,8 +59,6 @@ public partial class GameplayState : BaseState
 	public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
 	{
 		base.OnPlayerKilled( player, attacker, info );
-
-		AdjustTeam( player.Team, -1 );
 
 		if ( !_firstBlood && attacker is Player )
 		{
@@ -82,7 +73,10 @@ public partial class GameplayState : BaseState
 
 	public override void Tick()
 	{
-		if ( Host.IsServer && Bomb.IsValid() )
+		if ( !Host.IsServer )
+			return;
+
+		if ( Bomb.IsValid() )
 			Bomb.Tick();
 
 		if ( UntilStateEnds )
@@ -96,18 +90,12 @@ public partial class GameplayState : BaseState
 
 			case RoundState.Play:
 
-				if ( !Host.IsServer )
-					break;
-
 				if ( AliveBlue == 0 || AliveRed == 0 )
 					RoundStateFinish();
 
 				break;
 
 			case RoundState.Bomb:
-
-				if ( !Host.IsServer )
-					break;
 
 				if ( AliveBlue == 0 || Bomb.Disabled )
 					RoundStateFinish();
@@ -256,17 +244,6 @@ public partial class GameplayState : BaseState
 		RoundStateStart();
 	}
 
-	private void AdjustTeam( Team team, int num )
-	{
-		if ( team == Team.None )
-			return;
-
-		if ( team == Team.Blue )
-			AliveBlue += num;
-		else
-			AliveRed += num;
-	}
-
 	private Team GetWinner()
 	{
 		if ( Bomb.IsValid() && Bomb.Disabled )
@@ -296,7 +273,7 @@ public partial class GameplayState : BaseState
 		if ( diff <= 0 )
 			return;
 
-		Notification.Create( To.Everyone, "Team have been Auto-Balanced!", 3 );
+		Notification.Create( To.Everyone, "Teams have been Auto-Balanced!", 3 );
 
 		Team teamLess = teamBlue.Count() > teamRed.Count() ? Team.Red : Team.Blue;
 		var teamMore = teamLess == Team.Blue ? teamRed : teamBlue;
@@ -309,26 +286,4 @@ public partial class GameplayState : BaseState
 				break;
 		}
 	}
-
-	#region callbacks;
-	private void OnAliveBlueChanged()
-	{
-		RoundInfo.Instance.AliveBlue.Text = AliveBlue.ToString();
-	}
-
-	private void OnAliveRedChanged()
-	{
-		RoundInfo.Instance.AliveRed.Text = AliveRed.ToString();
-	}
-
-	private void OnBlueScoreChanged()
-	{
-		RoundInfo.Instance.BlueScore.Text = BlueScore.ToString();
-	}
-
-	private void OnRedScoreChanged()
-	{
-		RoundInfo.Instance.RedScore.Text = RedScore.ToString();
-	}
-	#endregion
 }
