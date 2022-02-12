@@ -48,7 +48,7 @@ public class Money : Panel
 		_stopAnimation = 2f;
 		_difference += difference;
 
-		Difference.Text = $"${string.Format( "{0:n0}", _difference)}";
+		Difference.Text = $"${string.Format( "{0:n0}", _difference )}";
 		Difference.SetClass( "minus", _difference < 0 );
 		Difference.SetClass( "plus", _difference > 0 );
 	}
@@ -59,14 +59,7 @@ public class Money : Panel
 		_difference = 0;
 		_stopAnimation = 0;
 
-		if ( !newPlayer.IsValid() )
-		{
-			Count.Text = (Local.Pawn as Player).Money.ToString();
-
-			return;
-		}
-
-		Count.Text = $"${string.Format( "{0:n0}", newPlayer.CurrentPlayer.Money )}";
+		Count.Text = $"${string.Format( "{0:n0}", (Local.Pawn as Player).CurrentPlayer.Money )}";
 	}
 }
 
