@@ -53,8 +53,8 @@ public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 
 		if ( player.CurrentPlayer.IsValid() )
 		{
-			Position = Vector3.Lerp( Position, player.CurrentPlayer.EyePos, SMOOTH_SPEED * Time.Delta );
-			Rotation = Rotation.Slerp( Rotation, player.CurrentPlayer.EyeRot, SMOOTH_SPEED * Time.Delta );
+			Position = Vector3.Lerp( Position, player.CurrentPlayer.EyePosition, SMOOTH_SPEED * Time.Delta );
+			Rotation = Rotation.Slerp( Rotation, player.CurrentPlayer.EyeRotation, SMOOTH_SPEED * Time.Delta );
 		}
 	}
 }

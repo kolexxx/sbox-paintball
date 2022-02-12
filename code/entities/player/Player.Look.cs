@@ -35,7 +35,7 @@ public partial class Player : ILook
 
 	protected Entity FindLookable()
 	{
-		var tr = Trace.Ray( CurrentPlayer.EyePos, CurrentPlayer.EyePos + CurrentPlayer.EyeRot.Forward * (105 * Scale) )
+		var tr = Trace.Ray( CurrentPlayer.EyePosition, CurrentPlayer.EyePosition + CurrentPlayer.EyeRotation.Forward * (105 * Scale) )
 			.HitLayer( CollisionLayer.All )
 			.Ignore( CurrentPlayer )
 			.Run();

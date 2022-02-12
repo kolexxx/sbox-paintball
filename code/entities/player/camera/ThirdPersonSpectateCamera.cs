@@ -45,7 +45,7 @@ public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 		if ( Local.Pawn is not Player player || !player.IsSpectatingPlayer )
 			return Vector3.Zero;
 
-		return player.CurrentPlayer.EyePos;
+		return player.CurrentPlayer.EyePosition;
 	}
 
 	public override void BuildInput( InputBuilder input )

@@ -109,7 +109,8 @@ public partial class Player : Sandbox.Player
 			return;
 		}
 
-		Inventory.Pickup( other );
+		if ( IsServer )
+			Inventory.Pickup( other );
 	}
 
 	public void Reset()
@@ -121,6 +122,7 @@ public partial class Player : Sandbox.Player
 
 		LastAttacker = null;
 		LastDamageInfo = default;
+		LastWeaponConfig = null;
 		ConsecutiveKills = 0;
 		KillStreak = 0;
 		Money = 1000;
@@ -132,7 +134,6 @@ public partial class Player : Sandbox.Player
 		base.Spawn();
 
 		Tags.Add( "player" );
-		Transmit = TransmitType.Always;
 	}
 
 	public override void ClientSpawn()
@@ -152,7 +153,7 @@ public partial class Player : Sandbox.Player
 			{
 				if ( dropped.PhysicsGroup != null )
 				{
-					dropped.PhysicsGroup.Velocity = Velocity + (EyeRot.Forward + EyeRot.Up) * 300;
+					dropped.PhysicsGroup.Velocity = Velocity + (EyeRotation.Forward + EyeRotation.Up) * 300;
 
 					SwitchToBestWeapon();
 				}
