@@ -51,13 +51,13 @@ public sealed class KillFeed : Panel
 	[PBEvent.Round.New]
 	private void OnNewRound()
 	{
-		DeleteChildren();
+		DeleteChildren( true );
 	}
 
 	[PBEvent.Game.StateChanged]
 	private void OnStatechanged( BaseState oldState, BaseState newState )
 	{
-		DeleteChildren();
+		DeleteChildren( true );
 	}
 
 	public sealed class Entry : Popup
