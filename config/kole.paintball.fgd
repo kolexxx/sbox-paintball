@@ -14,6 +14,66 @@
 ]
 
 //
+// Paintball.AutoShotgun
+//
+@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_autoshotgun : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
+// Paintball.Havoc
+//
+@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_havoc : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
+// Paintball.Pistol
+//
+@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_pistol/rust_pistol.vmdl" ) = pb_pistol : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
+// Paintball.Shotgun
+//
+@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" ) = pb_shotgun : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
+// Paintball.SMG
+//
+@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_smg : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
+// Paintball.Throwable
+//
+@PointClass base(BaseProperties_kole_paintball) editormodel( "models/grenade/grenade.vmdl" ) = pb_spike : ""
+[
+	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
+
+	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+]
+
+//
 // Paintball.Bombsite
 //
 @SolidClass base(BaseProperties_kole_paintball) tags( Trigger, Trigger ) 
@@ -153,66 +213,6 @@ metadata
 }
 = pb_spectatepoint : ""
 [
-	index(string) : "Index" :  : ""
-]
-
-//
-// Paintball.AutoShotgun
-//
-@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_autoshotgun : ""
-[
-	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
-
-	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
-]
-
-//
-// Paintball.Havoc
-//
-@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_havoc : ""
-[
-	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
-
-	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
-]
-
-//
-// Paintball.Pistol
-//
-@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_pistol/rust_pistol.vmdl" ) = pb_pistol : ""
-[
-	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
-
-	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
-]
-
-//
-// Paintball.Shotgun
-//
-@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" ) = pb_shotgun : ""
-[
-	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
-
-	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
-]
-
-//
-// Paintball.SMG
-//
-@PointClass base(BaseProperties_kole_paintball) editormodel( "weapons/rust_smg/rust_smg.vmdl" ) = pb_smg : ""
-[
-	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
-
-	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
-]
-
-//
-// Paintball.Throwable
-//
-@PointClass base(BaseProperties_kole_paintball) editormodel( "models/grenade/grenade.vmdl" ) = pb_spike : ""
-[
-	enable_shadows(boolean) { group = "Rendering" } : "Shadow Casting" : 1 : "Whether this entity should cast shadows or not"
-
-	input SetColor(string) : "Sets the color of this entity. Format is '255 255 255 255'."
+	index(integer) : "Index" : 0 : ""
 ]
 
