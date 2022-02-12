@@ -96,7 +96,7 @@ public class BuyMenu : Panel
 		if ( Wheel is BuyMenuWheelGroups || !canBuy )
 		{
 			SetClass( "visible", false );
-			Sound.FromScreen( "ui.radial_menu_buy.close" );
+			Sound.FromScreen( "buymenu_close" );
 
 			Wheel.Delete( true );
 			Wheel = null;
@@ -150,7 +150,7 @@ public class BuyMenuWheel : Panel
 		icon.BindClass( "red", () => ((Player)Local.Pawn).Team == Team.Red );
 
 		AddEventListener( "onclick", HandleClick );
-		Sound.FromScreen( "ui.radial_menu_buy.open" );
+		Sound.FromScreen( "buymenu_open" );
 	}
 
 	/// <summary>
@@ -385,10 +385,11 @@ public class BuyMenuWheelItems : BuyMenuWheel
 			Player.RequestItem( Group.Weapons[index] );
 
 			Parent.AddChild<BuyMenuWheelGroups>();
+			Sound.FromScreen( "buymenu_purchase" );
 		}
 		else
 		{
-			Sound.FromScreen( "ui.radial_menu_buy.cant" );
+			Sound.FromScreen( "buymenu_purchase_fail" );
 		}
 
 	}
