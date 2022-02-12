@@ -52,16 +52,13 @@ public partial class Grenade : ModelEntity, ITeamEntity
 				{
 					Owner = owner,
 					Team = Team,
-					// FollowEffect = $"particles/{owner.Team.GetString()}_glow.vpcf",
-					// HitSound = "impact",
 					Scale = 0.25f,
 					Gravity = -pitch,
-					// ModelPath = $"models/{owner.Team.GetString()}_ball/ball.vmdl",
 					IsServerOnly = true,
 					Origin = Origin
 				};
 
-				var velocity = Rotation.From( angles ).Forward * 1000f;
+				var velocity = Angles.AngleVector( angles ) * 1000f;
 
 				projectile.Initialize( PhysicsBody.MassCenter, velocity, 4f );
 			}
