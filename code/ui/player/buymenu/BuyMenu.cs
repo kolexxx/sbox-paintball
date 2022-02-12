@@ -54,7 +54,7 @@ public class BuyMenu : Panel
 		if ( Local.Pawn is not Player player || !player.Alive() )
 			return;
 
-		bool canBuy = Game.Current.State.CanBuy;
+		bool canBuy = player.IsInBuyZone && Game.Current.State.CanBuy;
 
 		if ( TimeSinceInteraction > 0.1f )
 		{
@@ -91,7 +91,7 @@ public class BuyMenu : Panel
 	{
 		if ( !HasClass( "visible" ) ) return;
 
-		bool canBuy = Game.Current.State.CanBuy;
+		bool canBuy = player.IsInBuyZone && Game.Current.State.CanBuy;
 		if ( Wheel is BuyMenuWheelGroups || !canBuy )
 		{
 			SetClass( "visible", false );
