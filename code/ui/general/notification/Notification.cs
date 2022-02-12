@@ -1,6 +1,5 @@
 ﻿using Sandbox;
 using Sandbox.UI;
-using Sandbox.UI.Construct;
 using System;
 
 namespace Paintball.UI;
@@ -8,6 +7,7 @@ namespace Paintball.UI;
 /// <summary>
 /// Header notification. Might change the name later.
 /// </summary>
+[UseTemplate]
 public partial class Notification : Popup
 {
 	public Label Message { get; set; }
@@ -17,9 +17,7 @@ public partial class Notification : Popup
 	{
 		s_current = this;
 
-		StyleSheet.Load( "/ui/general/notification/Notification.scss" );
-
-		Message = Add.Label( text, "text" );
+		Message.Text = text;
 		BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 	}
 
@@ -29,7 +27,7 @@ public partial class Notification : Popup
 
 		StyleSheet.Load( "/ui/general/notification/Notification.scss" );
 
-		Message = Add.Label( text, "text" );
+		Message.Text = text;
 		BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 	}
 
@@ -68,11 +66,13 @@ public partial class Notification : Popup
 	[PBEvent.Game.StateChanged]
 	private static void OnStateChanged( BaseState _, BaseState newState )
 	{
-		if ( !Host.IsClient || newState is not WaitingForPlayersState )
+		if ( !Host.IsClient )
 			return;
 
 		s_current?.Delete( true );
-		Local.Hud.AddChild( new Notification( "Waiting for players...", () => Game.Current.State is not WaitingForPlayersState ) );
+
+		if ( newState is WaitingForPlayersState )
+			Local.Hud.AddChild( new Notification( "Waiting for players...", () => Game.Current.State is not WaitingForPlayersState ) );
 	}
 
 	public override void OnDeleted()
