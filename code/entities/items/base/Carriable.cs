@@ -2,11 +2,54 @@
 using Sandbox;
 using Sandbox.UI;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Paintball;
 
+public enum SlotType : byte
+{
+	Primary = 0,
+	Secondary = 1,
+	Melee = 2,
+	Utility = 3,
+	Deployable = 4,
+}
+
+[Library( "carri" ), AutoGenerate]
+public partial class CarriableInfo : Asset
+{
+	public static Dictionary<string, CarriableInfo> All { get; set; } = new();
+
+	[Property, Category( "Important" )] public bool Buyable { get; set; }
+	[Property, Category( "Important" )] public Team ExclusiveFor { get; set; }
+	[Property, Category( "Important" )] public string LibraryName { get; set; }
+	[Property, Category( "Important" )] public SlotType Slot { get; set; }
+	[Property, Category( "UI" ), ResourceType( "png" )] public string Icon { get; set; } = "";
+	[Property, Category( "Models" ), ResourceType( "vmdl" )] public string ViewModel { get; set; } = "";
+	[Property, Category( "Models" ), ResourceType( "vmdl" )] public string WorldModel { get; set; } = "";
+	[Property, Category( "Stats" )] public float MovementSpeedMultiplier { get; set; } = 1f;
+	[Property, Category( "Stats" )] public int Price { get; set; }
+
+	protected override void PostLoad()
+	{
+		base.PostLoad();
+
+		if ( string.IsNullOrEmpty( LibraryName ) )
+			return;
+
+		var attribute = Library.GetAttribute( LibraryName );
+
+		if ( attribute == null )
+			return;
+
+		All[LibraryName] = this;
+	}
+}
+
+
 [Hammer.Skip]
-public abstract partial class Weapon : BaseWeapon, IUse, ILook
+public abstract partial class Carriable : BaseWeapon, IUse, ILook
 {
 	[Net, Predicted] public int AmmoClip { get; set; }
 	[Net, Predicted] public bool IsReloading { get; protected set; }
@@ -17,25 +60,22 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	public virtual int ClipSize => 20;
 	public virtual string CrosshairClass => "standard";
 	public virtual bool Droppable => true;
-	public virtual string FireSound => "pbg";
 	public virtual bool IsMelee => false;
+	public CarriableInfo Info { get; set; }
 	public Panel LookPanel { get; set; }
-	public virtual string ModelPath => "";
 	public virtual float MovementSpeedMultiplier => 1;
 	public PickupTrigger PickupTrigger { get; protected set; }
 	public Entity PreviousOwner { get; private set; }
 	public virtual float ReloadTime => 5f;
 	public TimeSince TimeSinceDropped { get; private set; }
 	public virtual bool UnlimitedAmmo => false;
-	public ItemConfig Config { get; set; }
-
 	public new Player Owner
 	{
 		get => base.Owner as Player;
 		set => base.Owner = value;
 	}
 
-	public Weapon() { }
+	public Carriable() { }
 
 	public override void Spawn()
 	{
@@ -48,14 +88,20 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		};
 
 		PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
-		Config = ItemConfig.All[ClassInfo?.Name];
+
+		if ( string.IsNullOrEmpty( ClassInfo.Name ) )
+			return;
+			
+		Info = CarriableInfo.All[ClassInfo?.Name];
+		SetModel( Info.WorldModel );
 	}
 
 	public override void ClientSpawn()
 	{
 		base.ClientSpawn();
 
-		Config = ItemConfig.All[ClassInfo?.Name];
+		if ( !string.IsNullOrEmpty( ClassInfo.Name ) )
+			Info = CarriableInfo.All[ClassInfo?.Name];
 
 		if ( Local.Pawn is not Player player )
 			return;
@@ -138,10 +184,10 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		if ( Owner != null || carrier is not Player player )
 			return false;
 
-		if ( Config.ExclusiveFor != Team.None && player.Team != Config.ExclusiveFor )
+		if ( Info.ExclusiveFor != Team.None && player.Team != Info.ExclusiveFor )
 			return false;
 
-		if ( !player.Inventory.HasFreeSlot( Config.Slot ) )
+		if ( !player.Inventory.HasFreeSlot( Info.Slot ) )
 			return false;
 
 		return true;
@@ -172,7 +218,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 	{
 		Host.AssertClient();
 
-		if ( string.IsNullOrEmpty( ViewModelPath ) )
+		if ( string.IsNullOrEmpty( Info.ViewModel ) )
 			return;
 
 		ViewModelEntity = new ViewModel
@@ -183,7 +229,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		};
 
 		ViewModelEntity.FieldOfView = 70;
-		ViewModelEntity.SetModel( ViewModelPath );
+		ViewModelEntity.SetModel( Info.ViewModel );
 	}
 
 	public override void CreateHudElements()
@@ -329,7 +375,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 		if ( Owner != null || user is not Player player )
 			return false;
 
-		if ( Config.ExclusiveFor != Team.None && player.Team != Config.ExclusiveFor )
+		if ( Info.ExclusiveFor != Team.None && player.Team != Info.ExclusiveFor )
 			return false;
 
 		return true;
@@ -346,7 +392,7 @@ public abstract partial class Weapon : BaseWeapon, IUse, ILook
 			return;
 
 		LookPanel = Local.Hud.AddChild<WeaponLookAt>();
-		(LookPanel as WeaponLookAt).Icon.SetTexture( Config.Icon );
+		(LookPanel as WeaponLookAt).Icon.SetTexture( Info.Icon );
 	}
 
 	void ILook.EndLook( Entity viewer )
