@@ -18,13 +18,19 @@ public partial class Player
 		if ( !player.IsValid() || !(player.IsInBuyZone && Game.Current.State.CanBuy) )
 			return;
 
-		var config = ItemConfig.All[libraryName];
+		var info = CarriableInfo.All[libraryName];
 
-		if ( player.Money < config.Price )
+		if ( !info.Buyable )
+		{
+			Log.Warning( "Tried to request an unbuyable item!" );
+			return;
+		}
+
+		if ( player.Money < info.Price )
 			return;
 
-		player.Money -= config.Price;
-		player.Inventory.Add( Library.Create<Entity>( libraryName ) );
+		player.Money -= info.Price;
+		player.Inventory.Swap( Library.Create<Carriable>( libraryName ) );
 	}
 
 	private void OnMoneyChanged( int oldMoney, int newMoney )
