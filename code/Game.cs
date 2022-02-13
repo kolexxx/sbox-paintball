@@ -24,7 +24,7 @@ public partial class Game : Sandbox.Game
 		Current = this;
 
 		if ( IsServer )
-			_ = new Hud();		
+			_ = new Hud();
 
 		Map = new Map();
 	}
@@ -62,7 +62,6 @@ public partial class Game : Sandbox.Game
 		base.ClientJoined( client );
 
 		State?.OnPlayerJoin( player );
-
 		Event.Run( PBEvent.Client.Joined, client );
 		RPC.ClientJoined( To.Everyone, client );
 	}
@@ -70,7 +69,6 @@ public partial class Game : Sandbox.Game
 	public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
 	{
 		State?.OnPlayerLeave( client.Pawn as Player );
-
 		Event.Run( PBEvent.Client.Disconnected, client.PlayerId, reason );
 		RPC.ClientDisconnected( To.Everyone, client.PlayerId, reason );
 
