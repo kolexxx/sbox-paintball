@@ -101,5 +101,8 @@ public sealed partial class Bomb : Weapon
 			return;
 
 		player.IsPlantingBomb = false;
+
+		if ( !dropper.Alive() )
+			UI.Notification.Create( Team.Red.ToClients(), "Bomb has been dropped!", 2f );
 	}
 }
