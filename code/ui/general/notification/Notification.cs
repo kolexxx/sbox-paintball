@@ -45,7 +45,7 @@ public partial class Notification : Popup
 			return;
 		}
 
-		if ( s_current.ForceStay )
+		if ( s_current?.ForceStay ?? false )
 			return;
 
 		Local.Hud.AddChild( new Notification( message, lifeTime ) );
