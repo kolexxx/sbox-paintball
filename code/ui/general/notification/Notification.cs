@@ -15,6 +15,7 @@ public partial class Notification : Popup
 
 	public Notification( string text, float lifeTime ) : base( lifeTime )
 	{
+		s_current?.Delete( true );
 		s_current = this;
 
 		Message.Text = text;
@@ -23,6 +24,7 @@ public partial class Notification : Popup
 
 	public Notification( string text, Func<bool> condition ) : base( condition )
 	{
+		s_current?.Delete( true );
 		s_current = this;
 
 		StyleSheet.Load( "/ui/general/notification/Notification.scss" );
@@ -40,7 +42,6 @@ public partial class Notification : Popup
 			return;
 		}
 
-		s_current?.Delete( true );
 		Local.Hud.AddChild( new Notification( message, lifeTime ) );
 	}
 
@@ -68,8 +69,6 @@ public partial class Notification : Popup
 	{
 		if ( !Host.IsClient )
 			return;
-
-		s_current?.Delete( true );
 
 		if ( newState is WaitingForPlayersState )
 			Local.Hud.AddChild( new Notification( "Waiting for players...", () => Game.Current.State is not WaitingForPlayersState ) );

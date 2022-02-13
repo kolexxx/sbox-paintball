@@ -20,6 +20,7 @@ public class KillConfirmed : Popup
 
 	public KillConfirmed( Player player, float lifeTime ) : base( lifeTime )
 	{
+		s_current?.Delete( true );
 		s_current = this;
 
 		#region terry
@@ -54,8 +55,6 @@ public class KillConfirmed : Popup
 	{
 		if ( !Host.IsClient || player.LastAttacker != Local.Pawn )
 			return;
-
-		s_current?.Delete( true );
 
 		Local.Hud.AddChild( new KillConfirmed( player, 5f ) );
 
