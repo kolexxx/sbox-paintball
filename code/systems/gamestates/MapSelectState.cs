@@ -1,5 +1,4 @@
-﻿using Paintball.UI;
-using Sandbox;
+﻿using Sandbox;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -28,7 +27,7 @@ public partial class MapSelectState : BaseState
 
 		if ( Host.IsClient )
 		{
-			Local.Hud.AddChild<MapSelect>();
+			Local.Hud.AddChild<UI.MapSelect>();
 
 			return;
 		}
@@ -133,6 +132,6 @@ public partial class MapSelectState : BaseState
 
 	private void OnMapImagesChanged()
 	{
-		MapSelect.Instance?.LoadMaps();
+		UI.MapSelect.Instance?.LoadMaps();
 	}
 }

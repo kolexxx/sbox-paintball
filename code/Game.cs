@@ -1,6 +1,5 @@
 ﻿using Paintball.UI;
 using Sandbox;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Paintball;
@@ -146,12 +145,6 @@ public partial class Game : Sandbox.Game
 
 		if ( Settings == null )
 			Settings = new Settings();
-
-		foreach ( var type in Library.GetAll<Weapon>() )
-		{
-			if ( !type.IsAbstract )
-				_ = new ItemConfig( type );
-		}
 	}
 
 	private void OnStateChanged()

@@ -25,13 +25,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 	protected SceneObject ModelEntity { get; set; }
 	protected Particles Trail { get; set; }
 
-	public void Initialize( Vector3 start, Vector3 velocity, float radius )
-	{
-		Initialize( start, velocity );
-		Radius = radius;
-	}
-
-	public void Initialize( Vector3 start, Vector3 velocity )
+	public void Initialize( Vector3 start, Vector3 velocity, float scale = 0.25f )
 	{
 		DestroyTime = LifeTime;
 
@@ -46,6 +40,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 		EnableDrawing = false;
 		Velocity = velocity;
 		Position = start;
+		Scale = scale;
 
 		Tags.Add( "projectile" );
 

@@ -60,7 +60,7 @@ public partial class Grenade : ModelEntity, ITeamEntity
 
 				var velocity = Angles.AngleVector( angles ) * 1000f;
 
-				projectile.Initialize( PhysicsBody.MassCenter, velocity, 4f );
+				projectile.Initialize( PhysicsBody.MassCenter, velocity );
 			}
 		}
 	}
