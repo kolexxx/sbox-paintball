@@ -14,22 +14,9 @@ public partial class Game : Sandbox.Game
 		get; private set;
 	}
 
+	[Net, Change] public BaseState State { get; private set; }
 	public Map Map { get; set; }
 	public Settings Settings { get; set; }
-
-	[Net, Change( nameof( OnStateChanged ) )]
-	public BaseState State { get; private set; }
-
-	[ServerVar( "pb_max_players", Help = "The maximum amount of players allowed to be on the server." )]
-	public static int MaxPlayers
-	{
-		get => Global.Lobby.MaxMembers;
-		set => Global.Lobby.MaxMembers = value;
-	}
-
-	[ServerVar( "pb_min_players", Help = "The minimum players required to start." )]
-	public static int MinPlayers { get; set; } = 2;
-
 	private BaseState _lastState { get; set; }
 
 	public Game()
@@ -37,11 +24,7 @@ public partial class Game : Sandbox.Game
 		Current = this;
 
 		if ( IsServer )
-		{
-			// PrecacheAssets();
-
-			_ = new Hud();
-		}
+			_ = new Hud();		
 
 		Map = new Map();
 	}
@@ -127,10 +110,10 @@ public partial class Game : Sandbox.Game
 
 	public override void Shutdown()
 	{
+		base.Shutdown();
+
 		State = null;
 		_lastState = null;
-
-		base.Shutdown();
 	}
 
 	public override void DoPlayerDevCam( Client player )
@@ -175,27 +158,15 @@ public partial class Game : Sandbox.Game
 
 	private void OnStateChanged()
 	{
-		if ( _lastState != State )
-		{
-			var oldState = _lastState;
+		if ( _lastState == State )
+			return;
 
-			_lastState?.Finish();
-			_lastState = State;
-			_lastState.Start();
+		var oldState = _lastState;
 
-			Event.Run( PBEvent.Game.StateChanged, oldState, _lastState );
-		}
-	}
+		_lastState?.Finish();
+		_lastState = State;
+		_lastState.Start();
 
-	private void PrecacheAssets()
-	{
-		/*
-		var assets = FileSystem.Mounted.ReadJsonOrDefault<List<string>>( "paintball.assets.json" );
-		foreach ( var asset in assets )
-		{
-			Log.Info( $"Precaching: {asset}" );
-			Precache.Add( asset );
-		}
-		*/
+		Event.Run( PBEvent.Game.StateChanged, oldState, _lastState );
 	}
 }
