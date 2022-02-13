@@ -6,7 +6,7 @@
 		firesound = "pbg"
 		projectilemodel = resource:"models/paintball/paintball.vmdl"
 		clipsize = 15
-		bulletsperfire = 3
+		bulletsperfire = 1
 		firemode = "0"
 		primaryrate = 6.0
 		projectilegravity = 4.0
