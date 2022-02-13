@@ -27,6 +27,7 @@ public partial class CarriableInfo : Asset
 	[Property, Category( "UI" ), ResourceType( "png" )] public string Icon { get; set; } = "";
 	[Property, Category( "Models" ), ResourceType( "vmdl" )] public string ViewModel { get; set; } = "";
 	[Property, Category( "Models" ), ResourceType( "vmdl" )] public string WorldModel { get; set; } = "";
+	[Property, Category( "Stats" )] public float DeployTime { get; set; } = 0.6f;
 	[Property, Category( "Stats" )] public float MovementSpeedMultiplier { get; set; } = 1f;
 	[Property, Category( "Stats" )] public int Price { get; set; }
 
@@ -127,7 +128,7 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 
 	public override void Simulate( Client owner )
 	{
-		if ( TimeSinceDeployed < 0.6f )
+		if ( TimeSinceDeployed < Info.DeployTime )
 			return;
 
 		base.Simulate( owner );

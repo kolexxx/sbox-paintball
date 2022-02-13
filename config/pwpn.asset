@@ -42,6 +42,7 @@
 	icon(string) { group = "UI" editor = "AssetBrowse(png)" } : "Icon" : "" : ""
 	viewmodel(resource:vmdl) { group = "Models" } : "View Model" : "" : ""
 	worldmodel(resource:vmdl) { group = "Models" } : "World Model" : "" : ""
+	deploytime(float) { group = "Stats" } : "Deploy Time" : "0.6" : ""
 	movementspeedmultiplier(float) { group = "Stats" } : "Movement Speed Multiplier" : "1" : ""
 	price(integer) { group = "Stats" } : "Price" : 0 : ""
 ]

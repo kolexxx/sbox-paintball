@@ -27,7 +27,7 @@ public sealed partial class Bomb : Carriable
 
 	public override void Simulate( Client owner )
 	{
-		if ( TimeSinceDeployed < 0.6f )
+		if ( TimeSinceDeployed < Info.DeployTime )
 			return;
 
 		if ( CanPlant() )

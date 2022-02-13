@@ -12,7 +12,7 @@ public partial class Knife : Carriable
 
 	public override void Simulate( Client owner )
 	{
-		if ( TimeSinceDeployed < 0.6 )
+		if ( TimeSinceDeployed < Info.DeployTime )
 			return;
 
 		if ( CanAttack() )
