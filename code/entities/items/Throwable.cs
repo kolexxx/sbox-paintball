@@ -2,14 +2,11 @@
 
 namespace Paintball;
 
-[Config( SlotType.Utility )]
-[Buyable( Price = 1000 )]
 [Library( "pb_spike", Title = "Spike", Icon = "ui/weapons/grenade.png", Spawnable = true )]
 [Hammer.EditorModel( "models/grenade/grenade.vmdl" )]
-public sealed partial class Throwable : Weapon
+public sealed partial class Throwable : Carriable
 {
 	public override int ClipSize => 1;
-	public override string FireSound => "";
 	public override float PrimaryRate => 15f;
 	public override float ReloadTime => 2.0f;
 	public override string ViewModelPath => "models/grenade/v_grenade.vmdl";

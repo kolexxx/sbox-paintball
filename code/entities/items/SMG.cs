@@ -2,8 +2,6 @@
 
 namespace Paintball;
 
-[Config( SlotType.Primary )]
-[Buyable( Price = 1000 )]
 [Library( "pb_smg", Title = "SMG", Icon = "ui/weapons/smg.png", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
 public partial class SMG : ProjectileWeapon<BaseProjectile>
@@ -15,17 +13,6 @@ public partial class SMG : ProjectileWeapon<BaseProjectile>
 	public override float ProjectileGravity => 7f;
 	public override float ProjectileSpeed => 2500f;
 	public override float ReloadTime => 3f;
-	public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
-
-	public override void Spawn()
-	{
-		base.Spawn();
-
-		AmmoClip = ClipSize;
-		ReserveAmmo = 2 * ClipSize;
-
-		SetModel( "weapons/rust_smg/rust_smg.vmdl" );
-	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{

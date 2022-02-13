@@ -2,8 +2,6 @@
 
 namespace Paintball;
 
-[Config( SlotType.Primary )]
-[Buyable( Price = 3000 )]
 [Library( "pb_havoc", Title = "Havoc", Icon = "ui/weapons/smg.png", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
 public partial class Havoc : ProjectileWeapon<BouncyProjectile>
@@ -15,17 +13,6 @@ public partial class Havoc : ProjectileWeapon<BouncyProjectile>
 	public override float ProjectileGravity => 4f;
 	public override float ProjectileSpeed => 2500f;
 	public override float ReloadTime => 3f;
-	public override string ViewModelPath => "weapons/rust_smg/v_rust_smg.vmdl";
-
-	public override void Spawn()
-	{
-		base.Spawn();
-
-		AmmoClip = ClipSize;
-		ReserveAmmo = 2 * ClipSize;
-
-		SetModel( "weapons/rust_smg/rust_smg.vmdl" );
-	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
