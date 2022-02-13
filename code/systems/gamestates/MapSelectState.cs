@@ -26,7 +26,7 @@ public partial class MapSelectState : BaseState
 	{
 		base.Start();
 
-		if ( !Host.IsServer )
+		if ( Host.IsClient )
 		{
 			Local.Hud.AddChild<MapSelect>();
 
