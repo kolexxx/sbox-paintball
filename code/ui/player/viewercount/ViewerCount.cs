@@ -7,8 +7,8 @@ namespace Paintball.UI;
 public class ViewerCount : Panel
 {
 	public static ViewerCount Instance;
-	private Image _icon;
 	private Label _count;
+	private Image _icon;
 
 	public ViewerCount()
 	{
