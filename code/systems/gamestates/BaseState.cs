@@ -30,6 +30,8 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void OnPlayerJoin( Player player )
 	{
+		Host.AssertServer();
+
 		AddPlayer( player );
 
 		if ( player.Client.IsBot )
@@ -47,6 +49,8 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void OnPlayerLeave( Player player )
 	{
+		Host.AssertServer();
+
 		Players.Remove( player );
 
 		if ( player.Alive() )
@@ -55,6 +59,8 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void OnPlayerSpawned( Player player )
 	{
+		Host.AssertServer();
+
 		AdjustTeam( player.Team, 1 );
 
 		Game.Current?.MoveToSpawnpoint( player );
@@ -62,11 +68,15 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
 	{
+		Host.AssertServer();
+
 		AdjustTeam( player.Team, -1 );
 	}
 
 	public virtual void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
 	{
+		Host.AssertServer();
+
 		if ( newTeam == Team.None )
 		{
 			player.MakeSpectator();
