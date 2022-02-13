@@ -6,27 +6,7 @@ namespace Paintball;
 [Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
 public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 {
-	public override int BulletsPerFire => 9;
-	public override int ClipSize => 5;
-	public override string CrosshairClass => "shotgun";
-	public override float MovementSpeedMultiplier => 0.85f;
-	public override float PrimaryRate => 1f;
-	public override float ProjectileGravity => 7f;
-	public override float ProjectileSpeed => 3000f;
-	public override float ReloadTime => 0.7f;
-	public override float Spread => 0.05f;
-	public override string ViewModelPath => "weapons/rust_pumpshotgun/v_rust_pumpshotgun.vmdl";
 	private bool _attackedDuringReload = false;
-
-	public override void Spawn()
-	{
-		base.Spawn();
-
-		AmmoClip = ClipSize;
-		ReserveAmmo = 2 * ClipSize;
-
-		SetModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" );
-	}
 
 	public override void ActiveStart( Entity entity )
 	{
@@ -38,13 +18,10 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 
 	public override bool CanReload()
 	{
-		if ( AmmoClip >= ClipSize || (!UnlimitedAmmo && ReserveAmmo == 0) )
+		if ( !base.CanReload() )
 			return false;
 
-		if ( !Owner.IsValid() || !Input.Down( InputButton.Reload ) )
-			return false;
-
-		var rate = PrimaryRate;
+		var rate = Info.PrimaryRate;
 		if ( rate <= 0 )
 			return true;
 
@@ -67,7 +44,7 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 
 		AmmoClip += TakeAmmo( 1 );
 
-		if ( !_attackedDuringReload && AmmoClip < ClipSize && (UnlimitedAmmo || ReserveAmmo != 0) )
+		if ( !_attackedDuringReload && AmmoClip < Info.ClipSize && (UnlimitedAmmo || ReserveAmmo != 0) )
 			Reload();
 		else
 			FinishReload();

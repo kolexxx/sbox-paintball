@@ -6,15 +6,6 @@ namespace Paintball;
 [Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
 public class AutoShotgun : ProjectileWeapon<BaseProjectile>
 {
-	public override bool Automatic => true;
-	public override int BulletsPerFire => 3;
-	public override int ClipSize => 5;
-	public override float MovementSpeedMultiplier => 0.85f;
-	public override float PrimaryRate => 3f;
-	public override float ProjectileGravity => 7f;
-	public override float ProjectileSpeed => 2500f;
-	public override float ReloadTime => 3f;
-
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
 		anim.SetParam( "holdtype", 2 );

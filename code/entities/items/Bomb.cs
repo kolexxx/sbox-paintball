@@ -9,10 +9,6 @@ public sealed partial class Bomb : Carriable
 {
 	[Net, Predicted] public TimeSince Delay { get; set; } = 2f;
 	[Net] public TimeSince TimeSinceStartedPlanting { get; set; } = 0f;
-	public override bool Automatic => true;
-	public override int ClipSize => 1;
-	public override float PrimaryRate => 0;
-	public override float ReloadTime => 2.0f;
 
 	public override void ActiveStart( Entity entity )
 	{
@@ -29,21 +25,23 @@ public sealed partial class Bomb : Carriable
 			Owner.IsPlantingBomb = false;
 	}
 
-	public override void Spawn()
+	public override void Simulate( Client owner )
 	{
-		base.Spawn();
+		if ( TimeSinceDeployed < 0.6f )
+			return;
 
-		AmmoClip = ClipSize;
+		if ( CanPlant() )
+			Plant();
 	}
 
-	public override bool CanPrimaryAttack()
+	public bool CanPlant()
 	{
-		if ( base.CanPrimaryAttack() && Owner.CanPlantBomb && Delay >= 2f )
+		if ( Input.Down( InputButton.Attack1 ) && Owner.CanPlantBomb && Delay >= 2f )
 		{
 			if ( !Owner.IsPlantingBomb )
 			{
 				PlaySound( "started_planting" );
-				ShootEffects();
+				PlantEffects();
 			}
 
 			Owner.IsPlantingBomb = true;
@@ -55,13 +53,12 @@ public sealed partial class Bomb : Carriable
 
 		TimeSinceStartedPlanting = 0f;
 		Owner.IsPlantingBomb = false;
+
 		return false;
 	}
 
-	public override void AttackPrimary()
+	public void Plant()
 	{
-		base.AttackPrimary();
-
 		if ( TimeSinceStartedPlanting >= 2f )
 		{
 			Owner.IsPlantingBomb = false;
@@ -100,5 +97,11 @@ public sealed partial class Bomb : Carriable
 
 		if ( !dropper.Alive() )
 			UI.Notification.Create( Team.Red.ToClients(), "Bomb has been dropped!", 2f );
+	}
+
+	[ClientRpc]
+	private void PlantEffects()
+	{
+
 	}
 }

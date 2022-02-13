@@ -6,18 +6,13 @@ namespace Paintball;
 [Hammer.EditorModel( "models/grenade/grenade.vmdl" )]
 public sealed partial class Throwable : Carriable
 {
-	public override int ClipSize => 1;
-	public override float PrimaryRate => 15f;
-	public override float ReloadTime => 2.0f;
-	public override string ViewModelPath => "models/grenade/v_grenade.vmdl";
-
-	public override void Spawn()
+	public override void Simulate( Client owner )
 	{
-		base.Spawn();
+		if ( TimeSinceDeployed < 0.6f )
+			return;
 
-		AmmoClip = ClipSize;
-
-		SetModel( "models/grenade/grenade.vmdl" );
+		if ( CanThrow() )
+			Throw();
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
@@ -26,7 +21,7 @@ public sealed partial class Throwable : Carriable
 		anim.SetParam( "aimat_weight", 1.0f );
 	}
 
-	public override bool CanPrimaryAttack()
+	public bool CanThrow()
 	{
 		if ( Owner.IsFrozen || !Input.Released( InputButton.Attack1 ) )
 			return false;
@@ -34,12 +29,8 @@ public sealed partial class Throwable : Carriable
 		return true;
 	}
 
-	public override void AttackPrimary()
+	public void Throw()
 	{
-		base.AttackPrimary();
-
-		TimeSincePrimaryAttack = 0;
-
 		var trace = Trace.Ray( Owner.EyePosition, (Owner.EyeRotation.Forward * 40) ).Run();
 
 		Owner.SwitchToBestWeapon();

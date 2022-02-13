@@ -6,9 +6,9 @@ namespace Paintball.UI;
 
 public class Ammo : Panel
 {
-	public Label Reserve;
 	public Image AmmoIcon;
 	public ProgressBar Clip;
+	public Label Reserve;
 
 	public Ammo()
 	{
@@ -23,11 +23,11 @@ public class Ammo : Panel
 			 if ( player == null )
 				 return 0;
 
-			 var weapon = player.CurrentPlayer.ActiveChild as Carriable;
-			 if ( weapon == null )
+			 var carriable = player.CurrentPlayer.ActiveChild as Carriable;
+			 if ( carriable == null || carriable.Info is not ProjectileWeaponInfo info )
 				 return 0;
 
-			 return weapon.AmmoClip / (float)weapon.ClipSize;
+			 return carriable.AmmoClip / (float)info.ClipSize;
 		 } ) );
 
 		Clip = GetChild( ChildrenCount - 1 ) as ProgressBar;
@@ -46,15 +46,15 @@ public class Ammo : Panel
 		if ( !IsVisible )
 			return;
 
-		var weapon = player.CurrentPlayer.ActiveChild as Carriable;
+		var carriable = player.CurrentPlayer.ActiveChild as Carriable;
 
-		if ( weapon == null )
+		if ( carriable == null || carriable.Info is not ProjectileWeaponInfo info )
 		{
 			Reserve.Text = "";
 
 			return;
 		}
 
-		Reserve.Text = weapon.UnlimitedAmmo ? "∞" : $"{weapon.ReserveAmmo}";
+		Reserve.Text = info.ReserveAmmo.ToString();
 	}
 }

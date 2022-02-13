@@ -44,31 +44,24 @@ public partial class CarriableInfo : Asset
 			return;
 
 		All[LibraryName] = this;
+
+		Model.Load( ViewModel );
+		Model.Load( WorldModel );
 	}
 }
 
-
 [Hammer.Skip]
-public abstract partial class Carriable : BaseWeapon, IUse, ILook
+public abstract partial class Carriable : BaseCarriable, IUse, ILook
 {
 	[Net, Predicted] public int AmmoClip { get; set; }
-	[Net, Predicted] public bool IsReloading { get; protected set; }
-	[Net, Predicted] public int ReserveAmmo { get; protected set; }
 	[Net, Predicted] public TimeSince TimeSinceDeployed { get; protected set; }
-	[Net, Predicted] public TimeSince TimeSinceReload { get; protected set; }
-	public virtual bool Automatic => false;
-	public virtual int ClipSize => 20;
 	public virtual string CrosshairClass => "standard";
 	public virtual bool Droppable => true;
-	public virtual bool IsMelee => false;
 	public CarriableInfo Info { get; set; }
 	public Panel LookPanel { get; set; }
-	public virtual float MovementSpeedMultiplier => 1;
 	public PickupTrigger PickupTrigger { get; protected set; }
 	public Entity PreviousOwner { get; private set; }
-	public virtual float ReloadTime => 5f;
 	public TimeSince TimeSinceDropped { get; private set; }
-	public virtual bool UnlimitedAmmo => false;
 	public new Player Owner
 	{
 		get => base.Owner as Player;
@@ -121,7 +114,6 @@ public abstract partial class Carriable : BaseWeapon, IUse, ILook
 		base.ActiveStart( entity );
 
 		TimeSinceDeployed = 0;
-		IsReloading = false;
 
 		if ( IsServer )
 			OnActiveStartClient( To.Everyone );
@@ -140,43 +132,7 @@ public abstract partial class Carriable : BaseWeapon, IUse, ILook
 		if ( TimeSinceDeployed < 0.6f )
 			return;
 
-		if ( !IsReloading )
-			base.Simulate( owner );
-
-		if ( IsReloading && TimeSinceReload > ReloadTime )
-			OnReloadFinish();
-	}
-
-	public override bool CanPrimaryAttack()
-	{
-		if ( Owner.IsFrozen )
-			return false;
-
-		if ( Automatic == false && !Input.Pressed( InputButton.Attack1 ) )
-			return false;
-		else if ( Automatic == true && !Input.Down( InputButton.Attack1 ) )
-			return false;
-
-		var rate = PrimaryRate;
-		if ( rate <= 0 )
-			return true;
-
-		return TimeSincePrimaryAttack > (1 / rate);
-	}
-
-	public override bool CanSecondaryAttack()
-	{
-		if ( Owner.IsFrozen )
-			return false;
-
-		if ( !Input.Pressed( InputButton.Attack2 ) )
-			return false;
-
-		var rate = SecondaryRate;
-		if ( rate <= 0 )
-			return true;
-
-		return TimeSinceSecondaryAttack > (1 / rate);
+		base.Simulate( owner );
 	}
 
 	public override bool CanCarry( Entity carrier )
@@ -191,27 +147,6 @@ public abstract partial class Carriable : BaseWeapon, IUse, ILook
 			return false;
 
 		return true;
-	}
-
-	public override void Reload()
-	{
-		if ( IsReloading )
-			return;
-
-		TimeSinceReload = 0;
-		IsReloading = true;
-
-		Owner.SetAnimBool( "b_reload", true );
-
-		ReloadEffects();
-	}
-
-	public override bool CanReload()
-	{
-		if ( AmmoClip >= ClipSize || (!UnlimitedAmmo && ReserveAmmo == 0) )
-			return false;
-
-		return base.CanReload();
 	}
 
 	public override void CreateViewModel()
@@ -245,12 +180,6 @@ public abstract partial class Carriable : BaseWeapon, IUse, ILook
 		CrosshairPanel.AddClass( CrosshairClass );
 	}
 
-	public virtual void OnReloadFinish()
-	{
-		IsReloading = false;
-		AmmoClip += TakeAmmo( ClipSize - AmmoClip );
-	}
-
 	public override void OnCarryStart( Entity carrier )
 	{
 		base.OnCarryStart( carrier );
@@ -279,27 +208,10 @@ public abstract partial class Carriable : BaseWeapon, IUse, ILook
 		Delete();
 	}
 
-	protected int TakeAmmo( int ammo )
+	public virtual void Reset()
 	{
-		if ( UnlimitedAmmo )
-			return ammo;
-
-		int available = Math.Min( ReserveAmmo, ammo );
-		ReserveAmmo -= available;
-
-		return available;
-	}
-
-	public void Reset()
-	{
-		AmmoClip = ClipSize;
-		ReserveAmmo = 2 * ClipSize;
 		TimeSinceDeployed = 0;
-		TimeSincePrimaryAttack = 0;
 		TimeSinceDropped = 0;
-		TimeSinceReload = 0;
-		TimeSinceSecondaryAttack = 0;
-		IsReloading = false;
 
 		ClientReset();
 	}
@@ -333,32 +245,6 @@ public abstract partial class Carriable : BaseWeapon, IUse, ILook
 
 		DestroyHudElements();
 		DestroyViewModel();
-	}
-
-	[ClientRpc]
-	protected virtual void ReloadEffects()
-	{
-		ViewModelEntity?.SetAnimBool( "reload", true );
-	}
-
-	[ClientRpc]
-	protected virtual void ShootEffects()
-	{
-		Host.AssertClient();
-
-		// Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
-
-		if ( IsLocalPawn )
-			_ = new Sandbox.ScreenShake.Perlin( 1f, 0.2f, 0.8f );
-
-		ViewModelEntity?.SetAnimBool( "fire", true );
-		CrosshairPanel?.CreateEvent( "fire" );
-	}
-
-	[ClientRpc]
-	protected virtual void StartReloadEffects()
-	{
-		ViewModelEntity?.SetAnimBool( "reload", true );
 	}
 	#endregion
 

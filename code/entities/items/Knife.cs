@@ -6,40 +6,41 @@ namespace Paintball;
 [Hammer.Skip]
 public partial class Knife : Carriable
 {
-	public override bool Automatic => true;
-	public override int ClipSize => 0;
+	[Net, Predicted] public TimeSince TimeSinceStab { get; set; }
+	[Net, Predicted] public TimeSince TimeSinceSwing { get; set; }
 	public override bool Droppable => false;
-	public override bool IsMelee => true;
-	public override float PrimaryRate => 1.5f;
-	public override float SecondaryRate => 0.75f;
-	public override string ViewModelPath => "models/rust_boneknife/v_rust_boneknife.vmdl";
-	public override bool UnlimitedAmmo => true;
 
-	public override void Spawn()
+	public override void Simulate( Client owner )
 	{
-		base.Spawn();
+		if ( TimeSinceDeployed < 0.6 )
+			return;
 
-		SetModel( "models/rust_boneknife/rust_boneknife.vmdl" );
+		if ( CanAttack() )
+			Attack();
 	}
 
-	public override bool CanReload()
+	public void Attack()
 	{
-		return false;
+		if ( Input.Down( InputButton.Attack1 ) )
+			MeleeAttack( 50f, 100f, 8f );
+		else if ( Input.Down( InputButton.Attack2 ) )
+			MeleeAttack( 100f, 50f, 16f );
 	}
 
-	public override void AttackPrimary()
+	public bool CanAttack()
 	{
-		base.AttackPrimary();
+		if ( Owner.IsFrozen )
+			return false;
 
-		MeleeAttack( 50f, 100f, 8f );
+		if ( Input.Down( InputButton.Attack1 ) && TimeSinceSwing < 0.6f )
+			return false;
+
+		if ( Input.Down( InputButton.Attack2 ) && TimeSinceStab < 1f )
+			return false;
+
+		return true;
 	}
 
-	public override void AttackSecondary()
-	{
-		base.AttackSecondary();
-
-		MeleeAttack( 100f, 50f, 16f );
-	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
@@ -49,11 +50,10 @@ public partial class Knife : Carriable
 
 	protected void MeleeAttack( float damage, float range, float radius )
 	{
-		TimeSincePrimaryAttack = 0;
-		TimeSinceSecondaryAttack = 0;
+		TimeSinceStab = 0;
+		TimeSinceSwing = 0;
 
 		Owner.SetAnimBool( "b_attack", true );
-		ShootEffects();
 
 		var endPos = Owner.EyePosition + Owner.EyeRotation.Forward * range;
 

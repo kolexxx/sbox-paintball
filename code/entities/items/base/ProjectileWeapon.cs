@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 using System.ComponentModel;
 
 namespace Paintball;
@@ -33,21 +34,18 @@ public partial class ProjectileWeaponInfo : CarriableInfo
 [Hammer.Skip]
 public abstract partial class ProjectileWeapon<T> : Carriable where T : BaseProjectile, new()
 {
-	public virtual int BulletsPerFire => 1;
+	[Net, Predicted] public bool IsReloading { get; protected set; }
+	[Net, Predicted] public int ReserveAmmo { get; protected set; }
+	[Net, Predicted] public TimeSince TimeSincePrimaryAttack { get; protected set; }
+	[Net, Predicted] public TimeSince TimeSinceSecondaryAttack { get; protected set; }
+	[Net, Predicted] public TimeSince TimeSinceReload { get; protected set; }
 	public virtual string FollowEffect => $"particles/{Owner.Team.GetTag()}_glow.vpcf";
-	public virtual string HitSound => "impact";
 	public new ProjectileWeaponInfo Info
 	{
 		get => base.Info as ProjectileWeaponInfo;
 		set => base.Info = value;
 	}
-	public virtual string ProjectileModel => "models/paintball/paintball.vmdl";
-	public virtual float ProjectileGravity => 0f;
-	public virtual float ProjectileRadius => 3f;
-	public virtual float ProjectileScale => 0.25f;
-	public virtual float ProjectileSpeed => 2000f;
-	public virtual float Spread => 0f;
-	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
+	public bool UnlimitedAmmo { get; set; }
 
 	public override void Spawn()
 	{
@@ -57,7 +55,53 @@ public abstract partial class ProjectileWeapon<T> : Carriable where T : BaseProj
 		ReserveAmmo = Info.ReserveAmmo;
 	}
 
-	public override bool CanPrimaryAttack()
+	public override void Simulate( Client owner )
+	{
+		if ( TimeSinceDeployed < 0.6f )
+			return;
+
+		if ( !IsReloading )
+		{
+			if ( CanReload() )
+			{
+				Reload();
+			}
+
+			//
+			// Reload could have changed our owner
+			//
+			if ( !Owner.IsValid() )
+				return;
+
+			if ( CanPrimaryAttack() )
+			{
+				using ( LagCompensation() )
+				{
+					TimeSincePrimaryAttack = 0;
+					AttackPrimary();
+				}
+			}
+
+			//
+			// AttackPrimary could have changed our owner
+			//
+			if ( !Owner.IsValid() )
+				return;
+
+			if ( CanSecondaryAttack() )
+			{
+				using ( LagCompensation() )
+				{
+					TimeSinceSecondaryAttack = 0;
+					AttackSecondary();
+				}
+			}
+		}
+		else if ( IsReloading && TimeSinceReload > Info.ReloadTime )
+			OnReloadFinish();
+	}
+
+	public virtual bool CanPrimaryAttack()
 	{
 		if ( Owner.IsFrozen )
 			return false;
@@ -74,10 +118,23 @@ public abstract partial class ProjectileWeapon<T> : Carriable where T : BaseProj
 		return TimeSincePrimaryAttack > (1 / rate);
 	}
 
-	public override void AttackPrimary()
+	public virtual bool CanSecondaryAttack()
 	{
-		base.AttackPrimary();
+		if ( Owner.IsFrozen )
+			return false;
 
+		if ( !Input.Pressed( InputButton.Attack2 ) )
+			return false;
+
+		var rate = Info.SecondaryRate;
+		if ( rate <= 0 )
+			return true;
+
+		return TimeSinceSecondaryAttack > (1 / rate);
+	}
+
+	public virtual void AttackPrimary()
+	{
 		if ( AmmoClip == 0 )
 		{
 			if ( !UnlimitedAmmo && ReserveAmmo == 0 )
@@ -102,11 +159,54 @@ public abstract partial class ProjectileWeapon<T> : Carriable where T : BaseProj
 		{
 			Rand.SetSeed( Time.Tick );
 
-			if ( BulletsPerFire == 1 )
+			if ( Info.BulletsPerFire == 1 )
 				FireProjectile();
 			else
 				FireProjectilesInPatern();
 		}
+	}
+
+	public virtual void AttackSecondary() { }
+
+	public virtual bool CanReload()
+	{
+		if ( AmmoClip >= Info.ClipSize || (!UnlimitedAmmo && ReserveAmmo == 0) )
+			return false;
+
+		if ( !Owner.IsValid() || !Input.Down( InputButton.Reload ) )
+			return false;
+
+		return true;
+	}
+
+	public virtual void Reload()
+	{
+		if ( IsReloading )
+			return;
+
+		TimeSinceReload = 0;
+		IsReloading = true;
+
+		Owner.SetAnimBool( "b_reload", true );
+
+		ReloadEffects();
+	}
+
+	public virtual void OnReloadFinish()
+	{
+		IsReloading = false;
+		AmmoClip += TakeAmmo( Info.ClipSize - AmmoClip );
+	}
+
+	public override void Reset()
+	{
+		TimeSincePrimaryAttack = 0;
+		TimeSinceSecondaryAttack = 0;
+		TimeSinceReload = 0;
+		AmmoClip = Info.ClipSize;
+		ReserveAmmo = Info.ReserveAmmo;
+
+		base.Reset();
 	}
 
 	protected void FireProjectile()
@@ -130,12 +230,12 @@ public abstract partial class ProjectileWeapon<T> : Carriable where T : BaseProj
 		};
 
 		var forward = owner.EyeRotation.Forward;
-		forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * Spread * 0.25f;
+		forward += (Vector3.Random + Vector3.Random + Vector3.Random + Vector3.Random) * Info.Spread * 0.25f;
 		forward = forward.Normal;
 
 		var position = owner.EyePosition;
 
-		var velocity = forward * ProjectileSpeed;
+		var velocity = forward * Info.ProjectileSpeed;
 
 		projectile.Initialize( position, velocity );
 	}
@@ -173,10 +273,39 @@ public abstract partial class ProjectileWeapon<T> : Carriable where T : BaseProj
 
 				var position = owner.EyePosition;
 
-				var velocity = forward * ProjectileSpeed;
+				var velocity = forward * Info.ProjectileSpeed;
 
 				projectile.Initialize( position, velocity );
 			}
 		}
+	}
+
+	[ClientRpc]
+	protected virtual void ShootEffects()
+	{
+		// Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+
+		if ( IsLocalPawn )
+			_ = new Sandbox.ScreenShake.Perlin( 1f, 0.2f, 0.8f );
+
+		ViewModelEntity?.SetAnimBool( "fire", true );
+		CrosshairPanel?.CreateEvent( "fire" );
+	}
+
+	[ClientRpc]
+	protected virtual void ReloadEffects()
+	{
+		ViewModelEntity?.SetAnimBool( "reload", true );
+	}
+
+	protected int TakeAmmo( int ammo )
+	{
+		if ( UnlimitedAmmo )
+			return ammo;
+
+		int available = Math.Min( ReserveAmmo, ammo );
+		ReserveAmmo -= available;
+
+		return available;
 	}
 }
