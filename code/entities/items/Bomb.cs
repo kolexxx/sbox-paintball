@@ -42,10 +42,7 @@ public sealed partial class Bomb : Weapon
 
 	public override bool CanPrimaryAttack()
 	{
-		if ( !Owner.CanPlantBomb )
-			return false;
-
-		if ( base.CanPrimaryAttack() && Delay >= 2f )
+		if ( base.CanPrimaryAttack() && Owner.CanPlantBomb && Delay >= 2f )
 		{
 			if ( !Owner.IsPlantingBomb )
 			{
