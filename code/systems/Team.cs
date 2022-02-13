@@ -61,4 +61,9 @@ public static class TeamExtensions
 	{
 		return Entity.All.OfType<Player>().Where( e => e.Team == team ).Count();
 	}
+
+	public static To ToClients( this Team team )
+	{
+		return To.Multiple( Client.All.Where( x => (x.Pawn as Player).Team == team ) );
+	}
 }
