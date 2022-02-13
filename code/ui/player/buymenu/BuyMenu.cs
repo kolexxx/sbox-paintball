@@ -286,13 +286,13 @@ public class BuyMenuWheelGroups : BuyMenuWheel
 	{
 		public string Name;
 		public int Slices;
-		public string[] Weapons;
+		public string[] Items;
 
 		public GroupDefinition( string name, int slices, string[] weapons )
 		{
 			Name = name;
 			Slices = slices;
-			Weapons = weapons;
+			Items = weapons;
 		}
 	}
 
@@ -354,9 +354,9 @@ public class BuyMenuWheelItems : BuyMenuWheel
 
 		if ( Local.Pawn is Player player )
 		{
-			if ( index >= Group.Weapons.Count() ) return;
+			if ( index >= Group.Items.Count() ) return;
 
-			var name = Group.Weapons[index];
+			var name = Group.Items[index];
 
 			if ( !CarriableInfo.All.TryGetValue( name, out var info ) )
 				return;
@@ -382,7 +382,7 @@ public class BuyMenuWheelItems : BuyMenuWheel
 
 		if ( CanBuy[index] )
 		{
-			Player.RequestItem( Group.Weapons[index] );
+			Player.RequestItem( Group.Items[index] );
 
 			Parent.AddChild<BuyMenuWheelGroups>();
 			Sound.FromScreen( "buymenu_purchase" );
@@ -396,7 +396,7 @@ public class BuyMenuWheelItems : BuyMenuWheel
 
 	public override bool IsSliceActive( int index )
 	{
-		return index < Group.Weapons.Count();
+		return index < Group.Items.Count();
 	}
 }
 

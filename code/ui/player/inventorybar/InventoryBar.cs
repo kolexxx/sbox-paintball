@@ -9,7 +9,7 @@ public class InventoryBar : Panel
 {
 	public static InventoryBar Instance;
 	private InventoryIcon[] _slots = new InventoryIcon[5];
-	private Carriable[] _weapons = new Carriable[5];
+	private Carriable[] _carriables = new Carriable[5];
 	private RealTimeUntil _close;
 
 	public InventoryBar()
@@ -35,26 +35,26 @@ public class InventoryBar : Panel
 			return;
 
 		for ( int i = 0; i < 5; i++ )
-			_weapons[i] = null;
+			_carriables[i] = null;
 
-		foreach ( var weapon in player.CurrentPlayer.Children.OfType<Carriable>() )
-			_weapons[(int)weapon.Info.Slot] = weapon;
+		foreach ( var carriable in player.CurrentPlayer.Children.OfType<Carriable>() )
+			_carriables[(int)carriable.Info.Slot] = carriable;
 
 		for ( int i = 0; i < 5; i++ )
 		{
-			if ( _weapons[i] == null )
+			if ( _carriables[i] == null )
 			{
-				if ( _slots[i].TargetWeapon != null )
+				if ( _slots[i].TargetCarriable != null )
 					_close = 3f;
 
 				_slots[i].Clear();
 				continue;
 			}
 
-			if ( _slots[i].TargetWeapon == null || _slots[i].TargetWeapon != _weapons[i] )
+			if ( _slots[i].TargetCarriable == null || _slots[i].TargetCarriable != _carriables[i] )
 				_close = 3f;
 
-			_slots[i].UpdateWeapon( _weapons[i] );
+			_slots[i].UpdateCarriable( _carriables[i] );
 		}
 
 		SetClass( "hidden", _close <= 0 );
@@ -89,20 +89,20 @@ public class InventoryBar : Panel
 		if ( player == null || player.CurrentPlayer != player )
 			return;
 
-		var weapon = _weapons[i];
+		var carriable = _carriables[i];
 
-		if ( player.ActiveChild == weapon )
+		if ( player.ActiveChild == carriable )
 			return;
 
-		if ( weapon == null )
+		if ( carriable == null )
 			return;
 
-		input.ActiveChild = weapon;
+		input.ActiveChild = carriable;
 	}
 
 	public class InventoryIcon : Panel
 	{
-		public Carriable TargetWeapon;
+		public Carriable TargetCarriable;
 		public Image Icon;
 		public InputHint InputHint;
 
@@ -139,13 +139,13 @@ public class InventoryBar : Panel
 
 		public void Clear()
 		{
-			TargetWeapon = null;
+			TargetCarriable = null;
 			SetClass( "hidden", true );
 		}
 
-		public void UpdateWeapon( Carriable weapon )
+		public void UpdateCarriable( Carriable weapon )
 		{
-			TargetWeapon = weapon;
+			TargetCarriable = weapon;
 			Icon.SetTexture( weapon?.Info.Icon );
 
 			if ( weapon.IsActiveChild() && !HasClass( "active" ) )

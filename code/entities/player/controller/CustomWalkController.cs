@@ -28,8 +28,8 @@ public partial class CustomWalkController : WalkController
 
 		float movementSpeedMultiplier = 1f;
 
-		if ( Pawn.ActiveChild is Carriable weapon )
-			movementSpeedMultiplier = weapon.MovementSpeedMultiplier;
+		if ( Pawn.ActiveChild is Carriable carriable )
+			movementSpeedMultiplier = carriable.Info.MovementSpeedMultiplier;
 
 		return DefaultSpeed * movementSpeedMultiplier;
 	}
