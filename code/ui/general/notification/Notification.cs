@@ -10,25 +10,28 @@ namespace Paintball.UI;
 [UseTemplate]
 public partial class Notification : Popup
 {
+	public bool ForceStay { get; set; }
 	public Label Message { get; set; }
 	private static Notification s_current;
 
-	public Notification( string text, float lifeTime ) : base( lifeTime )
+	public Notification( string text, float lifeTime, bool forceStay = false ) : base( lifeTime )
 	{
 		s_current?.Delete( true );
 		s_current = this;
 
+		ForceStay = forceStay;
 		Message.Text = text;
 		BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 	}
 
-	public Notification( string text, Func<bool> condition ) : base( condition )
+	public Notification( string text, Func<bool> condition, bool forceStay = false ) : base( condition )
 	{
 		s_current?.Delete( true );
 		s_current = this;
 
 		StyleSheet.Load( "/ui/general/notification/Notification.scss" );
 
+		ForceStay = forceStay;
 		Message.Text = text;
 		BindClass( "hidden", () => TeamSelect.Instance.IsVisible );
 	}
@@ -41,6 +44,9 @@ public partial class Notification : Popup
 			s_current.Message.Text = message;
 			return;
 		}
+
+		if ( s_current.ForceStay )
+			return;
 
 		Local.Hud.AddChild( new Notification( message, lifeTime ) );
 	}
@@ -59,7 +65,7 @@ public partial class Notification : Popup
 		if ( winner == Team.Blue && bomb.IsValid() && bomb.Disabled && bomb.Defuser != null )
 			message = "Bomb has been defused!";
 
-		Local.Hud.AddChild( new Notification( message, 5 ) );
+		Local.Hud.AddChild( new Notification( message, 5, true ) );
 		Audio.Announce( $"{winner.GetTag()}win", Audio.Priority.High );
 	}
 
@@ -71,7 +77,7 @@ public partial class Notification : Popup
 			return;
 
 		if ( newState is WaitingForPlayersState )
-			Local.Hud.AddChild( new Notification( "Waiting for players...", () => Game.Current.State is not WaitingForPlayersState ) );
+			Local.Hud.AddChild( new Notification( "Waiting for players...", () => Game.Current.State is not WaitingForPlayersState, true ) );
 	}
 
 	public override void OnDeleted()
