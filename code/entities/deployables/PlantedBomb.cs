@@ -54,6 +54,17 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		if ( Disabled )
 			return;
 
+		if ( IsClient )
+		{
+			if ( UntilTickSound )
+			{
+				Sound.FromEntity( "bomb_tick", this );
+				UntilTickSound = 1f;
+			}
+
+			return;
+		}
+
 		if ( Defuser?.Using != this )
 		{
 			Defuser = null;
@@ -77,16 +88,6 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			Event.Run( PBEvent.Round.Bomb.Explode, this );
 			Bombsite.OnBombExplode.Fire( this );
 			OnDisabled( Defuser );
-		}
-	}
-
-	[Event.Tick.Client]
-	public void ClientTick()
-	{
-		if ( !Disabled && UntilTickSound )
-		{
-			Sound.FromEntity( "bomb_tick", this );
-			UntilTickSound = 1f;
 		}
 	}
 

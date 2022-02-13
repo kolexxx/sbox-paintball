@@ -48,8 +48,6 @@ public partial class GameplayState : BaseState
 	{
 		base.OnPlayerSpawned( player );
 
-		Host.AssertServer();
-
 		if ( player.Inventory.HasFreeSlot( SlotType.Secondary ) )
 			player.Inventory.Add( new Pistol() );
 		if ( player.Inventory.HasFreeSlot( SlotType.Melee ) )
@@ -73,9 +71,6 @@ public partial class GameplayState : BaseState
 
 	public override void Tick()
 	{
-		if ( !Host.IsServer )
-			return;
-
 		if ( Bomb.IsValid() )
 			Bomb.Tick();
 
