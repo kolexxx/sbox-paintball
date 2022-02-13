@@ -11,7 +11,7 @@ public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 		if ( Local.Pawn is not Player player )
 			return;
 
-		if ( player.CurrentPlayer.ActiveChild is Weapon weapon && weapon.ViewModelEntity != null )
+		if ( player.CurrentPlayer.ActiveChild is Carriable weapon && weapon.ViewModelEntity != null )
 			weapon.ViewModelEntity.EnableDrawing = false;
 
 		if ( player.Camera is ThirdPersonSpectateCamera )
@@ -29,13 +29,13 @@ public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 
 	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer )
 	{
-		if ( oldPlayer.ActiveChild is Weapon oldWeapon && oldWeapon.ViewModelEntity != null )
+		if ( oldPlayer.ActiveChild is Carriable oldWeapon && oldWeapon.ViewModelEntity != null )
 			oldWeapon.ViewModelEntity.EnableDrawing = false;
 
 		Local.Hud.RemoveClass( oldPlayer.Team.GetTag() );
 		Local.Hud.AddClass( newPlayer.Team.GetTag() );
 
-		if ( newPlayer.ActiveChild is Weapon newWeapon && newWeapon.ViewModelEntity != null )
+		if ( newPlayer.ActiveChild is Carriable newWeapon && newWeapon.ViewModelEntity != null )
 			newWeapon.ViewModelEntity.EnableDrawing = true;
 
 		Viewer = newPlayer;

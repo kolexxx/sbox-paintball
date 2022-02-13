@@ -44,7 +44,7 @@ public partial class Map
 			{
 				if ( entity is BaseProjectile || entity is Grenade )
 					entity.Delete();
-				else if ( entity is Weapon weapon && weapon.IsValid() )
+				else if ( entity is Carriable weapon && weapon.IsValid() )
 				{
 					if ( weapon.Owner == null || weapon is Bomb )
 						weapon.Delete();

@@ -99,7 +99,7 @@ public partial class Player : Sandbox.Player
 
 	public override void StartTouch( Entity other )
 	{
-		if ( other is Weapon weapon && weapon.PreviousOwner == this && weapon.TimeSinceDropped <= 2f )
+		if ( other is Carriable weapon && weapon.PreviousOwner == this && weapon.TimeSinceDropped <= 2f )
 			return;
 
 		if ( other is PickupTrigger )
@@ -122,7 +122,7 @@ public partial class Player : Sandbox.Player
 
 		LastAttacker = null;
 		LastDamageInfo = default;
-		LastWeaponConfig = null;
+		LastWeaponInfo = null;
 		ConsecutiveKills = 0;
 		KillStreak = 0;
 		Money = 1000;

@@ -9,7 +9,7 @@ public class InventoryBar : Panel
 {
 	public static InventoryBar Instance;
 	private InventoryIcon[] _slots = new InventoryIcon[5];
-	private Weapon[] _weapons = new Weapon[5];
+	private Carriable[] _weapons = new Carriable[5];
 	private RealTimeUntil _close;
 
 	public InventoryBar()
@@ -37,8 +37,8 @@ public class InventoryBar : Panel
 		for ( int i = 0; i < 5; i++ )
 			_weapons[i] = null;
 
-		foreach ( var weapon in player.CurrentPlayer.Children.OfType<Weapon>() )
-			_weapons[(int)weapon.Config.Slot] = weapon;
+		foreach ( var weapon in player.CurrentPlayer.Children.OfType<Carriable>() )
+			_weapons[(int)weapon.Info.Slot] = weapon;
 
 		for ( int i = 0; i < 5; i++ )
 		{
@@ -102,7 +102,7 @@ public class InventoryBar : Panel
 
 	public class InventoryIcon : Panel
 	{
-		public Weapon TargetWeapon;
+		public Carriable TargetWeapon;
 		public Image Icon;
 		public InputHint InputHint;
 
@@ -143,10 +143,10 @@ public class InventoryBar : Panel
 			SetClass( "hidden", true );
 		}
 
-		public void UpdateWeapon( Weapon weapon )
+		public void UpdateWeapon( Carriable weapon )
 		{
 			TargetWeapon = weapon;
-			Icon.SetTexture( weapon?.Config.Icon );
+			Icon.SetTexture( weapon?.Info.Icon );
 
 			if ( weapon.IsActiveChild() && !HasClass( "active" ) )
 				Instance._close = 3f;

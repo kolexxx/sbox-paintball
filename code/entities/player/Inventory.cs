@@ -30,7 +30,7 @@ public class Inventory : BaseInventory
 
 	public override Entity DropActive()
 	{
-		var ac = Owner.ActiveChild as Weapon;
+		var ac = Owner.ActiveChild as Carriable;
 
 		if ( !ac.IsValid() || !ac.Droppable )
 			return null;
@@ -38,20 +38,20 @@ public class Inventory : BaseInventory
 		return base.DropActive();
 	}
 
-	public Weapon Swap( Weapon weapon )
+	public Carriable Swap( Carriable carriable )
 	{
-		var ent = List.Find( x => (x as Weapon).Config.Slot == weapon.Config.Slot );
+		var ent = List.Find( x => (x as Carriable).Info.Slot == carriable.Info.Slot );
 		bool wasActive = ent?.IsActiveChild() ?? false;
 
 		Drop( ent );
-		Add( weapon, wasActive );
+		Add( carriable, wasActive );
 
-		return ent as Weapon;
+		return ent as Carriable;
 	}
 
 	public bool HasFreeSlot(SlotType slot )
 	{
-		int count = List.Where( x => (x as Weapon).Config.Slot == slot ).Count();
+		int count = List.Where( x => (x as Carriable).Info.Slot == slot ).Count();
 
 		return count < SlotCapacity[(int)slot];
 	}

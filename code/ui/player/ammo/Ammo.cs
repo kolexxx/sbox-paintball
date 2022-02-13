@@ -23,7 +23,7 @@ public class Ammo : Panel
 			 if ( player == null )
 				 return 0;
 
-			 var weapon = player.CurrentPlayer.ActiveChild as Weapon;
+			 var weapon = player.CurrentPlayer.ActiveChild as Carriable;
 			 if ( weapon == null )
 				 return 0;
 
@@ -46,7 +46,7 @@ public class Ammo : Panel
 		if ( !IsVisible )
 			return;
 
-		var weapon = player.CurrentPlayer.ActiveChild as Weapon;
+		var weapon = player.CurrentPlayer.ActiveChild as Carriable;
 
 		if ( weapon == null )
 		{

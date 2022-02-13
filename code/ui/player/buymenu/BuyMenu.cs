@@ -358,7 +358,7 @@ public class BuyMenuWheelItems : BuyMenuWheel
 
 			var name = Group.Weapons[index];
 
-			if ( !ItemConfig.All.TryGetValue( name, out var config ) )
+			if ( !CarriableInfo.All.TryGetValue( name, out var info ) )
 				return;
 
 			var pos = GetSliceContentPosition( index, 180 );
@@ -367,11 +367,11 @@ public class BuyMenuWheelItems : BuyMenuWheel
 			item.Style.Set( "left", $"{pos.x}px" );
 			item.Style.Set( "top", $"{pos.y}px" );
 
-			item.Add.Label( config.Title, "itemname" );
-			item.Add.Image( config.Icon, "itemicon" );
-			var price = item.Add.Label( $"${string.Format( "{0:n0}", config.Price )}", "itemprice" );
+			item.Add.Label( info.Name, "itemname" );
+			item.Add.Image( info.Icon, "itemicon" );
+			var price = item.Add.Label( $"${string.Format( "{0:n0}", info.Price )}", "itemprice" );
 
-			CanBuy[index] = player.Money >= config.Price;
+			CanBuy[index] = player.Money >= info.Price;
 			price.SetClass( "locked", !CanBuy[index] );
 		}
 	}

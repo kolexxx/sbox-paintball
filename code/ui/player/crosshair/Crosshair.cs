@@ -6,7 +6,7 @@ namespace Paintball.UI;
 
 public class Crosshair : Panel
 {
-	public Weapon TargetWeapon { get; set; }
+	public Carriable TargetWeapon { get; set; }
 	private int _fireCount = 0;
 
 	public Crosshair()
