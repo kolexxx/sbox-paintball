@@ -23,11 +23,11 @@ public class Ammo : Panel
 			 if ( player == null )
 				 return 0;
 
-			 var carriable = player.CurrentPlayer.ActiveChild as Carriable;
-			 if ( carriable == null || carriable.Info is not ProjectileWeaponInfo info )
+			 var projectileWeapon = player.CurrentPlayer.ActiveChild as IProjectileWeapon;
+			 if ( projectileWeapon == null )
 				 return 0;
 
-			 return carriable.AmmoClip / (float)info.ClipSize;
+			 return projectileWeapon.AmmoClip / (float)projectileWeapon.Info.ClipSize;
 		 } ) );
 
 		Clip = GetChild( ChildrenCount - 1 ) as ProgressBar;
@@ -46,15 +46,15 @@ public class Ammo : Panel
 		if ( !IsVisible )
 			return;
 
-		var carriable = player.CurrentPlayer.ActiveChild as Carriable;
+		var projectileWeapon = player.CurrentPlayer.ActiveChild as IProjectileWeapon;
 
-		if ( carriable == null || carriable.Info is not ProjectileWeaponInfo info )
+		if ( projectileWeapon == null  )
 		{
 			Reserve.Text = "";
 
 			return;
 		}
 
-		Reserve.Text = info.ReserveAmmo.ToString();
+		Reserve.Text = projectileWeapon.ReserveAmmo.ToString();
 	}
 }

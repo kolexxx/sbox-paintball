@@ -1,7 +1,6 @@
 ﻿using Paintball.UI;
 using Sandbox;
 using Sandbox.UI;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 
@@ -53,7 +52,6 @@ public partial class CarriableInfo : Asset
 [Hammer.Skip]
 public abstract partial class Carriable : BaseCarriable, IUse, ILook
 {
-	[Net, Predicted] public int AmmoClip { get; set; }
 	[Net, Predicted] public TimeSince TimeSinceDeployed { get; protected set; }
 	public virtual string CrosshairClass => "standard";
 	public virtual bool Droppable => true;

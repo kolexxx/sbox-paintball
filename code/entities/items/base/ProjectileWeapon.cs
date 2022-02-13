@@ -31,9 +31,18 @@ public partial class ProjectileWeaponInfo : CarriableInfo
 	[Property, Category( "Stats" )] public float Spread { get; set; } = 0f;
 }
 
-[Hammer.Skip]
-public abstract partial class ProjectileWeapon<T> : Carriable where T : BaseProjectile, new()
+public interface IProjectileWeapon
 {
+	public int AmmoClip { get; }
+	public bool IsReloading { get; }
+	public int ReserveAmmo { get; }
+	public ProjectileWeaponInfo Info { get; }
+}
+
+[Hammer.Skip]
+public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon where T : BaseProjectile, new()
+{
+	[Net, Predicted] public int AmmoClip { get; set; }
 	[Net, Predicted] public bool IsReloading { get; protected set; }
 	[Net, Predicted] public int ReserveAmmo { get; protected set; }
 	[Net, Predicted] public TimeSince TimeSincePrimaryAttack { get; protected set; }
