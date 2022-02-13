@@ -1,0 +1,15 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	data = 
+	{
+		buyable = false
+		exclusivefor = "0"
+		libraryname = "pb_knife"
+		slot = "2"
+		icon = "ui/weapons/knife.png"
+		viewmodel = resource:"models/rust_boneknife/v_rust_boneknife.vmdl"
+		worldmodel = resource:"models/rust_boneknife/rust_boneknife.vmdl"
+		movementspeedmultiplier = 1.0
+		price = 0
+	}
+}

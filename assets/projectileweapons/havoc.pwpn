@@ -1,0 +1,30 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	data = 
+	{
+		followeffect = resource:""
+		firesound = "pbg"
+		projectilemodel = resource:"models/paintball/paintball.vmdl"
+		clipsize = 15
+		bulletsperfire = 3
+		firemode = "0"
+		primaryrate = 6.0
+		projectilegravity = 4.0
+		projectileradius = 3.0
+		projectilescale = 0.25
+		projectilespeed = 2500.0
+		reloadtime = 3.0
+		reserveammo = 15
+		secondaryrate = 0.0
+		spread = 0.0
+		buyable = true
+		exclusivefor = "0"
+		libraryname = "pb_havoc"
+		slot = "0"
+		icon = "ui/weapons/smg.png"
+		viewmodel = resource:"weapons/rust_smg/v_rust_smg.vmdl"
+		worldmodel = resource:"weapons/rust_smg/rust_smg.vmdl"
+		movementspeedmultiplier = 0.85
+		price = 1000
+	}
+}
