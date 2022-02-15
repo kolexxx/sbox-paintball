@@ -19,6 +19,8 @@ public enum SlotType : byte
 public partial class CarriableInfo : Asset
 {
 	public static Dictionary<string, CarriableInfo> All { get; set; } = new();
+	public Model CachedViewModel { get; set; }
+	public Model CachedWorldModel { get; set; }
 
 	[Property, Category( "Important" )] public bool Buyable { get; set; }
 	[Property, Category( "Important" )] public Team ExclusiveFor { get; set; }
@@ -45,8 +47,8 @@ public partial class CarriableInfo : Asset
 
 		All[LibraryName] = this;
 
-		Model.Load( ViewModel );
-		Model.Load( WorldModel );
+		CachedViewModel = Model.Load( ViewModel );
+		CachedWorldModel = Model.Load( WorldModel );
 	}
 }
 
@@ -59,7 +61,7 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 	public CarriableInfo Info { get; set; }
 	public Panel LookPanel { get; set; }
 	public PickupTrigger PickupTrigger { get; protected set; }
-	public Entity PreviousOwner { get; private set; }
+	public Player PreviousOwner { get; private set; }
 	public TimeSince TimeSinceDropped { get; private set; }
 	public new Player Owner
 	{
@@ -82,8 +84,12 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
 
 		if ( string.IsNullOrEmpty( ClassInfo.Name ) )
+		{
+			Log.Error( this + " doesn't have a Library name!" );
+
 			return;
-			
+		}
+
 		Info = CarriableInfo.All[ClassInfo?.Name];
 		SetModel( Info.WorldModel );
 	}
@@ -134,20 +140,6 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		base.Simulate( owner );
 	}
 
-	public override bool CanCarry( Entity carrier )
-	{
-		if ( Owner != null || carrier is not Player player )
-			return false;
-
-		if ( Info.ExclusiveFor != Team.None && player.Team != Info.ExclusiveFor )
-			return false;
-
-		if ( !player.Inventory.HasFreeSlot( Info.Slot ) )
-			return false;
-
-		return true;
-	}
-
 	public override void CreateViewModel()
 	{
 		Host.AssertClient();
@@ -179,6 +171,20 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		CrosshairPanel.AddClass( CrosshairClass );
 	}
 
+	public override bool CanCarry( Entity carrier )
+	{
+		if ( Owner != null || carrier is not Player player )
+			return false;
+
+		if ( Info.ExclusiveFor != Team.None && player.Team != Info.ExclusiveFor )
+			return false;
+
+		if ( !player.Inventory.HasFreeSlot( Info.Slot ) )
+			return false;
+
+		return true;
+	}
+
 	public override void OnCarryStart( Entity carrier )
 	{
 		base.OnCarryStart( carrier );
@@ -187,6 +193,7 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 			PickupTrigger.EnableTouch = false;
 
 		PreviousOwner = Owner;
+		Owner.Inventory.SlotCapacity[(int)Info.Slot]--;
 	}
 
 	public override void OnCarryDrop( Entity dropper )
@@ -197,6 +204,7 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 			PickupTrigger.EnableTouch = true;
 
 		TimeSinceDropped = 0f;
+		PreviousOwner.Inventory.SlotCapacity[(int)Info.Slot]++;
 
 		OnActiveEndClient( To.Everyone );
 	}
@@ -209,8 +217,11 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 
 	public virtual void Reset()
 	{
-		TimeSinceDeployed = 0;
-		TimeSinceDropped = 0;
+		using ( Prediction.Off() )
+		{
+			TimeSinceDeployed = 0;
+			TimeSinceDropped = 0;
+		}
 
 		ClientReset();
 	}
@@ -219,7 +230,7 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 	[ClientRpc]
 	protected void ClientReset()
 	{
-		SetAnimBool( "idle", true );
+		ViewModelEntity?.SetAnimBool( "idle", true );
 	}
 
 	[ClientRpc]
@@ -246,6 +257,12 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		DestroyViewModel();
 	}
 	#endregion
+
+	[Event.Entity.PostCleanup]
+	protected void PostCleanup()
+	{
+		Reset();
+	}
 
 	bool IUse.OnUse( Entity user )
 	{
