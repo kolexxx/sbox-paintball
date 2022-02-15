@@ -117,7 +117,7 @@ public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon
 
 		if ( Info.FireMode == FireMode.Semi && !Input.Pressed( InputButton.Attack1 ) )
 			return false;
-		else if ( Info.FireMode == FireMode.Automatic && !Input.Down( InputButton.Attack1 ) )
+		else if ( Info.FireMode != FireMode.Semi && !Input.Down( InputButton.Attack1 ) )
 			return false;
 
 		var rate = Info.PrimaryRate;
@@ -209,12 +209,15 @@ public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon
 
 	public override void Reset()
 	{
-		TimeSincePrimaryAttack = 0;
-		TimeSinceSecondaryAttack = 0;
-		TimeSinceReload = 0;
-		AmmoClip = Info.ClipSize;
-		ReserveAmmo = Info.ReserveAmmo;
-
+		using ( Prediction.Off() )
+		{
+			TimeSincePrimaryAttack = 0;
+			TimeSinceSecondaryAttack = 0;
+			TimeSinceReload = 0;
+			AmmoClip = Info.ClipSize;
+			ReserveAmmo = Info.ReserveAmmo;
+		}
+		
 		base.Reset();
 	}
 
