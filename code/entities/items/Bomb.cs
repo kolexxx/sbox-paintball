@@ -2,9 +2,9 @@
 
 namespace Paintball;
 
-[Library( "pb_bomb", Title = "Bomb", Description = "A bomb that can be planted on a bombsite.", Spawnable = false )]
-[Hammer.EditorModel( "weapons/rust_shotgun/rust_shotgun.vmdl" )]
 [Hammer.Skip]
+[Hammer.EditorModel( "weapons/rust_shotgun/rust_shotgun.vmdl" )]
+[Library( "pb_bomb", Title = "Bomb", Description = "A bomb that can be planted on a bombsite.", Spawnable = false )]
 public sealed partial class Bomb : Carriable
 {
 	[Net, Predicted] public TimeSince Delay { get; set; } = 2f;
@@ -31,7 +31,8 @@ public sealed partial class Bomb : Carriable
 			return;
 
 		if ( CanPlant() )
-			Plant();
+			using ( LagCompensation() )
+				Plant();
 	}
 
 	public bool CanPlant()
@@ -76,7 +77,11 @@ public sealed partial class Bomb : Carriable
 					Position = trace.EndPos,
 					Rotation = Owner.Rotation,
 					Planter = Owner,
-					Bombsite = Owner.Bombsite
+					Bombsite = Owner.Bombsite,
+					PhysicsEnabled = false,
+					UsePhysicsCollision = true,
+					GlowActive = true,
+					GlowColor = Color.Red
 				};
 
 				bomb.Initialize();
@@ -97,6 +102,12 @@ public sealed partial class Bomb : Carriable
 
 		if ( !dropper.Alive() )
 			UI.Notification.Create( Team.Red.ToClients(), "Bomb has been dropped!", 2f );
+	}
+
+	public override void Reset()
+	{
+		OnCarryDrop( Owner );
+		Delete();
 	}
 
 	[ClientRpc]

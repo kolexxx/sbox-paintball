@@ -21,10 +21,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 	{
 		base.Spawn();
 
-		SetModel( $"models/paintball/paintball.vmdl" );
-
-		PhysicsEnabled = false;
-		UsePhysicsCollision = true;
+		SetModel( "models/rust_props/small_junk/newspaper_stack_a.vmdl" );
 
 		SetInteractsAs( CollisionLayer.All );
 		SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
