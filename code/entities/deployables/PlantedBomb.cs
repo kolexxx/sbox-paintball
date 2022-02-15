@@ -23,6 +23,8 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 
 		SetModel( "models/rust_props/small_junk/newspaper_stack_a.vmdl" );
 
+		PhysicsEnabled = false;
+		UsePhysicsCollision = true;
 		SetInteractsAs( CollisionLayer.All );
 		SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
 	}
@@ -94,6 +96,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		Planter = planter;
 		_gameplayState = Game.Current.State as GameplayState;
 		UntilTickSound = _gameplayState.UntilStateEnds.Relative % 1;
+
 		Sound.FromEntity( "bomb_plant", this );
 
 		if ( _gameplayState.RoundState == RoundState.Play )
