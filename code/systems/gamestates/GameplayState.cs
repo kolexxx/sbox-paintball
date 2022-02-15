@@ -130,10 +130,12 @@ public partial class GameplayState : BaseState
 		{
 			case RoundState.Freeze:
 
+				Event.Run( PBEvent.Round.New );
+				RPC.OnRoundStateChanged( RoundState.Freeze );
+
 				Bomb = null;
 				_firstBlood = false;
 
-				Game.Current.Map.CleanUp();
 				TeamBalance();
 
 				int index = Rand.Int( 1, Team.Red.GetCount() );
@@ -151,9 +153,6 @@ public partial class GameplayState : BaseState
 
 				if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
 					Notification.Create( To.Everyone, "Matchpoint!", Game.Current.Settings.FreezeDuration );
-
-				Event.Run( PBEvent.Round.New );
-				RPC.OnRoundStateChanged( RoundState.Freeze );
 
 				UntilStateEnds = Game.Current.Settings.FreezeDuration;
 				BuyTimeExpire = Game.Current.Settings.FreezeDuration + 10;
