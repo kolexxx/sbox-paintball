@@ -34,10 +34,22 @@ public partial class Map
 		_ = GetInfo();
 	}
 
+	[PBEvent.Round.New]
 	public void CleanUp()
 	{
-		Sandbox.Internal.Decals.RemoveFromWorld();
-		EntityManager.CleanUpMap( Filter );
+		if ( Host.IsServer )
+		{
+			Sandbox.Internal.Decals.RemoveFromWorld();
+			EntityManager.CleanUpMap( Filter );
+		}
+		else
+		{
+			foreach ( var entity in Entity.All )
+			{
+				if ( entity.IsClientOnly && entity is not BaseViewModel )
+					entity.Delete();
+			}
+		}
 
 		return;
 	}
@@ -48,12 +60,12 @@ public partial class Map
 			return false;
 
 		// When creating entities we only have classNames to work with..
-		if ( ent == null || !ent.IsValid ) 
+		if ( ent == null || !ent.IsValid )
 			return true;
 
 		// Gamemode related stuff, game entity, HUD, etc
 		if ( ent is GameBase || ent.Parent is GameBase )
-			return false;	
+			return false;
 
 		// Player related stuff, clothing and weapons
 		foreach ( var cl in Client.All )
