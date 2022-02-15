@@ -2,8 +2,8 @@
 
 namespace Paintball;
 
-[Library( "pb_havoc", Title = "Havoc", Icon = "ui/weapons/smg.png", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
+[Library( "pb_havoc", Title = "Havoc", Spawnable = true )]
 public partial class Havoc : ProjectileWeapon<BouncyProjectile>
 {
 	public override void SimulateAnimator( PawnAnimator anim )

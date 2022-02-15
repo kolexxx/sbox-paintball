@@ -2,8 +2,8 @@
 
 namespace Paintball;
 
-[Library( "pb_autoshotgun", Title = "AutoShotgun", Icon = "ui/weapons/autoshotgun.png", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
+[Library( "pb_autoshotgun", Title = "AutoShotgun", Spawnable = true )]
 public class AutoShotgun : ProjectileWeapon<BaseProjectile>
 {
 	public override void SimulateAnimator( PawnAnimator anim )

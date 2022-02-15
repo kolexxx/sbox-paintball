@@ -2,8 +2,8 @@
 
 namespace Paintball;
 
-[Library( "pb_knife", Title = "Knife", Icon = "ui/weapons/knife.png", Spawnable = false )]
 [Hammer.Skip]
+[Library( "pb_knife", Title = "Knife", Spawnable = false )]
 public partial class Knife : Carriable
 {
 	[Net, Predicted] public TimeSince TimeSinceStab { get; set; }
@@ -16,7 +16,8 @@ public partial class Knife : Carriable
 			return;
 
 		if ( CanAttack() )
-			Attack();
+			using ( LagCompensation() )
+				Attack();
 	}
 
 	public void Attack()
@@ -54,6 +55,7 @@ public partial class Knife : Carriable
 		TimeSinceSwing = 0;
 
 		Owner.SetAnimBool( "b_attack", true );
+		SwingEffects();
 
 		var endPos = Owner.EyePosition + Owner.EyeRotation.Forward * range;
 
@@ -83,5 +85,12 @@ public partial class Knife : Carriable
 
 			trace.Entity.TakeDamage( info );
 		}
+	}
+
+	[ClientRpc]
+	protected void SwingEffects()
+	{
+		ViewModelEntity?.SetAnimBool( "fire", true );
+		CrosshairPanel?.CreateEvent( "fire" );
 	}
 }

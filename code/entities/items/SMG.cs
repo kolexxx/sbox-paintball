@@ -2,8 +2,8 @@
 
 namespace Paintball;
 
-[Library( "pb_smg", Title = "SMG", Icon = "ui/weapons/smg.png", Spawnable = true )]
 [Hammer.EditorModel( "weapons/rust_smg/rust_smg.vmdl" )]
+[Library( "pb_smg", Title = "SMG", Spawnable = true )]
 public partial class SMG : ProjectileWeapon<BaseProjectile>
 {
 	public override void SimulateAnimator( PawnAnimator anim )
