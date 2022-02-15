@@ -78,14 +78,13 @@ public sealed partial class Bomb : Carriable
 					Rotation = Owner.Rotation,
 					Planter = Owner,
 					Bombsite = Owner.Bombsite,
-					PhysicsEnabled = false,
-					UsePhysicsCollision = true,
 					GlowActive = true,
 					GlowColor = Color.Red
 				};
 
 				bomb.Initialize();
 
+				Owner.Inventory.SlotCapacity[(int)Info.Slot]++;
 				Delete();
 			}
 		}

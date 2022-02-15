@@ -50,6 +50,7 @@ public sealed partial class Throwable : Carriable
 				Team = Owner.Team
 			};
 
+			Owner.Inventory.SlotCapacity[(int)Info.Slot]++;
 			Delete();
 		}
 	}
