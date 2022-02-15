@@ -162,7 +162,7 @@ metadata
 metadata
 {
 	entity_tool_name = "Player Spawnpoint"
-	entity_tool_group = "PaintBall"
+	entity_tool_group = "Paintball"
 	entity_tool_tip = "Defines a point where players on a team can spawn."
 }
 = pb_spawnpoint : ""
@@ -182,7 +182,7 @@ metadata
 metadata
 {
 	entity_tool_name = "Game and Map settings"
-	entity_tool_group = "PaintBall"
+	entity_tool_group = "Paintball"
 }
 = pb_settings : ""
 [
@@ -208,7 +208,7 @@ metadata
 metadata
 {
 	entity_tool_name = "Spectate Point"
-	entity_tool_group = "PaintBall"
+	entity_tool_group = "Paintball"
 	entity_tool_tip = "Defines a fixed point where a player can spectate from."
 }
 = pb_spectatepoint : ""
