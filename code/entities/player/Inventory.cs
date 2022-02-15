@@ -5,7 +5,7 @@ namespace Paintball;
 
 public class Inventory : BaseInventory
 {
-	public readonly int[] SlotCapacity = new int[] { 1, 1, 1, 3, 3 };
+	public int[] SlotCapacity = new int[] { 1, 1, 1, 3, 3 };
 
 	public Inventory( Player player ) : base( player ) { }
 
@@ -49,11 +49,9 @@ public class Inventory : BaseInventory
 		return ent as Carriable;
 	}
 
-	public bool HasFreeSlot(SlotType slot )
+	public bool HasFreeSlot( SlotType slot )
 	{
-		int count = List.Where( x => (x as Carriable).Info.Slot == slot ).Count();
-
-		return count < SlotCapacity[(int)slot];
+		return SlotCapacity[(int)slot] > 0;
 	}
 
 	public Bomb DropBomb()
