@@ -1,9 +1,8 @@
-﻿using Hammer;
-using Sandbox;
+﻿using Sandbox;
 
 namespace Paintball;
 
-[Skip]
+[Hammer.Skip]
 public partial class Grenade : ModelEntity, ITeamEntity
 {
 	public RealTimeUntil DestroyTime { get; set; }
