@@ -1,11 +1,10 @@
 ﻿using Sandbox;
-using System.Linq;
 
 namespace Paintball;
 
 public class Inventory : BaseInventory
 {
-	public int[] SlotCapacity = new int[] { 1, 1, 1, 3, 3 };
+	public int[] SlotCapacity = new int[] { 1, 1, 1, 3, 1 };
 
 	public Inventory( Player player ) : base( player ) { }
 
