@@ -2,10 +2,10 @@
 
 namespace Paintball;
 
-[Library( "pb_buyzone", Description = "Place where players can buy items." )]
 [Hammer.AutoApplyMaterial( "materials/tools/toolstrigger.vmat" )]
 [Hammer.Solid]
 [Hammer.VisGroup( Hammer.VisGroup.Trigger )]
+[Library( "pb_buyzone", Description = "Place where players can buy items." )]
 public partial class BuyZone : BaseTrigger
 {
 	[Net, Property] public Team Team { get; set; }
@@ -16,6 +16,7 @@ public partial class BuyZone : BaseTrigger
 
 		SurroundingBoundsMode = SurroundingBoundsType.Obb;
 		Transmit = TransmitType.Always;
+		Parent = Game.Current;
 	}
 
 	public override void ClientSpawn()

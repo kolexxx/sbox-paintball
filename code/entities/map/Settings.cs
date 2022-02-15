@@ -2,8 +2,8 @@
 
 namespace Paintball;
 
+[Hammer.EntityTool( "Game and Map settings", "Paintball" )]
 [Library( "pb_settings", Title = "Settings", Spawnable = true )]
-[Hammer.EntityTool( "Game and Map settings", "PaintBall" )]
 public partial class Settings : Entity
 {
 	[Net, Property] public string BlueTeamName { get; set; } = "Blue";
@@ -32,6 +32,7 @@ public partial class Settings : Entity
 		base.Spawn();
 
 		Game.Current.Settings = this;
+		Parent = Game.Current;
 		Transmit = TransmitType.Always;
 
 		Event.Run( PBEvent.Game.SettingsLoaded );

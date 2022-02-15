@@ -2,10 +2,10 @@
 
 namespace Paintball;
 
-[Library( "pb_bombsite", Description = "Place where the Red Team can plant the bomb." )]
 [Hammer.AutoApplyMaterial( "materials/tools/toolstrigger.vmat" )]
 [Hammer.Solid]
 [Hammer.VisGroup( Hammer.VisGroup.Trigger )]
+[Library( "pb_bombsite", Description = "Place where the Red Team can plant the bomb." )]
 public partial class Bombsite : BaseTrigger
 {
 	[Net, Property] public char Letter { get; set; }
@@ -19,6 +19,7 @@ public partial class Bombsite : BaseTrigger
 
 		SurroundingBoundsMode = SurroundingBoundsType.Obb;
 		Transmit = TransmitType.Always;
+		Parent = Game.Current;
 	}
 
 	public override void ClientSpawn()

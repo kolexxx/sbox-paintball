@@ -2,11 +2,24 @@ using Sandbox;
 
 namespace Paintball;
 
-[Library( "pb_spawnpoint" )]
 [Hammer.EditorModel( "models/editor/playerstart.vmdl", FixedBounds = true )]
-[Hammer.EntityTool( "Player Spawnpoint", "PaintBall", "Defines a point where players on a team can spawn." )]
+[Hammer.EntityTool( "Player Spawnpoint", "Paintball", "Defines a point where players on a team can spawn." )]
+[Library( "pb_spawnpoint" )]
 public class PlayerSpawnPoint : Entity
 {
 	[Property] public Team Team { get; set; }
 	public bool Occupied { get; set; }
+
+	public override void Spawn()
+	{
+		base.Spawn();
+
+		Parent = Game.Current;
+	}
+
+	[Event.Entity.PostCleanup]
+	private void PostCleanup()
+	{
+		Occupied = false;
+	}
 }
