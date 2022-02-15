@@ -23,15 +23,21 @@ public partial class Game : Sandbox.Game
 		Current = this;
 
 		if ( IsServer )
-			_ = new Hud();
+		{
+			new Hud
+			{
+				Parent = this
+			};
+		}
 
 		Map = new Map();
 	}
 
-	[Event.Tick]
-	private void Tick()
+	public override void Simulate( Client cl )
 	{
 		State?.Tick();
+
+		base.Simulate( cl );
 	}
 
 	public void ChangeState( BaseState state )
