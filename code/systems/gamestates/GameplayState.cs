@@ -130,7 +130,6 @@ public partial class GameplayState : BaseState
 		{
 			case RoundState.Freeze:
 
-				Bomb?.Delete();
 				Bomb = null;
 				_firstBlood = false;
 

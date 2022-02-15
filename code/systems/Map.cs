@@ -36,33 +36,32 @@ public partial class Map
 
 	public void CleanUp()
 	{
-		if ( Host.IsServer )
-		{
-			Sandbox.Internal.Decals.RemoveFromWorld();
+		Sandbox.Internal.Decals.RemoveFromWorld();
+		EntityManager.CleanUpMap( Filter );
 
-			foreach ( var entity in Entity.All )
-			{
-				if ( entity is BaseProjectile || entity is Grenade )
-					entity.Delete();
-				else if ( entity is Carriable weapon && weapon.IsValid() )
-				{
-					if ( weapon.Owner == null || weapon is Bomb )
-						weapon.Delete();
-					else
-						weapon.Reset();
-				}
-			}
+		return;
+	}
 
-			foreach ( var spawnPoint in SpawnPoints )
-				spawnPoint.Occupied = false;
-		}
-		else if ( Host.IsClient )
+	public bool Filter( string className, Entity ent )
+	{
+		if ( className == "player" || className == "worldent" || className == "worldspawn" || className == "soundent" || className == "player_manager" )
+			return false;
+
+		// When creating entities we only have classNames to work with..
+		if ( ent == null || !ent.IsValid ) 
+			return true;
+
+		// Gamemode related stuff, game entity, HUD, etc
+		if ( ent is GameBase || ent.Parent is GameBase )
+			return false;	
+
+		// Player related stuff, clothing and weapons
+		foreach ( var cl in Client.All )
 		{
-			foreach ( var ent in Entity.All.OfType<ModelEntity>() )
-			{
-				if ( ent.IsValid() && ent.IsClientOnly && ent is not BaseViewModel )
-					ent.Delete();
-			}
+			if ( ent == cl.Pawn || cl.Pawn.Inventory.Contains( ent ) || ent.Parent == cl.Pawn )
+				return false;
 		}
+
+		return true;
 	}
 }
