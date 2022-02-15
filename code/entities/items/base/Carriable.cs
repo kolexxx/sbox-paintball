@@ -230,7 +230,7 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 	[ClientRpc]
 	protected void ClientReset()
 	{
-		ViewModelEntity?.SetAnimBool( "idle", true );
+		ViewModelEntity?.SetAnimBool( "deploy", true );
 	}
 
 	[ClientRpc]
