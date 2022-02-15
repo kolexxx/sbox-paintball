@@ -25,6 +25,7 @@
 		viewmodel = resource:"weapons/rust_smg/v_rust_smg.vmdl"
 		worldmodel = resource:"weapons/rust_smg/rust_smg.vmdl"
 		movementspeedmultiplier = 0.85
-		price = 1000
+		price = 2000
+		deploytime = 0.6
 	}
 }
