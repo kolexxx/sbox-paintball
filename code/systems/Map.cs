@@ -5,17 +5,14 @@ using System.Threading.Tasks;
 
 namespace Paintball;
 
-public partial class Map
+public static partial class Map
 {
-	public Package Info { get; set; }
-	public List<PlayerSpawnPoint> SpawnPoints { get; set; }
-	public List<SpectatePoint> SpectatePoints { get; set; }
+	public static Package Info { get; private set; }
+	public static List<Bombsite> Bombsites { get; private set; }
+	public static List<PlayerSpawnPoint> SpawnPoints { get; private set; }
+	public static List<SpectatePoint> SpectatePoints { get; private set; }
 
-	public Map() { Event.Register( this ); }
-
-	~Map() { Event.Unregister( this ); }
-
-	public async Task GetInfo()
+	public static async Task GetInfo()
 	{
 		Info = await Package.Fetch( Global.MapName, false );
 
@@ -24,18 +21,19 @@ public partial class Map
 	}
 
 	[Event.Entity.PostSpawn]
-	private void EntityPostSpawn()
+	private static void EntityPostSpawn()
 	{
 		if ( Host.IsServer )
 			SpawnPoints = Entity.All.OfType<PlayerSpawnPoint>().ToList();
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
+		Bombsites = Entity.All.OfType<Bombsite>().ToList();
 
 		_ = GetInfo();
 	}
 
 	[PBEvent.Round.New]
-	public void CleanUp()
+	public static void CleanUp()
 	{
 		if ( Host.IsServer )
 		{
@@ -54,7 +52,7 @@ public partial class Map
 		return;
 	}
 
-	public bool Filter( string className, Entity ent )
+	public static bool Filter( string className, Entity ent )
 	{
 		if ( className == "player" || className == "worldent" || className == "worldspawn" || className == "soundent" || className == "player_manager" )
 			return false;

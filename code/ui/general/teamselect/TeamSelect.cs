@@ -77,7 +77,7 @@ public partial class TeamSelect : Panel
 	[PBEvent.Game.Map.InfoFetched]
 	private void OnMapInfoFetched()
 	{
-		MapImage.SetTexture( Game.Current.Map.Info.Thumb );
-		ServerInfo.Text = Global.Lobby.Title + " | " + Game.Current.Map.Info.Title;
+		MapImage.SetTexture( Map.Info.Thumb );
+		ServerInfo.Text = Global.Lobby.Title + " | " + Map.Info.Title;
 	}
 }

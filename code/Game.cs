@@ -14,7 +14,6 @@ public partial class Game : Sandbox.Game
 	}
 
 	[Net, Change] public BaseState State { get; private set; }
-	public Map Map { get; set; }
 	public Settings Settings { get; set; }
 	private BaseState _lastState { get; set; }
 
@@ -29,8 +28,6 @@ public partial class Game : Sandbox.Game
 				Parent = this
 			};
 		}
-
-		Map = new Map();
 	}
 
 	public override void Simulate( Client cl )
