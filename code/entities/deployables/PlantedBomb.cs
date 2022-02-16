@@ -41,7 +41,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			_gameplayState.RoundStateStart();
 		}
 
-		Planter.Money += 1000;
+		Planter.AddMoney( 1000 );
 
 		Event.Run( PBEvent.Round.Bomb.Planted, this );
 		Bombsite.OnBombPlanted.Fire( this );
@@ -73,7 +73,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		if ( TimeSinceStartedBeingDefused >= 5f )
 		{
 			Disabled = true;
-			Defuser.Money += 1000;
+			Defuser.AddMoney( 1000 );
 			GlowActive = false;
 
 			Event.Run( PBEvent.Round.Bomb.Defused, this );

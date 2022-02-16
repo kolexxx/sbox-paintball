@@ -91,10 +91,6 @@ public partial class Game : Sandbox.Game
 			if ( spawnpoints.Count > 0 )
 			{
 				var spawnpoint = spawnpoints[Rand.Int( 0, spawnpoints.Count - 1 )];
-
-				if ( State is GameplayState )
-					spawnpoint.Occupied = true;
-
 				pawn.Transform = spawnpoint.Transform;
 
 				return;
