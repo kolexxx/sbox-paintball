@@ -63,8 +63,12 @@ public partial class Player
 		Inventory.DeleteContents();
 
 		BecomeRagdollOnClient( LastDamageInfo.Force, GetHitboxBone( LastDamageInfo.HitboxIndex ) );
-
 		RemoveAllDecals();
+
+		Clothing.ForEach( ( entity ) =>
+		{
+			entity.EnableDrawing = false;
+		} );
 
 		var attacker = LastAttacker.IsValid() ? LastAttacker : null;
 

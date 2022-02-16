@@ -66,8 +66,6 @@ public partial class Player : Sandbox.Player
 
 		RemoveCorpse();
 
-		SetModel( "models/citizen/citizen.vmdl" );
-
 		Controller = new CustomWalkController();
 
 		Animator = new StandardPlayerAnimator();
@@ -78,6 +76,10 @@ public partial class Player : Sandbox.Player
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
+		Clothing.ForEach( ( entity ) =>
+		{
+			entity.EnableDrawing = true;
+		} );
 
 		RenderColor = Team.GetColor();
 		Transmit = TransmitType.Always;
@@ -158,6 +160,8 @@ public partial class Player : Sandbox.Player
 		base.Spawn();
 
 		Tags.Add( "player" );
+		SetModel( "models/citizen/citizen.vmdl" );
+		AttachClothing( "models/helmet/paintballhelmet.vmdl" );
 	}
 
 	public override void ClientSpawn()
