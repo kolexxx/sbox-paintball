@@ -37,7 +37,7 @@ public partial class Notification : Popup
 	}
 
 	[ClientRpc]
-	public static void Create( string message = "", float lifeTime = 0f )
+	public static void Create( string message = "", float lifeTime = 0f, bool forceStay = false )
 	{
 		if ( s_current != null && !s_current.HasLifetime )
 		{
@@ -45,7 +45,7 @@ public partial class Notification : Popup
 			return;
 		}
 
-		if ( s_current?.ForceStay ?? false )
+		if ( (s_current?.ForceStay ?? false) && !forceStay )
 			return;
 
 		Local.Hud.AddChild( new Notification( message, lifeTime ) );
@@ -71,7 +71,7 @@ public partial class Notification : Popup
 		if ( winner == Team.Blue && bomb.IsValid() && bomb.Disabled && bomb.Defuser != null )
 			message = "Bomb has been defused!";
 
-		Local.Hud.AddChild( new Notification( message, 4, true ) );
+		Local.Hud.AddChild( new Notification( message, 5, true ) );
 		Audio.Announce( $"{winner.GetTag()}win", Audio.Priority.High );
 	}
 
