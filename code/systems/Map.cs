@@ -35,9 +35,9 @@ public static partial class Map
 					BlueSpawnPoints.Add( spawnpoint );
 				else if ( spawnpoint.Team == Team.Red )
 					RedSpawnPoints.Add( spawnpoint );
-
-				Global.Lobby.MaxMembers = Math.Min( BlueSpawnPoints.Count, RedSpawnPoints.Count );
 			}
+
+			Global.Lobby.MaxMembers = Math.Min( BlueSpawnPoints.Count, RedSpawnPoints.Count );
 		}
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
