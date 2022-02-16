@@ -14,7 +14,7 @@ public static partial class Map
 	public static List<PlayerSpawnPoint> RedSpawnPoints { get; private set; }
 	public static List<SpectatePoint> SpectatePoints { get; private set; }
 
-	public static async Task GetInfo()
+	private static async Task GetInfo()
 	{
 		Info = await Package.Fetch( Global.MapName, false );
 
@@ -29,6 +29,7 @@ public static partial class Map
 		{
 			BlueSpawnPoints = new();
 			RedSpawnPoints = new();
+
 			foreach ( var spawnpoint in Entity.All.OfType<PlayerSpawnPoint>() )
 			{
 				if ( spawnpoint.Team == Team.Blue )
