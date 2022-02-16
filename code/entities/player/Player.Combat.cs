@@ -90,7 +90,7 @@ public partial class Player
 		if ( TimeSinceLastKill >= 5f )
 			ConsecutiveKills = 0;
 
-		Money += 1000;
+		AddMoney( 1000 );
 		ConsecutiveKills++;
 		KillStreak++;
 		TimeSinceLastKill = 0f;

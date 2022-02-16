@@ -8,18 +8,11 @@ namespace Paintball;
 public class PlayerSpawnPoint : Entity
 {
 	[Property] public Team Team { get; set; }
-	public bool Occupied { get; set; }
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
 		Parent = Game.Current;
-	}
-
-	[Event.Entity.PostCleanup]
-	private void PostCleanup()
-	{
-		Occupied = false;
 	}
 }

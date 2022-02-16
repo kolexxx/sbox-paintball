@@ -1,11 +1,21 @@
 ﻿using Sandbox;
+using System;
 
 namespace Paintball;
 
 public partial class Player
 {
+	[ServerVar( "pb_playermoneycap" )] public static int MoneyCap { get; set; }
 	[Net, Change] public int Money { get; set; } = 1000;
 	public bool IsInBuyZone { get; set; } = true;
+
+	public void AddMoney( int amount )
+	{
+		Host.AssertServer();
+
+		Money += amount;
+		Money = Math.Min( Money, MoneyCap );
+	}
 
 	[ServerCmd]
 	public static void RequestItem( string libraryName )
@@ -31,6 +41,21 @@ public partial class Player
 
 		player.Money -= info.Price;
 		player.Inventory.Swap( Library.Create<Carriable>( libraryName ) );
+	}
+
+	[PBEvent.Round.End]
+	private void OnRoundEnd( Team winner )
+	{
+		if ( !IsServer )
+			return;
+
+		if ( winner == Team.None )
+			return;
+
+		if ( winner == Team )
+			AddMoney( 2000 );
+		else
+			AddMoney( 1000 );
 	}
 
 	private void OnMoneyChanged( int oldMoney, int newMoney )
