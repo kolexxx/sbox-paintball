@@ -30,18 +30,34 @@ public partial class GameplayState : BaseState
 {
 	[Net] public TimeUntil BuyTimeExpire { get; private set; } = 0;
 	public PlantedBomb Bomb { get; set; }
+	public bool BombEnabled { get; init; } = true;
 	public override bool CanBuy => !BuyTimeExpire;
+	public int Round { get; private set; } = 1;
 	public RoundState RoundState { get; set; }
+	public int ToWinScore { get; private set; }
 	public override bool UpdateTimer => RoundState != RoundState.End;
 	private bool _firstBlood = false;
-	private int _toWinScore => (Game.Current.Settings.RoundLimit >> 1) + 1; 
-	private int _round = 1;
+
+	public GameplayState() : base() { }
+
+	public GameplayState( bool bombEnabled ) : base() => BombEnabled = bombEnabled;
+
+	public override void OnPlayerJoin( Player player )
+	{
+		base.OnPlayerJoin( player );
+
+		if ( RoundState == RoundState.Play || RoundState == RoundState.Bomb )
+			if ( Players.Count == 2 )
+				RoundStateFinish();
+	}
 
 	public override void OnPlayerLeave( Player player )
 	{
 		base.OnPlayerLeave( player );
 
 		player.Inventory.DropBomb();
+
+		CheckRoundOver();
 	}
 
 	public override void OnPlayerSpawned( Player player )
@@ -52,6 +68,10 @@ public partial class GameplayState : BaseState
 			player.Inventory.Add( new Pistol() );
 		if ( player.Inventory.HasFreeSlot( SlotType.Melee ) )
 			player.Inventory.Add( new Knife() );
+
+		if ( RoundState == RoundState.Play || RoundState == RoundState.Bomb )
+			if ( AliveBlue == 0 || AliveRed == 0 )
+				RoundStateFinish();
 	}
 
 	public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
@@ -65,6 +85,7 @@ public partial class GameplayState : BaseState
 		}
 
 		player.MakeSpectator();
+		CheckRoundOver();
 	}
 
 	public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam ) { }
@@ -76,31 +97,6 @@ public partial class GameplayState : BaseState
 
 		if ( UntilStateEnds )
 			TimeUp();
-
-		switch ( RoundState )
-		{
-			case RoundState.Freeze:
-
-				break;
-
-			case RoundState.Play:
-
-				if ( AliveBlue == 0 || AliveRed == 0 )
-					RoundStateFinish();
-
-				break;
-
-			case RoundState.Bomb:
-
-				if ( AliveBlue == 0 || Bomb.Disabled )
-					RoundStateFinish();
-
-				break;
-
-			case RoundState.End:
-
-				break;
-		}
 	}
 
 	public override void TimeUp()
@@ -119,6 +115,7 @@ public partial class GameplayState : BaseState
 			player.Reset();
 
 		RoundState = RoundState.Freeze;
+		ToWinScore = (Game.Current.Settings.RoundLimit >> 1) + 1;
 
 		if ( Host.IsServer )
 			RoundStateStart();
@@ -129,6 +126,14 @@ public partial class GameplayState : BaseState
 		switch ( RoundState )
 		{
 			case RoundState.Freeze:
+			{
+				if ( Host.IsClient )
+				{
+					if ( BlueScore == ToWinScore - 1 || RedScore == ToWinScore - 1 )
+						Notification.Create( "Matchpoint!", Game.Current.Settings.FreezeDuration );
+
+					return;
+				}
 
 				Event.Run( PBEvent.Round.New );
 				RPC.OnRoundStateChanged( RoundState.Freeze );
@@ -138,7 +143,7 @@ public partial class GameplayState : BaseState
 
 				TeamBalance();
 
-				int index = Rand.Int( 1, Team.Red.GetCount() );
+				int index = BombEnabled ? Rand.Int( 1, Team.Red.GetCount() ) : int.MaxValue;
 
 				foreach ( var player in Players )
 				{
@@ -151,17 +156,19 @@ public partial class GameplayState : BaseState
 						player.Inventory.Add( new Bomb() );
 				}
 
-				if ( BlueScore == _toWinScore - 1 || RedScore == _toWinScore - 1 )
-					Notification.Create( To.Everyone, "Matchpoint!", Game.Current.Settings.FreezeDuration );
-
 				UntilStateEnds = Game.Current.Settings.FreezeDuration;
 				BuyTimeExpire = Game.Current.Settings.FreezeDuration + 10;
 
 				break;
-
+			}
 			case RoundState.Play:
+			{
+				if ( Host.IsClient )
+				{
+					Audio.Announce( "prepare", Audio.Priority.High );
 
-				Audio.AnnounceAll( "prepare", Audio.Priority.High );
+					return;
+				}
 
 				Event.Run( PBEvent.Round.Start );
 				RPC.OnRoundStateChanged( RoundState.Play );
@@ -169,14 +176,19 @@ public partial class GameplayState : BaseState
 				UntilStateEnds = Game.Current.Settings.PlayDuration;
 
 				break;
-
+			}
 			case RoundState.Bomb:
+			{
+				// clientside is handled somewhere else
 
 				UntilStateEnds = Bomb.TimeUntilExplode;
 
 				break;
-
+			}
 			case RoundState.End:
+			{
+				if ( Host.IsClient )
+					return;
 
 				Event.Run( PBEvent.Round.End, GetWinner() );
 				RPC.OnRoundStateChanged( RoundState.End, GetWinner() );
@@ -184,40 +196,48 @@ public partial class GameplayState : BaseState
 				UntilStateEnds = Game.Current.Settings.EndDuration;
 
 				break;
+			}
 		}
 	}
 
 	public void RoundStateFinish()
 	{
+		Host.AssertServer();
+
 		switch ( RoundState )
 		{
 			case RoundState.Freeze:
-
+			{
 				RoundState = RoundState.Play;
 
 				break;
-
+			}
 			case RoundState.Play:
-
+			{
 				RoundState = RoundState.End;
 
-				_ = GetWinner() == Team.Blue ? BlueScore++ : RedScore++;
+				Team winner = GetWinner();
+
+				if ( winner == Team.None )
+					break;
+				_ = winner == Team.Blue ? BlueScore++ : RedScore++;
 
 				break;
-
+			}
 			case RoundState.Bomb:
-
+			{
 				RoundState = RoundState.End;
 
-				_ = GetWinner() == Team.Blue ? BlueScore++ : RedScore++;
+				Team winner = GetWinner();
+				_ = winner == Team.Blue ? BlueScore++ : RedScore++;
 
 				break;
-
+			}
 			case RoundState.End:
+			{
+				Round++;
 
-				_round++;
-
-				if ( BlueScore == _toWinScore || RedScore == _toWinScore || _round > Game.Current.Settings.RoundLimit )
+				if ( BlueScore == ToWinScore || RedScore == ToWinScore || Round > Game.Current.Settings.RoundLimit )
 				{
 					Bomb?.Delete();
 					Bomb = null;
@@ -232,6 +252,7 @@ public partial class GameplayState : BaseState
 				AliveRed = 0;
 
 				break;
+			}
 		}
 
 		RoundStateStart();
@@ -248,12 +269,26 @@ public partial class GameplayState : BaseState
 		}
 
 		if ( AliveBlue != 0 && AliveRed != 0 )
-			return Team.Blue; // Blue always wins
+			return BombEnabled ? Team.Blue : Team.None;
 
 		if ( AliveBlue > AliveRed )
 			return Team.Blue;
 		else
 			return Team.Red;
+	}
+
+	private void CheckRoundOver()
+	{
+		if ( RoundState == RoundState.Play )
+		{
+			if ( AliveBlue == 0 || AliveRed == 0 )
+				RoundStateFinish();
+		}
+		else if ( RoundState == RoundState.Bomb )
+		{
+			if ( AliveBlue == 0 )
+				RoundStateFinish();
+		}
 	}
 
 	private void TeamBalance()
