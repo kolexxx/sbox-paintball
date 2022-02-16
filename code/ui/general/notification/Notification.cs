@@ -57,6 +57,12 @@ public partial class Notification : Popup
 		if ( !Host.IsClient )
 			return;
 
+		if ( winner == Team.None )
+		{
+			Local.Hud.AddChild( new Notification( "Draw", 4, true ) );
+			return;
+		}
+
 		var bomb = (Game.Current.State as GameplayState).Bomb;
 		string teamName = winner.GetName();
 
