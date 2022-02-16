@@ -1,5 +1,4 @@
-﻿using Paintball.UI;
-using Sandbox;
+﻿using Sandbox;
 using System;
 using System.Linq;
 
@@ -26,6 +25,9 @@ public enum RoundState : byte
 	End
 }
 
+/// <summary>
+/// Bomb defusal or Team Deathmatch.
+/// </summary>
 public partial class GameplayState : BaseState
 {
 	[Net] public TimeUntil BuyTimeExpire { get; private set; } = 0;
@@ -68,10 +70,6 @@ public partial class GameplayState : BaseState
 			player.Inventory.Add( new Pistol() );
 		if ( player.Inventory.HasFreeSlot( SlotType.Melee ) )
 			player.Inventory.Add( new Knife() );
-
-		if ( RoundState == RoundState.Play || RoundState == RoundState.Bomb )
-			if ( AliveBlue == 0 || AliveRed == 0 )
-				RoundStateFinish();
 	}
 
 	public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
@@ -127,24 +125,25 @@ public partial class GameplayState : BaseState
 		{
 			case RoundState.Freeze:
 			{
+				Map.CleanUp();
+
 				if ( Host.IsClient )
 				{
 					if ( BlueScore == ToWinScore - 1 || RedScore == ToWinScore - 1 )
-						Notification.Create( "Matchpoint!", Game.Current.Settings.FreezeDuration );
+						UI.Notification.Create( "Matchpoint!", Game.Current.Settings.FreezeDuration, true );
 
 					return;
 				}
-
-				Event.Run( PBEvent.Round.New );
-				RPC.OnRoundStateChanged( RoundState.Freeze );
 
 				Bomb = null;
 				_firstBlood = false;
 
 				TeamBalance();
 
+				Map.BlueSpawnPoints.Shuffle();
+				Map.RedSpawnPoints.Shuffle();
+				int bluei = 0, redi = 0;
 				int index = BombEnabled ? Rand.Int( 1, Team.Red.GetCount() ) : int.MaxValue;
-
 				foreach ( var player in Players )
 				{
 					if ( !player.IsValid() || player.Team == Team.None )
@@ -152,12 +151,30 @@ public partial class GameplayState : BaseState
 
 					player.Respawn();
 
-					if ( player.Team == Team.Red && --index == 0 )
-						player.Inventory.Add( new Bomb() );
+					if ( player.Team == Team.Blue )
+					{
+						if ( bluei >= Map.BlueSpawnPoints.Count )
+							bluei = 0;
+
+						player.Transform = Map.BlueSpawnPoints[bluei++].Transform;
+					}
+					else if ( player.Team == Team.Red )
+					{
+						if ( redi >= Map.RedSpawnPoints.Count )
+							redi = 0;
+
+						player.Transform = Map.RedSpawnPoints[redi++].Transform;
+
+						if ( --index == 0 )
+							player.Inventory.Add( new Bomb() );
+					}
 				}
 
 				UntilStateEnds = Game.Current.Settings.FreezeDuration;
 				BuyTimeExpire = Game.Current.Settings.FreezeDuration + 10;
+
+				Event.Run( PBEvent.Round.New );
+				RPC.OnRoundStateChanged( RoundState.Freeze );
 
 				break;
 			}
@@ -301,7 +318,7 @@ public partial class GameplayState : BaseState
 		if ( diff <= 0 )
 			return;
 
-		Notification.Create( To.Everyone, "Teams have been Auto-Balanced!", 3 );
+		UI.Notification.Create( To.Everyone, "Teams have been Auto-Balanced!", 3 );
 
 		Team teamLess = teamBlue.Count() > teamRed.Count() ? Team.Red : Team.Blue;
 		var teamMore = teamLess == Team.Blue ? teamRed : teamBlue;
