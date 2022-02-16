@@ -5,7 +5,7 @@ namespace Paintball;
 public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 {
 	private const float LERP_MODE = 0;
-	private const int CAMERA_DISTANCE = 240;
+	private const int CAMERA_DISTANCE = 120;
 
 	private Rotation _targetRot;
 	private Vector3 _targetPos;
