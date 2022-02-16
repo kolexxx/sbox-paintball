@@ -34,8 +34,8 @@ public partial class GameplayState : BaseState
 	public RoundState RoundState { get; set; }
 	public override bool UpdateTimer => RoundState != RoundState.End;
 	private bool _firstBlood = false;
-	private int _toWinScore => 9;
-	private int _round = 0;
+	private int _toWinScore => (Game.Current.Settings.RoundLimit >> 1) + 1; 
+	private int _round = 1;
 
 	public override void OnPlayerLeave( Player player )
 	{
@@ -217,7 +217,7 @@ public partial class GameplayState : BaseState
 
 				_round++;
 
-				if ( BlueScore == _toWinScore || RedScore == _toWinScore || _round >= Game.Current.Settings.RoundLimit )
+				if ( BlueScore == _toWinScore || RedScore == _toWinScore || _round > Game.Current.Settings.RoundLimit )
 				{
 					Bomb?.Delete();
 					Bomb = null;
