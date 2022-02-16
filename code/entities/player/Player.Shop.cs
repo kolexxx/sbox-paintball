@@ -5,7 +5,7 @@ namespace Paintball;
 public partial class Player
 {
 	[Net, Change] public int Money { get; set; } = 1000;
-	public bool IsInBuyZone { get; set; }
+	public bool IsInBuyZone { get; set; } = true;
 
 	[ServerCmd]
 	public static void RequestItem( string libraryName )
