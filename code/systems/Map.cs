@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,7 +10,8 @@ public static partial class Map
 {
 	public static Package Info { get; private set; }
 	public static List<Bombsite> Bombsites { get; private set; }
-	public static List<PlayerSpawnPoint> SpawnPoints { get; private set; }
+	public static List<PlayerSpawnPoint> BlueSpawnPoints { get; private set; }
+	public static List<PlayerSpawnPoint> RedSpawnPoints { get; private set; }
 	public static List<SpectatePoint> SpectatePoints { get; private set; }
 
 	public static async Task GetInfo()
@@ -24,7 +26,19 @@ public static partial class Map
 	private static void EntityPostSpawn()
 	{
 		if ( Host.IsServer )
-			SpawnPoints = Entity.All.OfType<PlayerSpawnPoint>().ToList();
+		{
+			BlueSpawnPoints = new();
+			RedSpawnPoints = new();
+			foreach ( var spawnpoint in Entity.All.OfType<PlayerSpawnPoint>() )
+			{
+				if ( spawnpoint.Team == Team.Blue )
+					BlueSpawnPoints.Add( spawnpoint );
+				else if ( spawnpoint.Team == Team.Red )
+					RedSpawnPoints.Add( spawnpoint );
+
+				Global.Lobby.MaxMembers = Math.Min( BlueSpawnPoints.Count, RedSpawnPoints.Count );
+			}
+		}
 
 		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
 		Bombsites = Entity.All.OfType<Bombsite>().ToList();
@@ -32,7 +46,6 @@ public static partial class Map
 		_ = GetInfo();
 	}
 
-	[PBEvent.Round.New]
 	public static void CleanUp()
 	{
 		if ( Host.IsServer )
