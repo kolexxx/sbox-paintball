@@ -74,6 +74,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		{
 			Disabled = true;
 			Defuser.Money += 1000;
+			GlowActive = false;
 
 			Event.Run( PBEvent.Round.Bomb.Defused, this );
 			Bombsite.OnBombDefused.Fire( this );
@@ -83,6 +84,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		{
 			Disabled = true;
 			Defuser = null;
+			GlowActive = false;
 
 			Event.Run( PBEvent.Round.Bomb.Explode, this );
 			Bombsite.OnBombExplode.Fire( this );
