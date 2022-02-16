@@ -76,6 +76,7 @@ public partial class Player : Sandbox.Player
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
+
 		Clothing.ForEach( ( entity ) =>
 		{
 			entity.EnableDrawing = true;

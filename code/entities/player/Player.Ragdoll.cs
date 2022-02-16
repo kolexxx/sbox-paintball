@@ -44,6 +44,19 @@ partial class Player
 
 		Corpse = ent;
 
+		foreach ( var child in Children )
+		{
+			if ( child is BaseClothing e )
+			{
+				var model = e.GetModelName();
+				var clothing = new ModelEntity();
+
+				clothing.RenderColor = e.RenderColor;
+				clothing.SetModel( model );
+				clothing.SetParent( Corpse, true );
+			}
+		}
+
 		ent.DeleteAsync( 10.0f );
 	}
 
