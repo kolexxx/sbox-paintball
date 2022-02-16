@@ -78,8 +78,6 @@ public sealed partial class Bomb : Carriable
 					Rotation = Owner.Rotation,
 					Planter = Owner,
 					Bombsite = Owner.Bombsite,
-					GlowActive = true,
-					GlowColor = Color.Red
 				};
 
 				bomb.Initialize();
