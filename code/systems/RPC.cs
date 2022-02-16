@@ -28,7 +28,9 @@ public static partial class RPC
 	[ClientRpc]
 	public static void OnRoundStateChanged( RoundState roundState, Team winner = Team.None )
 	{
-		var gameplayState = Game.Current.State as GameplayState;
+		if ( Game.Current.State is not GameplayState gameplayState )
+			return;
+
 		gameplayState.RoundState = roundState;
 
 		switch ( roundState )
@@ -37,19 +39,21 @@ public static partial class RPC
 
 				Event.Run( PBEvent.Round.New );
 
-				return;
+				break;
 
 			case RoundState.Play:
 
 				Event.Run( PBEvent.Round.Start );
 
-				return;
+				break;
 
 			case RoundState.End:
 
 				Event.Run( PBEvent.Round.End, winner );
 
-				return;
+				break;
 		}
+
+		gameplayState.RoundStateStart();
 	}
 }
