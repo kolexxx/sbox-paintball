@@ -86,9 +86,7 @@ public partial class Game : Sandbox.Game
 			if ( player.Team == Team.None )
 				team = (Team)Rand.Int( 1, 2 );
 
-			var spawnpoints = Map.SpawnPoints
-							 .Where( e => e.Team == team && !e.Occupied )
-							 .ToList();
+			var spawnpoints = team == Team.Blue ? Map.BlueSpawnPoints : Map.RedSpawnPoints;
 
 			if ( spawnpoints.Count > 0 )
 			{
