@@ -11,10 +11,10 @@ public class FixedSpectateCamera : Camera, ISpectateCamera
 	{
 		base.Activated();
 
-		if ( Game.Current.Map.SpectatePoints.Count == 0 )
+		if ( Map.SpectatePoints.Count == 0 )
 			return;
 
-		_spectatePoint = Game.Current.Map.SpectatePoints[_index];
+		_spectatePoint = Map.SpectatePoints[_index];
 	}
 
 	public override void Update()
@@ -25,8 +25,8 @@ public class FixedSpectateCamera : Camera, ISpectateCamera
 			_index--;
 
 		if ( _index < 0 )
-			_index = Game.Current.Map.SpectatePoints.Count - 1;
-		else if ( _index >= Game.Current.Map.SpectatePoints.Count )
+			_index = Map.SpectatePoints.Count - 1;
+		else if ( _index >= Map.SpectatePoints.Count )
 			_index = 0;
 
 		Rotation = _spectatePoint.Rotation;
