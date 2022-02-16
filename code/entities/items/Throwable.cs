@@ -12,7 +12,8 @@ public sealed partial class Throwable : Carriable
 			return;
 
 		if ( CanThrow() )
-			Throw();
+			using ( LagCompensation() )
+				Throw();
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
