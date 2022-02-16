@@ -24,7 +24,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		SetModel( "models/rust_props/small_junk/newspaper_stack_a.vmdl" );
 
 		PhysicsEnabled = false;
-		UsePhysicsCollision = true;
+		UsePhysicsCollision = false;
 		SetInteractsAs( CollisionLayer.All );
 		SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
 	}
@@ -90,6 +90,10 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 			Bombsite.OnBombExplode.Fire( this );
 			OnDisabled( Defuser );
 		}
+
+		if ( Disabled && _gameplayState.RoundState == RoundState.Bomb )
+			_gameplayState.RoundStateFinish();
+
 	}
 
 	[ClientRpc]
@@ -100,6 +104,12 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		UntilTickSound = _gameplayState.UntilStateEnds.Relative % 1;
 
 		Sound.FromEntity( "bomb_plant", this );
+
+		if ( (Local.Pawn as Player).Team != Team.Red )
+		{
+			GlowActive = true;
+			GlowColor = Color.Red;
+		}
 
 		if ( _gameplayState.RoundState == RoundState.Play )
 		{
@@ -118,6 +128,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 	{
 		Disabled = true;
 		Defuser = defuser;
+		GlowActive = false;
 
 		if ( Defuser != null )
 			Event.Run( PBEvent.Round.Bomb.Defused, this );
