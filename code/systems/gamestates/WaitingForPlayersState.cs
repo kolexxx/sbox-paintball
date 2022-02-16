@@ -49,8 +49,8 @@ public partial class WaitingForPlayersState : BaseState
 	{
 		base.Tick();
 
-		if ( Host.IsServer && Players.Count == 1 )		
-			UntilStateEnds = StateDuration;	
+		if ( Host.IsServer && Players.Count == 1 )
+			UntilStateEnds = StateDuration;
 	}
 
 	public override void Start()
@@ -75,6 +75,6 @@ public partial class WaitingForPlayersState : BaseState
 	{
 		base.TimeUp();
 
-		Game.Current.ChangeState( new GameplayState() );
+		Game.Current.ChangeState( new GameplayState( Map.Bombsites.Count > 0 ) );
 	}
 }
