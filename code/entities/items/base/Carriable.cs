@@ -60,7 +60,6 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 	public virtual bool Droppable => true;
 	public CarriableInfo Info { get; set; }
 	public Panel LookPanel { get; set; }
-	public PickupTrigger PickupTrigger { get; protected set; }
 	public Player PreviousOwner { get; private set; }
 	public TimeSince TimeSinceDropped { get; private set; }
 	public new Player Owner
@@ -75,22 +74,17 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 	{
 		base.Spawn();
 
-		PickupTrigger = new PickupTrigger
-		{
-			Parent = this,
-			Position = Position
-		};
+		CollisionGroup = CollisionGroup.Weapon; // so players touch it as a trigger but not as a solid
+		SetInteractsAs( CollisionLayer.Debris ); // so player movement doesn't walk into it
 
-		PickupTrigger.PhysicsBody.EnableAutoSleeping = false;
-
-		if ( string.IsNullOrEmpty( ClassInfo.Name ) )
+		if ( string.IsNullOrEmpty( ClassInfo?.Name ) )
 		{
 			Log.Error( this + " doesn't have a Library name!" );
 
 			return;
 		}
 
-		Info = CarriableInfo.All[ClassInfo?.Name];
+		Info = CarriableInfo.All[ClassInfo.Name];
 		SetModel( Info.WorldModel );
 	}
 
@@ -189,9 +183,6 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 	{
 		base.OnCarryStart( carrier );
 
-		if ( PickupTrigger.IsValid() )
-			PickupTrigger.EnableTouch = false;
-
 		PreviousOwner = Owner;
 		Owner.Inventory.SlotCapacity[(int)Info.Slot]--;
 	}
@@ -199,9 +190,6 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 	public override void OnCarryDrop( Entity dropper )
 	{
 		base.OnCarryDrop( dropper );
-
-		if ( PickupTrigger.IsValid() )
-			PickupTrigger.EnableTouch = true;
 
 		TimeSinceDropped = 0f;
 		PreviousOwner.Inventory.SlotCapacity[(int)Info.Slot]++;
