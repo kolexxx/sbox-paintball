@@ -60,11 +60,12 @@ public partial class Player : Sandbox.Player
 
 	public override void Respawn()
 	{
+		if ( Team == Team.None )
+			return;	
+
 		TimeSinceSpawned = 0;
 		ConsecutiveKills = 0;
 		KillStreak = 0;
-
-		RemoveCorpse();
 
 		Controller = new CustomWalkController();
 
@@ -82,7 +83,6 @@ public partial class Player : Sandbox.Player
 			entity.EnableDrawing = true;
 		} );
 
-		RenderColor = Team.GetColor();
 		Transmit = TransmitType.Always;
 
 		Game.Current.State.OnPlayerSpawned( this );
@@ -96,6 +96,7 @@ public partial class Player : Sandbox.Player
 		SwitchToBestWeapon();
 		CreateHull();
 		ResetInterpolation();
+		RemoveCorpse();
 	}
 
 	public override void Simulate( Client cl )

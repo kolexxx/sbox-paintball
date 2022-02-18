@@ -75,7 +75,7 @@ public partial class Player
 		if ( attacker is Player killer )
 			killer?.OnPlayerKill( LastDamageInfo );
 
-		Game.Current.State?.OnPlayerKilled( this, attacker, LastDamageInfo );
+		Game.Current.State?.OnPlayerKilled( this );
 		Event.Run( PBEvent.Player.Killed, this );
 		RPC.OnPlayerKilled( this );
 	}
@@ -83,8 +83,9 @@ public partial class Player
 	public override void TakeDamage( DamageInfo info )
 	{
 		LastDamageInfo = info;
+		var carriable = info.Weapon as Carriable;
 
-		GetDamageInfo( To.Everyone, info.Attacker, (info.Weapon as Carriable)?.ClassInfo.Name, info.HitboxIndex, info.Position, info.Damage );
+		GetDamageInfo( To.Everyone, info.Attacker, carriable?.ClassInfo.Name, info.HitboxIndex, info.Position, info.Damage );
 
 		base.TakeDamage( info );
 	}
