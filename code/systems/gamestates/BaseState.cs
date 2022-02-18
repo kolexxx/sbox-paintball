@@ -16,7 +16,7 @@ public abstract partial class BaseState : BaseNetworkable
 	public virtual string Name => GetType().Name;
 	public virtual bool UpdateTimer => false;
 	public int TimeLeftSeconds => UntilStateEnds.Relative.CeilToInt();
-	protected RealTimeUntil NextSecondTime { get; set; }
+	protected RealTimeUntil NextSecondTime { get; set; } = 0f;
 	protected static List<Player> Players = new();
 
 	public BaseState() { }
@@ -66,25 +66,34 @@ public abstract partial class BaseState : BaseNetworkable
 		Game.Current?.MoveToSpawnpoint( player );
 	}
 
-	public virtual void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
+	public virtual void OnPlayerKilled( Player player )
 	{
 		Host.AssertServer();
 
 		AdjustTeam( player.Team, -1 );
 	}
 
-	public virtual void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam )
+	public virtual void OnPlayerChangedTeam( Player player, Team oldTeam )
 	{
 		Host.AssertServer();
 
-		if ( newTeam == Team.None )
+		if ( player.Alive() )
+		{
+			AdjustTeam( oldTeam, -1 );
+
+			player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
+		}
+
+		if ( player.Team == Team.None )
 		{
 			player.MakeSpectator();
 
 			return;
 		}
-
-		player.Respawn();
+		else
+		{
+			player.Respawn();
+		}
 	}
 
 	public virtual void OnSecond()
@@ -112,15 +121,15 @@ public abstract partial class BaseState : BaseNetworkable
 
 	public virtual void TimeUp() { }
 
-	protected void AdjustTeam( Team team, int num )
+	protected void AdjustTeam( Team team, int amount )
 	{
 		if ( team == Team.None )
 			return;
 
 		if ( team == Team.Blue )
-			AliveBlue += num;
+			AliveBlue += amount;
 		else
-			AliveRed += num;
+			AliveRed += amount;
 	}
 
 	#region callbacks;

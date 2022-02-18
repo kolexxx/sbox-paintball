@@ -1,4 +1,3 @@
-using Paintball.UI;
 using Sandbox;
 
 namespace Paintball;
@@ -15,9 +14,9 @@ public partial class WaitingForPlayersState : BaseState
 		NextSecondTime = 0f;
 	}
 
-	public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
+	public override void OnPlayerKilled( Player player )
 	{
-		base.OnPlayerKilled( player, attacker, info );
+		base.OnPlayerKilled( player );
 
 		player.Respawn();
 
@@ -37,9 +36,9 @@ public partial class WaitingForPlayersState : BaseState
 		if ( Host.IsServer )
 		{
 			if ( Players.Count > 1 )
-				Notification.Create( $"Starting in {TimeLeftSeconds}" );
+				UI.Notification.Create( $"Starting in {TimeLeftSeconds}" );
 			else
-				Notification.Create( "Waiting for players..." );
+				UI.Notification.Create( "Waiting for players..." );
 		}
 
 		base.OnSecond();

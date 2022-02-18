@@ -114,7 +114,7 @@ public partial class MapSelectState : BaseState
 
 	private async Task<List<string>> GetMapNames()
 	{
-		Package result = await Package.Fetch( Global.GameName, true );
+		Package result = await Package.Fetch( Global.GameIdent, true );
 		return result.GameConfiguration.MapList;
 	}
 

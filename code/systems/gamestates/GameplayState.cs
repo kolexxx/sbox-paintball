@@ -72,11 +72,11 @@ public partial class GameplayState : BaseState
 			player.Inventory.Add( new Knife() );
 	}
 
-	public override void OnPlayerKilled( Player player, Entity attacker, DamageInfo info )
+	public override void OnPlayerKilled( Player player )
 	{
-		base.OnPlayerKilled( player, attacker, info );
+		base.OnPlayerKilled( player );
 
-		if ( !_firstBlood && attacker is Player )
+		if ( !_firstBlood && player.LastAttacker is Player )
 		{
 			Audio.AnnounceAll( "first_blood", Audio.Priority.Medium );
 			_firstBlood = true;
@@ -86,7 +86,17 @@ public partial class GameplayState : BaseState
 		CheckRoundOver();
 	}
 
-	public override void OnPlayerChangedTeam( Player player, Team oldTeam, Team newTeam ) { }
+	public override void OnPlayerChangedTeam( Player player, Team oldTeam )
+	{
+		Host.AssertServer();
+
+		if ( !player.Alive() )
+			return;
+		
+		AdjustTeam( oldTeam, -1 );
+		AdjustTeam( player.Team, 1 );
+		player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
+	}
 
 	public override void Tick()
 	{
