@@ -3,7 +3,7 @@
 namespace Paintball;
 
 [Hammer.EditorModel( "weapons/rust_pistol/rust_pistol.vmdl" )]
-[Library( "pb_pistol", Title = "Pistol", Icon = "ui/weapons/pistol.png", Spawnable = true )]
+[Library( "pb_pistol", Title = "Pistol", Spawnable = true )]
 public partial class Pistol : ProjectileWeapon<BouncyProjectile>
 {
 	public override void SimulateAnimator( PawnAnimator anim )
