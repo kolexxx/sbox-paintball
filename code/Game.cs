@@ -1,6 +1,4 @@
-﻿using Paintball.UI;
-using Sandbox;
-using System.Linq;
+﻿using Sandbox;
 
 namespace Paintball;
 
@@ -8,22 +6,16 @@ namespace Paintball;
 [Library( "paintball", Title = "PaintBall" )]
 public partial class Game : Sandbox.Game
 {
-	public new static Game Current
-	{
-		get; private set;
-	}
-
+	public new static Game Current => Sandbox.Game.Current as Game;
 	[Net, Change] public BaseState State { get; private set; }
 	public Settings Settings { get; set; }
 	private BaseState _lastState { get; set; }
 
 	public Game()
 	{
-		Current = this;
-
 		if ( IsServer )
 		{
-			new Hud
+			new UI.Hud
 			{
 				Parent = this
 			};

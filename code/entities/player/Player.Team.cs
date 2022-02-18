@@ -11,13 +11,13 @@ public partial class Player : ITeamEntity
 	public void SetTeam( Team newTeam )
 	{
 		TimeSinceTeamChanged = 0f;
-		TakeDamage( DamageInfo.Generic( float.MaxValue ) );
 
 		Team oldTeam = Team;
 		Tags.Remove( $"{oldTeam.GetTag()}" );
 
 		Team = newTeam;
 		Tags.Add( $"{newTeam.GetTag()}" );
+		RenderColor = newTeam.GetColor();
 
 		Client.SetInt( "team", (int)newTeam );
 
@@ -26,7 +26,7 @@ public partial class Player : ITeamEntity
 		else
 			ChatBox.AddInformation( To.Everyone, $"{Client.Name} has started spectating" );
 
-		Game.Current.State.OnPlayerChangedTeam( this, oldTeam, newTeam );
+		Game.Current.State.OnPlayerChangedTeam( this, oldTeam );
 		Event.Run( PBEvent.Player.Team.Changed, this, oldTeam );
 	}
 

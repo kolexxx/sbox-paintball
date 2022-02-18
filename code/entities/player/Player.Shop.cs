@@ -5,7 +5,7 @@ namespace Paintball;
 
 public partial class Player
 {
-	[ServerVar( "pb_playermoneycap" )] public static int MoneyCap { get; set; }
+	[ServerVar( "pb_playermoneycap" )] public static int MoneyCap { get; set; } = 10000;
 	[Net, Change] public int Money { get; set; } = 1000;
 	public bool IsInBuyZone { get; set; } = true;
 
@@ -39,7 +39,7 @@ public partial class Player
 		if ( player.Money < info.Price )
 			return;
 
-		player.Money -= info.Price;
+		player.AddMoney( -info.Price );
 		player.Inventory.Swap( Library.Create<Carriable>( libraryName ) );
 	}
 
