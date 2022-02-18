@@ -73,6 +73,10 @@ public partial class Player
 		Controller = null;
 		EnableAllCollisions = false;
 		EnableDrawing = false;
+		Clothing.ForEach( ( entity ) =>
+		{
+			entity.EnableDrawing = false;
+		} );
 		LifeState = LifeState.Dead;
 		Health = 0;
 		Camera = new FreeSpectateCamera();
