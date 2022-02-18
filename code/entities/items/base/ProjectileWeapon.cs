@@ -4,7 +4,7 @@ using System.ComponentModel;
 
 namespace Paintball;
 
-public enum FireMode
+public enum FireMode : sbyte
 {
 	Automatic,
 	Semi,
@@ -66,7 +66,7 @@ public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon
 
 	public override void Simulate( Client owner )
 	{
-		if ( TimeSinceDeployed < 0.6f )
+		if ( TimeSinceDeployed < Info.DeployTime )
 			return;
 
 		if ( !IsReloading )
@@ -197,7 +197,6 @@ public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon
 		IsReloading = true;
 
 		Owner.SetAnimBool( "b_reload", true );
-
 		ReloadEffects();
 	}
 
@@ -295,7 +294,7 @@ public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon
 	[ClientRpc]
 	protected virtual void ShootEffects()
 	{
-		// Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+		// Particles.Create( "particles/impact.generic.smokering.vpcf", EffectEntity, "muzzle" );
 
 		if ( IsLocalPawn )
 			_ = new Sandbox.ScreenShake.Perlin( 1f, 0.2f, 0.8f );
