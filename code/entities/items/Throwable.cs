@@ -3,7 +3,7 @@
 namespace Paintball;
 
 [Hammer.EditorModel( "models/grenade/grenade.vmdl" )]
-[Library( "pb_spike", Title = "Spike" )]
+[Library( "pb_spike", Title = "Spike", Spawnable = false )]
 public sealed partial class Throwable : Carriable
 {
 	public override void Simulate( Client owner )
