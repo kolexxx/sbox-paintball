@@ -26,5 +26,7 @@
 		worldmodel = resource:"weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl"
 		movementspeedmultiplier = 0.85
 		price = 1000
+		title = "Shotgun"
+		deploytime = 0.6
 	}
 }

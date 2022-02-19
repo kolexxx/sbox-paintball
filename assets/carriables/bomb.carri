@@ -11,5 +11,7 @@
 		worldmodel = resource:"weapons/rust_shotgun/rust_shotgun.vmdl"
 		movementspeedmultiplier = 1.0
 		price = 0
+		title = "Bomb"
+		deploytime = 0.6
 	}
 }

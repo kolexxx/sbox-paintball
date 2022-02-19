@@ -27,5 +27,6 @@
 		movementspeedmultiplier = 0.85
 		price = 2000
 		deploytime = 0.6
+		title = "Havoc"
 	}
 }

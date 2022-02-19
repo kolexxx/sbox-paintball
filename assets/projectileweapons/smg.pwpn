@@ -26,5 +26,7 @@
 		worldmodel = resource:"weapons/rust_smg/rust_smg.vmdl"
 		movementspeedmultiplier = 0.85
 		price = 1000
+		title = "SMG"
+		deploytime = 0.6
 	}
 }

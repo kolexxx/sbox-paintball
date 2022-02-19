@@ -26,5 +26,7 @@
 		worldmodel = resource:"weapons/rust_pistol/rust_pistol.vmdl"
 		movementspeedmultiplier = 0.9
 		price = 100
+		title = "Pistol"
+		deploytime = 0.6
 	}
 }
