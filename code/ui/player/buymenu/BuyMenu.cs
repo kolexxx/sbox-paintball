@@ -367,7 +367,7 @@ public class BuyMenuWheelItems : BuyMenuWheel
 			item.Style.Set( "left", $"{pos.x}px" );
 			item.Style.Set( "top", $"{pos.y}px" );
 
-			item.Add.Label( info.Name, "itemname" );
+			item.Add.Label( info.Title, "itemname" );
 			item.Add.Image( info.Icon, "itemicon" );
 			var price = item.Add.Label( $"${string.Format( "{0:n0}", info.Price )}", "itemprice" );
 
