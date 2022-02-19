@@ -3,7 +3,7 @@
 namespace Paintball;
 
 [Hammer.Skip]
-[Library( "pb_knife", Title = "Knife" )]
+[Library( "pb_knife", Title = "Knife", Spawnable = false )]
 public partial class Knife : Carriable
 {
 	[Net, Predicted] public TimeSince TimeSinceStab { get; set; }

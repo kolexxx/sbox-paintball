@@ -3,7 +3,7 @@
 namespace Paintball;
 
 [Hammer.EditorModel( "weapons/rust_pumpshotgun/rust_pumpshotgun.vmdl" )]
-[Library( "pb_shotgun", Title = "Shotgun" )]
+[Library( "pb_shotgun", Title = "Shotgun", Spawnable = false )]
 public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 {
 	private bool _attackedDuringReload = false;

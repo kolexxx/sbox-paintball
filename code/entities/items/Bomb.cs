@@ -4,7 +4,7 @@ namespace Paintball;
 
 [Hammer.Skip]
 [Hammer.EditorModel( "weapons/rust_shotgun/rust_shotgun.vmdl" )]
-[Library( "pb_bomb", Title = "Bomb", Description = "A bomb that can be planted on a bombsite." )]
+[Library( "pb_bomb", Title = "Bomb", Description = "A bomb that can be planted on a bombsite.", Spawnable = false )]
 public sealed partial class Bomb : Carriable
 {
 	[Net, Predicted] public TimeSince Delay { get; set; } = 2f;
