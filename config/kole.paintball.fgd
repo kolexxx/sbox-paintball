@@ -203,18 +203,3 @@ metadata
 	output OnRedWin(void) : ""
 ]
 
-//
-// Paintball.SpectatePoint
-//
-@PointClass base(BaseProperties_kole_paintball) editormodel( "models/editor/camera.vmdl" ) 
-metadata
-{
-	entity_tool_name = "Spectate Point"
-	entity_tool_group = "Paintball"
-	entity_tool_tip = "Defines a fixed point where a player can spectate from."
-}
-= pb_spectatepoint : ""
-[
-	index(integer) : "Index" : 0 : ""
-]
-
