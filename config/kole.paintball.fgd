@@ -178,7 +178,7 @@ metadata
 //
 // Paintball.Settings
 //
-@PointClass base(BaseProperties_kole_paintball) 
+@PointClass base(BaseProperties_kole_paintball) iconsprite( "materials/editor/env_spark.vmat" ) 
 metadata
 {
 	entity_tool_name = "Game and Map settings"
@@ -188,6 +188,8 @@ metadata
 [
 	blueteamname(string) : "Blue Team Name" : "Blue" : ""
 	redteamname(string) : "Red Team Name" : "Red" : ""
+	blueteamicon(string) { editor = "AssetBrowse(png)" } : "Blue Team Icon" :  : ""
+	redteamicon(string) { editor = "AssetBrowse(png)" } : "Red Team Icon" :  : ""
 	freezeduration(integer) : "Freeze Duration" : 5 : ""
 	playduration(integer) : "Play Duration" : 60 : ""
 	endduration(integer) : "End Duration" : 5 : ""
