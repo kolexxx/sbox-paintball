@@ -17,22 +17,12 @@ public abstract partial class BaseState : BaseNetworkable
 	public virtual bool UpdateTimer => false;
 	public int TimeLeftSeconds => UntilStateEnds.Relative.CeilToInt();
 	protected RealTimeUntil NextSecondTime { get; set; } = 0f;
-	protected static List<Player> Players = new();
 
 	public BaseState() { }
-
-	public virtual void AddPlayer( Player player )
-	{
-		Host.AssertServer();
-
-		Players.Add( player );
-	}
 
 	public virtual void OnPlayerJoin( Player player )
 	{
 		Host.AssertServer();
-
-		AddPlayer( player );
 
 		if ( player.Client.IsBot )
 		{
@@ -50,8 +40,6 @@ public abstract partial class BaseState : BaseNetworkable
 	public virtual void OnPlayerLeave( Player player )
 	{
 		Host.AssertServer();
-
-		Players.Remove( player );
 
 		if ( player.Alive() )
 			AdjustTeam( player.Team, -1 );

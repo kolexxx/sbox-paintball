@@ -33,9 +33,9 @@ public partial class WaitingForPlayersState : BaseState
 
 	public override void OnSecond()
 	{
-		if ( Host.IsServer )
+		if ( Host.IsClient )
 		{
-			if ( Players.Count > 1 )
+			if ( Client.All.Count > 1 )
 				UI.Notification.Create( $"Starting in {TimeLeftSeconds}" );
 			else
 				UI.Notification.Create( "Waiting for players..." );
@@ -48,7 +48,7 @@ public partial class WaitingForPlayersState : BaseState
 	{
 		base.Tick();
 
-		if ( Host.IsServer && Players.Count == 1 )
+		if ( Host.IsServer && Client.All.Count == 1 )
 			UntilStateEnds = StateDuration;
 	}
 
@@ -56,11 +56,15 @@ public partial class WaitingForPlayersState : BaseState
 	{
 		base.Start();
 
-		if ( Players.Count > 1 )
+		if ( !Host.IsServer )
+			return;
+
+		if ( Client.All.Count > 1 )
 			UntilStateEnds = StateDuration;
 
-		foreach ( var player in Players )
+		foreach ( var client in Client.All )
 		{
+			var player = client.Pawn as Player;
 			if ( player.Team == Team.None )
 				continue;
 

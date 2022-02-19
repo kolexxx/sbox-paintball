@@ -37,8 +37,9 @@ public partial class MapSelectState : BaseState
 		VoteCount = new Dictionary<string, int>();
 		VoteCount.Add( string.Empty, 0 );
 
-		foreach ( var player in Players )
+		foreach ( var client in Client.All )
 		{
+			var player = client.Pawn as Player;
 			player.Inventory?.DeleteContents();
 			PlayerIdVote.Add( player.Client.PlayerId, string.Empty );
 		}
