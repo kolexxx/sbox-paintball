@@ -118,13 +118,13 @@ public partial class Player
 	}
 
 	[PBEvent.Player.Killed]
-	private void OnPlayerKilled( Player player )
+	private static void OnPlayerKilled( Player player )
 	{
-		if ( !IsClient || !player.IsValid() )
+		if ( !Host.IsClient || Local.Pawn is not Player localPlayer )
 			return;
 
-		if ( IsSpectatingPlayer && player == CurrentPlayer )
-			UpdateSpectatingPlayer( 1 );
+		if ( localPlayer.IsSpectatingPlayer && player == localPlayer.CurrentPlayer )
+			localPlayer.UpdateSpectatingPlayer( 1 );
 	}
 
 	private void OnViewerCountChanged(int oldValue, int newValue)
