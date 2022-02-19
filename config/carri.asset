@@ -11,6 +11,7 @@
 		2 : "Red"
 	]
 	libraryname(string) { group = "Important" } : "Library Name" :  : ""
+	title(string) { group = "Important" } : "Title" :  : ""
 	slot(choices) { group = "Important" } : "Slot" : 0 : "" =
 	[
 		0 : "Primary"
