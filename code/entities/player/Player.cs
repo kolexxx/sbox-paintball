@@ -60,7 +60,7 @@ public partial class Player : Sandbox.Player
 
 	public async void Respawn( float delay )
 	{
-		await GameTask.DelaySeconds( 1 );
+		await GameTask.DelaySeconds( delay );
 
 		if ( this.IsValid() && Game.Current.State is WaitingForPlayersState )
 			Respawn();
