@@ -60,6 +60,8 @@ public partial class Notification : Popup
 		if ( winner == Team.None )
 		{
 			Local.Hud.AddChild( new Notification( "Draw", 4, true ) );
+			Audio.Announce( "draw", Audio.Priority.High );
+
 			return;
 		}
 
