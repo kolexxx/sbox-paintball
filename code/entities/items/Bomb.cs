@@ -103,6 +103,9 @@ public sealed partial class Bomb : Carriable
 
 	public override void Reset()
 	{
+		if ( !IsServer )
+			return;
+
 		OnCarryDrop( Owner );
 		Delete();
 	}

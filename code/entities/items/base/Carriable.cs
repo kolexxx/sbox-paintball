@@ -25,6 +25,7 @@ public partial class CarriableInfo : Asset
 	[Property, Category( "Important" )] public bool Buyable { get; set; }
 	[Property, Category( "Important" )] public Team ExclusiveFor { get; set; }
 	[Property, Category( "Important" )] public string LibraryName { get; set; }
+	[Property, Category( "Important" )] public string Title { get; set; }
 	[Property, Category( "Important" )] public SlotType Slot { get; set; }
 	[Property, Category( "UI" ), ResourceType( "png" )] public string Icon { get; set; } = "";
 	[Property, Category( "Models" ), ResourceType( "vmdl" )] public string ViewModel { get; set; } = "";
@@ -145,16 +146,17 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		{
 			Position = Position,
 			Owner = Owner,
-			EnableViewmodelRendering = true
+			EnableViewmodelRendering = true,
+			FieldOfView = 80
 		};
 
-		ViewModelEntity.FieldOfView = 70;
 		ViewModelEntity.SetModel( Info.ViewModel );
 	}
 
 	public override void CreateHudElements()
 	{
-		if ( Local.Hud == null ) return;
+		if ( Local.Hud == null )
+			return;
 
 		CrosshairPanel = new Crosshair
 		{
@@ -192,35 +194,33 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		base.OnCarryDrop( dropper );
 
 		TimeSinceDropped = 0f;
-		PreviousOwner.Inventory.SlotCapacity[(int)Info.Slot]++;
+
+		if ( PreviousOwner.IsValid() )
+			PreviousOwner.Inventory.SlotCapacity[(int)Info.Slot]++;
 
 		OnActiveEndClient( To.Everyone );
 	}
 
-	public void Remove()
-	{
-		PhysicsGroup?.Wake();
-		Delete();
-	}
-
+	/// <summary>
+	/// Gets called on the server and client
+	/// </summary>
 	public virtual void Reset()
 	{
-		using ( Prediction.Off() )
+		if ( IsServer )
 		{
-			TimeSinceDeployed = 0;
-			TimeSinceDropped = 0;
+			using ( Prediction.Off() )
+			{
+				TimeSinceDeployed = 0;
+				TimeSinceDropped = 0;
+			}
+
+			return;
 		}
 
-		ClientReset();
-	}
-
-	#region rpc
-	[ClientRpc]
-	protected void ClientReset()
-	{
 		ViewModelEntity?.SetAnimBool( "deploy", true );
 	}
 
+	#region rpc
 	[ClientRpc]
 	protected void OnActiveStartClient()
 	{
