@@ -4,7 +4,7 @@ namespace Paintball;
 
 public class FixedSpectateCamera : Camera, ISpectateCamera
 {
-	private SpectatePoint _spectatePoint;
+	private PointCamera _currentPoint;
 	private int _index = 0;
 
 	public override void Activated()
@@ -14,7 +14,7 @@ public class FixedSpectateCamera : Camera, ISpectateCamera
 		if ( Map.SpectatePoints.Count == 0 )
 			return;
 
-		_spectatePoint = Map.SpectatePoints[_index];
+		_currentPoint = Map.SpectatePoints[_index];
 	}
 
 	public override void Update()
@@ -29,8 +29,8 @@ public class FixedSpectateCamera : Camera, ISpectateCamera
 		else if ( _index >= Map.SpectatePoints.Count )
 			_index = 0;
 
-		Rotation = _spectatePoint.Rotation;
-		Position = _spectatePoint.Position;
+		Rotation = _currentPoint.Rotation;
+		Position = _currentPoint.Position;
 	}
 
 	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer ) { }

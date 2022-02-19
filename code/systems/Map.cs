@@ -12,7 +12,7 @@ public static partial class Map
 	public static List<Bombsite> Bombsites { get; private set; }
 	public static List<PlayerSpawnPoint> BlueSpawnPoints { get; private set; }
 	public static List<PlayerSpawnPoint> RedSpawnPoints { get; private set; }
-	public static List<SpectatePoint> SpectatePoints { get; private set; }
+	public static List<PointCamera> SpectatePoints { get; private set; }
 
 	private static async Task GetInfo()
 	{
@@ -41,7 +41,7 @@ public static partial class Map
 			Global.Lobby.MaxMembers = Math.Min( BlueSpawnPoints.Count, RedSpawnPoints.Count );
 		}
 
-		SpectatePoints = Entity.All.OfType<SpectatePoint>().ToList();
+		SpectatePoints = Entity.All.OfType<PointCamera>().ToList();
 		Bombsites = Entity.All.OfType<Bombsite>().ToList();
 
 		_ = GetInfo();
