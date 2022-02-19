@@ -24,7 +24,7 @@ public partial class Player : Sandbox.Player
 	{
 		get
 		{
-			if ( Game.Current.State is not GameplayState state || !state.BombEnabled )
+			if ( Game.Current.State is not GameplayState || !GameplayState.BombEnabled )
 				return false;
 
 			if ( GroundEntity is not WorldEntity || Bombsite == null )
@@ -58,10 +58,18 @@ public partial class Player : Sandbox.Player
 		LifeState = LifeState.Respawnable;
 	}
 
+	public async void Respawn( float delay )
+	{
+		await GameTask.DelaySeconds( 1 );
+
+		if ( this.IsValid() && Game.Current.State is WaitingForPlayersState )
+			Respawn();
+	}
+
 	public override void Respawn()
 	{
 		if ( Team == Team.None )
-			return;	
+			return;
 
 		TimeSinceSpawned = 0;
 		ConsecutiveKills = 0;
