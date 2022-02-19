@@ -31,7 +31,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 
 	public void Initialize()
 	{
-		TimeUntilExplode = Game.Current.Settings.BombDuration;
+		TimeUntilExplode = GameplayState.BombDuration;
 		_gameplayState = Game.Current.State as GameplayState;
 		_gameplayState.Bomb = this;
 
