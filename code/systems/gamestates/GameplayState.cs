@@ -30,9 +30,23 @@ public enum RoundState : byte
 /// </summary>
 public partial class GameplayState : BaseState
 {
+	[ServerVar( "pb_freeze_duration", Help = "The duration of the freeze period." )]
+	public static int FreezeDuration { get; set; } = 5;
+	[ServerVar( "pb_play_duration", Help = "The duration of the play period." )]
+	public static int PlayDuration { get; set; } = 60;
+	[ServerVar( "pb_end_duration", Help = "The duration of the end period." )]
+	public static int EndDuration { get; set; } = 5;
+	[ServerVar( "pb_bomb_duration", Help = "The time needed for the bomb to explode." )]
+	public static int BombDuration { get; set; } = 30;
+	[ServerVar( "pb_bomb_enabled" )]
+	public static bool BombEnabled { get; set; } = true;
+	[ServerVar( "pb_buy_duration", Help = "The duration of the buy period." )]
+	public static int BuyDuration { get; set; } = 15;
+	[ServerVar( "pb_round_limit", Help = "The amount of rounds." )]
+	public static int RoundLimit { get; set; } = 12;
+
 	[Net] public TimeUntil BuyTimeExpire { get; private set; } = 0;
 	public PlantedBomb Bomb { get; set; }
-	public bool BombEnabled { get; init; } = true;
 	public override bool CanBuy => !BuyTimeExpire;
 	public int Round { get; private set; } = 1;
 	public RoundState RoundState { get; set; }
@@ -49,7 +63,7 @@ public partial class GameplayState : BaseState
 		base.OnPlayerJoin( player );
 
 		if ( RoundState == RoundState.Play || RoundState == RoundState.Bomb )
-			if ( Players.Count == 2 )
+			if ( Client.All.Count == 2 )
 				RoundStateFinish();
 	}
 
@@ -92,7 +106,7 @@ public partial class GameplayState : BaseState
 
 		if ( !player.Alive() )
 			return;
-		
+
 		AdjustTeam( oldTeam, -1 );
 		AdjustTeam( player.Team, 1 );
 		player.TakeDamage( DamageInfo.Generic( float.MaxValue ) );
@@ -119,14 +133,16 @@ public partial class GameplayState : BaseState
 	{
 		base.Start();
 
-		foreach ( var player in Players )
-			player.Reset();
-
 		RoundState = RoundState.Freeze;
-		ToWinScore = (Game.Current.Settings.RoundLimit >> 1) + 1;
+		ToWinScore = (RoundLimit >> 1) + 1;
 
-		if ( Host.IsServer )
-			RoundStateStart();
+		if ( !Host.IsServer )
+			return;
+
+		foreach ( var client in Client.All )
+			(client.Pawn as Player).Reset();
+
+		RoundStateStart();
 	}
 
 	public void RoundStateStart()
@@ -140,7 +156,7 @@ public partial class GameplayState : BaseState
 				if ( Host.IsClient )
 				{
 					if ( BlueScore == ToWinScore - 1 || RedScore == ToWinScore - 1 )
-						UI.Notification.Create( "Matchpoint!", Game.Current.Settings.FreezeDuration, true );
+						UI.Notification.Create( "Matchpoint!", FreezeDuration, true );
 
 					return;
 				}
@@ -154,8 +170,10 @@ public partial class GameplayState : BaseState
 				Map.RedSpawnPoints.Shuffle();
 				int bluei = 0, redi = 0;
 				int index = BombEnabled ? Rand.Int( 1, Team.Red.GetCount() ) : int.MaxValue;
-				foreach ( var player in Players )
+				foreach ( var client in Client.All )
 				{
+					var player = client.Pawn as Player;
+
 					if ( !player.IsValid() || player.Team == Team.None )
 						continue;
 
@@ -180,8 +198,8 @@ public partial class GameplayState : BaseState
 					}
 				}
 
-				UntilStateEnds = Game.Current.Settings.FreezeDuration;
-				BuyTimeExpire = Game.Current.Settings.FreezeDuration + 10;
+				UntilStateEnds = FreezeDuration;
+				BuyTimeExpire = BuyDuration;
 
 				Event.Run( PBEvent.Round.New );
 				RPC.OnRoundStateChanged( RoundState.Freeze );
@@ -200,7 +218,7 @@ public partial class GameplayState : BaseState
 				Event.Run( PBEvent.Round.Start );
 				RPC.OnRoundStateChanged( RoundState.Play );
 
-				UntilStateEnds = Game.Current.Settings.PlayDuration;
+				UntilStateEnds = PlayDuration;
 
 				break;
 			}
@@ -220,7 +238,7 @@ public partial class GameplayState : BaseState
 				Event.Run( PBEvent.Round.End, GetWinner() );
 				RPC.OnRoundStateChanged( RoundState.End, GetWinner() );
 
-				UntilStateEnds = Game.Current.Settings.EndDuration;
+				UntilStateEnds = EndDuration;
 
 				break;
 			}
@@ -264,7 +282,7 @@ public partial class GameplayState : BaseState
 			{
 				Round++;
 
-				if ( BlueScore == ToWinScore || RedScore == ToWinScore || Round > Game.Current.Settings.RoundLimit )
+				if ( BlueScore == ToWinScore || RedScore == ToWinScore || Round > RoundLimit )
 				{
 					Bomb?.Delete();
 					Bomb = null;
