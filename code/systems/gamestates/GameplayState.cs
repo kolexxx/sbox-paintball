@@ -30,19 +30,19 @@ public enum RoundState : byte
 /// </summary>
 public partial class GameplayState : BaseState
 {
-	[ServerVar( "pb_freeze_duration", Help = "The duration of the freeze period." )]
+	[ConVar.Replicated( "pb_freeze_duration", Help = "The duration of the freeze period." )]
 	public static int FreezeDuration { get; set; } = 5;
-	[ServerVar( "pb_play_duration", Help = "The duration of the play period." )]
+	[ConVar.Replicated( "pb_play_duration", Help = "The duration of the play period." )]
 	public static int PlayDuration { get; set; } = 60;
-	[ServerVar( "pb_end_duration", Help = "The duration of the end period." )]
+	[ConVar.Replicated( "pb_end_duration", Help = "The duration of the end period." )]
 	public static int EndDuration { get; set; } = 5;
-	[ServerVar( "pb_bomb_duration", Help = "The time needed for the bomb to explode." )]
+	[ConVar.Replicated( "pb_bomb_duration", Help = "The time needed for the bomb to explode." )]
 	public static int BombDuration { get; set; } = 30;
-	[ServerVar( "pb_bomb_enabled" )]
+	[ConVar.Replicated( "pb_bomb_enabled" )]
 	public static bool BombEnabled { get; set; } = true;
-	[ServerVar( "pb_buy_duration", Help = "The duration of the buy period." )]
+	[ConVar.Replicated( "pb_buy_duration", Help = "The duration of the buy period." )]
 	public static int BuyDuration { get; set; } = 15;
-	[ServerVar( "pb_round_limit", Help = "The amount of rounds." )]
+	[ConVar.Replicated( "pb_round_limit", Help = "The amount of rounds." )]
 	public static int RoundLimit { get; set; } = 12;
 
 	[Net] public TimeUntil BuyTimeExpire { get; private set; } = 0;
@@ -50,7 +50,7 @@ public partial class GameplayState : BaseState
 	public override bool CanBuy => !BuyTimeExpire;
 	public int Round { get; private set; } = 1;
 	public RoundState RoundState { get; set; }
-	public int ToWinScore { get; private set; }
+	public int ToWinScore => (RoundLimit >> 1) + 1;
 	public override bool UpdateTimer => RoundState != RoundState.End;
 	private bool _firstBlood = false;
 
@@ -134,7 +134,6 @@ public partial class GameplayState : BaseState
 		base.Start();
 
 		RoundState = RoundState.Freeze;
-		ToWinScore = (RoundLimit >> 1) + 1;
 
 		if ( !Host.IsServer )
 			return;
