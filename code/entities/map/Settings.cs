@@ -2,17 +2,20 @@
 
 namespace Paintball;
 
+[Hammer.EditorSprite( "materials/editor/env_spark.vmat" )]
 [Hammer.EntityTool( "Game and Map settings", "Paintball" )]
 [Library( "pb_settings", Title = "Settings", Spawnable = true )]
 public partial class Settings : Entity
 {
 	[Net, Property] public string BlueTeamName { get; set; } = "Blue";
 	[Net, Property] public string RedTeamName { get; set; } = "Red";
-	[Property] public int FreezeDuration { get; set; } = 5;
-	[Property] public int PlayDuration { get; set; } = 60;
-	[Property] public int EndDuration { get; set; } = 5;
-	[Property] public int BombDuration { get; set; } = 30;
-	[Property] public int RoundLimit { get; set; } = 12;
+	[Property, ResourceType( "png" )] public string BlueTeamIcon { get; set; }
+	[Property, ResourceType( "png" )] public string RedTeamIcon { get; set; }
+	[Property] private int FreezeDuration { get; set; } = 5;
+	[Property] private int PlayDuration { get; set; } = 60;
+	[Property] private int EndDuration { get; set; } = 5;
+	[Property] private int BombDuration { get; set; } = 30;
+	[Property] private int RoundLimit { get; set; } = 12;
 	protected Output OnRoundStart { get; set; }
 	protected Output<Team> OnRoundEnd { get; set; }
 	protected Output OnRoundNew { get; set; }
@@ -34,6 +37,11 @@ public partial class Settings : Entity
 		Game.Current.Settings = this;
 		Parent = Game.Current;
 		Transmit = TransmitType.Always;
+		GameplayState.FreezeDuration = FreezeDuration;
+		GameplayState.PlayDuration = PlayDuration;
+		GameplayState.EndDuration = EndDuration;
+		GameplayState.BombDuration = BombDuration;
+		GameplayState.RoundLimit = RoundLimit;
 
 		Event.Run( PBEvent.Game.SettingsLoaded );
 	}
