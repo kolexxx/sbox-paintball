@@ -156,8 +156,9 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 		var info = new DamageInfo()
 			.WithAttacker( Owner )
 			.WithWeapon( Origin )
-			.WithPosition( StartPosition )
+			.WithPosition( trace.EndPos )
 			.WithForce( Velocity * 0.1f )
+			.WithFlag( DamageFlags.PhysicsImpact )
 			.UsingTraceResult( trace );
 
 		info.Damage = float.MaxValue;

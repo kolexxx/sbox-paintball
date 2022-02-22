@@ -17,5 +17,4 @@ public static class ListExtensions
 			list[n] = value;
 		}
 	}
-
 }

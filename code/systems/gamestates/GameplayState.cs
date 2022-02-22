@@ -178,6 +178,12 @@ public partial class GameplayState : BaseState
 
 					player.Respawn();
 
+					if ( Map.BlueSpawnPoints.Count == 0 || Map.RedSpawnPoints.Count == 0 )
+					{
+						Game.Current.MoveToSpawnpoint( player );
+						return;
+					}
+
 					if ( player.Team == Team.Blue )
 					{
 						if ( bluei >= Map.BlueSpawnPoints.Count )

@@ -77,8 +77,10 @@ public partial class Knife : Carriable
 		using ( Prediction.Off() )
 		{
 			DamageInfo info = new DamageInfo()
+				.WithPosition( trace.EndPos )
 				.UsingTraceResult( trace )
 				.WithAttacker( Owner )
+				.WithFlag( DamageFlags.Bullet )
 				.WithWeapon( this );
 
 			info.Damage = damage;
