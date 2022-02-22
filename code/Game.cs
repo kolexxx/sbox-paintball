@@ -94,6 +94,16 @@ public partial class Game : Sandbox.Game
 		base.MoveToSpawnpoint( pawn );
 	}
 
+	public override void PostLevelLoaded()
+	{
+		base.PostLevelLoaded();
+
+		ChangeState( new WaitingForPlayersState() );
+
+		if ( !Settings.IsValid() )
+			Settings = new Settings();
+	}
+
 	public override void Shutdown()
 	{
 		base.Shutdown();
@@ -124,16 +134,6 @@ public partial class Game : Sandbox.Game
 			return;
 
 		base.DoPlayerSuicide( cl );
-	}
-
-	[Event.Entity.PostSpawn]
-	private void EntityPostSpawn()
-	{
-		if ( IsServer )
-			ChangeState( new WaitingForPlayersState() );
-
-		if ( Settings == null )
-			Settings = new Settings();
 	}
 
 	private void OnStateChanged()
