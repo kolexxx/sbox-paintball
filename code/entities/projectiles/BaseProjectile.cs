@@ -87,7 +87,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 
 		if ( !string.IsNullOrEmpty( ModelPath ) )
 		{
-			ModelEntity = SceneObject.CreateModel( ModelPath );
+			ModelEntity = new SceneObject( Map.Accessor.Scene, ModelPath );
 			ModelEntity.SetMaterialOverride( Material.Load( $"materials/{Team.GetTag()}_surface.vmat" ) );
 		}
 	}
@@ -106,7 +106,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 			.WithoutTags( Team.GetTag(), "projectile" )
 			.Run();
 
-		Position = trace.EndPos;
+		Position = trace.EndPosition;
 
 		if ( DestroyTime )
 		{
@@ -156,7 +156,7 @@ public partial class BaseProjectile : ModelEntity, ITeamEntity
 		var info = new DamageInfo()
 			.WithAttacker( Owner )
 			.WithWeapon( Origin )
-			.WithPosition( trace.EndPos )
+			.WithPosition( trace.EndPosition )
 			.WithForce( Velocity * 0.1f )
 			.WithFlag( DamageFlags.PhysicsImpact )
 			.UsingTraceResult( trace );

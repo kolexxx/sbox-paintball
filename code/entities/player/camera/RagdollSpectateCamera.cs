@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-public class RagdollSpectateCamera : Camera, ISpectateCamera
+public class RagdollSpectateCamera : CameraMode, ISpectateCamera
 {
 	public override void Activated()
 	{
@@ -14,6 +14,4 @@ public class RagdollSpectateCamera : Camera, ISpectateCamera
 	public override void Update()
 	{
 	}
-
-	public void OnSpectatedPlayerChanged( Player oldPlayer, Player newPlayer ) { }
 }

@@ -1,6 +1,7 @@
 ﻿using Paintball.UI;
 using Sandbox;
 using Sandbox.UI;
+using Sandbox.Component;
 
 namespace Paintball;
 
@@ -16,6 +17,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 	public Panel LookPanel { get; set; }
 	public TimeUntil UntilTickSound { get; set; }
 	private GameplayState _gameplayState;
+	private Glow _glow;
 
 	public override void Spawn()
 	{
@@ -74,7 +76,6 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		{
 			Disabled = true;
 			Defuser.AddMoney( 1000 );
-			GlowActive = false;
 
 			Event.Run( PBEvent.Round.Bomb.Defused, this );
 			Bombsite.OnBombDefused.Fire( this );
@@ -84,7 +85,6 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 		{
 			Disabled = true;
 			Defuser = null;
-			GlowActive = false;
 
 			Event.Run( PBEvent.Round.Bomb.Explode, this );
 			Bombsite.OnBombExplode.Fire( this );
@@ -107,8 +107,11 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 
 		if ( (Local.Pawn as Player).Team != Team.Red )
 		{
-			GlowActive = true;
-			GlowColor = Color.Red;
+			_glow = Components.GetOrCreate<Glow>();
+			_glow.Active = true;
+			_glow.RangeMin = 0;
+			_glow.RangeMax = 1000;
+			_glow.Color = Color.Red;
 		}
 
 		if ( _gameplayState.RoundState == RoundState.Play )
@@ -128,7 +131,7 @@ public partial class PlantedBomb : ModelEntity, IUse, ILook
 	{
 		Disabled = true;
 		Defuser = defuser;
-		GlowActive = false;
+		_glow.Active = false;
 
 		if ( Defuser != null )
 			Event.Run( PBEvent.Round.Bomb.Defused, this );

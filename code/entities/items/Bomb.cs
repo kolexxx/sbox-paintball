@@ -74,7 +74,7 @@ public sealed partial class Bomb : Carriable
 			{
 				var bomb = new PlantedBomb
 				{
-					Position = trace.EndPos,
+					Position = trace.EndPosition,
 					Rotation = Owner.Rotation,
 					Planter = Owner,
 					Bombsite = Owner.Bombsite,

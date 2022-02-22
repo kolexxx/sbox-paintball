@@ -16,12 +16,6 @@ public sealed partial class Throwable : Carriable
 				Throw();
 	}
 
-	public override void SimulateAnimator( PawnAnimator anim )
-	{
-		anim.SetParam( "holdtype", 5 );
-		anim.SetParam( "aimat_weight", 1.0f );
-	}
-
 	public bool CanThrow()
 	{
 		if ( Owner.IsFrozen || !Input.Released( InputButton.Attack1 ) )
@@ -44,7 +38,7 @@ public sealed partial class Throwable : Carriable
 			var ent = new Grenade
 			{
 				Rotation = Owner.EyeRotation,
-				Position = trace.EndPos,
+				Position = trace.EndPosition,
 				Velocity = Owner.EyeRotation.Forward * 1000 + Vector3.Up * 100,
 				Owner = Owner,
 				Origin = this,

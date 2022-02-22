@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-public class FixedSpectateCamera : Camera, ISpectateCamera
+public class FixedSpectateCamera : CameraMode, ISpectateCamera
 {
 	private PointCamera _currentPoint;
 	private int _index = 0;

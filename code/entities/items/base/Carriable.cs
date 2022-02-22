@@ -21,11 +21,13 @@ public partial class CarriableInfo : Asset
 	public static Dictionary<string, CarriableInfo> All { get; set; } = new();
 	public Model CachedViewModel { get; set; }
 	public Model CachedWorldModel { get; set; }
+	public LibraryAttribute LibraryAttribute { get; set; }
+	public string Title { get; set; }
 
 	[Property, Category( "Important" )] public bool Buyable { get; set; }
 	[Property, Category( "Important" )] public Team ExclusiveFor { get; set; }
-	[Property, Category( "Important" )] public string LibraryName { get; set; }
-	[Property, Category( "Important" )] public string Title { get; set; }
+	[Property, Category( "Important" )] public int HoldType { get; set; }
+	[Property, Category( "Important" )] public string LibraryName { get; set; } 
 	[Property, Category( "Important" )] public SlotType Slot { get; set; }
 	[Property, Category( "UI" ), ResourceType( "png" )] public string Icon { get; set; } = "";
 	[Property, Category( "Models" ), ResourceType( "vmdl" )] public string ViewModel { get; set; } = "";
@@ -50,6 +52,8 @@ public partial class CarriableInfo : Asset
 
 		CachedViewModel = Model.Load( ViewModel );
 		CachedWorldModel = Model.Load( WorldModel );
+		LibraryAttribute = attribute;
+		Title = attribute.Title;
 	}
 }
 
@@ -135,6 +139,11 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		base.Simulate( owner );
 	}
 
+	public override void SimulateAnimator( PawnAnimator anim )
+	{
+		anim.SetAnimParameter( "holdtype", Info.HoldType );
+	}
+
 	public override void CreateViewModel()
 	{
 		Host.AssertClient();
@@ -178,7 +187,7 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		if ( !player.Inventory.HasFreeSlot( Info.Slot ) )
 			return false;
 
-		return true;
+		return base.CanCarry( carrier );
 	}
 
 	public override void OnCarryStart( Entity carrier )
@@ -217,7 +226,12 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 			return;
 		}
 
-		ViewModelEntity?.SetAnimBool( "deploy", true );
+		ViewModelEntity?.SetAnimParameter( "deploy", true );
+	}
+
+	public bool IsActiveChild()
+	{
+		return Owner?.ActiveChild == this;
 	}
 
 	#region rpc
@@ -232,7 +246,7 @@ public abstract partial class Carriable : BaseCarriable, IUse, ILook
 		if ( (Local.Pawn as Player).CurrentPlayer != Owner )
 			ViewModelEntity.EnableDrawing = false;
 
-		ViewModelEntity?.SetAnimBool( "deploy", true );
+		ViewModelEntity?.SetAnimParameter( "deploy", true );
 	}
 
 	[ClientRpc]

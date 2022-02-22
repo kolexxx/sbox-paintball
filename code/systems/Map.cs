@@ -1,6 +1,6 @@
 ﻿using Sandbox;
+using Sandbox.Internal;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,6 +8,7 @@ namespace Paintball;
 
 public static partial class Map
 {
+	public static MapAccessor Accessor => GlobalGameNamespace.Map;
 	public static Package Info { get; private set; }
 	public static List<Bombsite> Bombsites { get; private set; }
 	public static List<PlayerSpawnPoint> BlueSpawnPoints { get; private set; }
@@ -48,6 +49,6 @@ public static partial class Map
 	public static void CleanUp()
 	{
 		Sandbox.Internal.Decals.RemoveFromWorld();
-		EntityManager.CleanUpMap( Game.DefaultCleanupFilter );
+		Accessor.Reset( Game.DefaultCleanupFilter );
 	}
 }

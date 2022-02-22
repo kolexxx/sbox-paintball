@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-public class FirstPersonSpectateCamera : Camera, ISpectateCamera
+public class FirstPersonSpectateCamera : CameraMode, ISpectateCamera
 {
 	private const float SMOOTH_SPEED = 25f;
 
@@ -14,7 +14,7 @@ public class FirstPersonSpectateCamera : Camera, ISpectateCamera
 		if ( player.CurrentPlayer.ActiveChild is Carriable weapon && weapon.ViewModelEntity != null )
 			weapon.ViewModelEntity.EnableDrawing = false;
 
-		if ( player.Camera is ThirdPersonSpectateCamera )
+		if ( player.CameraMode is ThirdPersonSpectateCamera )
 			return;
 
 		if ( Host.IsClient && player.CurrentPlayer.IsValid() )

@@ -39,13 +39,13 @@ public class Inventory : BaseInventory
 
 	public Carriable Swap( Carriable carriable )
 	{
-		var ent = List.Find( x => (x as Carriable).Info.Slot == carriable.Info.Slot );
+		var ent = List.Find( x => (x as Carriable).Info.Slot == carriable.Info.Slot ) as Carriable;
 		bool wasActive = ent?.IsActiveChild() ?? false;
 
 		Drop( ent );
 		Add( carriable, wasActive );
 
-		return ent as Carriable;
+		return ent;
 	}
 
 	public bool HasFreeSlot( SlotType slot )
@@ -70,7 +70,7 @@ public class Inventory : BaseInventory
 
 		foreach ( var item in List.ToArray() )
 		{
-			item.OnCarryDrop( Owner );
+			(item as Carriable).OnCarryDrop( Owner );
 			item.Delete();
 		}
 

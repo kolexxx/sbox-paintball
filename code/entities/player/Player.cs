@@ -52,10 +52,27 @@ public partial class Player : Sandbox.Player
 	{
 		Inventory = new Inventory( this );
 		Projectiles = new( this );
-		EnableTouch = true;
-		EnableShadowInFirstPerson = true;
 
 		LifeState = LifeState.Respawnable;
+	}
+
+	public override void Spawn()
+	{
+		base.Spawn();
+
+		Tags.Add( "player" );
+		SetModel( "models/citizen/citizen.vmdl" );
+		AttachClothing( "models/helmet/paintballhelmet.vmdl" );
+
+		EnableTouch = true;
+		EnableShadowInFirstPerson = true;
+	}
+
+	public override void ClientSpawn()
+	{
+		base.ClientSpawn();
+
+		CreateHull();
 	}
 
 	public async void Respawn( float delay )
@@ -68,9 +85,6 @@ public partial class Player : Sandbox.Player
 
 	public override void Respawn()
 	{
-		if ( Team == Team.None )
-			return;
-
 		TimeSinceSpawned = 0;
 		ConsecutiveKills = 0;
 		KillStreak = 0;
@@ -79,7 +93,7 @@ public partial class Player : Sandbox.Player
 
 		Animator = new StandardPlayerAnimator();
 
-		Camera = new FirstPersonCamera();
+		CameraMode = new FirstPersonCamera();
 
 		EnableAllCollisions = true;
 		EnableDrawing = true;
@@ -98,7 +112,7 @@ public partial class Player : Sandbox.Player
 		LifeState = LifeState.Alive;
 		Health = 100;
 		Velocity = Vector3.Zero;
-		WaterLevel.Clear();
+		WaterLevel = 0;
 		TimeSinceSpawned = 0f;
 
 		SwitchToBestWeapon();
@@ -112,7 +126,6 @@ public partial class Player : Sandbox.Player
 		Projectiles.Simulate();
 
 		var controller = GetActiveController();
-
 		SimulateActiveChild( cl, ActiveChild );
 
 		if ( Input.ActiveChild != null )
@@ -163,22 +176,6 @@ public partial class Player : Sandbox.Player
 		KillStreak = 0;
 		Money = 1000;
 		LifeState = LifeState.Respawnable;
-	}
-
-	public override void Spawn()
-	{
-		base.Spawn();
-
-		Tags.Add( "player" );
-		SetModel( "models/citizen/citizen.vmdl" );
-		AttachClothing( "models/helmet/paintballhelmet.vmdl" );
-	}
-
-	public override void ClientSpawn()
-	{
-		base.ClientSpawn();
-
-		CreateHull();
 	}
 
 	private void TickPlayerDrop()

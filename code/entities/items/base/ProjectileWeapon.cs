@@ -11,7 +11,7 @@ public enum FireMode : sbyte
 	Burst
 }
 
-[Library( "pwpn" ), AutoGenerate]
+[Library( "pweap" ), AutoGenerate]
 public partial class ProjectileWeaponInfo : CarriableInfo
 {
 	[Property, Category( "VFX" ), ResourceType( "vpcf" )] public string FollowEffect { get; set; }
@@ -159,7 +159,7 @@ public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon
 
 		AmmoClip--;
 
-		Owner.SetAnimBool( "b_attack", true );
+		Owner.SetAnimParameter( "b_attack", true );
 
 		ShootEffects();
 		PlaySound( Info.FireSound );
@@ -196,7 +196,7 @@ public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon
 		TimeSinceReload = 0;
 		IsReloading = true;
 
-		Owner.SetAnimBool( "b_reload", true );
+		Owner.SetAnimParameter( "b_reload", true );
 		ReloadEffects();
 	}
 
@@ -299,14 +299,14 @@ public abstract partial class ProjectileWeapon<T> : Carriable, IProjectileWeapon
 		if ( IsLocalPawn )
 			_ = new Sandbox.ScreenShake.Perlin( 1f, 0.2f, 0.8f );
 
-		ViewModelEntity?.SetAnimBool( "fire", true );
+		ViewModelEntity?.SetAnimParameter( "fire", true );
 		CrosshairPanel?.CreateEvent( "fire" );
 	}
 
 	[ClientRpc]
 	protected virtual void ReloadEffects()
 	{
-		ViewModelEntity?.SetAnimBool( "reload", true );
+		ViewModelEntity?.SetAnimParameter( "reload", true );
 	}
 
 	protected int TakeAmmo( int ammo )

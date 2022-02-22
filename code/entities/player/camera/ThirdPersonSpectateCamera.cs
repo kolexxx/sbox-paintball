@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
+public class ThirdPersonSpectateCamera : CameraMode, ISpectateCamera
 {
 	private const float LERP_MODE = 0;
 	private const int CAMERA_DISTANCE = 120;
@@ -37,7 +37,7 @@ public class ThirdPersonSpectateCamera : Camera, ISpectateCamera
 			.WorldOnly()
 			.Run();
 
-		Position = trace.EndPos;
+		Position = trace.EndPosition;
 	}
 
 	private Vector3 GetSpectatePoint()

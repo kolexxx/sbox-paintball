@@ -2,7 +2,7 @@
 
 namespace Paintball;
 
-public class FreeSpectateCamera : Camera, ISpectateCamera
+public class FreeSpectateCamera : CameraMode, ISpectateCamera
 {
 	private Angles _moveAngles;
 	private Vector3 _moveInput;

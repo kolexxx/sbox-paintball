@@ -6,7 +6,7 @@ namespace Paintball;
 public partial class Player
 {
 	[Net, Change] public int ViewerCount { get; set; }
-	public bool IsSpectator => Camera is ISpectateCamera;
+	public bool IsSpectator => CameraMode is ISpectateCamera;
 	public bool IsSpectatingPlayer => _spectatedPlayer.IsValid();
 	public Player CurrentPlayer
 	{
@@ -55,13 +55,13 @@ public partial class Player
 		if ( !IsServer || this.Alive() || !Input.Pressed( InputButton.Jump ) )
 			return;
 
-		Camera = Camera switch
+		CameraMode = CameraMode switch
 		{
 			FreeSpectateCamera => new FirstPersonSpectateCamera(),
 			FirstPersonSpectateCamera => new ThirdPersonSpectateCamera(),
 			ThirdPersonSpectateCamera => new FreeSpectateCamera(),
 			FixedSpectateCamera => new FreeSpectateCamera(),
-			_ => Camera
+			_ => CameraMode
 		};
 	}
 
@@ -79,7 +79,7 @@ public partial class Player
 		} );
 		LifeState = LifeState.Dead;
 		Health = 0;
-		Camera = new FreeSpectateCamera();
+		CameraMode = new FreeSpectateCamera();
 	}
 
 	public void UpdateSpectatingPlayer( int i )
@@ -113,7 +113,7 @@ public partial class Player
 			CurrentPlayer = null;
 		}
 
-		if ( Camera is ISpectateCamera camera )
+		if ( CameraMode is ISpectateCamera camera )
 			camera.OnSpectatedPlayerChanged( oldPlayer, CurrentPlayer );
 	}
 

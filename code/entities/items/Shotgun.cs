@@ -52,14 +52,9 @@ public partial class Shotgun : ProjectileWeapon<BaseProjectile>
 		_attackedDuringReload = false;
 	}
 
-	public override void SimulateAnimator( PawnAnimator anim )
-	{
-		anim.SetParam( "holdtype", 3 );
-	}
-
 	[ClientRpc]
 	public void FinishReload()
 	{
-		ViewModelEntity?.SetAnimBool( "reload_finished", true );
+		ViewModelEntity?.SetAnimParameter( "reload_finished", true );
 	}
 }

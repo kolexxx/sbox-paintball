@@ -42,19 +42,12 @@ public partial class Knife : Carriable
 		return true;
 	}
 
-
-	public override void SimulateAnimator( PawnAnimator anim )
-	{
-		anim.SetParam( "holdtype", 5 );
-		anim.SetParam( "aimat_weight", 1.0f );
-	}
-
 	protected void MeleeAttack( float damage, float range, float radius )
 	{
 		TimeSinceStab = 0;
 		TimeSinceSwing = 0;
 
-		Owner.SetAnimBool( "b_attack", true );
+		Owner.SetAnimParameter( "b_attack", true );
 		SwingEffects();
 
 		var endPos = Owner.EyePosition + Owner.EyeRotation.Forward * range;
@@ -77,7 +70,7 @@ public partial class Knife : Carriable
 		using ( Prediction.Off() )
 		{
 			DamageInfo info = new DamageInfo()
-				.WithPosition( trace.EndPos )
+				.WithPosition( trace.EndPosition )
 				.UsingTraceResult( trace )
 				.WithAttacker( Owner )
 				.WithFlag( DamageFlags.Bullet )
@@ -92,7 +85,7 @@ public partial class Knife : Carriable
 	[ClientRpc]
 	protected void SwingEffects()
 	{
-		ViewModelEntity?.SetAnimBool( "fire", true );
+		ViewModelEntity?.SetAnimParameter( "fire", true );
 		CrosshairPanel?.CreateEvent( "fire" );
 	}
 }
