@@ -19,8 +19,6 @@ public partial class WaitingForPlayersState : BaseState
 		base.OnPlayerKilled( player );
 
 		player.Respawn();
-
-		Game.Current.MoveToSpawnpoint( player );
 	}
 
 	public override void OnPlayerSpawned( Player player )
