@@ -6,10 +6,5 @@ namespace Paintball;
 [Library( "pb_autoshotgun", Title = "AutoShotgun", Spawnable = false )]
 public class AutoShotgun : ProjectileWeapon<BaseProjectile>
 {
-	public override void SimulateAnimator( PawnAnimator anim )
-	{
-		anim.SetParam( "holdtype", 2 );
-		anim.SetParam( "aimat_weight", 1.0f );
-	}
 }
 

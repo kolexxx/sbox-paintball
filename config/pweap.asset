@@ -1,7 +1,7 @@
 //
 // Paintball.ProjectileWeaponInfo
 //
-@BaseClass = pwpn : ""
+@BaseClass = pweap : ""
 [
 	followeffect(resource:vpcf) { group = "VFX" } : "Follow Effect" :  : ""
 	firesound(string) { group = "Sounds" } : "Fire Sound" :  : ""
@@ -30,8 +30,8 @@
 		1 : "Blue"
 		2 : "Red"
 	]
+	holdtype(integer) { group = "Important" } : "Hold Type" : 0 : ""
 	libraryname(string) { group = "Important" } : "Library Name" :  : ""
-	title(string) { group = "Important" } : "Title" :  : ""
 	slot(choices) { group = "Important" } : "Slot" : 0 : "" =
 	[
 		0 : "Primary"

@@ -11,7 +11,7 @@
 		worldmodel = resource:"models/grenade/grenade.vmdl"
 		movementspeedmultiplier = 1.0
 		price = 1000
-		title = "Spike"
 		deploytime = 0.6
+		holdtype = 5
 	}
 }

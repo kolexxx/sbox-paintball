@@ -11,7 +11,7 @@
 		worldmodel = resource:"models/rust_boneknife/rust_boneknife.vmdl"
 		movementspeedmultiplier = 1.0
 		price = 0
-		title = "Knife"
 		deploytime = 0.6
+		holdtype = 5
 	}
 }
