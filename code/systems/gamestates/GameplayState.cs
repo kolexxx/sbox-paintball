@@ -78,7 +78,7 @@ public partial class GameplayState : BaseState
 
 	public override void OnPlayerSpawned( Player player )
 	{
-		base.OnPlayerSpawned( player );
+		AdjustTeam( player.Team, 1 );
 
 		if ( player.Inventory.HasFreeSlot( SlotType.Secondary ) )
 			player.Inventory.Add( new Pistol() );
@@ -133,13 +133,16 @@ public partial class GameplayState : BaseState
 	{
 		base.Start();
 
-		RoundState = RoundState.Freeze;
-
 		if ( !Host.IsServer )
 			return;
 
+		RoundState = RoundState.Freeze;
+
 		foreach ( var client in Client.All )
-			(client.Pawn as Player).Reset();
+		{
+			var player = client.Pawn as Player;
+			player.Reset();
+		}
 
 		RoundStateStart();
 	}
@@ -181,7 +184,7 @@ public partial class GameplayState : BaseState
 					if ( Map.BlueSpawnPoints.Count == 0 || Map.RedSpawnPoints.Count == 0 )
 					{
 						Game.Current.MoveToSpawnpoint( player );
-						return;
+						continue;
 					}
 
 					if ( player.Team == Team.Blue )
@@ -202,7 +205,6 @@ public partial class GameplayState : BaseState
 							player.Inventory.Add( new Bomb() );
 					}
 				}
-
 				UntilStateEnds = FreezeDuration;
 				BuyTimeExpire = BuyDuration;
 
@@ -240,8 +242,9 @@ public partial class GameplayState : BaseState
 				if ( Host.IsClient )
 					return;
 
-				Event.Run( PBEvent.Round.End, GetWinner() );
-				RPC.OnRoundStateChanged( RoundState.End, GetWinner() );
+				Team winner = GetWinner();
+				Event.Run( PBEvent.Round.End, winner );
+				RPC.OnRoundStateChanged( RoundState.End, winner );
 
 				UntilStateEnds = EndDuration;
 
