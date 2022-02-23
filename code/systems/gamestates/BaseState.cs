@@ -33,7 +33,7 @@ public abstract partial class BaseState : BaseNetworkable
 		}
 		else
 		{
-			player.MakeSpectator();
+			// player.MakeSpectator();
 		}
 	}
 
@@ -51,7 +51,7 @@ public abstract partial class BaseState : BaseNetworkable
 
 		AdjustTeam( player.Team, 1 );
 
-		Game.Current?.MoveToSpawnpoint( player );
+		Game.Current.MoveToSpawnpoint( player );
 	}
 
 	public virtual void OnPlayerKilled( Player player )
